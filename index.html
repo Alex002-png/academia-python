@@ -1252,7 +1252,7 @@ S.ex=S.ex||{};S.quiz=S.quiz||{best:null,attempts:0};S.cards=S.cards||{};S.weak=S
 const save=()=>{localStorage.setItem(KEY,JSON.stringify(S));cloudSchedule()};
 const draftKey=id=>"apydraft."+id;
 
-function phOf(d){return S.ph[d.id]||{}}
+function phOf(d){if(!S.ph)S.ph={};return S.ph[d.id]||{}}
 function dayDone(d){
   if(d.eval)return levelApproved();
   if(!d.ex.length&&!d.reto)return false;
@@ -1640,7 +1640,7 @@ function exportar(){
 function importar(){
   try{const d=JSON.parse(document.getElementById("impTxt").value);
     if(!d||typeof d!=="object")throw 0;
-    S={ex:d.ex||{},quiz:d.quiz||{best:null,attempts:0},cards:d.cards||{},weak:d.weak||[],hints:d.hints||{},migrated:1};
+    S={ex:d.ex||{},quiz:d.quiz||{best:null,attempts:0},cards:d.cards||{},weak:d.weak||[],hints:d.hints||{},ph:d.ph||{},migrated:1};
     save();renderHome();renderWeak();renderFC();curDay=null;
     document.getElementById("syncMsg").textContent="Progreso importado correctamente.";
     document.getElementById("impBox").style.display="none";
@@ -1709,6 +1709,11 @@ function mergeS(a,b){
     m.cards[k]=!x?y:!y?x:(x.due>y.due?x:y)});
   new Set([...Object.keys(a.hints||{}),...Object.keys(b.hints||{})]).forEach(k=>
     m.hints[k]=Math.max((a.hints||{})[k]||0,(b.hints||{})[k]||0));
+  m.ph={};
+  new Set([...Object.keys(a.ph||{}),...Object.keys(b.ph||{})]).forEach(k=>{
+    const x=(a.ph||{})[k]||{},y=(b.ph||{})[k]||{};
+    m.ph[k]={};if(x.int||y.int)m.ph[k].int=1;if(x.mcq||y.mcq)m.ph[k].mcq=1;
+  });
   return m;
 }
 function cloudFetch(method,body){

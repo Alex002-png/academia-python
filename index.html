@@ -193,11 +193,50 @@
     cursor:pointer;box-shadow:0 6px 22px #000a;display:flex;align-items:center;gap:6px}
   .fab:hover{filter:brightness(1.08)}
   @media(min-width:820px){.fab{bottom:22px;right:22px}}
+
+  /* ---- pulido visual ---- */
+  #topline{position:fixed;top:0;left:0;height:3px;z-index:100;width:0%;
+    background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width .6s ease;
+    box-shadow:0 0 8px #FFD43B66}
+  .card{transition:border-color .25s}
+  .daycard{border-left:3px solid transparent;transition:transform .15s,border-color .2s}
+  .daycard.cur{border-left-color:var(--gold)}
+  .daycard.done{border-left-color:var(--good)}
+  .daycard:hover:not(.locked){transform:translateX(3px)}
+  button.btn{transition:transform .08s,filter .15s}
+  button.btn:active{transform:scale(.96)}
+  .chip.gold{box-shadow:0 0 10px #FFD43B33}
+  .okbox{animation:pop .3s ease}
+  @keyframes pop{0%{transform:scale(.96);opacity:0}100%{transform:scale(1);opacity:1}}
+  .bar>i{position:relative;overflow:hidden}
+  .bar>i::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,transparent,#ffffff45,transparent);
+    animation:shimmer 2.4s infinite}
+  @keyframes shimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+  .replrow input{caret-color:var(--gold)}
+  .termout::-webkit-scrollbar,.editor::-webkit-scrollbar{width:8px;height:8px}
+  .termout::-webkit-scrollbar-thumb,.editor::-webkit-scrollbar-thumb{background:var(--line2);border-radius:99px}
+  body::-webkit-scrollbar{width:10px}
+  body::-webkit-scrollbar-thumb{background:var(--line2);border-radius:99px}
+  body::-webkit-scrollbar-track{background:var(--deep)}
+  .xptoast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);z-index:99;
+    background:var(--gold);color:#0B111D;font-weight:800;font-family:var(--mono);
+    padding:8px 18px;border-radius:999px;box-shadow:0 6px 22px #000a;
+    animation:xprise 1.5s ease forwards;pointer-events:none}
+  @keyframes xprise{0%{opacity:0;transform:translateX(-50%) translateY(14px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}75%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-26px)}}
+  @media(prefers-reduced-motion:reduce){
+    .bar>i::after{animation:none}
+    .okbox{animation:none}
+    .daycard:hover:not(.locked){transform:none}
+    .xptoast{animation:none;opacity:1}
+    #topline{transition:none}
+  }
   .lvlmeta{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-top:4px}
 </style>
 </head>
 <body>
 
+<div id="topline"></div>
 <header class="top"><div class="wrap brand">
   <div class="logo">&gt;_</div>
   <div><h1>Academia <span class="py">AI</span>
@@ -1523,7 +1562,7 @@ function checkIntuit(){
   const fb=document.getElementById("intFb");
   if(!val.trim()){fb.innerHTML='<div class="kobox">Escribe tu predicción — pensar es la fase 1.</div>';return}
   const ok=d.intuit.req.every(r=>val.includes(r.toLowerCase()));
-  if(ok){S.ph[d.id]=Object.assign({},phOf(d),{int:1});intTries=0;save();renderClases()}
+  if(ok){S.ph[d.id]=Object.assign({},phOf(d),{int:1});intTries=0;save();xpToast(5);renderClases()}
   else{
     intTries++;
     fb.innerHTML='<div class="kobox">Esa no es la salida real. Recorre el código línea por línea, como el intérprete: sin saltos.</div>'+
@@ -1548,7 +1587,7 @@ function corrMCQ(){
     if(+sel.value===m.a){ok++;el.classList.add("ok");fb.textContent="Correcto. "+m.e}
     else{el.classList.add("ko");fb.textContent="Incorrecto. "+m.e}
   });
-  if(ok===d.mcq.length){S.ph[d.id]=Object.assign({},phOf(d),{mcq:1});save();renderClases()}
+  if(ok===d.mcq.length){S.ph[d.id]=Object.assign({},phOf(d),{mcq:1});save();xpToast(5);renderClases()}
 }
 function openDay(i){curDay=i;renderClases();window.scrollTo({top:0})}
 function closeDay(){curDay=null;renderClases();window.scrollTo({top:0})}
@@ -1594,6 +1633,7 @@ async function checkEx(id){
       (first?" Ejercicio registrado en tu expediente.":"")+"</div>"+
       '<div class="term" style="margin-top:8px"><div class="termout">'+esc(outs[0])+"</div></div>";
     renderHome();
+    if(first){xpToast(xpDe(id));celebrar(document.getElementById("card-"+id),/r$|^p|9p/.test(id)?36:20)}
     const enClases=curDay!==null&&document.getElementById("v-clases").classList.contains("on")&&
       (LEVEL0[curDay].ex.some(x=>x.id===id)||(LEVEL0[curDay].reto&&LEVEL0[curDay].reto.id===id));
     if(enClases){
@@ -1864,10 +1904,39 @@ function nextStepInfo(){
 }
 function rutaGo(){const ns=nextStepInfo();
   if(ns.target==="clases"&&ns.di>=0){go("clases");openDay(ns.di)}else go(ns.target)}
+/* ---- celebraciones ---- */
+const REDUCED=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function celebrar(el,n){
+  if(REDUCED||!el)return;
+  const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=Math.max(r.top,60)+10;
+  const colors=["#FFD43B","#5FA8E0","#4ADE80","#7FD4C1","#F87171"];
+  const cant=n||22;
+  for(let i=0;i<cant;i++){
+    const s=document.createElement("i");
+    s.style.cssText="position:fixed;z-index:99;width:7px;height:7px;pointer-events:none;border-radius:2px;left:"+cx+"px;top:"+cy+"px;background:"+colors[i%5];
+    document.body.appendChild(s);
+    const a=Math.random()*Math.PI*2,v=60+Math.random()*100;
+    s.animate([
+      {transform:"translate(0,0) rotate(0deg)",opacity:1},
+      {transform:"translate("+Math.cos(a)*v+"px,"+(Math.sin(a)*v+100)+"px) rotate("+(Math.random()*720-360)+"deg)",opacity:0}
+    ],{duration:900+Math.random()*500,easing:"cubic-bezier(.2,.6,.3,1)"}).onfinish=()=>s.remove();
+  }
+}
+function xpToast(n){
+  const t=document.createElement("div");t.className="xptoast";t.textContent="+"+n+" XP";
+  document.body.appendChild(t);setTimeout(()=>t.remove(),1600);
+}
+function xpDe(id){
+  if(id==="d9p")return 100;
+  if(/^p\d$/.test(id))return 20;
+  if(/^d\d+r$/.test(id))return 25;
+  return 10;
+}
 function renderHome(){
   const n0=nivel0Pct(),pct=n0.pct,done=n0.done,tot=n0.tot;
   document.getElementById("barN0").style.width=pct+"%";
   document.getElementById("hdPct").textContent=pct+"%";
+  const tl=document.getElementById("topline");if(tl)tl.style.width=pct+"%";
   document.getElementById("barTxt").textContent=done+" / "+tot+" ejercicios · examen teórico "+(quizPassed()?"aprobado":"pendiente");
   document.getElementById("kEx").textContent=done+" / "+tot;
   document.getElementById("kQuiz").textContent=!projectDone()?"bloqueado":(S.quiz.best===null?"disponible":S.quiz.best+"% (mejor)");

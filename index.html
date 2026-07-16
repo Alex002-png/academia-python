@@ -1463,7 +1463,8 @@ function mergeS(a,b){
   return m;
 }
 function cloudFetch(method,body){
-  const u=CLOUD.url.replace(/\/+$/,"")+"/rest/v1/academia_progress";
+  let base;try{base=new URL(CLOUD.url).origin}catch(e){base=CLOUD.url.replace(/\/+$/,"")}
+  const u=base+"/rest/v1/academia_progress";
   const h={apikey:CLOUD.key,"Content-Type":"application/json"};
   if(CLOUD.key.startsWith("eyJ"))h.Authorization="Bearer "+CLOUD.key; // solo claves legacy JWT
   if(method==="GET")return fetch(u+"?sync_code=eq."+encodeURIComponent(CLOUD.code)+"&select=data",{headers:h});

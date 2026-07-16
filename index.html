@@ -244,6 +244,20 @@
     </ul>
   </div>
   <div class="card">
+    <p class="eyebrow">Metodología · 13 fases por tema</p>
+    <p class="small muted" style="margin:2px 0 8px">Diseñada para cómo aprendes: entendiendo el porqué, no memorizando. Si una fase no sale perfecta, no se avanza.</p>
+    <table class="mini">
+      <tr><td class="num">1</td><td><strong>Intuición</strong> — predices qué hace el código antes de verlo correr</td></tr>
+      <tr><td class="num">2</td><td><strong>Razonamiento</strong> — preguntas de porqué, para construir el modelo mental</td></tr>
+      <tr><td class="num">3–4</td><td><strong>Corrección y analogía</strong> — la clase completa, conectada con cosas reales</td></tr>
+      <tr><td class="num">5+12</td><td><strong>Ingeniería e IA</strong> — cómo lo usa un ingeniero y cómo se conecta con JARVIS/IA</td></tr>
+      <tr><td class="num">6–8</td><td><strong>Práctica guiada</strong> — ejercicios con corrector implacable y pistas escalonadas</td></tr>
+      <tr><td class="num">9–10</td><td><strong>Optimización y errores comunes</strong> — mejorar el código y esquivar los bugs típicos</td></tr>
+      <tr><td class="num">11</td><td><strong>Desafío</strong> — un ejercicio sin pistas ni ayuda</td></tr>
+      <tr><td class="num">13</td><td><strong>Examen oral</strong> — defensa con tu tutor en el chat: no puedes copiar, solo razonar</td></tr>
+    </table>
+  </div>
+  <div class="card">
     <p class="eyebrow">Puntos débiles</p>
     <div id="weakList"></div>
     <div class="row" style="margin-top:10px">
@@ -765,6 +779,20 @@ const norm=s=>s.split("\n").map(l=>l.replace(/\s+$/,"")).join("\n").replace(/\n+
 function T(html){return html}
 const LEVEL0=[
 {id:"d1",n:"Día 1",t:"Tu primer programa",
+ intro:"Hoy cruzas una frontera: dejas de ser alguien que USA programas y te conviertes en alguien que los ESCRIBE. Una sola idea sostiene todo el día: tu código es texto que otro programa (el intérprete) lee y obedece, línea por línea.",
+ intuit:{code:'print("2 + 3")\nprint(2 + 3)',
+  q:"Sin ejecutar nada: ¿qué imprime EXACTAMENTE cada línea? Escribe las dos salidas.",
+  req:["2 + 3","5"],out:"2 + 3\n5",
+  e:"Las comillas convierten 2 + 3 en TEXTO literal: Python no lo calcula, lo repite tal cual. Sin comillas es una expresión: Python la evalúa y muestra 5. Mismos símbolos, dos mundos distintos."},
+ mcq:[
+  {q:'¿Por qué print("2 + 3") no imprime 5?',o:["Porque Python no sabe sumar dentro de print","Porque las comillas lo hacen texto literal: no se evalúa","Porque falta convertir con int()","Porque print solo acepta palabras"],a:1,e:"Todo lo que va entre comillas es un string: se muestra tal cual."},
+  {q:"¿Qué es exactamente print?",o:["Una variable especial","Un tipo de dato","Una función: una orden con nombre que recibe datos entre paréntesis y actúa con ellos","Un comentario del sistema"],a:2,e:"print() es una función. En el Nivel 1 escribirás las tuyas."}],
+ ing:"En una empresa, los print se convierten en <em>logs</em>: mensajes que los sistemas escriben para contar qué hacen. Tu JARVIS hace exactamente eso al emitir el progreso de cada etapa de razonamiento — son prints con uniforme de trabajo. Depurar con print es la primera herramienta de todo ingeniero, y la última que se abandona.",
+ errores:["Olvidar cerrar comillas o paréntesis → SyntaxError","Escribir Print con mayúscula: Python distingue mayúsculas","Poner texto sin comillas y esperar que se imprima"],
+ reto:{id:"d1r",t:"Desafío final · sin pistas",
+  d:'Imprime EXACTAMENTE estas tres líneas:<pre class="codebox">== RECIBO ==\nTotal: 25 soles\nGracias, Alex</pre>',
+  starter:"",runs:[[]],hints:[],
+  check:(o)=>norm(o[0])==="== RECIBO ==\nTotal: 25 soles\nGracias, Alex"?true:"La salida no coincide. Compara carácter por carácter. Obtuve:\n"+norm(o[0])},
  theory:[
   ["¿Qué pasa cuando 'ejecutas' código?",T('Un archivo <code>.py</code> es solo texto. El <strong>intérprete</strong> de Python lo lee de arriba hacia abajo, traduce cada instrucción a operaciones que el procesador entiende, y las ejecuta una por una. Por eso Python es un lenguaje <em>interpretado</em>: no se convierte en un .exe, se va leyendo y ejecutando en vivo. En esta academia el intérprete vive dentro de tu navegador: la pestaña <strong>Terminal</strong> es tu laboratorio libre.')],
   ["print(): tu voz en la pantalla",T('<code>print()</code> es una <strong>función</strong>: una orden con nombre que recibe datos entre paréntesis y hace algo con ellos — en este caso, mostrarlos. Las comillas delimitan un <strong>string</strong> (texto). Sin comillas, Python creería que <code>Hola</code> es una variable.'),
@@ -788,6 +816,21 @@ const LEVEL0=[
    hints:["Ejecuta y lee el mensaje: Python te dice qué esperaba.","Cuenta los paréntesis: ¿cuántos abren y cuántos cierran?"]},
  ]},
 {id:"d2",n:"Día 2",t:"Variables: etiquetas, no cajas",
+ intro:"Un programa sin variables es una calculadora de un solo uso. Hoy aprendes a darle MEMORIA: nombrar valores, guardarlos y transformarlos. Y construyes el modelo mental que separa a los que entienden Python de los que solo lo escriben.",
+ intuit:{code:"x = 5\nx = x + 1\nprint(x)",
+  q:"¿Qué imprime? Y piensa: ¿cómo puede x ser igual a x + 1?",
+  req:["6"],out:"6",
+  e:"El = no es una ecuación matemática: primero se evalúa la DERECHA (5 + 1 = 6) y luego la etiqueta x se mueve al resultado. Por eso x = x + 1 es legal y utilísimo."},
+ mcq:[
+  {q:"precio = 100, luego precio_final = precio, luego precio = 200. ¿Cuánto vale precio_final?",o:["200","100","Error","None"],a:1,e:"precio_final quedó apuntando al objeto 100. Mover la etiqueta precio después no lo afecta."},
+  {q:"¿Por qué decimos que una variable es una etiqueta y no una caja?",o:["Porque ocupa menos memoria","Porque apunta a un objeto; reasignar mueve la etiqueta, no modifica el objeto","Porque las cajas son de otros lenguajes","Es solo una metáfora sin consecuencias"],a:1,e:"En el Nivel 3, con listas y objetos, esta diferencia explicará bugs que confunden a programadores intermedios."}],
+ ing:"Las variables son el ESTADO de un sistema: lo que recuerda entre un paso y el siguiente. Cuando tu JARVIS responde, guarda en variables la pregunta del usuario, el contexto recuperado y la respuesta parcial. Sin variables no hay memoria; sin memoria no hay inteligencia.",
+ errores:["Usar = creyendo que compara (eso es ==)","Nombres crípticos: x, aux, cosa","Usar una variable antes de crearla → NameError"],
+ reto:{id:"d2r",t:"Desafío final · sin pistas",
+  d:'Intercambia los valores de las dos variables usando una <strong>variable auxiliar</strong> (prohibido reasignar los textos directamente) e imprime ambas: primero la izquierda, luego la derecha. Salida esperada: <code>dolar</code> y luego <code>sol</code>.',
+  starter:'moneda_izquierda = "sol"\nmoneda_derecha = "dolar"',runs:[[]],hints:[],
+  check:(o,c)=>{if(/moneda_izquierda\s*=\s*"dolar"/.test(c)||/moneda_derecha\s*=\s*"sol"/.test(c))return"Tramposo: reasignaste los textos a mano. El intercambio debe usar una variable auxiliar.";
+    return norm(o[0])==="dolar\nsol"?true:"Esperaba:\ndolar\nsol\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["El modelo mental correcto",T('Una variable NO es una caja que guarda un valor: es una <strong>etiqueta</strong> que apunta a un objeto en memoria. <code>precio = 100</code> significa: crea el objeto <code>100</code> y ponle la etiqueta <code>precio</code>. Si luego escribes <code>precio = 200</code>, la etiqueta se mueve a otro objeto — el 100 no se "modifica". Esta diferencia parece filosófica hoy; en el Nivel 3 será la razón por la que entiendas bugs que confunden a programadores intermedios.'),
    'precio = 100\nprecio_final = precio   # otra etiqueta al MISMO objeto\nprecio = 200            # solo se mueve la etiqueta precio\nprint(precio)\nprint(precio_final)'],
@@ -816,6 +859,22 @@ const LEVEL0=[
    hints:["Una variable puede asignarse desde otra variable.","print(precio) y print(precio_final) en líneas separadas."]},
  ]},
 {id:"d3",n:"Día 3",t:"Tipos de datos",
+ intro:"En Python todo valor tiene un TIPO, y el tipo decide qué puedes hacer con él. El 90% de los errores de principiante son errores de tipo. Hoy aprendes a verlos venir antes de que exploten.",
+ intuit:{code:'print("3" + "4")\nprint(3 + 4)',
+  q:"¿Qué imprime cada línea? Cuidado: no es la misma operación.",
+  req:["34","7"],out:"34\n7",
+  e:'El operador + tiene doble vida: con strings PEGA ("3"+"4" → "34"), con números SUMA (3+4 → 7). El tipo del dato decide cuál de las dos ocurre.'},
+ mcq:[
+  {q:"¿Qué devuelve type(True)?",o:["<class 'str'>","<class 'int'>","<class 'bool'>","<class 'True'>"],a:2,e:"True y False son los dos únicos valores del tipo bool. \"True\" con comillas sería un str."},
+  {q:'¿Por qué int("3.5") lanza ValueError?',o:["Porque 3.5 es negativo","Porque int() sobre un string solo acepta dígitos enteros: no interpreta el punto","Porque falta float primero siempre","Porque los strings no se convierten nunca"],a:1,e:'Camino correcto: int(float("3.5")) — primero a float, luego truncar.'}],
+ ing:"Los modelos de IA viven de conversiones de tipo: tu pregunta llega como str, se convierte en números (tokens y vectores de floats), y la respuesta vuelve a str. Tu sistema RAG hace ese viaje completo en cada consulta. Dominar los tipos es dominar la frontera donde los sistemas se rompen.",
+ errores:['Sumar str + int → TypeError','Creer que int("3.5") funciona','Confundir "True" (string) con True (bool)'],
+ reto:{id:"d3r",t:"Desafío final · sin pistas",
+  d:'El precio llega como texto y hay un descuento. Imprime EXACTAMENTE <code>Pagas: 120</code> — pero el 120 debe salir de un CÁLCULO (prohibido escribir 120 en tu código).',
+  starter:'precio_texto = "150"\ndescuento = 30',runs:[[]],hints:[],
+  check:(o,c)=>{if(/120/.test(c))return"Prohibido escribir 120: debe salir del cálculo precio - descuento.";
+    if(!/int\s*\(/.test(c))return"El precio llega como str: conviértelo con int().";
+    return norm(o[0])==="Pagas: 120"?true:"Esperaba exactamente: Pagas: 120\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["Los cuatro tipos primitivos",T('<code>int</code> (enteros), <code>float</code> (decimales), <code>str</code> (texto), <code>bool</code> (<code>True</code>/<code>False</code>). El tipo determina qué operaciones son válidas: <code>3 + 5</code> suma, <code>"3" + "5"</code> pega texto (<code>"35"</code>), y <code>"3" + 5</code> explota con <code>TypeError</code>. Pregunta el tipo de cualquier cosa con <code>type()</code>.'),
    'print(type(42))\nprint(type(3.14))\nprint(type("hola"))\nprint(type(True))'],
@@ -842,6 +901,22 @@ const LEVEL0=[
    hints:["El error dice que no puede sumar str con int. Haz que TODO sea texto.","Camino 1: str(25). Camino 2: print(f\"Tengo {25} años\") — las f-strings se ven en detalle el Día 5."]},
  ]},
 {id:"d4",n:"Día 4",t:"Operadores",
+ intro:"Los operadores son los verbos de Python. Hoy conoces a la familia completa — y en especial a dos subestimados que usarás toda tu carrera: // y %. Parecen matemática de colegio; son herramientas de ingeniería.",
+ intuit:{code:"print(10 % 3)\nprint(10 // 3)",
+  q:"¿Qué imprime cada línea? Piensa en dividir 10 entre 3 a mano, como en primaria.",
+  req:["1","3"],out:"1\n3",
+  e:"10 entre 3: cabe 3 veces (eso responde //) y sobra 1 (eso responde %). División de primaria: cociente y resto. Python te da los dos por separado."},
+ mcq:[
+  {q:"¿Qué imprime print(2 + 3 * 4) y por qué?",o:["20, porque se lee de izquierda a derecha","14, porque * tiene mayor precedencia que +","24, porque + agrupa","Error de sintaxis"],a:1,e:"Igual que en matemáticas: primero 3*4=12, luego 2+12."},
+  {q:"¿Cuál expresión te dice si n es divisible entre 7?",o:["n / 7 == 0","n // 7 == 0","n % 7 == 0","n ** 7 == 0"],a:2,e:"Divisible = la división no deja resto. El resto lo da %."}],
+ ing:"// y % están por todas partes: paginar resultados (página = elemento // por_página), relojes (minutos % 60), y en IA: repartir 319 PDFs en lotes de 8 para procesarlos — como hace tu HERMES al indexar documentos. Lo que hoy es 10 % 3, mañana es distribuir carga en un sistema real.",
+ errores:["Esperar que 10/2 dé 5 (da 5.0: / siempre float)","Confundir / con //","Olvidar paréntesis: 8 + 10 / 2 no es un promedio"],
+ reto:{id:"d4r",t:"Desafío final · sin pistas",
+  d:'Convierte los minutos totales a horas y minutos usando <code>//</code> y <code>%</code>, e imprime EXACTAMENTE <code>3 horas y 20 minutos</code> — calculado, no escrito a mano.',
+  starter:"minutos_totales = 200",runs:[[]],hints:[],
+  check:(o,c)=>{if(!/\/\//.test(c)||!/%/.test(c))return"Obligatorio usar // (horas) y % (minutos sobrantes).";
+    if(/3\s*horas/.test(c))return'Prohibido escribir "3 horas" a mano: las cifras deben salir del cálculo.';
+    return norm(o[0])==="3 horas y 20 minutos"?true:"Esperaba: 3 horas y 20 minutos\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["La familia aritmética completa",T('<code>+ - *</code> son obvios. Los importantes: <code>/</code> divide y SIEMPRE devuelve float (<code>10 / 5</code> → <code>2.0</code>); <code>//</code> es división entera (descarta decimales); <code>%</code> es el <strong>resto</strong> de la división (7 = 2·3 + <strong>1</strong>); <code>**</code> es potencia. El <code>%</code> es más útil de lo que parece: <code>n % 2 == 0</code> te dice si n es par — piénsalo como repartir caramelos: % es lo que sobra.'),
    'print(7 / 2)    # 3.5\nprint(7 // 2)   # 3\nprint(7 % 2)    # 1\nprint(2 ** 10)  # 1024'],
@@ -868,6 +943,22 @@ const LEVEL0=[
    hints:["La división se ejecuta ANTES que la suma: 8 + 5.0.","Agrupa la suma para que ocurra primero, luego divide."]},
  ]},
 {id:"d5",n:"Día 5",t:"Strings a fondo",
+ intro:"El 80% de los datos del mundo real son texto sucio: correos con espacios, nombres en mayúsculas, archivos mal formateados. Hoy aprendes cirugía de strings — la habilidad que usarás en TODOS tus proyectos, desde scrapers hasta IA.",
+ intuit:{code:'palabra = "python"\nprint(palabra[1])\nprint(palabra[-2])',
+  q:"¿Qué letra imprime cada línea? Recuerda desde dónde cuenta Python.",
+  req:["y","o"],out:"y\no",
+  e:"Los índices empiezan en 0: palabra[1] es la SEGUNDA letra (y). Los negativos cuentan desde el final: [-1] es la última, [-2] la penúltima (o)."},
+ mcq:[
+  {q:'¿Qué devuelve "hola"[0:2]?',o:['"hol"','"ho"','"ola"','Error'],a:1,e:"El slicing excluye el límite derecho: índices 0 y 1."},
+  {q:"¿Qué hace exactamente .strip()?",o:["Quita TODOS los espacios del texto","Quita espacios solo de los bordes (inicio y final)","Separa el texto en palabras","Pone el texto en minúsculas"],a:1,e:'"  hola  mundo  ".strip() → "hola  mundo": los espacios internos sobreviven.'}],
+ ing:"La limpieza de texto es el 80% del preprocesamiento en ciencia de datos e IA. Tu HERMES, antes de indexar un PDF, normaliza el texto igual que tu ejercicio del correo: strip, lower, replace. Un dato sucio que entra es una respuesta basura que sale — los ingenieros lo llaman garbage in, garbage out.",
+ errores:["Creer que [0:3] incluye el índice 3","Esperar que .strip() borre espacios internos","Pedir un índice que no existe → IndexError"],
+ reto:{id:"d5r",t:"Desafío final · sin pistas",
+  d:'Ese correo llegó sucio de un formulario. Imprímelo limpio y normalizado: EXACTAMENTE <code>alex@gmail.com</code> — usando métodos, no escribiéndolo a mano.',
+  starter:'correo = "  ALEX@GMAIL.COM  "',runs:[[]],hints:[],
+  check:(o,c)=>{if(/"alex@gmail\.com"/.test(c)||/'alex@gmail\.com'/.test(c))return"Prohibido escribir el resultado a mano: transforma la variable con métodos.";
+    if(!/\.strip\s*\(/.test(c)||!/\.lower\s*\(/.test(c))return"Necesitas .strip() para los bordes y .lower() para las mayúsculas.";
+    return norm(o[0])==="alex@gmail.com"?true:"Esperaba: alex@gmail.com\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["Índices y rebanadas",T('Un string es una secuencia: cada carácter tiene una posición <strong>empezando en 0</strong>. <code>palabra[0]</code> es el primero, <code>palabra[-1]</code> el último. El <strong>slicing</strong> <code>palabra[a:b]</code> corta desde <code>a</code> hasta ANTES de <code>b</code> — el límite derecho nunca entra. <code>len(palabra)</code> cuenta todos los caracteres, espacios incluidos.'),
    'palabra = "programando"\nprint(palabra[0])      # p\nprint(palabra[-1])     # o\nprint(palabra[0:3])    # pro\nprint(len(palabra))    # 11'],
@@ -897,6 +988,22 @@ const LEVEL0=[
    hints:["f\"texto {variable} texto\" — las llaves evalúan lo que pongas dentro.","Dos huecos: {nombre} y {edad}, con los espacios bien puestos alrededor."]},
  ]},
 {id:"d6",n:"Día 6",t:"Entrada y salida",
+ intro:"Hasta hoy tus programas hablaban solos. Hoy aprenden a ESCUCHAR. Con input() tus programas se vuelven conversaciones — y conocerás la trampa número 1 de todos los principiantes del planeta.",
+ intuit:{code:'edad = input("Edad: ")\nprint(edad + edad)',
+  q:"El usuario escribe 21. ¿Qué imprime la segunda línea?",
+  req:["2121"],out:"2121",
+  e:'input() SIEMPRE devuelve str: recibiste "21" (texto), y "21" + "21" pega, no suma → "2121". Ésta es la trampa que atrapa a todo principiante — tú ya la viste venir.'},
+ mcq:[
+  {q:"El usuario escribe 25 en un input(). ¿Qué recibes?",o:["El número 25 (int)","El texto \"25\" (str)","25.0 (float)","Depende de lo que escriba"],a:1,e:"SIEMPRE str, sin excepción. Para operar: int() o float()."},
+  {q:'¿Qué imprime print("a", "b", sep="-")?',o:["a b","a-b","ab","a, b"],a:1,e:"sep define el separador entre los valores; por defecto es un espacio."}],
+ ing:"input → procesar → print es la anatomía de TODO sistema interactivo. Un chatbot es exactamente eso con esteroides: lee tu mensaje (input), lo procesa un modelo, responde (print). Tu bot de Telegram del Nivel 5 y tu JARVIS son este patrón — hoy estás aprendiendo su esqueleto.",
+ errores:["Operar el input sin convertir → el bug del 48","Convertir a int cuando puede traer decimales","Olvidar el mensaje del prompt: input() mudo confunde al usuario"],
+ reto:{id:"d6r",t:"Desafío final · sin pistas",
+  d:'Pide un nombre y una nota (0–20). Imprime el nombre en MAYÚSCULAS con la nota, formato exacto: <code>ALEX: 15 puntos</code>. La prueba escribe <code>alex</code> y <code>15</code>.',
+  starter:"",runs:[["alex","15"]],hints:[],
+  check:(o,c)=>{if(!/\.upper\s*\(/.test(c))return"El nombre debe salir en MAYÚSCULAS con .upper().";
+    if(!/f["']/.test(c))return"El formato final debe construirse con una f-string.";
+    return norm(o[0]).includes("ALEX: 15 puntos")?true:"Con alex y 15 esperaba: ALEX: 15 puntos"}},
  theory:[
   ["input(): la trampa clásica número 1",T('<code>input("mensaje")</code> muestra el mensaje, espera a que el usuario escriba, y devuelve lo escrito. Grábatelo a fuego: <strong>input() SIEMPRE devuelve str</strong>. Si el usuario escribe 4, tú recibes <code>"4"</code>. Por eso <code>input() + input()</code> con 4 y 8 da <code>"48"</code>, no 12. Todo número que entre por input debe pasar por <code>int()</code> o <code>float()</code>.'),
    'numero_1 = float(input("Primer número: "))\nnumero_2 = float(input("Segundo número: "))\nprint(f"Suma: {numero_1 + numero_2}")'],
@@ -926,6 +1033,22 @@ const LEVEL0=[
    hints:["Tres pasos: leer, convertir, restar de 2026.","f\"Cumples {2026 - anio} años\" — la cuenta puede ir dentro de las llaves."]},
  ]},
 {id:"d7",n:"Día 7",t:"Decisiones y repetición",
+ intro:"Éste es el día más importante del nivel. if y while convierten tus guiones lineales en programas que DECIDEN y PERSISTEN. Después de hoy, tu código deja de ser una lista de pasos y se vuelve lógica viva.",
+ intuit:{code:"n = 4\nwhile n > 2:\n    print(n)\n    n = n - 1",
+  q:"¿Qué números imprime? ¿Y por qué se detiene donde se detiene?",
+  req:["4","3"],out:"4\n3",
+  e:"Imprime 4 y 3. Cuando n vale 2, la condición 2 > 2 es False y el bucle NO entra: el while revisa la condición ANTES de cada vuelta, no después."},
+ mcq:[
+  {q:"La indentación (los 4 espacios) en Python es…",o:["Decorativa, para que se lea bonito","Sintaxis obligatoria: define qué está dentro del bloque","Opcional si usas paréntesis","Solo necesaria en funciones"],a:1,e:"Mover la indentación CAMBIA la lógica del programa. Es gramática, no estética."},
+  {q:"¿Qué evita que un while sea infinito?",o:["Ponerle un límite de tiempo","Que algo DENTRO del bucle pueda volver falsa la condición","Usar break siempre al final","Python los detiene solo"],a:1,e:"Regla de oro: si nada dentro cambia la condición, el bucle nunca muere. (Esta terminal te rescata; la vida real, no siempre.)"}],
+ ing:"El corazón de un agente de IA es literalmente esto: <code>while</code> no haya respuesta final → pensar, actuar, evaluar (con ifs decidiendo cada paso). Tu JARVIS con LangGraph es un grafo de decisiones sobre un bucle. El if/while que aprendes hoy es el mismo patrón, a otra escala.",
+ errores:["Olvidar los dos puntos al final del if/while","Indentación desigual dentro del mismo bloque","Bucle donde nada cambia la condición → infinito"],
+ reto:{id:"d7r",t:"Desafío final · sin pistas",
+  d:'Lee un número n e imprime del 1 al n (uno por línea) con while, PERO: si el número es múltiplo de 3, imprime <code>fizz</code> en su lugar. La prueba escribe <code>7</code>: espera 1, 2, fizz, 4, 5, fizz, 7.',
+  starter:"",runs:[["7"]],hints:[],
+  check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while.";
+    if(!/%/.test(c))return"Detectar múltiplos de 3 exige el operador %.";
+    return norm(o[0]).includes("1\n2\nfizz\n4\n5\nfizz\n7")?true:"Con 7 esperaba:\n1\n2\nfizz\n4\n5\nfizz\n7\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["if / elif / else: el programa decide",T('Hasta hoy tus programas eran una línea recta. <code>if</code> abre caminos: si la condición es <code>True</code> se ejecuta su bloque — y el bloque se marca con <strong>indentación</strong> (4 espacios), que en Python no es estética, es sintaxis. <code>elif</code> encadena más condiciones, <code>else</code> atrapa todo lo demás.'),
    'nota = 15\nif nota >= 18:\n    print("Excelente")\nelif nota >= 11:\n    print("Aprobado")\nelse:\n    print("Desaprobado")'],
@@ -957,6 +1080,23 @@ const LEVEL0=[
    hints:["Patrón: leer una vez ANTES del while; condición: opcion != \"1\" and opcion != \"2\"; volver a leer DENTRO.","input() devuelve texto: compara con \"1\" y \"2\" entre comillas, o convierte a int."]},
  ]},
 {id:"d8",n:"Día 8",t:"Errores y tracebacks",
+ intro:"Los programadores mediocres temen a los errores; los ingenieros los leen como mapas. Hoy transformas tu relación con los tracebacks: de enemigo que asusta a informante que te dice exactamente dónde mirar. Ya depuraste un 404 real conmigo — esto te va a sonar familiar.",
+ intuit:{code:'print(int("12.5"))',
+  q:"¿Corre o explota? Si explota, ¿con qué TIPO de error exactamente?",
+  req:["ValueError"],out:'Traceback (most recent call last):\n  File "programa.py", línea 1, in <module>\nValueError: invalid literal for int() with base 10: \'12.5\'',
+  e:'Explota con ValueError: int() sobre un string exige dígitos enteros puros — el punto lo descoloca. El TIPO correcto era todo lo que preguntaba: eso es leer tracebacks.'},
+ mcq:[
+  {q:"¿Dónde miras PRIMERO en un traceback?",o:["La primera línea, arriba","La última línea: tipo de error y mensaje","El número más grande","Da igual, es aleatorio"],a:1,e:"Última línea = QUÉ pasó. Las de arriba = DÓNDE (archivo y línea). Se lee de abajo hacia arriba."},
+  {q:"¿Cuál error impide que el programa siquiera ARRANQUE?",o:["ZeroDivisionError","ValueError","SyntaxError","NameError"],a:2,e:"SyntaxError se detecta al analizar el código, antes de ejecutar nada. Los otros tres explotan en plena ejecución."}],
+ ing:"Un ingeniero profesional lee tracebacks a diario: los logs de errores de producción de cualquier empresa (y de tu JARVIS) son tracebacks acumulados. La diferencia entre junior y senior no es cometer menos errores: es diagnosticarlos en segundos. Hoy entrenas ese músculo.",
+ errores:["Leer el traceback de arriba hacia abajo","Ignorar el número de línea que te regala","Borrar código hasta que 'funcione' en vez de entender la causa"],
+ reto:{id:"d8r",t:"Desafío final · sin pistas",
+  d:'Un divisor robusto: lee dos números y muestra la división con 2 decimales (formato <code>Resultado: X.XX</code>), pero si el divisor es 0, imprime <code>no se puede dividir entre cero</code> sin explotar. Pruebas: (9, 4) y (5, 0).',
+  starter:"",runs:[["9","4"],["5","0"]],hints:[],
+  check:(o,c)=>{if(!/\bif\b/.test(c))return"La robustez se construye anticipando con if.";
+    if(!/:\.2f/.test(c))return"Los 2 decimales exigen f-string con :.2f";
+    if(!norm(o[0]).includes("Resultado: 2.25"))return"Con 9 y 4 esperaba: Resultado: 2.25";
+    return norm(o[1]).includes("no se puede dividir entre cero")?true:"Con 5 y 0 debe avisar: no se puede dividir entre cero"}},
  theory:[
   ["El traceback es tu amigo",T('Cuando un programa explota, Python deja un informe: el <strong>traceback</strong>. Se lee <strong>de abajo hacia arriba</strong>: la última línea dice el TIPO de error y el mensaje; encima, el archivo y la línea exacta. Tus cuatro sospechosos habituales: <code>NameError</code> (variable mal escrita o no creada), <code>TypeError</code> (mezclar tipos incompatibles), <code>ValueError</code> (conversión imposible, como <code>int("hola")</code>) y <code>ZeroDivisionError</code>.')],
   ["Dos familias de errores",T('<code>SyntaxError</code> se detecta ANTES de ejecutar: Python ni siquiera arranca (paréntesis sin cerrar, dos puntos faltantes). Los errores de ejecución solo aparecen cuando esa línea corre — el programa puede funcionar 100 veces y explotar en la 101, cuando alguien escribe "hola" donde iba un número. Programar profesionalmente es anticiparlos: hoy con if, en el Nivel 1 con try/except.')],
@@ -982,6 +1122,7 @@ const LEVEL0=[
    hints:["if divisor == 0: mensaje. else: la división.","Convierte el input a float (o int) antes de comparar con 0."]},
  ]},
 {id:"d9",n:"Días 8–9",t:"PROYECTO · Calculadora profesional",project:true,
+ intro:"Fases 7, 8 y 9 en una sola misión: CONSTRUYES (proyecto), lo escribes como profesional (nombres, estructura, robustez) y lo OPTIMIZAS tras el veredicto del corrector. Aquí se junta todo el nivel. Después del corrector viene mi code review en el chat — y ahí seré más duro que la máquina.",
  theory:[
   ["Especificación (contrato estricto)",T('Construye una calculadora de consola con menú en bucle. El corrector ejecutará tu programa con secuencias de entradas reales y verificará cada salida. Contrato:<ul class="tight small"><li>Menú con opciones <strong>1</strong> suma · <strong>2</strong> resta · <strong>3</strong> multiplicación · <strong>4</strong> división · <strong>5</strong> potencia · <strong>6</strong> resto · <strong>7</strong> salir.</li><li>Tras elegir operación, pide dos números (léelos con <code>float()</code>).</li><li>Muestra el resultado EXACTAMENTE como <code>Resultado: X</code> con 2 decimales (f-string con <code>:.2f</code>). Ej.: <code>Resultado: 12.00</code></li><li>División entre cero → imprime una línea que contenga <code>no se puede dividir entre cero</code> (sin explotar) y vuelve al menú.</li><li>Opción no válida → imprime una línea que contenga <code>Opción inválida</code> y vuelve al menú.</li><li>Opción 7 → imprime una línea que contenga <code>Hasta luego</code> y termina.</li><li>Nombres de variables profesionales: nada de <code>a</code>, <code>b</code>, <code>x</code>.</li></ul>Cuando lo apruebes aquí, llévalo al chat con tu tutor para el <strong>code review y la defensa oral</strong> — el corrector mide el contrato; el tutor mide tu comprensión.')],
  ],
@@ -1009,6 +1150,7 @@ const LEVEL0=[
      "División: if numero_2 == 0: aviso. else: f\"Resultado: {numero_1 / numero_2:.2f}\""]},
  ]},
 {id:"d10",n:"Día 10",t:"Evaluación final del nivel",eval:true,
+ intro:"Fase 13: demostrar. Primero contra el corrector (teórico + práctico, sin pistas) y después la defensa oral conmigo en el chat — sin copiar, solo razonar. Si algo sale mal, no es fracaso: es el mapa de tu repaso.",
  theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen teórico en la pestaña <strong>Examen</strong> (15 preguntas, mínimo 80%); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
  ex:[]},
 ];
@@ -1106,11 +1248,17 @@ try{S=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){S={}}
 // migrar quiz/cards/weak desde v1 si existe
 try{const old=JSON.parse(localStorage.getItem("academiaPython.v1"));
   if(old&&!S.migrated){S.quiz=S.quiz||old.quiz;S.weak=S.weak||old.weak;S.migrated=1}}catch(e){}
-S.ex=S.ex||{};S.quiz=S.quiz||{best:null,attempts:0};S.cards=S.cards||{};S.weak=S.weak||[];S.hints=S.hints||{};
+S.ex=S.ex||{};S.quiz=S.quiz||{best:null,attempts:0};S.cards=S.cards||{};S.weak=S.weak||[];S.hints=S.hints||{};S.ph=S.ph||{};
 const save=()=>{localStorage.setItem(KEY,JSON.stringify(S));cloudSchedule()};
 const draftKey=id=>"apydraft."+id;
 
-function dayDone(d){return d.ex.length>0&&d.ex.every(e=>S.ex[e.id])}
+function phOf(d){return S.ph[d.id]||{}}
+function dayDone(d){
+  if(d.eval)return levelApproved();
+  if(!d.ex.length&&!d.reto)return false;
+  const p=phOf(d);
+  return(!d.intuit||p.int)&&(!d.mcq||p.mcq)&&d.ex.every(e=>S.ex[e.id])&&(!d.reto||S.ex[d.reto.id]);
+}
 function dayUnlocked(i){
   if(i===0)return true;
   for(let j=i-1;j>=0;j--){const d=LEVEL0[j];if(d.ex.length)return dayDone(d)}
@@ -1149,30 +1297,120 @@ function renderClases(){
       const unlocked=dayUnlocked(i),done=dayDone(d);
       const evalDay=d.eval;
       const evalOk=evalDay&&levelApproved();
+      const tot=d.ex.length+(d.reto?1:0);
+      const hecho=d.ex.filter(e=>S.ex[e.id]).length+((d.reto&&S.ex[d.reto.id])?1:0);
       const st=evalDay?(evalOk?'<span class="chip good">Aprobado</span>':unlocked?'<span class="chip blue">Evaluación</span>':'<span class="chip lock">Bloqueado</span>')
         :done?'<span class="chip good">Completado</span>'
         :unlocked?'<span class="chip gold">Disponible</span>':'<span class="chip lock">Bloqueado</span>';
       h+='<div class="daycard '+(unlocked?"":"locked ")+(done?"done ":"")+(unlocked&&!done?"cur":"")+'" '+
         (unlocked?'onclick="openDay('+i+')" tabindex="0" onkeydown="if(event.key===\'Enter\')openDay('+i+')"':"")+'>'+
         '<div class="dnum">'+d.n+'</div><div class="dtitle">'+d.t+
-        (d.ex.length?'<span class="small">'+d.ex.filter(e=>S.ex[e.id]).length+"/"+d.ex.length+" ejercicios</span>":"")+
+        (tot?'<span class="small">'+hecho+"/"+tot+" ejercicios</span>":"")+
         "</div>"+st+"</div>";
     });
     box.innerHTML=h;return;
   }
-  const d=LEVEL0[curDay];
+  const d=LEVEL0[curDay],p=phOf(d);
   let h='<div class="lesson-nav"><button class="btn ghost" onclick="closeDay()">← Todas las clases</button></div>';
-  h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0</p><h2>"+d.t+"</h2></div>";
-  d.theory.forEach(t=>{
-    h+='<div class="card"><h2 style="font-size:.98rem">'+t[0]+"</h2><div class='small' style='color:var(--text)'>"+t[1]+"</div>";
-    if(t[2])h+='<pre class="codebox">'+hl(t[2])+'</pre><button class="btn ghost" onclick="toPlayground(this)" data-code="'+esc(t[2]).replace(/"/g,"&quot;").replace(/\n/g,"&#10;")+'">Probar en la Terminal →</button>';
-    h+="</div>";
-  });
-  const exs=d.eval?[]:d.ex;
-  exs.forEach(e=>h+=exCard(e));
-  if(d.eval)h+='<div class="card"><button class="btn" onclick="go(\'examen\')">Ir a la pestaña Examen →</button></div>';
+  h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0 · metodología 13 fases</p><h2>"+d.t+"</h2>"+
+    (d.intro?'<p class="small" style="margin:8px 0 0;color:var(--muted)">'+d.intro+"</p>":"")+"</div>";
+  const okInt=!d.intuit||p.int,okMcq=okInt&&(!d.mcq||p.mcq);
+  // FASE 1 · intuición
+  if(d.intuit){
+    h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 1 · Intuición</p>'+
+      '<p class="small" style="margin:2px 0 8px">'+d.intuit.q+'</p>'+
+      '<pre class="codebox">'+hl(d.intuit.code)+"</pre>";
+    if(p.int){
+      h+='<div class="okbox"><strong>Predicción registrada.</strong> Salida real:</div>'+
+        '<div class="term" style="margin-top:8px"><div class="termout">'+esc(d.intuit.out)+"</div></div>"+
+        '<p class="small muted" style="margin:8px 0 0">'+d.intuit.e+"</p></div>";
+    }else{
+      h+='<textarea class="plain" id="intIn" rows="2" placeholder="Escribe aquí tu predicción exacta (prohibido ejecutarlo antes)"></textarea>'+
+        '<button class="btn" style="margin-top:8px" onclick="checkIntuit()">Comprobar mi predicción</button>'+
+        '<div id="intFb"></div></div>';
+    }
+  }
+  // FASE 2 · razonamiento
+  if(d.mcq&&okInt){
+    h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 2 · Razonamiento</p>';
+    if(p.mcq){
+      h+='<div class="okbox"><strong>Razonamiento verificado</strong> — modelo mental correcto.</div>'+
+        d.mcq.map(m=>'<p class="small" style="margin:10px 0 2px"><strong>'+m.q+'</strong></p><p class="small muted" style="margin:0">'+m.e+"</p>").join("")+"</div>";
+    }else{
+      h+='<p class="small muted" style="margin:2px 0 6px">Todas correctas para avanzar (regla: menos de perfecto aquí = no seguimos).</p>'+
+        d.mcq.map((m,i)=>'<div class="q" id="mq'+i+'"><p class="enun">'+m.q+"</p>"+
+          m.o.map((o,j)=>'<label><input type="radio" name="mq'+i+'" value="'+j+'"><span>'+o+"</span></label>").join("")+
+          '<div class="fb"></div></div>').join("")+
+        '<button class="btn" style="margin-top:10px" onclick="corrMCQ()">Verificar razonamiento</button></div>';
+    }
+  }
+  if(!okInt)h+='<div class="card"><p class="small muted" style="margin:0">🔒 El resto de la clase se abre al completar la <strong>Fase 1 · Intuición</strong>. Primero piensas, después ves.</p></div>';
+  else if(!okMcq)h+='<div class="card"><p class="small muted" style="margin:0">🔒 La clase completa se abre al superar la <strong>Fase 2 · Razonamiento</strong>.</p></div>';
+  else{
+    // FASES 3-4 · clase y analogía
+    d.theory.forEach((t,i)=>{
+      h+='<div class="card">'+(i===0?'<p class="eyebrow" style="color:var(--gold)">Fases 3–4 · Clase, corrección y analogía</p>':"")+
+        '<h2 style="font-size:.98rem">'+t[0]+"</h2><div class='small' style='color:var(--text)'>"+t[1]+"</div>";
+      if(t[2])h+='<pre class="codebox">'+hl(t[2])+'</pre><button class="btn ghost" onclick="toPlayground(this)" data-code="'+esc(t[2]).replace(/"/g,"&quot;").replace(/\n/g,"&#10;")+'">Probar en la Terminal →</button>';
+      h+="</div>";
+    });
+    // FASES 5+12 · ingeniería e IA
+    if(d.ing)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fases 5 y 12 · Ingeniería real e IA</p><p class="small" style="margin:2px 0 0">'+d.ing+"</p></div>";
+    // FASES 6-8 · práctica guiada
+    const exs=d.eval?[]:d.ex;
+    if(exs.length)h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fases 6–8 · Práctica guiada</p></div>';
+    exs.forEach(e=>h+=exCard(e));
+    // FASE 10 · errores comunes
+    if(d.errores)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 10 · Errores comunes</p><ul class="tight small">'+d.errores.map(x=>"<li>"+x+"</li>").join("")+"</ul></div>";
+    // FASE 11 · desafío
+    if(d.reto){
+      if(d.ex.every(e=>S.ex[e.id]))h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fase 11 · Desafío — sin pistas, sin ayuda</p></div>'+exCard(d.reto);
+      else h+='<div class="card"><p class="small muted" style="margin:0">🔒 <strong>Fase 11 · Desafío</strong>: se abre al aprobar toda la práctica guiada.</p></div>';
+    }
+    if(d.eval)h+='<div class="card"><button class="btn" onclick="go(\'examen\')">Ir a la pestaña Examen →</button></div>';
+  }
+  // día completado → continuar
+  if(dayDone(d)&&!d.eval){
+    const nx=curDay+1;
+    h+='<div class="card" style="border-color:var(--gold-dim)"><p class="eyebrow" style="color:var(--gold)">'+d.n+" completado</p>"+
+      '<h2 style="color:var(--good)">Todas las fases superadas ✓</h2>'+
+      (nx<LEVEL0.length?'<button class="btn" style="margin-top:10px" onclick="openDay('+nx+')">Continuar → '+LEVEL0[nx].n+": "+LEVEL0[nx].t+"</button>":"")+"</div>";
+  }
   box.innerHTML=h;
-  exs.forEach(e=>wireEx(e));
+  if(okMcq){d.ex.forEach(e=>{if(document.getElementById("ed-"+e.id))wireEx(e)});
+    if(d.reto&&document.getElementById("ed-"+d.reto.id))wireEx(d.reto)}
+}
+let intTries=0;
+function checkIntuit(){
+  const d=LEVEL0[curDay];
+  const val=(document.getElementById("intIn").value||"").toLowerCase();
+  const fb=document.getElementById("intFb");
+  if(!val.trim()){fb.innerHTML='<div class="kobox">Escribe tu predicción — pensar es la fase 1.</div>';return}
+  const ok=d.intuit.req.every(r=>val.includes(r.toLowerCase()));
+  if(ok){S.ph[d.id]=Object.assign({},phOf(d),{int:1});intTries=0;save();renderClases()}
+  else{
+    intTries++;
+    fb.innerHTML='<div class="kobox">Esa no es la salida real. Recorre el código línea por línea, como el intérprete: sin saltos.</div>'+
+      (intTries>=2?'<button class="btn ghost" style="margin-top:8px" onclick="revealIntuit()">Mostrar la respuesta y continuar (queda anotado como punto débil)</button>':"");
+  }
+}
+function revealIntuit(){
+  const d=LEVEL0[curDay];
+  S.weak.push("Predicción fallida en "+d.n+": "+d.t);
+  S.ph[d.id]=Object.assign({},phOf(d),{int:1});intTries=0;save();renderClases();renderWeak();
+}
+function corrMCQ(){
+  const d=LEVEL0[curDay];
+  let ok=0;
+  d.mcq.forEach((m,i)=>{
+    const el=document.getElementById("mq"+i),sel=el.querySelector("input:checked");
+    el.classList.remove("ok","ko");
+    const fb=el.querySelector(".fb");
+    if(!sel){el.classList.add("ko");fb.textContent="Sin responder.";return}
+    if(+sel.value===m.a){ok++;el.classList.add("ok");fb.textContent="Correcto. "+m.e}
+    else{el.classList.add("ko");fb.textContent="Incorrecto. "+m.e}
+  });
+  if(ok===d.mcq.length){S.ph[d.id]=Object.assign({},phOf(d),{mcq:1});save();renderClases()}
 }
 function openDay(i){curDay=i;renderClases();window.scrollTo({top:0})}
 function closeDay(){curDay=null;renderClases();window.scrollTo({top:0})}
@@ -1188,11 +1426,11 @@ function exCard(e){
     '<textarea class="editor" id="ed-'+e.id+'" rows="'+(e.big?14:6)+'" spellcheck="false"></textarea>'+
     '<div class="row" style="margin-top:8px">'+
     '<button class="btn" onclick="checkEx(\''+e.id+'\')">▶ Ejecutar y comprobar</button>'+
-    '<button class="btn ghost" onclick="hintEx(\''+e.id+'\')">Pista</button>'+
+    (e.hints&&e.hints.length?'<button class="btn ghost" onclick="hintEx(\''+e.id+'\')">Pista</button>':"")+
     '<button class="btn ghost" onclick="resetEx(\''+e.id+'\')">Reiniciar</button></div>'+
     '<div id="fb-'+e.id+'"></div></div>';
 }
-function allEx(){const m={};LEVEL0.forEach(d=>d.ex.forEach(e=>m[e.id]=e));PRACTICA.forEach(e=>m[e.id]=e);return m}
+function allEx(){const m={};LEVEL0.forEach(d=>{d.ex.forEach(e=>m[e.id]=e);if(d.reto)m[d.reto.id]=d.reto});PRACTICA.forEach(e=>m[e.id]=e);return m}
 function wireEx(e){
   const ed=document.getElementById("ed-"+e.id);
   ed.value=localStorage.getItem(draftKey(e.id))??e.starter;
@@ -1220,6 +1458,13 @@ async function checkEx(id){
     renderHome();
     const card=document.getElementById("card-"+id);
     if(card)card.querySelector(".chip").outerHTML='<span class="chip good">Aprobado</span>';
+    // si se completó la práctica guiada o el día entero, refresca la clase (desbloquea desafío / botón continuar)
+    if(curDay!==null&&document.getElementById("v-clases").classList.contains("on")){
+      const d=LEVEL0[curDay];
+      const inDay=d.ex.some(x=>x.id===id)||(d.reto&&d.reto.id===id);
+      if(inDay&&first&&(dayDone(d)||d.ex.every(x=>S.ex[x.id])))
+        setTimeout(()=>{renderClases();window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"})},900);
+    }
   }else{
     fb.innerHTML='<div class="kobox">'+esc(res)+"</div>"+
       '<div class="term" style="margin-top:8px"><div class="termout">'+(esc(outs[0])||'<span class="sys">(sin salida)</span>')+"</div></div>";
@@ -1414,7 +1659,7 @@ function renderRuta(){
   });
 }
 function renderHome(){
-  const ids=[];LEVEL0.forEach(d=>d.ex.forEach(e=>ids.push(e.id)));PRACTICA.forEach(p=>ids.push(p.id));
+  const ids=[];LEVEL0.forEach(d=>{d.ex.forEach(e=>ids.push(e.id));if(d.reto)ids.push(d.reto.id)});PRACTICA.forEach(p=>ids.push(p.id));
   const done=ids.filter(i=>S.ex[i]).length,tot=ids.length;
   const quizPart=quizPassed()?1:0;
   const pct=Math.round((done+quizPart)/(tot+1)*100);
@@ -1429,8 +1674,12 @@ function renderHome(){
   for(let i=0;i<LEVEL0.length;i++){
     const d=LEVEL0[i];
     if(!dayUnlocked(i))break;
+    if(d.eval){if(!levelApproved()){next="Evaluación final: examen teórico y práctico";target="examen";break}continue}
+    const p=phOf(d);
+    if(d.intuit&&!p.int){next=d.n+" · Fase 1: Intuición";break}
+    if(d.mcq&&!p.mcq){next=d.n+" · Fase 2: Razonamiento";break}
     for(const e of d.ex)if(!S.ex[e.id]){next=d.n+" · "+e.t;break outer}
-    if(d.eval&&!levelApproved()){next="Evaluación final: examen teórico y práctico";target="examen";break}
+    if(d.reto&&!S.ex[d.reto.id]){next=d.n+" · Fase 11: Desafío final";break}
   }
   if(levelApproved()){next="Defensa oral con tu tutor → desbloquea el Nivel 1";target="examen"}
   document.getElementById("nextTask").textContent=next;

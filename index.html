@@ -1472,25 +1472,34 @@ function cloudFetch(method,body){
 }
 async function cloudPushNow(){
   const r=await cloudFetch("POST",[{sync_code:CLOUD.code,data:S,updated_at:new Date().toISOString()}]);
-  if(!r.ok)throw new Error("HTTP "+r.status);
+  if(!r.ok){const t=await r.text().catch(()=>"");throw new Error("HTTP "+r.status+" "+t.slice(0,200))}
+}
+function cloudDiag(e){
+  const m=String(e&&e.message||e);
+  if(/HTTP 401|Invalid API key|jwt/i.test(m))return"Clave rechazada (401): la clave está mal copiada o no es la sb_publishable_ de ESTE proyecto. Cópiala de nuevo con el botón 📋.";
+  if(/HTTP 404/.test(m))return"No existe la tabla (404): en Supabase → SQL Editor vuelve a ejecutar el SQL de creación de academia_progress.";
+  if(/HTTP 40[03]/.test(m))return"Permiso denegado ("+m.match(/HTTP \d+/)[0]+"): falta la política RLS — reejecuta el SQL completo (incluye el create policy).";
+  if(/Failed to fetch|NetworkError|TypeError/i.test(m))return"El navegador no llegó a Supabase: o estás en claude.ai (bloquea conexiones externas — usa tu URL de GitHub Pages), o la Project URL está mal escrita, o no hay internet.";
+  return"Detalle técnico: "+m.slice(0,220);
 }
 async function cloudPull(){
   if(!CLOUD)return;
   try{
     cloudUI("conectando…","blue");
     const r=await cloudFetch("GET");
-    if(!r.ok)throw new Error("HTTP "+r.status);
+    if(!r.ok){const t=await r.text().catch(()=>"");throw new Error("HTTP "+r.status+" "+t.slice(0,200))}
     const rows=await r.json();
     if(rows.length){S=mergeS(S,rows[0].data);localStorage.setItem(KEY,JSON.stringify(S))}
     await cloudPushNow();
+    const old=document.getElementById("cloudErr");if(old)old.remove();
     cloudUI("nube conectada · progreso sincronizado","good");
     renderHome();renderWeak();renderFC();
     if(document.getElementById("v-clases").classList.contains("on"))renderClases();
   }catch(e){
     cloudUI("no se pudo conectar","bad");
     const el=document.getElementById("cloudForm");
-    if(el&&!document.getElementById("cloudErr"))
-      el.insertAdjacentHTML("beforeend",'<p class="small" id="cloudErr" style="color:var(--bad);margin:8px 0 0">Si estás en claude.ai: ese hosting bloquea conexiones externas — abre la app desde tu URL de GitHub Pages. Si ya estás en GitHub Pages: revisa la URL del proyecto, la clave anon y tu código.</p>');
+    const old=document.getElementById("cloudErr");if(old)old.remove();
+    if(el)el.insertAdjacentHTML("beforeend",'<p class="small" id="cloudErr" style="color:var(--bad);margin:8px 0 0">'+cloudDiag(e)+"</p>");
   }
 }
 function cloudSchedule(){
@@ -1501,10 +1510,19 @@ function cloudSchedule(){
     catch(e){cloudUI("sin conexión — se reintentará al siguiente avance","bad")}},2500);
 }
 function connectCloud(){
-  const url=document.getElementById("cbUrl").value.trim(),
-    key=document.getElementById("cbKey").value.trim(),
+  let url=document.getElementById("cbUrl").value.trim().replace(/["']/g,""),
+    key=document.getElementById("cbKey").value.trim().replace(/["'\s]/g,""),
     code=document.getElementById("cbCode").value.trim();
+  const dash=url.match(/dashboard\/project\/([a-z0-9-]+)/i);
+  if(dash)url="https://"+dash[1]+".supabase.co";
+  if(url&&!/^https?:\/\//i.test(url))url="https://"+url;
+  url=url.replace(/\/+$/,"");
   if(!url||!key||!code){cloudUI("completa los 3 campos","bad");return}
+  if(!/\.supabase\.co$/i.test(url.replace(/^https?:\/\//i,"").split("/")[0]))
+    {cloudUI("la URL debe ser la Project URL: https://xxxx.supabase.co (Settings → Data API)","bad");return}
+  if(/^sb_secret_/.test(key)){cloudUI("¡esa es la clave SECRETA! Nunca va en un navegador — usa la sb_publishable_","bad");return}
+  if(!/^(sb_publishable_|eyJ)/.test(key)){cloudUI("la clave debe empezar con sb_publishable_ (o eyJ si es legacy)","bad");return}
+  if(/…/.test(key)||key.length<40){cloudUI("la clave parece incompleta — cópiala con el botón 📋 de Supabase, no seleccionando el texto","bad");return}
   if(code.length<8){cloudUI("el código secreto debe tener al menos 8 caracteres","bad");return}
   CLOUD={url,key,code};localStorage.setItem(CKEY,JSON.stringify(CLOUD));
   renderCloudForm();cloudPull();

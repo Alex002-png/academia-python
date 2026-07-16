@@ -1360,6 +1360,7 @@ function go(v){
   window.scrollTo({top:0});
   if(v==="clases")renderClases();
   if(v==="examen")renderExamen();
+  if(v==="ruta")renderRuta();
 }
 tabs.forEach(b=>b.addEventListener("click",()=>go(b.dataset.v)));
 
@@ -1749,12 +1750,38 @@ function importar(){
 }
 function renderRuta(){
   const box=document.getElementById("rutaList");box.innerHTML="";
-  NIVELES.forEach(l=>{
-    const cls=l.s==="active"?"lvl active":"lvl locked";
-    const chip=l.s==="active"?'<span class="chip gold">En curso</span>':'<span class="chip lock">Bloqueado</span>';
+  const ns=nextStepInfo(),pct=nivel0Pct().pct;
+  const mesesTot=MESES.reduce((a,b)=>a+b,0);
+  const global=pct/100*MESES[0]/mesesTot*100;
+  const mesesRestantes=Math.round(mesesTot-(pct/100*MESES[0]));
+  // tarjeta ESTÁS AQUÍ
+  box.insertAdjacentHTML("beforeend",'<div class="card" style="border-color:var(--gold-dim)">'+
+   '<p class="eyebrow" style="color:var(--gold)">📍 Estás aquí</p>'+
+   '<h2 style="margin-bottom:2px">Nivel 0 · '+ns.label+"</h2>"+
+   '<div class="row" style="justify-content:space-between;margin-top:12px"><span class="small muted">Nivel 0 — Validación</span><span class="small num" style="color:var(--gold);font-weight:700">'+pct+"%</span></div>"+
+   '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+   '<div class="row" style="justify-content:space-between;margin-top:12px"><span class="small muted">Programa completo · 13 niveles · ~'+Math.round(mesesTot)+' meses</span><span class="small num" style="font-weight:700">'+global.toFixed(1)+"%</span></div>"+
+   '<div class="bar"><i style="width:'+Math.max(global,0.6)+'%;background:linear-gradient(90deg,var(--blue),var(--cyan))"></i></div>'+
+   '<p class="small muted" style="margin:8px 0 0">Te quedan ~'+mesesRestantes+' meses de camino a AI Systems Architect. Cada casilla se gana, no se espera.</p>'+
+   '<button class="btn" style="margin-top:12px" onclick="rutaGo()">▶ Continuar donde voy</button></div>');
+  NIVELES.forEach((l,li)=>{
+    const activo=l.s==="active";
+    const cls=activo?"lvl active":"lvl locked";
+    const chip=activo?'<span class="chip gold">En curso · '+pct+"%</span>"
+      :'<span class="chip lock">Se desbloquea al dominar N'+(l.n-1)+"</span>";
+    let inner="";
+    if(activo){
+      // mini-mapa de días del nivel actual
+      const mini=LEVEL0.map((d,i)=>{
+        const done=d.eval?levelApproved():dayDone(d);
+        const cur=i===ns.di;
+        return '<span class="chip '+(done?"good":cur?"gold":"lock")+'" style="margin:0 4px 4px 0">'+
+          d.n.replace("Días ","D").replace("Día ","D")+(done?" ✓":cur?" ◀":"")+"</span>"}).join("");
+      inner='<div class="bar" style="margin:8px 0 6px"><i style="width:'+pct+'%"></i></div><div>'+mini+"</div>";
+    }
     box.insertAdjacentHTML("beforeend",'<div class="'+cls+'"><div class="lvlnum">N'+l.n+"</div>"+
      '<div style="flex:1"><div class="row" style="justify-content:space-between"><strong>'+l.t+"</strong>"+chip+"</div>"+
-     '<div class="lvlmeta">'+l.d+"</div>"+
+     '<div class="lvlmeta">'+l.d+"</div>"+inner+
      '<div class="small" style="margin-top:5px">Proyecto: <span class="muted">'+l.p+"</span></div>"+
      '<div class="small">Temas: <span class="muted">'+l.b+"</span></div>"+
      (l.cur?'<div class="small">Cursos: <span class="muted">'+l.cur+"</span></div>":"")+
@@ -1762,36 +1789,40 @@ function renderRuta(){
      "</div></div>");
   });
 }
-function renderHome(){
+const MESES=[1.5,5,4,3,3,4,4,4,5,4,4,6,6]; // duración nominal de cada nivel del roadmap
+function nivel0Pct(){
   const ids=[];LEVEL0.forEach(d=>{d.ex.forEach(e=>ids.push(e.id));if(d.reto)ids.push(d.reto.id)});PRACTICA.forEach(p=>ids.push(p.id));
-  const done=ids.filter(i=>S.ex[i]).length,tot=ids.length;
-  const quizPart=quizPassed()?1:0;
-  const pct=Math.round((done+quizPart)/(tot+1)*100);
+  const done=ids.filter(i=>S.ex[i]).length;
+  return{pct:Math.round((done+(quizPassed()?1:0))/(ids.length+1)*100),done,tot:ids.length};
+}
+function nextStepInfo(){
+  for(let i=0;i<LEVEL0.length;i++){
+    const d=LEVEL0[i];
+    if(!dayUnlocked(i))break;
+    if(d.eval){if(!levelApproved())return{label:"Evaluación final: examen teórico y práctico",target:"examen",di:i};continue}
+    const p=phOf(d);
+    if(d.intuit&&!p.int)return{label:d.n+" · Fase 1: Comprensión e intuición",target:"clases",di:i};
+    if(d.mcq&&!p.mcq)return{label:d.n+" · Fase 2: Teoría y razonamiento",target:"clases",di:i};
+    for(const e of d.ex)if(!S.ex[e.id])return{label:d.n+" · "+e.t,target:"clases",di:i};
+    if(d.reto&&!S.ex[d.reto.id])return{label:d.n+" · Fase 6: Proyecto del tema",target:"clases",di:i};
+  }
+  if(levelApproved())return{label:"Defensa oral con tu tutor → sello + Nivel 1",target:"examen",di:-1};
+  return{label:"—",target:"clases",di:-1};
+}
+function rutaGo(){const ns=nextStepInfo();
+  if(ns.target==="clases"&&ns.di>=0){go("clases");openDay(ns.di)}else go(ns.target)}
+function renderHome(){
+  const n0=nivel0Pct(),pct=n0.pct,done=n0.done,tot=n0.tot;
   document.getElementById("barN0").style.width=pct+"%";
   document.getElementById("hdPct").textContent=pct+"%";
   document.getElementById("barTxt").textContent=done+" / "+tot+" ejercicios · examen teórico "+(quizPassed()?"aprobado":"pendiente");
   document.getElementById("kEx").textContent=done+" / "+tot;
   document.getElementById("kQuiz").textContent=!projectDone()?"bloqueado":(S.quiz.best===null?"disponible":S.quiz.best+"% (mejor)");
   document.getElementById("kDue").textContent=dueCards().length;
-  let next="—",target="clases";
-  outer:
-  for(let i=0;i<LEVEL0.length;i++){
-    const d=LEVEL0[i];
-    if(!dayUnlocked(i))break;
-    if(d.eval){if(!levelApproved()){next="Evaluación final: examen teórico y práctico";target="examen";break}continue}
-    const p=phOf(d);
-    if(d.intuit&&!p.int){next=d.n+" · Fase 1: Intuición";break}
-    if(d.mcq&&!p.mcq){next=d.n+" · Fase 2: Razonamiento";break}
-    for(const e of d.ex)if(!S.ex[e.id]){next=d.n+" · "+e.t;break outer}
-    if(d.reto&&!S.ex[d.reto.id]){next=d.n+" · Fase 11: Desafío final";break}
-  }
-  if(levelApproved()){next="Defensa oral con tu tutor → desbloquea el Nivel 1";target="examen"}
-  document.getElementById("nextTask").textContent=next;
-  document.getElementById("btnContinuar").onclick=()=>{
-    if(target==="clases"){go("clases");
-      const i=LEVEL0.findIndex((d,ix)=>dayUnlocked(ix)&&!dayDone(d)&&d.ex.length);
-      if(i>=0)openDay(i)}
-    else go(target)};
+  const ns=nextStepInfo();
+  document.getElementById("nextTask").textContent=ns.label;
+  document.getElementById("btnContinuar").onclick=rutaGo;
+  if(document.getElementById("v-ruta").classList.contains("on"))renderRuta();
   document.getElementById("aprobadoBox").innerHTML=levelApproved()
     ?'<div class="okbox" style="margin-top:12px"><strong>NIVEL 0 APROBADO por el corrector.</strong> Última puerta: defensa oral y code review con tu tutor en el chat. Después, él desbloquea el Nivel 1 aquí mismo.</div>':"";
 }

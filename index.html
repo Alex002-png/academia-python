@@ -192,8 +192,8 @@
 
 <header class="top"><div class="wrap brand">
   <div class="logo">&gt;_</div>
-  <div><h1>Academia <span class="py">Python</span>
-    <span class="sub">campus privado · alex · todo dentro de la web</span></h1></div>
+  <div><h1>Academia <span class="py">AI</span>
+    <span class="sub">ai systems architect &amp; research engineer · alex</span></h1></div>
   <div class="hdright"><div class="pct num" id="hdPct">0%</div><div class="lbl">nivel 0</div></div>
 </div></header>
 
@@ -244,17 +244,42 @@
     </ul>
   </div>
   <div class="card">
-    <p class="eyebrow">Metodología · 13 fases por tema</p>
-    <p class="small muted" style="margin:2px 0 8px">Diseñada para cómo aprendes: entendiendo el porqué, no memorizando. Si una fase no sale perfecta, no se avanza.</p>
+    <p class="eyebrow">Metodología · 9 fases por tema — camino al dominio</p>
+    <p class="small muted" style="margin:2px 0 8px">Aquí no se “termina” un tema: se <strong>domina</strong>. Regla de calidad: nada se aprueba con menos de 8.5/10.</p>
     <table class="mini">
-      <tr><td class="num">1</td><td><strong>Intuición</strong> — predices qué hace el código antes de verlo correr</td></tr>
-      <tr><td class="num">2</td><td><strong>Razonamiento</strong> — preguntas de porqué, para construir el modelo mental</td></tr>
-      <tr><td class="num">3–4</td><td><strong>Corrección y analogía</strong> — la clase completa, conectada con cosas reales</td></tr>
-      <tr><td class="num">5+12</td><td><strong>Ingeniería e IA</strong> — cómo lo usa un ingeniero y cómo se conecta con JARVIS/IA</td></tr>
-      <tr><td class="num">6–8</td><td><strong>Práctica guiada</strong> — ejercicios con corrector implacable y pistas escalonadas</td></tr>
-      <tr><td class="num">9–10</td><td><strong>Optimización y errores comunes</strong> — mejorar el código y esquivar los bugs típicos</td></tr>
-      <tr><td class="num">11</td><td><strong>Desafío</strong> — un ejercicio sin pistas ni ayuda</td></tr>
-      <tr><td class="num">13</td><td><strong>Examen oral</strong> — defensa con tu tutor en el chat: no puedes copiar, solo razonar</td></tr>
+      <tr><td class="num">1</td><td><strong>Comprensión</strong> — qué es, para qué sirve, intuición y analogías</td><td class="num">10%</td></tr>
+      <tr><td class="num">2</td><td><strong>Teoría</strong> — conceptos, reglas, funcionamiento interno + razonamiento</td><td class="num">20%</td></tr>
+      <tr><td class="num">3</td><td><strong>Visualización</strong> — diagramas y flujo interno</td><td class="num">30%</td></tr>
+      <tr><td class="num">4</td><td><strong>Código guiado</strong> — escribir junto al profesor, línea por línea</td><td class="num">40%</td></tr>
+      <tr><td class="num">5</td><td><strong>Práctica</strong> — ejercicios de dificultad creciente, corrector implacable</td><td class="num">60%</td></tr>
+      <tr><td class="num">6</td><td><strong>Proyecto</strong> — construir algo real con el tema, sin pistas</td><td class="num">80%</td></tr>
+      <tr><td class="num">7</td><td><strong>Examen</strong> — oral + código + preguntas difíciles + debugging</td><td class="num">90%</td></tr>
+      <tr><td class="num">8</td><td><strong>Dominio</strong> — ¿puedes explicarlo, implementarlo, usarlo y enseñarlo? Si algo es “no”, se repite</td><td class="num">100%</td></tr>
+      <tr><td class="num">9</td><td><strong>🔥 Ingeniería Real</strong> — cómo lo usa OpenAI/NVIDIA, cómo lo usarás en JARVIS, qué haría un Junior vs un Senior</td><td class="num">∞</td></tr>
+    </table>
+    <p class="small muted" style="margin:8px 0 0">Tiempos por tamaño de tema: pequeño (variables, if) 1–3 días · mediano (funciones, POO, SQL) ~1 semana · grande (Docker, PyTorch, FastAPI) 2–4 semanas · enorme (ML, DL, LLMs, Kubernetes) 1–3 meses.</p>
+  </div>
+  <div class="card">
+    <p class="eyebrow">Progresión · XP, racha e insignias</p>
+    <div class="row" style="gap:26px">
+      <div><div class="num" id="gXp" style="font-size:1.35rem;font-weight:700;color:var(--gold)">0 XP</div><div class="small muted" id="gRank">Novato</div></div>
+      <div><div class="num" id="gStreak" style="font-size:1.35rem;font-weight:700">🔥 0</div><div class="small muted">racha de días</div></div>
+    </div>
+    <div id="gBadges" style="margin-top:12px"></div>
+  </div>
+  <div class="card">
+    <p class="eyebrow">Certificados</p>
+    <div id="gCerts"></div>
+  </div>
+  <div class="card">
+    <p class="eyebrow">Modos del tutor · actívalos diciéndomelo en el chat</p>
+    <table class="mini">
+      <tr><td><strong>Modo Harvard</strong></td><td>máxima exigencia, más preguntas, más profundidad</td></tr>
+      <tr><td><strong>Modo Karpathy</strong></td><td>desde cero, con matemáticas, papers e implementación</td></tr>
+      <tr><td><strong>Modo OpenAI</strong></td><td>problemas reales de industria, no ejercicios ficticios</td></tr>
+      <tr><td><strong>Modo Entrevista</strong></td><td>simulacro técnico cronometrado estilo FAANG</td></tr>
+      <tr><td><strong>Modo Research</strong></td><td>leer, implementar y explicar papers</td></tr>
+      <tr><td><strong>Modo Proyecto</strong></td><td>construir: APIs, RAG, agentes, JARVIS</td></tr>
     </table>
   </div>
   <div class="card">
@@ -330,11 +355,12 @@
 
 <!-- ======== RUTA ======== -->
 <section class="view" id="v-ruta">
-  <div class="card"><h2>Ruta completa — 9 niveles + pista DSA</h2>
-    <p class="small muted" style="margin:4px 0 0">El contenido de cada nivel se habilita dentro de esta app cuando apruebas el anterior (examen ≥ 80%, proyecto, code review y defensa oral con tu tutor).</p></div>
+  <div class="card"><p class="eyebrow">Roadmap V3 · Karpathy + Systems</p>
+    <h2>Ruta completa — 13 niveles hacia AI Systems Architect</h2>
+    <p class="small muted" style="margin:4px 0 0">Tu plan maestro: de Python a arquitecto de sistemas de IA, con JARVIS V1 → V2 → Local como proyectos de carrera. ~53 meses nominales a 25 h/semana (documento vivo: se comprime con solapamientos). El contenido interactivo de cada nivel se construye en esta app cuando apruebas el anterior — examen, proyecto, code review y defensa oral.</p></div>
   <div id="rutaList"></div>
   <div class="card">
-    <p class="eyebrow">Pista paralela · desde el nivel 3</p>
+    <p class="eyebrow">Pista paralela · desde el nivel 1 (CS) hasta el final</p>
     <h2>DSA — Algoritmos y Estructuras de Datos</h2>
     <ul class="tight small">
       <li><strong>Fase 1</strong> · Big O, arrays, strings, hash tables — <em>Grokking Algorithms</em>.</li>
@@ -789,6 +815,7 @@ const LEVEL0=[
   {q:"¿Qué es exactamente print?",o:["Una variable especial","Un tipo de dato","Una función: una orden con nombre que recibe datos entre paréntesis y actúa con ellos","Un comentario del sistema"],a:2,e:"print() es una función. En el Nivel 1 escribirás las tuyas."}],
  ing:"En una empresa, los print se convierten en <em>logs</em>: mensajes que los sistemas escriben para contar qué hacen. Tu JARVIS hace exactamente eso al emitir el progreso de cada etapa de razonamiento — son prints con uniforme de trabajo. Depurar con print es la primera herramienta de todo ingeniero, y la última que se abandona.",
  errores:["Olvidar cerrar comillas o paréntesis → SyntaxError","Escribir Print con mayúscula: Python distingue mayúsculas","Poner texto sin comillas y esperar que se imprima"],
+ mental:{jr:"“print muestra cosas en pantalla.”",sr:"“print es una función de salida que escribe en un flujo (stdout): hoy es tu pantalla, mañana será un archivo de logs, una tubería entre procesos o el monitor de JARVIS.”",err:"Creer que el código ES el programa. El código es texto; el programa es lo que el intérprete hace con él al ejecutarlo."},
  reto:{id:"d1r",t:"Desafío final · sin pistas",
   d:'Imprime EXACTAMENTE estas tres líneas:<pre class="codebox">== RECIBO ==\nTotal: 25 soles\nGracias, Alex</pre>',
   starter:"",runs:[[]],hints:[],
@@ -826,6 +853,7 @@ const LEVEL0=[
   {q:"¿Por qué decimos que una variable es una etiqueta y no una caja?",o:["Porque ocupa menos memoria","Porque apunta a un objeto; reasignar mueve la etiqueta, no modifica el objeto","Porque las cajas son de otros lenguajes","Es solo una metáfora sin consecuencias"],a:1,e:"En el Nivel 3, con listas y objetos, esta diferencia explicará bugs que confunden a programadores intermedios."}],
  ing:"Las variables son el ESTADO de un sistema: lo que recuerda entre un paso y el siguiente. Cuando tu JARVIS responde, guarda en variables la pregunta del usuario, el contexto recuperado y la respuesta parcial. Sin variables no hay memoria; sin memoria no hay inteligencia.",
  errores:["Usar = creyendo que compara (eso es ==)","Nombres crípticos: x, aux, cosa","Usar una variable antes de crearla → NameError"],
+ mental:{jr:"“Una variable es una caja que guarda un valor.”",sr:"“Un nombre que referencia un objeto en memoria. La asignación liga nombres a objetos — no copia valores. Dos nombres pueden apuntar al mismo objeto.”",err:"El modelo de la caja. Parece inofensivo hoy; en el Nivel 1, con listas, producirá bugs que no entenderás si piensas en cajas."},
  reto:{id:"d2r",t:"Desafío final · sin pistas",
   d:'Intercambia los valores de las dos variables usando una <strong>variable auxiliar</strong> (prohibido reasignar los textos directamente) e imprime ambas: primero la izquierda, luego la derecha. Salida esperada: <code>dolar</code> y luego <code>sol</code>.',
   starter:'moneda_izquierda = "sol"\nmoneda_derecha = "dolar"',runs:[[]],hints:[],
@@ -869,6 +897,7 @@ const LEVEL0=[
   {q:'¿Por qué int("3.5") lanza ValueError?',o:["Porque 3.5 es negativo","Porque int() sobre un string solo acepta dígitos enteros: no interpreta el punto","Porque falta float primero siempre","Porque los strings no se convierten nunca"],a:1,e:'Camino correcto: int(float("3.5")) — primero a float, luego truncar.'}],
  ing:"Los modelos de IA viven de conversiones de tipo: tu pregunta llega como str, se convierte en números (tokens y vectores de floats), y la respuesta vuelve a str. Tu sistema RAG hace ese viaje completo en cada consulta. Dominar los tipos es dominar la frontera donde los sistemas se rompen.",
  errores:['Sumar str + int → TypeError','Creer que int("3.5") funciona','Confundir "True" (string) con True (bool)'],
+ mental:{jr:"“Los tipos son categorías de datos.”",sr:"“Un tipo es un contrato: define qué operaciones son válidas y qué significan. Un TypeError no es una molestia — es el sistema defendiendo el contrato.”",err:"Esperar que Python ‘adivine’ la conversión. Python es explícito a propósito: la magia implícita es donde nacen los bugs silenciosos."},
  reto:{id:"d3r",t:"Desafío final · sin pistas",
   d:'El precio llega como texto y hay un descuento. Imprime EXACTAMENTE <code>Pagas: 120</code> — pero el 120 debe salir de un CÁLCULO (prohibido escribir 120 en tu código).',
   starter:'precio_texto = "150"\ndescuento = 30',runs:[[]],hints:[],
@@ -911,6 +940,7 @@ const LEVEL0=[
   {q:"¿Cuál expresión te dice si n es divisible entre 7?",o:["n / 7 == 0","n // 7 == 0","n % 7 == 0","n ** 7 == 0"],a:2,e:"Divisible = la división no deja resto. El resto lo da %."}],
  ing:"// y % están por todas partes: paginar resultados (página = elemento // por_página), relojes (minutos % 60), y en IA: repartir 319 PDFs en lotes de 8 para procesarlos — como hace tu HERMES al indexar documentos. Lo que hoy es 10 % 3, mañana es distribuir carga en un sistema real.",
  errores:["Esperar que 10/2 dé 5 (da 5.0: / siempre float)","Confundir / con //","Olvidar paréntesis: 8 + 10 / 2 no es un promedio"],
+ mental:{jr:"“Son símbolos para hacer cuentas.”",sr:"“Son funciones con sintaxis especial. // y % implementan aritmética modular: la base de relojes, hashing, buffers circulares y paginación en sistemas reales.”",err:"Asumir que la división se comporta como en tu calculadora física. En ingeniería, saber si tu resultado es int o float importa tanto como el número."},
  reto:{id:"d4r",t:"Desafío final · sin pistas",
   d:'Convierte los minutos totales a horas y minutos usando <code>//</code> y <code>%</code>, e imprime EXACTAMENTE <code>3 horas y 20 minutos</code> — calculado, no escrito a mano.',
   starter:"minutos_totales = 200",runs:[[]],hints:[],
@@ -943,7 +973,7 @@ const LEVEL0=[
    hints:["La división se ejecuta ANTES que la suma: 8 + 5.0.","Agrupa la suma para que ocurra primero, luego divide."]},
  ]},
 {id:"d5",n:"Día 5",t:"Strings a fondo",
- intro:"El 80% de los datos del mundo real son texto sucio: correos con espacios, nombres en mayúsculas, archivos mal formateados. Hoy aprendes cirugía de strings — la habilidad que usarás en TODOS tus proyectos, desde scrapers hasta IA.",
+ intro:"El 85% (regla 8.5/10) de los datos del mundo real son texto sucio: correos con espacios, nombres en mayúsculas, archivos mal formateados. Hoy aprendes cirugía de strings — la habilidad que usarás en TODOS tus proyectos, desde scrapers hasta IA.",
  intuit:{code:'palabra = "python"\nprint(palabra[1])\nprint(palabra[-2])',
   q:"¿Qué letra imprime cada línea? Recuerda desde dónde cuenta Python.",
   req:["y","o"],out:"y\no",
@@ -951,8 +981,9 @@ const LEVEL0=[
  mcq:[
   {q:'¿Qué devuelve "hola"[0:2]?',o:['"hol"','"ho"','"ola"','Error'],a:1,e:"El slicing excluye el límite derecho: índices 0 y 1."},
   {q:"¿Qué hace exactamente .strip()?",o:["Quita TODOS los espacios del texto","Quita espacios solo de los bordes (inicio y final)","Separa el texto en palabras","Pone el texto en minúsculas"],a:1,e:'"  hola  mundo  ".strip() → "hola  mundo": los espacios internos sobreviven.'}],
- ing:"La limpieza de texto es el 80% del preprocesamiento en ciencia de datos e IA. Tu HERMES, antes de indexar un PDF, normaliza el texto igual que tu ejercicio del correo: strip, lower, replace. Un dato sucio que entra es una respuesta basura que sale — los ingenieros lo llaman garbage in, garbage out.",
+ ing:"La limpieza de texto es el 85% (regla 8.5/10) del preprocesamiento en ciencia de datos e IA. Tu HERMES, antes de indexar un PDF, normaliza el texto igual que tu ejercicio del correo: strip, lower, replace. Un dato sucio que entra es una respuesta basura que sale — los ingenieros lo llaman garbage in, garbage out.",
  errores:["Creer que [0:3] incluye el índice 3","Esperar que .strip() borre espacios internos","Pedir un índice que no existe → IndexError"],
+ mental:{jr:"“Un string es texto entre comillas.”",sr:"“Una secuencia INMUTABLE de caracteres: cada ‘modificación’ crea un objeto nuevo. Por eso los métodos se encadenan — cada uno devuelve un string fresco.”",err:"Creer que texto.upper() modifica la variable. No: devuelve otro string; si no lo guardas, se pierde."},
  reto:{id:"d5r",t:"Desafío final · sin pistas",
   d:'Ese correo llegó sucio de un formulario. Imprímelo limpio y normalizado: EXACTAMENTE <code>alex@gmail.com</code> — usando métodos, no escribiéndolo a mano.',
   starter:'correo = "  ALEX@GMAIL.COM  "',runs:[[]],hints:[],
@@ -998,6 +1029,7 @@ const LEVEL0=[
   {q:'¿Qué imprime print("a", "b", sep="-")?',o:["a b","a-b","ab","a, b"],a:1,e:"sep define el separador entre los valores; por defecto es un espacio."}],
  ing:"input → procesar → print es la anatomía de TODO sistema interactivo. Un chatbot es exactamente eso con esteroides: lee tu mensaje (input), lo procesa un modelo, responde (print). Tu bot de Telegram del Nivel 5 y tu JARVIS son este patrón — hoy estás aprendiendo su esqueleto.",
  errores:["Operar el input sin convertir → el bug del 48","Convertir a int cuando puede traer decimales","Olvidar el mensaje del prompt: input() mudo confunde al usuario"],
+ mental:{jr:"“input() pide datos al usuario.”",sr:"“input() es una FRONTERA DE CONFIANZA: todo lo que cruza es str no confiable que se valida y convierte antes de tocar la lógica. Igual que una API valida cada request.”",err:"Confiar en que el usuario escribirá lo que esperas. Un Senior diseña para el usuario que escribe ‘hola’ donde iba un número."},
  reto:{id:"d6r",t:"Desafío final · sin pistas",
   d:'Pide un nombre y una nota (0–20). Imprime el nombre en MAYÚSCULAS con la nota, formato exacto: <code>ALEX: 15 puntos</code>. La prueba escribe <code>alex</code> y <code>15</code>.',
   starter:"",runs:[["alex","15"]],hints:[],
@@ -1043,6 +1075,7 @@ const LEVEL0=[
   {q:"¿Qué evita que un while sea infinito?",o:["Ponerle un límite de tiempo","Que algo DENTRO del bucle pueda volver falsa la condición","Usar break siempre al final","Python los detiene solo"],a:1,e:"Regla de oro: si nada dentro cambia la condición, el bucle nunca muere. (Esta terminal te rescata; la vida real, no siempre.)"}],
  ing:"El corazón de un agente de IA es literalmente esto: <code>while</code> no haya respuesta final → pensar, actuar, evaluar (con ifs decidiendo cada paso). Tu JARVIS con LangGraph es un grafo de decisiones sobre un bucle. El if/while que aprendes hoy es el mismo patrón, a otra escala.",
  errores:["Olvidar los dos puntos al final del if/while","Indentación desigual dentro del mismo bloque","Bucle donde nada cambia la condición → infinito"],
+ mental:{jr:"“if decide y while repite.”",sr:"“El programa es un GRAFO de caminos posibles: cada if bifurca, cada while cicla. Diseñar es razonar TODOS los caminos, no solo el feliz.”",err:"Pensar solo en el camino donde todo sale bien. Los bugs viven en los caminos que no imaginaste."},
  reto:{id:"d7r",t:"Desafío final · sin pistas",
   d:'Lee un número n e imprime del 1 al n (uno por línea) con while, PERO: si el número es múltiplo de 3, imprime <code>fizz</code> en su lugar. La prueba escribe <code>7</code>: espera 1, 2, fizz, 4, 5, fizz, 7.',
   starter:"",runs:[["7"]],hints:[],
@@ -1090,6 +1123,7 @@ const LEVEL0=[
   {q:"¿Cuál error impide que el programa siquiera ARRANQUE?",o:["ZeroDivisionError","ValueError","SyntaxError","NameError"],a:2,e:"SyntaxError se detecta al analizar el código, antes de ejecutar nada. Los otros tres explotan en plena ejecución."}],
  ing:"Un ingeniero profesional lee tracebacks a diario: los logs de errores de producción de cualquier empresa (y de tu JARVIS) son tracebacks acumulados. La diferencia entre junior y senior no es cometer menos errores: es diagnosticarlos en segundos. Hoy entrenas ese músculo.",
  errores:["Leer el traceback de arriba hacia abajo","Ignorar el número de línea que te regala","Borrar código hasta que 'funcione' en vez de entender la causa"],
+ mental:{jr:"“Los errores son fallos que hay que evitar.”",sr:"“Los errores son SEÑALES ESTRUCTURADAS del sistema. Manejarlos es parte del diseño, no un parche. Un sistema sin manejo de errores no está incompleto: está roto.”",err:"Tapar el error para que ‘no moleste’ en vez de entender la causa. El error silenciado siempre vuelve — más grande."},
  reto:{id:"d8r",t:"Desafío final · sin pistas",
   d:'Un divisor robusto: lee dos números y muestra la división con 2 decimales (formato <code>Resultado: X.XX</code>), pero si el divisor es 0, imprime <code>no se puede dividir entre cero</code> sin explotar. Pruebas: (9, 4) y (5, 0).',
   starter:"",runs:[["9","4"],["5","0"]],hints:[],
@@ -1151,9 +1185,20 @@ const LEVEL0=[
  ]},
 {id:"d10",n:"Día 10",t:"Evaluación final del nivel",eval:true,
  intro:"Fase 13: demostrar. Primero contra el corrector (teórico + práctico, sin pistas) y después la defensa oral conmigo en el chat — sin copiar, solo razonar. Si algo sale mal, no es fracaso: es el mapa de tu repaso.",
- theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen teórico en la pestaña <strong>Examen</strong> (15 preguntas, mínimo 80%); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
+ theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen teórico en la pestaña <strong>Examen</strong> (15 preguntas, mínimo 85% (regla 8.5/10)); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
  ex:[]},
 ];
+/* Fase 3 · Visualización — diagramas por tema */
+const VIZ={
+d1:'programa.py ──lee──▶ [ INTÉRPRETE ] ──ejecuta──▶ pantalla\nprint("hola")    traduce línea a línea          hola',
+d2:'precio ──────▶ ┌─────┐\n               │ 100 │ ◀── precio_final\n               └─────┘\ndespués de  precio = 200:\nprecio ──────▶ ┌─────┐   ┌─────┐\n               │ 200 │   │ 100 │ ◀── precio_final (intacto)\n               └─────┘   └─────┘',
+d3:'42     → int    3.14  → float\n"hola" → str    True  → bool\n\n"25" ──int()──▶ 25 ──str()──▶ "25"\n        conversiones explícitas',
+d4:'10 entre 3:      10 = 3 × 3 + 1\n                        ▲       ▲\n                    10 // 3   10 % 3\n                    cociente   resto',
+d5:'índice:     0   1   2   3   4   5\nletra:      p   y   t   h   o   n\nnegativo:  -6  -5  -4  -3  -2  -1\n\n"python"[0:3] → pyt   (el índice 3 NO entra)',
+d6:'USUARIO ─teclea─▶ input() ──str──▶ int()/float() ──▶ LÓGICA ──▶ print()\n                  frontera        validación         cálculo     salida',
+d7:'        ┌──────────◀─────────┐\n        ▼                     │\n  ¿condición? ──True──▶ cuerpo del bucle\n        │            (algo DEBE cambiar la condición)\n      False\n        ▼\n  sigue el programa',
+d8:'Traceback (most recent call last):    ← 3º  contexto\n  File "programa.py", línea 2         ← 2º  DÓNDE\nValueError: invalid literal ...        ← 1º  LEE AQUÍ PRIMERO'
+};
 /* examen práctico */
 const PRACTICA=[
  {id:"p1",t:"Práctico 1 · Eco en mayúsculas",
@@ -1228,15 +1273,19 @@ const CARDS=[
  ["Regla de oro del while","Algo DENTRO del bucle debe poder volver falsa la condición — o es infinito."],
 ];
 const NIVELES=[
- {n:0,t:"Fundamentos",d:"8–10 días · ~25 h",p:"Calculadora de consola",b:"Python Crash Course 1–2 · CS50P L0",s:"active"},
- {n:1,t:"Básico",d:"~2 sem · ~45 h",p:"Gestor de tareas con persistencia",b:"PCC 3–8 · Think Python 1–10"},
- {n:2,t:"Básico avanzado",d:"~2 sem · ~50 h",p:"Automatizador de archivos + Batalla Naval",b:"Automate the Boring Stuff 6–13"},
- {n:3,t:"Intermedio (POO) — arranca DSA y Git",d:"~3 sem · ~65 h",p:"Sistema bancario POO con tests",b:"PCC 9 · Effective Python (selección)"},
- {n:4,t:"Intermedio avanzado",d:"~3 sem · ~65 h",p:"Web scraper + CLI publicable",b:"Fluent Python 1–7 · Python Cookbook"},
- {n:5,t:"Avanzado — concurrencia y BD",d:"~3 sem · ~75 h",p:"Bot Telegram/Discord async con base de datos",b:"Fluent Python 17–21"},
- {n:6,t:"Profesional — APIs y deploy",d:"~3.5 sem · ~85 h",p:"API REST con auth JWT, tests, Docker y deploy",b:"Effective Python completo"},
- {n:7,t:"Ingeniería de Software",d:"~2.5 sem · ~60 h",p:"Contribución open source + refactor auditado",b:"Clean Code · Pragmatic Programmer"},
- {n:8,t:"Especialización: IA / Datos / Automatización",d:"8–12 sem · ~100 h",p:"Capstone profesional",b:"Según ruta"},
+ {n:0,t:"Validación — Python + ML Specialization",d:"1–2 meses",p:"Calculadora profesional + labs del curso de Ng",b:"Python básico (este campus, en curso) · Machine Learning Specialization de Andrew Ng (arranca al aprobar la calculadora)",s:"active"},
+ {n:1,t:"Computer Science",d:"5 meses",p:"API profesional",b:"Lógica · Python · POO · Algoritmos · Estructuras de Datos · Git/GitHub · Linux · Bash · Redes · HTTP · APIs · SQL"},
+ {n:2,t:"Software Engineering",d:"4 meses",p:"Backend escalable",b:"FastAPI · PostgreSQL · Redis · Docker · Testing · Clean Code · Patrones de Diseño · Arquitectura Backend"},
+ {n:3,t:"Matemáticas para IA",d:"3 meses",p:"Objetivo: entender papers",b:"Álgebra Lineal · Cálculo · Probabilidad · Estadística · Optimización"},
+ {n:4,t:"Machine Learning",d:"3 meses",p:"Modelos clásicos completos",b:"ML clásico · Scikit-Learn · Árboles · SVM · Ensembles · Clustering · Métricas"},
+ {n:5,t:"Deep Learning",d:"4 meses",p:"Redes en PyTorch (no TensorFlow)",b:"Redes neuronales · Backpropagation · CNN · RNN · LSTM · Attention"},
+ {n:6,t:"Transformers",d:"4 meses",p:"Leer papers reales",b:"Attention · Transformers · Tokenización · Embeddings · Positional Encoding · BERT · GPT · Llama · Qwen"},
+ {n:7,t:"LLM Engineering",d:"4 meses",p:"JARVIS V1",b:"Inferencia · RAG · Fine-Tuning · LoRA/QLoRA · Vector DBs · Prompt Engineering · AI Evals · Guardrails"},
+ {n:8,t:"AI Systems",d:"5 meses",p:"JARVIS V2",b:"AI Agents · MCP · LangGraph · CrewAI · A2A · Memoria · Planning · Tool Calling"},
+ {n:9,t:"Sistemas Distribuidos",d:"4 meses",p:"Infraestructura de IA",b:"Docker · Kubernetes · MLOps · Model Serving · vLLM · Ray · Kafka · Observabilidad · Escalabilidad"},
+ {n:10,t:"IA Local",d:"4 meses",p:"JARVIS Local",b:"Ollama · llama.cpp · GGUF · Quantization · CUDA básico · GPU · Optimización · Inferencia Local"},
+ {n:11,t:"Research Engineer",d:"6 meses",p:"Objetivo: pensar como Karpathy",b:"Leer papers · Reproducir papers · Implementar papers · Escribir papers · Open Source · Contribuir en GitHub"},
+ {n:12,t:"AI Systems Architect",d:"6 meses",p:"Arquitectura de IA completa",b:"Arquitectura LLM · Arquitectura Distribuida · Seguridad IA · Cloud/AWS · Multi-GPU · Costos · Optimización"},
 ];
 
 /* ============================================================
@@ -1249,7 +1298,8 @@ try{S=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){S={}}
 try{const old=JSON.parse(localStorage.getItem("academiaPython.v1"));
   if(old&&!S.migrated){S.quiz=S.quiz||old.quiz;S.weak=S.weak||old.weak;S.migrated=1}}catch(e){}
 S.ex=S.ex||{};S.quiz=S.quiz||{best:null,attempts:0};S.cards=S.cards||{};S.weak=S.weak||[];S.hints=S.hints||{};S.ph=S.ph||{};
-const save=()=>{localStorage.setItem(KEY,JSON.stringify(S));cloudSchedule()};
+const save=()=>{S.log=S.log||{};S.log[new Date().toISOString().slice(0,10)]=1;
+  localStorage.setItem(KEY,JSON.stringify(S));cloudSchedule()};
 const draftKey=id=>"apydraft."+id;
 
 function phOf(d){if(!S.ph)S.ph={};return S.ph[d.id]||{}}
@@ -1266,7 +1316,7 @@ function dayUnlocked(i){
 }
 function projectDone(){return!!S.ex["d9p"]}
 function practicaDone(){return PRACTICA.every(p=>S.ex[p.id])}
-function quizPassed(){return S.quiz.best!==null&&S.quiz.best>=80}
+function quizPassed(){return S.quiz.best!==null&&S.quiz.best>=85}
 function levelApproved(){return projectDone()&&practicaDone()&&quizPassed()}
 
 /* ============================================================
@@ -1300,7 +1350,7 @@ function renderClases(){
       const tot=d.ex.length+(d.reto?1:0);
       const hecho=d.ex.filter(e=>S.ex[e.id]).length+((d.reto&&S.ex[d.reto.id])?1:0);
       const st=evalDay?(evalOk?'<span class="chip good">Aprobado</span>':unlocked?'<span class="chip blue">Evaluación</span>':'<span class="chip lock">Bloqueado</span>')
-        :done?'<span class="chip good">Completado</span>'
+        :done?'<span class="chip good">80% · a dominar</span>'
         :unlocked?'<span class="chip gold">Disponible</span>':'<span class="chip lock">Bloqueado</span>';
       h+='<div class="daycard '+(unlocked?"":"locked ")+(done?"done ":"")+(unlocked&&!done?"cur":"")+'" '+
         (unlocked?'onclick="openDay('+i+')" tabindex="0" onkeydown="if(event.key===\'Enter\')openDay('+i+')"':"")+'>'+
@@ -1315,9 +1365,9 @@ function renderClases(){
   h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0 · metodología 13 fases</p><h2>"+d.t+"</h2>"+
     (d.intro?'<p class="small" style="margin:8px 0 0;color:var(--muted)">'+d.intro+"</p>":"")+"</div>";
   const okInt=!d.intuit||p.int,okMcq=okInt&&(!d.mcq||p.mcq);
-  // FASE 1 · intuición
+  // FASE 1 · comprensión e intuición
   if(d.intuit){
-    h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 1 · Intuición</p>'+
+    h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 1 · Comprensión e intuición — 10%</p>'+
       '<p class="small" style="margin:2px 0 8px">'+d.intuit.q+'</p>'+
       '<pre class="codebox">'+hl(d.intuit.code)+"</pre>";
     if(p.int){
@@ -1332,7 +1382,7 @@ function renderClases(){
   }
   // FASE 2 · razonamiento
   if(d.mcq&&okInt){
-    h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 2 · Razonamiento</p>';
+    h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 2 · Teoría y razonamiento — 20%</p>';
     if(p.mcq){
       h+='<div class="okbox"><strong>Razonamiento verificado</strong> — modelo mental correcto.</div>'+
         d.mcq.map(m=>'<p class="small" style="margin:10px 0 2px"><strong>'+m.q+'</strong></p><p class="small muted" style="margin:0">'+m.e+"</p>").join("")+"</div>";
@@ -1347,34 +1397,47 @@ function renderClases(){
   if(!okInt)h+='<div class="card"><p class="small muted" style="margin:0">🔒 El resto de la clase se abre al completar la <strong>Fase 1 · Intuición</strong>. Primero piensas, después ves.</p></div>';
   else if(!okMcq)h+='<div class="card"><p class="small muted" style="margin:0">🔒 La clase completa se abre al superar la <strong>Fase 2 · Razonamiento</strong>.</p></div>';
   else{
-    // FASES 3-4 · clase y analogía
+    // FASE 3 · visualización
+    if(VIZ[d.id])h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 3 · Visualización — 30%</p><pre class="codebox" style="border-left-color:var(--blue)">'+esc(VIZ[d.id])+"</pre></div>";
+    // FASES 2-4 · teoría y código guiado
     d.theory.forEach((t,i)=>{
-      h+='<div class="card">'+(i===0?'<p class="eyebrow" style="color:var(--gold)">Fases 3–4 · Clase, corrección y analogía</p>':"")+
+      h+='<div class="card">'+(i===0?'<p class="eyebrow" style="color:var(--gold)">Fase 4 · Código guiado — 40%</p>':"")+
         '<h2 style="font-size:.98rem">'+t[0]+"</h2><div class='small' style='color:var(--text)'>"+t[1]+"</div>";
       if(t[2])h+='<pre class="codebox">'+hl(t[2])+'</pre><button class="btn ghost" onclick="toPlayground(this)" data-code="'+esc(t[2]).replace(/"/g,"&quot;").replace(/\n/g,"&#10;")+'">Probar en la Terminal →</button>';
       h+="</div>";
     });
-    // FASES 5+12 · ingeniería e IA
-    if(d.ing)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fases 5 y 12 · Ingeniería real e IA</p><p class="small" style="margin:2px 0 0">'+d.ing+"</p></div>";
-    // FASES 6-8 · práctica guiada
+    // MENTAL MODEL
+    if(d.mental)h+='<div class="card"><p class="eyebrow" style="color:var(--cyan)">🧠 Mental Model · cómo piensa un Senior</p>'+
+      '<p class="small" style="margin:4px 0 6px">❌ <strong>Principiante:</strong> '+d.mental.jr+"</p>"+
+      '<p class="small" style="margin:0 0 6px">✅ <strong>Senior:</strong> '+d.mental.sr+"</p>"+
+      '<p class="small" style="margin:0">⚠️ <strong>Error mental típico:</strong> '+d.mental.err+"</p></div>";
+    // FASE 9 · ingeniería real
+    if(d.ing)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 9 · Ingeniería Real — industria y JARVIS</p><p class="small" style="margin:2px 0 0">'+d.ing+"</p></div>";
+    // FASE 5 · práctica
     const exs=d.eval?[]:d.ex;
-    if(exs.length)h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fases 6–8 · Práctica guiada</p></div>';
+    if(exs.length)h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fase 5 · Práctica — 60%</p></div>';
     exs.forEach(e=>h+=exCard(e));
-    // FASE 10 · errores comunes
-    if(d.errores)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 10 · Errores comunes</p><ul class="tight small">'+d.errores.map(x=>"<li>"+x+"</li>").join("")+"</ul></div>";
-    // FASE 11 · desafío
+    // errores comunes (lo que haría un junior)
+    if(d.errores)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Errores comunes · lo que haría un Junior</p><ul class="tight small">'+d.errores.map(x=>"<li>"+x+"</li>").join("")+"</ul></div>";
+    // FASE 6 · proyecto del tema
     if(d.reto){
-      if(d.ex.every(e=>S.ex[e.id]))h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fase 11 · Desafío — sin pistas, sin ayuda</p></div>'+exCard(d.reto);
-      else h+='<div class="card"><p class="small muted" style="margin:0">🔒 <strong>Fase 11 · Desafío</strong>: se abre al aprobar toda la práctica guiada.</p></div>';
+      if(d.ex.every(e=>S.ex[e.id]))h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fase 6 · Proyecto del tema — 80% · sin pistas, sin ayuda</p></div>'+exCard(d.reto);
+      else h+='<div class="card"><p class="small muted" style="margin:0">🔒 <strong>Fase 6 · Proyecto del tema</strong>: se abre al dominar toda la práctica.</p></div>';
     }
     if(d.eval)h+='<div class="card"><button class="btn" onclick="go(\'examen\')">Ir a la pestaña Examen →</button></div>';
   }
-  // día completado → continuar
+  // fases 1-6 superadas → verificación de dominio + continuar
   if(dayDone(d)&&!d.eval){
     const nx=curDay+1;
-    h+='<div class="card" style="border-color:var(--gold-dim)"><p class="eyebrow" style="color:var(--gold)">'+d.n+" completado</p>"+
-      '<h2 style="color:var(--good)">Todas las fases superadas ✓</h2>'+
-      (nx<LEVEL0.length?'<button class="btn" style="margin-top:10px" onclick="openDay('+nx+')">Continuar → '+LEVEL0[nx].n+": "+LEVEL0[nx].t+"</button>":"")+"</div>";
+    h+='<div class="card" style="border-color:var(--gold-dim)"><p class="eyebrow" style="color:var(--gold)">Fase 8 · Verificación de Dominio</p>'+
+      '<h2 style="color:var(--good)">'+d.n+' al 80% — fases 1–6 superadas</h2>'+
+      '<p class="small muted" style="margin:8px 0 6px">Aquí NO se dice “terminaste”. Antes de considerarlo <strong>dominado</strong>, respóndete con brutal honestidad:</p>'+
+      '<ul class="tight small"><li>✅ ¿Puedes <strong>explicarlo</strong> con tus palabras, sin mirar?</li>'+
+      '<li>✅ ¿Puedes <strong>implementarlo</strong> desde cero, editor vacío?</li>'+
+      '<li>✅ ¿Puedes <strong>usarlo</strong> en un problema nuevo?</li>'+
+      '<li>✅ ¿Podrías <strong>enseñárselo</strong> a alguien?</li></ul>'+
+      '<p class="small muted" style="margin:6px 0 0">Si alguna respuesta es “no”: repite esa parte. Las Fases 7 (Examen) y 8 se sellan al final del nivel — examen + defensa oral con tu tutor, que es quien declara <strong>DOMINADO</strong>.</p>'+
+      (nx<LEVEL0.length?'<button class="btn" style="margin-top:12px" onclick="openDay('+nx+')">Continuar → '+LEVEL0[nx].n+": "+LEVEL0[nx].t+"</button>":"")+"</div>";
   }
   box.innerHTML=h;
   if(okMcq){d.ex.forEach(e=>{if(document.getElementById("ed-"+e.id))wireEx(e)});
@@ -1535,7 +1598,7 @@ function renderExamen(){
     return;
   }
   let h='<div class="card"><p class="eyebrow">Evaluación final · nivel 0</p><h2>Parte 1 — Examen teórico</h2>'+
-   '<p class="small muted" style="margin:4px 0 0">15 preguntas · mínimo 80% · sin usar la Terminal (se honesto: el único estafado serías tú).</p>'+
+   '<p class="small muted" style="margin:4px 0 0">15 preguntas · mínimo 85% (regla 8.5/10) · sin usar la Terminal (se honesto: el único estafado serías tú).</p>'+
    '<p style="margin:10px 0 0" id="quizBest"></p></div>';
   h+='<div class="card">'+QUIZ.map((q,i)=>'<div class="q" id="q'+i+'"><p class="enun"><span class="num" style="color:var(--blue)">'+String(i+1).padStart(2,"0")+"</span> · "+q.q+"</p>"+
     q.o.map((o,j)=>'<label><input type="radio" name="q'+i+'" value="'+j+'"><span>'+o+"</span></label>").join("")+
@@ -1554,14 +1617,14 @@ function veredictoHTML(){
     return'<p class="eyebrow">Veredicto</p><h2 style="color:var(--good)">NIVEL 0 — APROBADO</h2>'+
      '<p class="small">Queda una sola puerta: la <strong>defensa oral</strong>. Llévale tu calculadora a tu tutor en el chat de Claude — te preguntará por qué cada línea está donde está y hará el code review. Superada la defensa, el tutor añade el Nivel 1 completo a esta app (misma URL).</p>';
   const f=[];
-  if(!quizPassed())f.push("examen teórico ≥ 80%");
+  if(!quizPassed())f.push("examen teórico ≥ 85% (regla 8.5/10)");
   if(!practicaDone())f.push("los 3 prácticos");
   return'<p class="eyebrow">Veredicto</p><h2 style="color:var(--warn)">En curso</h2><p class="small muted">Falta: '+f.join(" · ")+".</p>";
 }
 function pintarBest(){
   const el=document.getElementById("quizBest");if(!el)return;
   if(S.quiz.best===null){el.innerHTML='<span class="chip">Sin intentos aún</span>';return}
-  const ok=S.quiz.best>=80;
+  const ok=S.quiz.best>=85;
   el.innerHTML='<span class="chip '+(ok?"good":"bad")+'">Mejor nota: '+S.quiz.best+"% — "+(ok?"APROBADO":"aún no aprueba")+"</span> "+
    '<span class="chip">'+S.quiz.attempts+" intento(s)</span>";
 }
@@ -1579,7 +1642,7 @@ function corregir(){
   const p=Math.round(ok/QUIZ.length*100);
   S.quiz.attempts++;if(S.quiz.best===null||p>S.quiz.best)S.quiz.best=p;save();
   const r=document.getElementById("quizResult");r.style.display="block";
-  const pass=p>=80;
+  const pass=p>=85;
   r.innerHTML='<p class="eyebrow">Resultado teórico</p><h2 style="color:'+(pass?"var(--good)":"var(--bad)")+'">'+p+"% — "+(pass?"APROBADO":"NO APROBADO")+"</h2>"+
    '<p class="small muted">'+ok+" de "+QUIZ.length+" correctas. "+
    (pass?"Sigue con el examen práctico de abajo.":"Revisa las explicaciones, repasa las flashcards de esos temas y reinténtalo MAÑANA — el cerebro consolida durmiendo, no insistiendo.")+"</p>";
@@ -1640,7 +1703,7 @@ function exportar(){
 function importar(){
   try{const d=JSON.parse(document.getElementById("impTxt").value);
     if(!d||typeof d!=="object")throw 0;
-    S={ex:d.ex||{},quiz:d.quiz||{best:null,attempts:0},cards:d.cards||{},weak:d.weak||[],hints:d.hints||{},ph:d.ph||{},migrated:1};
+    S={ex:d.ex||{},quiz:d.quiz||{best:null,attempts:0},cards:d.cards||{},weak:d.weak||[],hints:d.hints||{},ph:d.ph||{},log:d.log||{},migrated:1};
     save();renderHome();renderWeak();renderFC();curDay=null;
     document.getElementById("syncMsg").textContent="Progreso importado correctamente.";
     document.getElementById("impBox").style.display="none";
@@ -1714,6 +1777,7 @@ function mergeS(a,b){
     const x=(a.ph||{})[k]||{},y=(b.ph||{})[k]||{};
     m.ph[k]={};if(x.int||y.int)m.ph[k].int=1;if(x.mcq||y.mcq)m.ph[k].mcq=1;
   });
+  m.log=Object.assign({},b.log||{},a.log||{});
   return m;
 }
 function cloudFetch(method,body){
@@ -1795,6 +1859,60 @@ function renderCloudForm(){
     '<input type="text" id="cbCode" placeholder="tu código secreto (mín. 8 caracteres, invéntalo)" style="margin-bottom:8px">'+
     '<button class="btn" onclick="connectCloud()">Conectar nube</button>';
 }
+/* ---- gamificación: XP, rangos, racha, insignias, certificados ---- */
+const RANGOS=[[0,"Novato"],[100,"Aprendiz"],[250,"Constructor"],[450,"Cadete de Ingeniería"],[700,"Ingeniero Junior"],[1000,"Ingeniero"],[1500,"Ingeniero Senior"],[2200,"Arquitecto en formación"]];
+function xpCalc(){
+  let xp=0;
+  LEVEL0.forEach(d=>{const p=phOf(d);
+    if(d.intuit&&p.int)xp+=5;
+    if(d.mcq&&p.mcq)xp+=5;
+    d.ex.forEach(e=>{if(S.ex[e.id])xp+=10});
+    if(d.reto&&S.ex[d.reto.id])xp+=25;
+  });
+  PRACTICA.forEach(e=>{if(S.ex[e.id])xp+=20});
+  if(S.ex["d9p"])xp+=90;
+  if(quizPassed())xp+=50;
+  return xp;
+}
+function rachaCalc(){
+  if(!S.log)return 0;
+  let n=0;const d=new Date();
+  if(!S.log[d.toISOString().slice(0,10)])d.setDate(d.getDate()-1);
+  while(S.log[d.toISOString().slice(0,10)]){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+function insignias(){
+  const b=[];
+  const anyEx=Object.keys(S.ex).length>0;
+  if(anyEx)b.push(["⚡ Primera sangre","primer ejercicio aprobado"]);
+  if(Object.values(S.ph||{}).some(p=>p.int))b.push(["🔮 Vidente","primera predicción correcta"]);
+  if(LEVEL0.some(d=>!d.eval&&dayDone(d)))b.push(["🏗️ Un día al 80%","primer tema con fases 1–6"]);
+  if(dayDone(LEVEL0.find(d=>d.id==="d8")||{ex:[]}))b.push(["🐛 Cazador de bugs","Día 8 dominado"]);
+  if(projectDone())b.push(["🧮 Constructor","proyecto Calculadora aprobado"]);
+  if(S.quiz.best!==null&&S.quiz.best>=93)b.push(["🧠 Mente de acero","examen teórico ≥ 93%"]);
+  if(rachaCalc()>=7)b.push(["🔥 Semana de fuego","racha de 7 días"]);
+  if(levelApproved())b.push(["🎓 Nivel 0","dominio verificado por el corrector"]);
+  return b;
+}
+function renderGam(){
+  const xp=xpCalc();
+  const gx=document.getElementById("gXp");if(!gx)return;
+  gx.textContent=xp+" XP";
+  let rango=RANGOS[0][1];RANGOS.forEach(r=>{if(xp>=r[0])rango=r[1]});
+  document.getElementById("gRank").textContent=rango;
+  document.getElementById("gStreak").textContent="🔥 "+rachaCalc();
+  const bs=insignias();
+  document.getElementById("gBadges").innerHTML=bs.length
+    ?bs.map(x=>'<span class="chip gold" style="margin:0 6px 6px 0" title="'+x[1]+'">'+x[0]+"</span>").join("")
+    :'<span class="small muted">Las insignias se ganan trabajando. La primera cae con tu primer ejercicio.</span>';
+  document.getElementById("gCerts").innerHTML=levelApproved()
+    ?'<div style="border:1px solid var(--gold-dim);border-radius:10px;padding:14px;text-align:center">'+
+     '<p class="eyebrow" style="color:var(--gold)">Academia AI Systems Architect</p>'+
+     '<p style="margin:4px 0;font-weight:700">Certificado interno · Nivel 0<br>Python — Fundamentos</p>'+
+     '<p class="small muted" style="margin:4px 0 0">Otorgado a Alex · sellado tras la defensa oral con el tutor</p></div>'
+    :'<p class="small muted" style="margin:2px 0">Aún no hay certificados. El primero se emite al dominar el Nivel 0 (examen + proyecto + defensa oral). El último dirá: <strong>AI Systems Architect</strong>.</p>';
+}
+const _renderHome=renderHome;renderHome=function(){_renderHome();renderGam()};
 renderHome();renderWeak();renderFC();renderRuta();renderCloudForm();cloudPull();
 </script>
 </body>

@@ -74,4 +74,15 @@ XP, niveles, insignias, rachas, logros, tiempo estudiado, % de dominio por habil
 **Harvard** (máxima exigencia) · **Karpathy** (desde cero, con matemáticas, papers e implementación) · **OpenAI** (problemas reales) · **Entrevista** (simulacros técnicos) · **Research** (papers) · **Proyecto** (construir).
 
 ## 11. Anti-Tutorial-Hell
-No se avanza viendo videos. Se escribe código, se explica y se construye. Siempre.
+No se avanza viendo videos. Se escribe código, se explica y se construye. Siempre. **Incluye el meta-trabajo:** rediseñar el plan tampoco cuenta como estudiar.
+
+## 12. Pistas paralelas permanentes (auditoría del tutor, jul-2026)
+1. **🇬🇧 Inglés técnico** — el hueco más grande detectado en el plan original. Progresión: N0 tracebacks + vocabulario en flashcards → N1-2 documentación solo en inglés → N3-5 videos sin subtítulos (3Blue1Brown, Karpathy) → N6-10 papers y resúmenes en inglés → N11-12 README, open source y mock interviews bilingües. Sin inglés no hay carrera internacional.
+2. **🧮 Matemáticas en goteo** — 30-60 min/semana desde N1 (3Blue1Brown). El N3 consolida, no presenta. Evita el muro de moral de 3 meses de matemáticas seguidas.
+3. **⚔️ DSA + entrevistas** — 2-3 katas/semana desde N1; Blind 75 desde N4; mock interviews continuas. Las entrevistas se ganan con años de goteo, no con cramming.
+4. **📦 Portafolio** — mínimo 1 repo nuevo por nivel con README, tests y docs.
+
+## 13. Mecanismos de integridad
+- **Sello del tutor:** los certificados de nivel solo se sellan con un código que el tutor entrega tras aprobar la defensa oral (Fase 8). El software ejecuta la regla suprema.
+- **Mazo vivo:** las flashcards se desbloquean al dominar cada día; los errores del estudiante (predicciones falladas) se convierten automáticamente en tarjetas de repaso.
+- **Métricas reales:** tiempo estudiado medido por actividad, dominio por habilidad, rachas — visibles en el dashboard.

@@ -228,6 +228,7 @@
       <table class="mini">
         <tr><td>Ejercicios aprobados</td><td class="num" id="kEx">0</td></tr>
         <tr><td>Examen teórico</td><td class="num" id="kQuiz">bloqueado</td></tr>
+        <tr><td>Tiempo estudiado</td><td class="num" id="kTime">0 min</td></tr>
         <tr><td>Flashcards pendientes</td><td class="num" id="kDue">—</td></tr>
         <tr><td>Puntos débiles</td><td class="num" id="kWeak">0</td></tr>
       </table>
@@ -266,9 +267,10 @@
       <div><div class="num" id="gStreak" style="font-size:1.35rem;font-weight:700">🔥 0</div><div class="small muted">racha de días</div></div>
     </div>
     <div id="gBadges" style="margin-top:12px"></div>
+    <div id="gSkills" style="margin-top:14px"></div>
   </div>
   <div class="card">
-    <p class="eyebrow">Certificados</p>
+    <p class="eyebrow">Certificados · se sellan con el código del tutor tras la defensa oral</p>
     <div id="gCerts"></div>
   </div>
   <div class="card">
@@ -360,14 +362,28 @@
     <p class="small muted" style="margin:4px 0 0">Tu plan maestro: de Python a arquitecto de sistemas de IA, con JARVIS V1 → V2 → Local como proyectos de carrera. ~53 meses nominales a 25 h/semana (documento vivo: se comprime con solapamientos). El contenido interactivo de cada nivel se construye en esta app cuando apruebas el anterior — examen, proyecto, code review y defensa oral.</p></div>
   <div id="rutaList"></div>
   <div class="card">
-    <p class="eyebrow">Pista paralela · desde el nivel 1 (CS) hasta el final</p>
-    <h2>DSA — Algoritmos y Estructuras de Datos</h2>
+    <p class="eyebrow">Pistas paralelas permanentes · corren junto a los niveles, nunca se detienen</p>
+    <h2>🇬🇧 Inglés técnico — el idioma de tu carrera</h2>
+    <p class="small muted" style="margin:2px 0 6px">Los papers, la documentación, las entrevistas de OpenAI/Meta y el 95% de Stack Overflow están en inglés. Sin esto, el Nivel 12 te deja como arquitecto que no pasa el filtro del recruiter. Progresión obligatoria:</p>
     <ul class="tight small">
-      <li><strong>Fase 1</strong> · Big O, arrays, strings, hash tables — <em>Grokking Algorithms</em>.</li>
-      <li><strong>Fase 2</strong> · listas enlazadas, pilas, colas, recursión, árboles, ordenamientos — NeetCode Roadmap.</li>
-      <li><strong>Fase 3</strong> · grafos, backtracking, programación dinámica — Blind 75 + CLRS.</li>
-      <li><strong>Cierre</strong> · 4 mock interviews cronometradas estilo Google/Meta.</li>
+      <li><strong>Nivel 0</strong> · leer errores y tracebacks en inglés (ya lo haces) + vocabulario técnico en las flashcards (tarjetas EN·).</li>
+      <li><strong>Nivel 1–2</strong> · documentación oficial SOLO en inglés (Python docs, FastAPI), con apoyo del tutor.</li>
+      <li><strong>Nivel 3–5</strong> · videos sin subtítulos en español: 3Blue1Brown, Karpathy, Fast.ai.</li>
+      <li><strong>Nivel 6–10</strong> · papers en inglés; resúmenes escritos en inglés.</li>
+      <li><strong>Nivel 11–12</strong> · explicar tu propio trabajo en inglés: README, issues de open source y mock interviews bilingües con el tutor.</li>
     </ul>
+    <h2 style="margin-top:16px">🧮 Matemáticas en goteo</h2>
+    <p class="small muted" style="margin:2px 0 0">30–60 min/semana desde el Nivel 1 (3Blue1Brown: Essence of Linear Algebra → Calculus). El Nivel 3 se convierte en consolidación, no en primer contacto. Un muro de 3 meses de matemáticas seguidas destruye la moral; el goteo construye intuición.</p>
+    <h2 style="margin-top:16px">⚔️ DSA + entrevistas</h2>
+    <ul class="tight small">
+      <li><strong>Desde Nivel 1</strong> · 2–3 katas/semana (Exercism → Codewars) apenas domines funciones.</li>
+      <li><strong>Fase 1</strong> · Big O, arrays, strings, hash tables — <em>Grokking Algorithms</em>.</li>
+      <li><strong>Fase 2</strong> · listas enlazadas, pilas, colas, recursión, árboles — NeetCode Roadmap.</li>
+      <li><strong>Fase 3 (N4+)</strong> · grafos, backtracking, DP — Blind 75 + CLRS.</li>
+      <li><strong>Cierre</strong> · mock interviews cronometradas estilo Google/Meta (Modo Entrevista).</li>
+    </ul>
+    <h2 style="margin-top:16px">📦 Portafolio</h2>
+    <p class="small muted" style="margin:2px 0 0">Mínimo 1 repositorio nuevo por nivel con README, tests y documentación. Al llegar al Nivel 7, tu GitHub ya demuestra experiencia — no empieza a construirse.</p>
   </div>
 </section>
 </main>
@@ -1254,23 +1270,33 @@ const QUIZ=[
   o:["Dividir entre cero","int('hola')","Un paréntesis sin cerrar (SyntaxError)","Usar una variable inexistente"],a:2,
   e:"SyntaxError aparece al analizar el código, antes de correr nada. Los otros son errores de ejecución."},
 ];
+/* [frente, respuesta, día que la desbloquea] — el mazo crece al dominar cada día */
 const CARDS=[
- ["¿Qué es el intérprete de Python?","El programa que lee tu código, lo traduce a bytecode y lo ejecuta instrucción por instrucción."],
- ["¿Qué es el REPL?","Consola interactiva: escribes una expresión y Python la evalúa al instante (Read-Eval-Print-Loop)."],
- ["Modelo mental de una variable","Una ETIQUETA que apunta a un objeto en memoria — no una caja que lo contiene."],
- ["7 // 2 y por qué","3 — división entera: descarta decimales."],
- ["7 % 2 y para qué sirve %","1 — el resto. n % 2 == 0 detecta pares."],
- ["¿Qué tipo devuelve input()?","SIEMPRE str. Convierte con int() o float() antes de operar."],
- ["¿Qué es una f-string?","String con f delante que interpola: f\"Hola {nombre}\". Con {x:.2f} controla decimales."],
- ["¿Cómo se lee un traceback?","De abajo hacia arriba: última línea = tipo de error y mensaje; arriba, archivo y línea."],
- ["SyntaxError vs error de ejecución","SyntaxError: ni siquiera arranca. Ejecución (ValueError, TypeError…): explota al correr esa línea."],
- ["¿Por qué 0.1 + 0.2 != 0.3?","Los floats viven en binario; 0.1 y 0.2 no tienen representación exacta."],
- ["10 / 5 en Python 3","2.0 — la división / siempre devuelve float."],
- ["\"python\"[0:2]","'py' — el slicing excluye el límite derecho."],
- ["= vs ==","= asigna; == compara y devuelve True/False."],
- ["Convención de nombres","snake_case descriptivo (PEP 8): precio_total, no pt ni PrecioTotal."],
- ["Estructura de un menú en bucle","while True: → mostrar menú → leer opción → break al salir → elif por operación."],
- ["Regla de oro del while","Algo DENTRO del bucle debe poder volver falsa la condición — o es infinito."],
+ ["¿Qué es el intérprete de Python?","El programa que lee tu código, lo traduce a bytecode y lo ejecuta instrucción por instrucción.","d1"],
+ ["¿Qué es el REPL?","Consola interactiva: escribes una expresión y Python la evalúa al instante (Read-Eval-Print-Loop).","d1"],
+ ["Modelo mental de una variable","Una ETIQUETA que apunta a un objeto en memoria — no una caja que lo contiene.","d2"],
+ ["7 // 2 y por qué","3 — división entera: descarta decimales.","d4"],
+ ["7 % 2 y para qué sirve %","1 — el resto. n % 2 == 0 detecta pares.","d4"],
+ ["¿Qué tipo devuelve input()?","SIEMPRE str. Convierte con int() o float() antes de operar.","d6"],
+ ["¿Qué es una f-string?","String con f delante que interpola: f\"Hola {nombre}\". Con {x:.2f} controla decimales.","d5"],
+ ["¿Cómo se lee un traceback?","De abajo hacia arriba: última línea = tipo de error y mensaje; arriba, archivo y línea.","d8"],
+ ["SyntaxError vs error de ejecución","SyntaxError: ni siquiera arranca. Ejecución (ValueError, TypeError…): explota al correr esa línea.","d8"],
+ ["¿Por qué 0.1 + 0.2 != 0.3?","Los floats viven en binario; 0.1 y 0.2 no tienen representación exacta.","d3"],
+ ["10 / 5 en Python 3","2.0 — la división / siempre devuelve float.","d4"],
+ ["\"python\"[0:2]","'py' — el slicing excluye el límite derecho.","d5"],
+ ["= vs ==","= asigna; == compara y devuelve True/False.","d2"],
+ ["Convención de nombres","snake_case descriptivo (PEP 8): precio_total, no pt ni PrecioTotal.","d2"],
+ ["Estructura de un menú en bucle","while True: → mostrar menú → leer opción → break al salir → elif por operación.","d7"],
+ ["Regla de oro del while","Algo DENTRO del bucle debe poder volver falsa la condición — o es infinito.","d7"],
+ /* pista de inglés técnico — el idioma de los papers y las entrevistas */
+ ["EN · statement vs expression","statement = instrucción completa · expression = fragmento que produce un valor.","d2"],
+ ["EN · ¿qué es un 'typo'?","Error de tipeo — la causa nº 1 de NameError.","d2"],
+ ["EN · 'invalid literal for int()'","“Literal inválido para int()”: ese texto no se puede convertir a entero.","d3"],
+ ["EN · 'unsupported operand type(s)'","“Tipos de operandos no soportados”: mezclaste tipos incompatibles (ej. str + int).","d3"],
+ ["EN · index vs slice","index = posición individual [i] · slice = rebanada [a:b].","d5"],
+ ["EN · prompt","El mensaje que muestra input() mientras espera al usuario.","d6"],
+ ["EN · loop / infinite loop","loop = bucle · infinite loop = bucle cuya condición nunca cambia.","d7"],
+ ["EN · 'is not defined'","“No está definido”: usaste un nombre que Python no conoce (NameError).","d8"],
 ];
 const NIVELES=[
  {n:0,t:"Validación — Python + ML Specialization",d:"1–2 meses",p:"Calculadora profesional + labs del curso de Ng",b:"Python básico (este campus, en curso) · Machine Learning Specialization de Andrew Ng (arranca al aprobar la calculadora)",cur:"CS50P (Harvard) · ML Specialization (DeepLearning.AI)",s:"active"},
@@ -1460,6 +1486,8 @@ function checkIntuit(){
 function revealIntuit(){
   const d=LEVEL0[curDay];
   S.weak.push("Predicción fallida en "+d.n+": "+d.t);
+  S.dyn=S.dyn||[];
+  S.dyn.push({f:"(Repaso de tu error) "+d.n+" — "+d.intuit.q,b:"Salida real: "+d.intuit.out+" — "+d.intuit.e});
   S.ph[d.id]=Object.assign({},phOf(d),{int:1});intTries=0;save();renderClases();renderWeak();
 }
 function corrMCQ(){
@@ -1614,8 +1642,8 @@ function renderExamen(){
 }
 function veredictoHTML(){
   if(levelApproved())
-    return'<p class="eyebrow">Veredicto</p><h2 style="color:var(--good)">NIVEL 0 — APROBADO</h2>'+
-     '<p class="small">Queda una sola puerta: la <strong>defensa oral</strong>. Llévale tu calculadora a tu tutor en el chat de Claude — te preguntará por qué cada línea está donde está y hará el code review. Superada la defensa, el tutor añade el Nivel 1 completo a esta app (misma URL).</p>';
+    return'<p class="eyebrow">Veredicto</p><h2 style="color:var(--good)">NIVEL 0 — APROBADO POR EL CORRECTOR</h2>'+
+     '<p class="small">Queda una sola puerta: la <strong>defensa oral</strong> (Fase 8 · Dominio). Llévale tu calculadora a tu tutor en el chat — te preguntará por qué cada línea está donde está, hará el code review y verificará las 4 preguntas del dominio. Si apruebas, te dará el <strong>código del sello</strong> para tu certificado (Inicio → Certificados) y añadirá el Nivel 1 completo a esta app.</p>';
   const f=[];
   if(!quizPassed())f.push("examen teórico ≥ 85% (regla 8.5/10)");
   if(!practicaDone())f.push("los 3 prácticos");
@@ -1651,21 +1679,31 @@ function corregir(){
   r.scrollIntoView({behavior:"smooth"});
 }
 
-/* ---- flashcards ---- */
+/* ---- flashcards (mazo que crece con tu dominio; incluye inglés técnico) ---- */
 const BOXDAYS=[0,2,5];
+function cardPool(){
+  const pool=[];
+  CARDS.forEach((c,i)=>{
+    const d=c[2]?LEVEL0.find(x=>x.id===c[2]):null;
+    if(!c[2]||(d&&dayDone(d)))pool.push({k:String(i),f:c[0],b:c[1]});
+  });
+  (S.dyn||[]).forEach((c,i)=>pool.push({k:"y"+i,f:c.f,b:c.b}));
+  return pool;
+}
 function dueCards(){const now=Date.now();
-  return CARDS.map((c,i)=>i).filter(i=>{const st=S.cards[i];return!st||st.due<=now})}
+  return cardPool().filter(c=>{const st=S.cards[c.k];return!st||st.due<=now})}
 let fcCur=null;
 function renderFC(){
-  const due=dueCards();
-  document.getElementById("fcHeader").textContent="Flashcards — "+due.length+" pendiente(s) hoy";
+  const due=dueCards(),pool=cardPool();
+  document.getElementById("fcHeader").textContent="Flashcards — "+due.length+" pendiente(s) · mazo: "+pool.length;
   const front=document.getElementById("fcFront"),back=document.getElementById("fcBack"),
     btns=document.getElementById("fcBtns");
-  if(!due.length){fcCur=null;front.textContent="Mazo al día. Vuelve mañana.";
+  if(!due.length){fcCur=null;
+    front.textContent=pool.length?"Mazo al día. Vuelve mañana.":"El mazo crece contigo: cada día dominado desbloquea sus tarjetas (incluye vocabulario técnico en inglés). Tus errores también se convierten en tarjetas.";
     back.style.display="none";btns.innerHTML="";renderHome();return}
   fcCur=due[Math.floor(Math.random()*due.length)];
-  front.textContent=CARDS[fcCur][0];
-  back.textContent=CARDS[fcCur][1];back.style.display="none";
+  front.textContent=fcCur.f;
+  back.textContent=fcCur.b;back.style.display="none";
   btns.innerHTML='<button class="btn ghost" onclick="revealFC()">Revelar respuesta</button>';
   renderHome();
 }
@@ -1676,10 +1714,10 @@ function revealFC(){
    '<button class="btn" onclick="calif(true)">La sé</button>';
 }
 function calif(bien){
-  const st=S.cards[fcCur]||{box:0};
+  const st=S.cards[fcCur.k]||{box:0};
   st.box=bien?Math.min(st.box+1,2):0;
   st.due=Date.now()+BOXDAYS[st.box]*86400000+(bien?0:600000);
-  S.cards[fcCur]=st;save();renderFC();
+  S.cards[fcCur.k]=st;save();renderFC();
 }
 
 /* ---- puntos débiles / sync / ruta / home ---- */
@@ -1703,7 +1741,7 @@ function exportar(){
 function importar(){
   try{const d=JSON.parse(document.getElementById("impTxt").value);
     if(!d||typeof d!=="object")throw 0;
-    S={ex:d.ex||{},quiz:d.quiz||{best:null,attempts:0},cards:d.cards||{},weak:d.weak||[],hints:d.hints||{},ph:d.ph||{},log:d.log||{},migrated:1};
+    S={ex:d.ex||{},quiz:d.quiz||{best:null,attempts:0},cards:d.cards||{},weak:d.weak||[],hints:d.hints||{},ph:d.ph||{},log:d.log||{},dyn:d.dyn||[],mins:d.mins||0,seal:d.seal?1:0,migrated:1};
     save();renderHome();renderWeak();renderFC();curDay=null;
     document.getElementById("syncMsg").textContent="Progreso importado correctamente.";
     document.getElementById("impBox").style.display="none";
@@ -1781,6 +1819,10 @@ function mergeS(a,b){
     m.ph[k]={};if(x.int||y.int)m.ph[k].int=1;if(x.mcq||y.mcq)m.ph[k].mcq=1;
   });
   m.log=Object.assign({},b.log||{},a.log||{});
+  const seen=new Set();m.dyn=[];
+  [...(a.dyn||[]),...(b.dyn||[])].forEach(c=>{if(!seen.has(c.f)){seen.add(c.f);m.dyn.push(c)}});
+  m.mins=Math.max(a.mins||0,b.mins||0);
+  m.seal=(a.seal||b.seal)?1:0;
   return m;
 }
 function cloudFetch(method,body){
@@ -1897,6 +1939,20 @@ function insignias(){
   if(levelApproved())b.push(["🎓 Nivel 0","dominio verificado por el corrector"]);
   return b;
 }
+const SKILLS=[["Sintaxis","d1"],["Variables","d2"],["Tipos","d3"],["Operadores","d4"],["Strings","d5"],["E/S","d6"],["Control de flujo","d7"],["Debugging","d8"],["Proyecto","d9"]];
+function dayPct(d){const p=phOf(d);let done=0,tot=0;
+  if(d.intuit){tot++;if(p.int)done++}
+  if(d.mcq){tot++;if(p.mcq)done++}
+  d.ex.forEach(e=>{tot++;if(S.ex[e.id])done++});
+  if(d.reto){tot++;if(S.ex[d.reto.id])done++}
+  return tot?Math.round(done/tot*100):0}
+function hashCode(s){let x=5381;for(let i=0;i<s.length;i++)x=((x*33)^s.charCodeAt(i))>>>0;return x}
+const SEAL_N0=3151530408;
+function sellar(){
+  const inp=document.getElementById("sealIn");
+  if(hashCode(inp.value.trim().toUpperCase())===SEAL_N0){S.seal=1;save();renderGam()}
+  else{inp.value="";inp.placeholder="Código incorrecto — se gana en la defensa oral"}
+}
 function renderGam(){
   const xp=xpCalc();
   const gx=document.getElementById("gXp");if(!gx)return;
@@ -1904,18 +1960,36 @@ function renderGam(){
   let rango=RANGOS[0][1];RANGOS.forEach(r=>{if(xp>=r[0])rango=r[1]});
   document.getElementById("gRank").textContent=rango;
   document.getElementById("gStreak").textContent="🔥 "+rachaCalc();
+  const mins=Math.round(S.mins||0);
+  document.getElementById("kTime").textContent=mins>=60?Math.floor(mins/60)+" h "+(mins%60)+" min":mins+" min";
   const bs=insignias();
   document.getElementById("gBadges").innerHTML=bs.length
     ?bs.map(x=>'<span class="chip gold" style="margin:0 6px 6px 0" title="'+x[1]+'">'+x[0]+"</span>").join("")
     :'<span class="small muted">Las insignias se ganan trabajando. La primera cae con tu primer ejercicio.</span>';
-  document.getElementById("gCerts").innerHTML=levelApproved()
-    ?'<div style="border:1px solid var(--gold-dim);border-radius:10px;padding:14px;text-align:center">'+
-     '<p class="eyebrow" style="color:var(--gold)">Academia AI Systems Architect</p>'+
-     '<p style="margin:4px 0;font-weight:700">Certificado interno · Nivel 0<br>Python — Fundamentos</p>'+
-     '<p class="small muted" style="margin:4px 0 0">Otorgado a Alex · sellado tras la defensa oral con el tutor</p></div>'
-    :'<p class="small muted" style="margin:2px 0">Aún no hay certificados. El primero se emite al dominar el Nivel 0 (examen + proyecto + defensa oral). El último dirá: <strong>AI Systems Architect</strong>.</p>';
+  document.getElementById("gSkills").innerHTML='<p class="eyebrow" style="margin:0 0 6px">Dominio por habilidad · nivel 0</p>'+
+    SKILLS.map(s=>{const d=LEVEL0.find(x=>x.id===s[1]);const pc=d?dayPct(d):0;
+      return '<div class="row" style="gap:8px;margin:3px 0"><span class="small" style="width:110px;flex:none">'+s[0]+'</span>'+
+        '<div class="bar" style="flex:1"><i style="width:'+pc+'%"></i></div>'+
+        '<span class="small num muted" style="width:38px;text-align:right">'+pc+"%</span></div>"}).join("");
+  const certBox=document.getElementById("gCerts");
+  if(!levelApproved())
+    certBox.innerHTML='<p class="small muted" style="margin:2px 0">Aún no hay certificados. El primero se emite al dominar el Nivel 0 (examen + proyecto + defensa oral con código del tutor). El último dirá: <strong>AI Systems Architect</strong>.</p>';
+  else if(S.seal)
+    certBox.innerHTML='<div style="border:1px solid var(--gold);border-radius:10px;padding:16px;text-align:center;background:linear-gradient(160deg,#1a2338,#141C2C)">'+
+     '<p class="eyebrow" style="color:var(--gold)">Academia AI Systems Architect &amp; Research Engineer</p>'+
+     '<p style="margin:6px 0;font-weight:800;font-size:1.05rem">CERTIFICADO · NIVEL 0 DOMINADO<br>Python — Fundamentos</p>'+
+     '<p class="small muted" style="margin:4px 0 0">Otorgado a Alex · verificado en defensa oral por el tutor · sello ✓</p></div>';
+  else
+    certBox.innerHTML='<div style="border:1px dashed var(--gold-dim);border-radius:10px;padding:14px">'+
+     '<p class="small" style="margin:0 0 8px"><strong>Nivel 0 aprobado por el corrector</strong> — falta la última puerta: la <strong>defensa oral</strong> con tu tutor en el chat. Al aprobarla, él te dará el código del sello.</p>'+
+     '<div class="row"><input type="text" id="sealIn" placeholder="Código del tutor" style="flex:1;min-width:150px">'+
+     '<button class="btn" onclick="sellar()">Sellar certificado</button></div></div>';
 }
 const _renderHome=renderHome;renderHome=function(){_renderHome();renderGam()};
+/* tiempo estudiado: +30s por tick con la pestaña visible (la nube lo recibe en el siguiente avance) */
+setInterval(()=>{if(!document.hidden){S.mins=(S.mins||0)+0.5;localStorage.setItem(KEY,JSON.stringify(S));
+  const el=document.getElementById("kTime");
+  if(el){const m=Math.round(S.mins);el.textContent=m>=60?Math.floor(m/60)+" h "+(m%60)+" min":m+" min"}}},30000);
 renderHome();renderWeak();renderFC();renderRuta();renderCloudForm();cloudPull();
 </script>
 </body>

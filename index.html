@@ -1273,19 +1273,19 @@ const CARDS=[
  ["Regla de oro del while","Algo DENTRO del bucle debe poder volver falsa la condición — o es infinito."],
 ];
 const NIVELES=[
- {n:0,t:"Validación — Python + ML Specialization",d:"1–2 meses",p:"Calculadora profesional + labs del curso de Ng",b:"Python básico (este campus, en curso) · Machine Learning Specialization de Andrew Ng (arranca al aprobar la calculadora)",s:"active"},
- {n:1,t:"Computer Science",d:"5 meses",p:"API profesional",b:"Lógica · Python · POO · Algoritmos · Estructuras de Datos · Git/GitHub · Linux · Bash · Redes · HTTP · APIs · SQL"},
- {n:2,t:"Software Engineering",d:"4 meses",p:"Backend escalable",b:"FastAPI · PostgreSQL · Redis · Docker · Testing · Clean Code · Patrones de Diseño · Arquitectura Backend"},
- {n:3,t:"Matemáticas para IA",d:"3 meses",p:"Objetivo: entender papers",b:"Álgebra Lineal · Cálculo · Probabilidad · Estadística · Optimización"},
- {n:4,t:"Machine Learning",d:"3 meses",p:"Modelos clásicos completos",b:"ML clásico · Scikit-Learn · Árboles · SVM · Ensembles · Clustering · Métricas"},
- {n:5,t:"Deep Learning",d:"4 meses",p:"Redes en PyTorch (no TensorFlow)",b:"Redes neuronales · Backpropagation · CNN · RNN · LSTM · Attention"},
- {n:6,t:"Transformers",d:"4 meses",p:"Leer papers reales",b:"Attention · Transformers · Tokenización · Embeddings · Positional Encoding · BERT · GPT · Llama · Qwen"},
- {n:7,t:"LLM Engineering",d:"4 meses",p:"JARVIS V1",b:"Inferencia · RAG · Fine-Tuning · LoRA/QLoRA · Vector DBs · Prompt Engineering · AI Evals · Guardrails"},
- {n:8,t:"AI Systems",d:"5 meses",p:"JARVIS V2",b:"AI Agents · MCP · LangGraph · CrewAI · A2A · Memoria · Planning · Tool Calling"},
- {n:9,t:"Sistemas Distribuidos",d:"4 meses",p:"Infraestructura de IA",b:"Docker · Kubernetes · MLOps · Model Serving · vLLM · Ray · Kafka · Observabilidad · Escalabilidad"},
- {n:10,t:"IA Local",d:"4 meses",p:"JARVIS Local",b:"Ollama · llama.cpp · GGUF · Quantization · CUDA básico · GPU · Optimización · Inferencia Local"},
- {n:11,t:"Research Engineer",d:"6 meses",p:"Objetivo: pensar como Karpathy",b:"Leer papers · Reproducir papers · Implementar papers · Escribir papers · Open Source · Contribuir en GitHub"},
- {n:12,t:"AI Systems Architect",d:"6 meses",p:"Arquitectura de IA completa",b:"Arquitectura LLM · Arquitectura Distribuida · Seguridad IA · Cloud/AWS · Multi-GPU · Costos · Optimización"},
+ {n:0,t:"Validación — Python + ML Specialization",d:"1–2 meses",p:"Calculadora profesional + labs del curso de Ng",b:"Python básico (este campus, en curso) · Machine Learning Specialization de Andrew Ng (arranca al aprobar la calculadora)",cur:"CS50P (Harvard) · ML Specialization (DeepLearning.AI)",s:"active"},
+ {n:1,t:"Computer Science",d:"5 meses",p:"API profesional",b:"Lógica · Python · POO · Algoritmos · Estructuras de Datos · Git/GitHub · Linux · Bash · Redes (HTTP, DNS, TCP/IP) · APIs · SQL",cur:"CS50 (Harvard) · Missing Semester (MIT)",job:"Junior Developer (trainee)"},
+ {n:2,t:"Software Engineering",d:"4 meses",p:"Backend escalable",b:"FastAPI · PostgreSQL · Auth (JWT, OAuth2) · Redis · Docker · CI/CD · AWS básico · Testing · Clean Code · Patrones · Arquitectura Backend",cur:"Docs oficiales FastAPI/Docker · TDD",job:"Backend Developer Jr"},
+ {n:3,t:"Matemáticas para IA",d:"3 meses",p:"Objetivo: entender papers",b:"Álgebra Lineal · Cálculo · Probabilidad · Estadística · Optimización",cur:"3Blue1Brown · Mathematics for ML (Imperial) · Khan Academy"},
+ {n:4,t:"Machine Learning",d:"3 meses",p:"Modelos clásicos completos",b:"ML clásico · Scikit-Learn · Árboles · SVM · Ensembles · Clustering · Métricas",cur:"ML Specialization (Ng) · Kaggle Learn",job:"ML Engineer Jr"},
+ {n:5,t:"Deep Learning",d:"4 meses",p:"Redes en PyTorch (no TensorFlow)",b:"Redes neuronales · Backpropagation · CNN · RNN · LSTM · Attention",cur:"DL Specialization (Ng) · Fast.ai · Karpathy Zero to Hero",job:"DL Engineer Jr"},
+ {n:6,t:"Transformers",d:"4 meses",p:"Leer papers reales",b:"Attention · Transformers · Tokenización · Embeddings · Positional Encoding · BERT · GPT · Llama · Qwen",cur:"Karpathy (GPT from scratch) · CS224N (Stanford) · HF NLP Course",job:"NLP Engineer Jr"},
+ {n:7,t:"LLM Engineering",d:"4 meses",p:"JARVIS V1",b:"Inferencia · RAG · Fine-Tuning · LoRA/QLoRA · Vector DBs · Prompt Engineering · AI Evals · Seguridad IA · Guardrails",cur:"Cursos cortos DeepLearning.AI (RAG, Evals) · Hugging Face",job:"LLM / AI Engineer"},
+ {n:8,t:"AI Systems",d:"5 meses",p:"JARVIS V2",b:"AI Agents · MCP · LangGraph · CrewAI · A2A · Memoria · Planning · Tool Calling · Multimodal · Voice AI",cur:"LangGraph docs · MCP (Anthropic) · cursos de agentes DL.AI",job:"AI / Agent Engineer"},
+ {n:9,t:"Sistemas Distribuidos",d:"4 meses",p:"Infraestructura de IA",b:"Docker · Kubernetes · MLOps · Model Serving · vLLM · Ray · Kafka · Observabilidad · Escalabilidad",cur:"Designing Data-Intensive Applications · MLOps Zoomcamp",job:"MLOps / Platform Engineer"},
+ {n:10,t:"IA Local",d:"4 meses",p:"JARVIS Local",b:"Ollama · llama.cpp · GGUF · Quantization · CUDA básico · GPU · Optimización · Inferencia Local",cur:"llama.cpp/Ollama docs · CUDA Guide · GPU Mode",job:"Inference Engineer"},
+ {n:11,t:"Research Engineer",d:"6 meses",p:"Objetivo: pensar como Karpathy",b:"Leer papers · Reproducir papers · Implementar papers · Escribir papers · Open Source · Contribuir en GitHub",cur:"arXiv · Papers With Code · reproducibility challenges",job:"Research Engineer"},
+ {n:12,t:"AI Systems Architect",d:"6 meses",p:"Arquitectura de IA completa",b:"System Design · Arquitectura LLM · Arquitectura Distribuida · Seguridad IA · Cloud/AWS · Multi-GPU · Costos · Entrevistas internacionales",cur:"System Design Interview (Xu) · AWS SAA si aporta",job:"AI Systems Architect / Staff Engineer"},
 ];
 
 /* ============================================================
@@ -1718,7 +1718,10 @@ function renderRuta(){
      '<div style="flex:1"><div class="row" style="justify-content:space-between"><strong>'+l.t+"</strong>"+chip+"</div>"+
      '<div class="lvlmeta">'+l.d+"</div>"+
      '<div class="small" style="margin-top:5px">Proyecto: <span class="muted">'+l.p+"</span></div>"+
-     '<div class="small">Libro: <span class="muted">'+l.b+"</span></div></div></div>");
+     '<div class="small">Temas: <span class="muted">'+l.b+"</span></div>"+
+     (l.cur?'<div class="small">Cursos: <span class="muted">'+l.cur+"</span></div>":"")+
+     (l.job?'<div class="small">Puesto alcanzable: <span class="muted">'+l.job+"</span></div>":"")+
+     "</div></div>");
   });
 }
 function renderHome(){

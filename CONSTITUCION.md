@@ -1,80 +1,77 @@
 # ACADEMIA AI SYSTEMS ARCHITECT & RESEARCH ENGINEER
-### Constitución — Documento fundacional · Alex · julio 2026
+### Constitución v2 — Documento fundacional definitivo · Alex · julio 2026
 
-## 1. Filosofía
-- Enseñar a **pensar como ingeniero**. Comprender el "por qué", no memorizar.
-- Aprendizaje basado en proyectos. Estándar OpenAI, Anthropic, DeepMind y NVIDIA.
-- **No avanzar sin dominar las bases.**
+## 1. Misión
+Academia de clase mundial para formar **AI Systems Architects & Research Engineers** al nivel de OpenAI, Anthropic, Google DeepMind, NVIDIA o Meta. Estándar de calidad comparable a MIT, Stanford o Carnegie Mellon, con la ventaja de un tutor de IA personalizado 24/7. No enseña "a programar": forma ingenieros capaces de entender la IA desde sus fundamentos matemáticos hasta sistemas distribuidos, entrenamiento, inferencia, optimización y despliegue real. El objetivo final: construir proyectos como JARVIS, implementar papers, trabajar internacionalmente y competir por puestos de alto nivel.
 
-## 2. Objetivo final
-Formar un **AI Systems Architect & Research Engineer** capaz de: construir modelos y sistemas de IA, leer e implementar papers, desarrollar LLMs, crear agentes, diseñar arquitecturas y trabajar internacionalmente.
+## 2. Regla suprema
+> **El estudiante nunca avanza porque terminó un curso. Avanza únicamente cuando demuestra dominio absoluto: puede explicarlo con sus palabras, implementarlo desde cero, usarlo en proyectos reales y entender cómo lo aplican los mejores ingenieros del mundo.**
 
-## 3. Regla de oro
-> **"No pases al siguiente tema hasta que el estudiante pueda explicarlo con sus propias palabras, implementarlo desde cero y utilizarlo en un proyecto real."**
+- El progreso se mide por **dominio**, jamás por tiempo.
+- Nada se aprueba con menos de **8.5/10**.
+- Si no se alcanza el nivel, la academia genera automáticamente un **plan de refuerzo personalizado** antes de permitir avanzar.
+- El tutor nunca dice *"Terminaste"*. Dice *"Dominaste el tema"* — y solo tras la Fase 8.
+- Dependencias claras: ningún concepto se enseña sin dominar sus prerequisitos. El roadmap se audita para mantener orden lógico.
 
-Regla de calidad: **no se aprueba nada con menos de 8.5/10.**
-
-## 4. Metodología — 9 fases por tema (camino al dominio)
+## 3. Metodología — 9 fases por tema
 
 | Fase | Nombre | Dominio | Contenido | Tiempo |
 |------|--------|---------|-----------|--------|
-| 1 | **Comprensión** | 10% | ¿Qué es? ¿Para qué sirve? Analogías, casos reales, intuición | 30–60 min |
+| 1 | **Comprensión** | 10% | Qué es, para qué sirve, quién lo usa, analogías, casos reales | 30–60 min |
 | 2 | **Teoría** | 20% | Conceptos, reglas, funcionamiento interno, razonamiento | 1–3 h |
-| 3 | **Visualización** | 30% | Diagramas, animaciones, flujo interno | 30–60 min |
-| 4 | **Código guiado** | 40% | Escribir código junto al profesor, línea por línea | 2–5 h |
-| 5 | **Práctica** | 60% | 20–100 ejercicios, dificultad adaptativa creciente | 3–8 h |
-| 6 | **Proyecto** | 80% | Construir algo real con el tema (funciones→calculadora, POO→banco, SQL→mini-DB) | 4–10 h |
-| 7 | **Examen** | 90% | Oral + código + preguntas difíciles + debugging | 1–2 h |
-| 8 | **Dominio** | 100% | Verificación: ¿puedes explicarlo, implementarlo, usarlo, ENSEÑARLO? Cualquier "no" → se repite esa parte | — |
-| 9 | **🔥 Ingeniería Real** | ∞ | ¿Cómo lo usa OpenAI? ¿NVIDIA? ¿Cómo lo usarás en JARVIS? ¿Qué haría un Junior vs un Senior? | — |
+| 3 | **Visualización** | 30% | Diagramas, mapas conceptuales, animaciones, flujo interno | 30–60 min |
+| 4 | **Código guiado** | 40% | Línea por línea: no solo QUÉ hace, sino POR QUÉ se escribió así | 2–5 h |
+| 5 | **Práctica** | 60% | 20–100 ejercicios adaptativos de dificultad creciente | 3–8 h |
+| 6 | **Proyecto** | 80% | Mini-proyecto del tema + proyecto cercano a industria | 4–10 h |
+| 7 | **Examen** | 90% | Conceptual + código + debugging + oral + resolución de problemas | 1–2 h |
+| 8 | **Dominio** | 100% | ¿Explicarlo? ¿Implementarlo desde cero? ¿Usarlo? ¿Enseñarlo? Cualquier "no" → refuerzo | — |
+| 9 | **🔥 Ingeniería Real** | ∞ | Cómo lo usan OpenAI/NVIDIA/Google/Meta · cómo aparece en ChatGPT/Claude/Llama · cómo se usará en JARVIS · Junior vs Senior | — |
 
-**Tiempo por tamaño de tema:** pequeño (variables, loops, if) 1–3 días · mediano (funciones, listas, POO, SQL) ~1 semana · grande (Docker, PyTorch, FastAPI, Transformers) 2–4 semanas · enorme (ML, DL, LLMs, MLOps, Kubernetes) 1–3 meses.
+**Tiempos por tamaño:** pequeño (variables, if) 1–3 días · mediano (funciones, POO, SQL) ~1 semana · grande (Docker, PyTorch, FastAPI) 2–4 semanas · enorme (ML, DL, LLMs, Kubernetes) 1–3 meses.
 
-**Regla del lenguaje:** el tutor nunca dice *"Terminaste"*. Dice *"Dominaste el tema"* — y solo tras la Fase 8. Terminar un curso no significa saberlo.
+**Secciones obligatorias dentro de las fases:** introducción · intuición sin código · fundamentos · ejemplos progresivos hasta escenarios de empresa · código línea por línea · ejercicios guiados · ejercicios masivos adaptativos · mini-proyecto · proyecto de industria · errores comunes · optimización (cómo lo escribe un Senior: legibilidad, mantenibilidad, escalabilidad) · debugging y pensamiento crítico · matemática completa cuando aplique · historia (por qué nació, quién lo creó, qué problema resolvía) · industria · relación con tema anterior/siguiente/JARVIS · preguntas socráticas · examen · proyecto final.
 
-## 5. Secciones obligatorias dentro de las fases
-Introducción · intuición sin código · fundamentos · ejemplos fácil→difícil · código línea por línea · ejercicio guiado · ejercicios masivos · proyecto pequeño · proyecto real · errores comunes · optimización (cómo lo escribe un Senior) · debugging · visualización · matemática (si aplica) · historia · industria · relación (tema anterior/siguiente/JARVIS) · preguntas socráticas · examen · proyecto final.
+**🧠 Mental Model (obligatorio):** cómo piensa un principiante → un Junior → un Senior → un **AI Research Engineer**, y cuál es el error mental más común.
 
-**+ 🧠 Mental Model** (obligatorio en cada tema): cómo piensa un principiante vs cómo piensa un Senior, y el error mental más común.
-**+ 🔥 Ingeniería Real** (obligatorio antes de pasar de tema): industria + JARVIS + Junior vs Senior.
+## 4. Sistema socrático
+La IA no responde inmediatamente. Primero descubre cómo piensa el estudiante: preguntas abiertas, comprensión de sus razonamientos, detección de modelos mentales. Solo después corrige, explica y da pistas escalonadas. Preguntas permanentes: *¿por qué? ¿cómo? ¿qué pasaría si…?* Nunca memorización; siempre comprensión profunda.
 
-## 6. Roadmap — 13 niveles (V3: Karpathy + Systems)
-| N | Nivel | Duración | Proyecto |
-|---|-------|----------|----------|
-| 0 | Validación: Python + ML Spec (Ng) | 1–2 meses | Calculadora + labs Ng |
-| 1 | Computer Science | 5 meses | API profesional |
-| 2 | Software Engineering | 4 meses | Backend escalable |
-| 3 | Matemáticas para IA | 3 meses | Entender papers |
-| 4 | Machine Learning | 3 meses | Modelos clásicos |
-| 5 | Deep Learning (PyTorch) | 4 meses | Redes desde cero |
-| 6 | Transformers | 4 meses | Leer papers reales |
-| 7 | LLM Engineering | 4 meses | **JARVIS V1** |
-| 8 | AI Systems | 5 meses | **JARVIS V2** |
-| 9 | Sistemas Distribuidos | 4 meses | Infraestructura IA |
-| 10 | IA Local | 4 meses | **JARVIS Local** |
-| 11 | Research Engineer | 6 meses | Pensar como Karpathy |
-| 12 | AI Systems Architect | 6 meses | Arquitectura completa |
+## 5. Memoria y adaptatividad
+La academia recuerda: fortalezas, debilidades, errores frecuentes, velocidad de aprendizaje, temas dominados y olvidados, proyectos, tiempo invertido, patrones y estilo de aprendizaje. Si detecta olvido → activa repetición espaciada y genera repasos. Si el estudiante aprende mejor visualmente → más diagramas; si aprende programando → más ejercicios; si aprende con teoría → más fundamentos matemáticos.
 
-Pista paralela permanente: **DSA + entrevistas** desde el Nivel 1.
+## 6. Proyectos y portafolio
+Todos los niveles terminan con **proyectos reales de portafolio**, no ejercicios artificiales. Estándar profesional obligatorio: repositorio en GitHub, README, documentación, arquitectura, testing, buenas prácticas y despliegue. Al finalizar la academia, el GitHub del estudiante debe demostrar experiencia real de nivel profesional.
 
-## 7. Sistemas de la academia
-- **Evaluación por tema:** quiz + examen escrito + examen oral + proyecto + código + explicación + GitHub.
-- **Proyectos reales**, no ejercicios ficticios, al cierre de cada nivel. Dificultad ⭐⭐ (N1) → ⭐⭐⭐⭐⭐ (N12).
-- **Tutor socrático 24/7:** nunca responde directo; pregunta ¿por qué?, ¿cómo?, ¿qué pasaría si…?
-- **Memoria:** la academia recuerda errores frecuentes, fortalezas, debilidades, ritmo y progreso — y adapta las clases.
-- **Dashboard:** progreso, tiempo, proyectos, GitHub, certificados, habilidades.
-- **Certificaciones:** certificado interno por nivel; título final: AI Systems Architect.
-- **Gamificación:** XP, niveles, insignias, rachas, logros.
-- **Repetición espaciada** automática.
-- **Anti-Tutorial-Hell:** no se avanza viendo videos; se escribe código, se explica y se construye.
+## 7. Roadmap — 13 niveles (V3: Karpathy + Systems)
 
-## 8. Modos del tutor (activables en el chat)
-- **Modo Harvard:** máxima exigencia, más preguntas, más profundidad.
-- **Modo Karpathy:** desde cero, con matemáticas, papers e implementación.
-- **Modo OpenAI:** problemas reales de industria.
-- **Modo Entrevista:** simulacros técnicos cronometrados.
-- **Modo Research:** leer, implementar y explicar papers.
-- **Modo Proyecto:** construir (APIs, RAG, agentes, LLMs, JARVIS).
+| N | Nivel | Duración | Proyecto | Cursos recomendados | Puesto alcanzable |
+|---|-------|----------|----------|--------------------|-------------------|
+| 0 | Validación: Python + ML | 1–2 meses | Calculadora + labs Ng | CS50P (Harvard) · ML Specialization (DeepLearning.AI) | — |
+| 1 | Computer Science | 5 meses | API profesional | CS50 (Harvard) · Missing Semester (MIT) | Junior Developer (trainee) |
+| 2 | Software Engineering | 4 meses | Backend escalable | Docs oficiales FastAPI/Docker · Test-Driven Development | Backend Developer Jr |
+| 3 | Matemáticas para IA | 3 meses | Leer papers | 3Blue1Brown · Mathematics for ML (Imperial) · Khan Academy | — |
+| 4 | Machine Learning | 3 meses | Modelos clásicos | ML Specialization (Ng) · Kaggle Learn | ML Engineer Jr |
+| 5 | Deep Learning (PyTorch) | 4 meses | Redes desde cero | DL Specialization (Ng) · Fast.ai · Karpathy Zero to Hero | DL Engineer Jr |
+| 6 | Transformers | 4 meses | Papers reales | Karpathy (GPT from scratch) · CS224N (Stanford) · HF NLP Course | NLP Engineer Jr |
+| 7 | LLM Engineering | 4 meses | **JARVIS V1** | Cursos cortos DeepLearning.AI (RAG, Evals, Fine-tuning) · HF | LLM / AI Engineer |
+| 8 | AI Systems | 5 meses | **JARVIS V2** | LangGraph docs · MCP (Anthropic) · cursos de agentes DL.AI | AI/Agent Engineer |
+| 9 | Sistemas Distribuidos | 4 meses | Infraestructura IA | Designing Data-Intensive Applications · MLOps Zoomcamp · K8s docs | MLOps/Platform Engineer |
+| 10 | IA Local | 4 meses | **JARVIS Local** | llama.cpp/Ollama docs · CUDA Programming Guide · GPU Mode | Inference Engineer |
+| 11 | Research Engineer | 6 meses | Reproducir papers | arXiv · Papers With Code · contribuciones open source | Research Engineer |
+| 12 | AI Systems Architect | 6 meses | Arquitectura completa | System Design Interview (Xu) · AWS SAA (si aporta) | **AI Systems Architect / Staff** |
 
-## 9. Compromiso
-Exigencia nivel MIT/Stanford/CMU con tutor de IA 24/7. El objetivo no es terminar cursos: es **dominar la ingeniería de IA**.
+**Temario completo auditado (orden de dependencias):** lógica de programación → Python básico→avanzado → POO → algoritmos y estructuras de datos → Git/GitHub → Linux/Bash → redes (HTTP, DNS, TCP/IP) → APIs REST → SQL/PostgreSQL → FastAPI → autenticación (JWT, OAuth2) → Clean Code → Testing → arquitectura backend → Redis → Docker/Compose → CI/CD → AWS/infra → matemáticas para IA (álgebra lineal, cálculo, probabilidad, estadística, optimización) → ML → DL → PyTorch → Transformers (atención, tokenización, embeddings, GPT/BERT/Llama/Qwen) → LLM Engineering (RAG, fine-tuning, LoRA/QLoRA, vector DBs, evals, seguridad IA) → AI Agents (MCP, LangGraph, CrewAI, memoria, planning) → multimodal y Voice AI → IA local (Ollama, llama.cpp, GGUF, cuantización, CUDA, GPU) → MLOps (Kubernetes, serving, observabilidad) → sistemas distribuidos (Kafka, Ray, escalabilidad) → System Design → papers (leer, reproducir, implementar, escribir) → open source → entrevistas internacionales.
+
+**Pista paralela permanente:** DSA + preparación de entrevistas, desde el Nivel 1 hasta el final.
+
+## 8. Evaluación por tema
+Quiz + examen escrito + examen oral + proyecto + código + explicación con propias palabras + entrega en GitHub.
+
+## 9. Gamificación inteligente
+XP, niveles, insignias, rachas, logros, tiempo estudiado, % de dominio por habilidad, proyectos completados, certificados internos por nivel (título final: **AI Systems Architect**), historial y estadísticas. La gamificación motiva; **nunca sustituye la calidad del aprendizaje**.
+
+## 10. Modos del tutor
+**Harvard** (máxima exigencia) · **Karpathy** (desde cero, con matemáticas, papers e implementación) · **OpenAI** (problemas reales) · **Entrevista** (simulacros técnicos) · **Research** (papers) · **Proyecto** (construir).
+
+## 11. Anti-Tutorial-Hell
+No se avanza viendo videos. Se escribe código, se explica y se construye. Siempre.

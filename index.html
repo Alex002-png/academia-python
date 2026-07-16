@@ -185,6 +185,14 @@
   .lvlnum{font-family:var(--mono);font-weight:700;font-size:1rem;color:var(--blue);
     flex:none;width:36px;text-align:center;padding-top:2px}
   .lvl.active .lvlnum{color:var(--gold)}
+
+  /* barra de fases fija + botón flotante */
+  .dayrail{position:sticky;top:8px;z-index:45;background:#141C2Cf2;backdrop-filter:blur(8px)}
+  .fab{position:fixed;right:14px;bottom:74px;z-index:70;background:var(--gold);color:#0B111D;
+    border:none;border-radius:999px;padding:12px 18px;font-weight:800;font-size:.88rem;
+    cursor:pointer;box-shadow:0 6px 22px #000a;display:flex;align-items:center;gap:6px}
+  .fab:hover{filter:brightness(1.08)}
+  @media(min-width:820px){.fab{bottom:22px;right:22px}}
   .lvlmeta{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-top:4px}
 </style>
 </head>
@@ -387,6 +395,8 @@
   </div>
 </section>
 </main>
+
+<button class="fab" id="fabGo" onclick="rutaGo()">▶ Continuar</button>
 
 <script>
 /* ============================================================
@@ -1369,7 +1379,10 @@ let curDay=null;
 function renderClases(){
   const box=document.getElementById("clasesBox");
   if(curDay===null){
-    let h='<div class="card"><p class="eyebrow">Nivel 0 · Fundamentos</p><h2>Plan de clases</h2><p class="small muted" style="margin:4px 0 0">Cada día se desbloquea al aprobar todos los ejercicios del anterior. Sin excepciones.</p></div>';
+    const ns0=nextStepInfo();
+    let h='<div class="card" style="border-color:var(--gold-dim)"><p class="eyebrow">Nivel 0 · Fundamentos</p><h2>Plan de clases</h2>'+
+      '<p class="small" style="margin:8px 0 0">📍 <strong>Siguiente:</strong> '+ns0.label+"</p>"+
+      '<button class="btn" style="margin-top:10px" onclick="rutaGo()">▶ Ir directo</button></div>';
     LEVEL0.forEach((d,i)=>{
       const unlocked=dayUnlocked(i),done=dayDone(d);
       const evalDay=d.eval;
@@ -1389,7 +1402,16 @@ function renderClases(){
   }
   const d=LEVEL0[curDay],p=phOf(d);
   let h='<div class="lesson-nav"><button class="btn ghost" onclick="closeDay()">← Todas las clases</button></div>';
-  h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0 · metodología 13 fases</p><h2>"+d.t+"</h2>"+
+  // riel de fases fijo: siempre sabes dónde estás y qué sigue
+  if(!d.eval){
+    const pctD=dayPct(d);
+    h+='<div class="card dayrail" style="padding:10px 16px;margin-bottom:10px">'+
+      '<div class="row" style="justify-content:space-between;align-items:center">'+
+      '<span class="row" style="gap:5px;flex-wrap:wrap">'+fasesChips(d)+"</span>"+
+      '<span class="small num" style="color:var(--gold);font-weight:700;flex:none">'+pctD+"%</span></div>"+
+      '<div class="bar" style="margin-top:8px;height:6px"><i style="width:'+pctD+'%"></i></div></div>';
+  }
+  h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0 · camino al dominio</p><h2>"+d.t+"</h2>"+
     (d.intro?'<p class="small" style="margin:8px 0 0;color:var(--muted)">'+d.intro+"</p>":"")+"</div>";
   const okInt=!d.intuit||p.int,okMcq=okInt&&(!d.mcq||p.mcq);
   // FASE 1 · comprensión e intuición
@@ -1470,6 +1492,23 @@ function renderClases(){
   if(okMcq){d.ex.forEach(e=>{if(document.getElementById("ed-"+e.id))wireEx(e)});
     if(d.reto&&document.getElementById("ed-"+d.reto.id))wireEx(d.reto)}
 }
+function fasesChips(d){
+  const p=phOf(d);
+  const items=[];
+  if(d.intuit)items.push(["F1 Intuición",!!p.int]);
+  if(d.mcq)items.push(["F2 Teoría",!!p.mcq]);
+  const clase=(!d.intuit||p.int)&&(!d.mcq||p.mcq);
+  items.push(["F3-4 Clase",clase]);
+  items.push(["F5 Práctica",d.ex.length>0&&d.ex.every(e=>S.ex[e.id])]);
+  if(d.reto)items.push(["F6 Proyecto",!!S.ex[d.reto.id]]);
+  let curMarked=false;
+  return items.map(x=>{
+    let cls="lock",txt=x[0];
+    if(x[1]){cls="good";txt+=" ✓"}
+    else if(!curMarked){cls="gold";txt+=" ◀";curMarked=true}
+    return '<span class="chip '+cls+'" style="font-size:.58rem">'+txt+"</span>";
+  }).join("");
+}
 let intTries=0;
 function checkIntuit(){
   const d=LEVEL0[curDay];
@@ -1544,18 +1583,25 @@ async function checkEx(id){
   const res=e.check(outs,code);
   if(res===true){
     const first=!S.ex[id];S.ex[id]=true;save();
-    fb.innerHTML='<div class="okbox"><strong>Aprobado.</strong> Salida verificada contra el contrato.'+
+    const okHtml='<div class="okbox"><strong>Aprobado.</strong> Salida verificada contra el contrato.'+
       (first?" Ejercicio registrado en tu expediente.":"")+"</div>"+
       '<div class="term" style="margin-top:8px"><div class="termout">'+esc(outs[0])+"</div></div>";
     renderHome();
-    const card=document.getElementById("card-"+id);
-    if(card)card.querySelector(".chip").outerHTML='<span class="chip good">Aprobado</span>';
-    // si se completó la práctica guiada o el día entero, refresca la clase (desbloquea desafío / botón continuar)
-    if(curDay!==null&&document.getElementById("v-clases").classList.contains("on")){
-      const d=LEVEL0[curDay];
-      const inDay=d.ex.some(x=>x.id===id)||(d.reto&&d.reto.id===id);
-      if(inDay&&first&&(dayDone(d)||d.ex.every(x=>S.ex[x.id])))
-        setTimeout(()=>{renderClases();window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"})},900);
+    const enClases=curDay!==null&&document.getElementById("v-clases").classList.contains("on")&&
+      (LEVEL0[curDay].ex.some(x=>x.id===id)||(LEVEL0[curDay].reto&&LEVEL0[curDay].reto.id===id));
+    if(enClases){
+      // re-render SIEMPRE: la vista nunca queda desactualizada (desbloqueos, barra, chips)
+      renderClases();
+      const fb2=document.getElementById("fb-"+id);
+      if(fb2)fb2.innerHTML=okHtml;
+      const card=document.getElementById("card-"+id);
+      if(card)card.scrollIntoView({behavior:"smooth",block:"center"});
+    }else{
+      fb.innerHTML=okHtml;
+      const card=document.getElementById("card-"+id);
+      if(card)card.querySelector(".chip").outerHTML='<span class="chip good">Aprobado</span>';
+      const v=document.getElementById("veredicto");
+      if(v)v.innerHTML=veredictoHTML();
     }
   }else{
     fb.innerHTML='<div class="kobox">'+esc(res)+"</div>"+

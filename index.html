@@ -1405,11 +1405,18 @@ function renderClases(){
   // riel de fases fijo: siempre sabes dónde estás y qué sigue
   if(!d.eval){
     const pctD=dayPct(d);
+    const pend=[];
+    if(d.intuit&&!p.int)pend.push("Fase 1 · Intuición");
+    if(d.mcq&&!p.mcq)pend.push("Fase 2 · Razonamiento");
+    d.ex.forEach(e=>{if(!S.ex[e.id])pend.push(e.t.split("·")[0].trim())});
+    if(d.reto&&!S.ex[d.reto.id])pend.push("Proyecto del tema");
     h+='<div class="card dayrail" style="padding:10px 16px;margin-bottom:10px">'+
       '<div class="row" style="justify-content:space-between;align-items:center">'+
       '<span class="row" style="gap:5px;flex-wrap:wrap">'+fasesChips(d)+"</span>"+
       '<span class="small num" style="color:var(--gold);font-weight:700;flex:none">'+pctD+"%</span></div>"+
-      '<div class="bar" style="margin-top:8px;height:6px"><i style="width:'+pctD+'%"></i></div></div>';
+      '<div class="bar" style="margin-top:8px;height:6px"><i style="width:'+pctD+'%"></i></div>'+
+      (pend.length?'<p class="small" style="margin:7px 0 0;color:var(--warn)">Te falta: '+pend.join(" · ")+"</p>"
+        :'<p class="small" style="margin:7px 0 0;color:var(--good)">Día al 100% — verifica tu dominio abajo y continúa.</p>')+"</div>";
   }
   h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0 · camino al dominio</p><h2>"+d.t+"</h2>"+
     (d.intro?'<p class="small" style="margin:8px 0 0;color:var(--muted)">'+d.intro+"</p>":"")+"</div>";

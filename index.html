@@ -214,6 +214,8 @@
     animation:shimmer 2.4s infinite}
   @keyframes shimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
   .replrow input{caret-color:var(--gold)}
+  #stepCode .ln{display:block;padding:1px 6px;border-left:3px solid transparent}
+  #stepCode .ln.on{background:#243150;border-left-color:var(--gold)}
   .termout::-webkit-scrollbar,.editor::-webkit-scrollbar{width:8px;height:8px}
   .termout::-webkit-scrollbar-thumb,.editor::-webkit-scrollbar-thumb{background:var(--line2);border-radius:99px}
   body::-webkit-scrollbar{width:10px}
@@ -371,6 +373,7 @@
       <span class="chip blue">programa.py</span>
       <span class="row">
         <button class="btn" onclick="runPlayground()">▶ Ejecutar</button>
+        <button class="btn ghost" onclick="runStepMode()">🔍 Paso a paso</button>
         <button class="btn ghost" onclick="TERM.clear()">Limpiar consola</button>
       </span>
     </div>
@@ -381,7 +384,22 @@
       <div class="replrow"><span class="ps">&gt;&gt;&gt;</span>
         <input id="replIn" spellcheck="false" autocomplete="off" placeholder="escribe una línea de Python y Enter"></div>
     </div>
-    <p class="small muted" style="margin:6px 0 0">Atajo: <code>Ctrl+Enter</code> en el editor ejecuta.</p>
+    <p class="small muted" style="margin:6px 0 0">Atajo: <code>Ctrl+Enter</code> en el editor ejecuta. <strong>🔍 Paso a paso</strong> te muestra cómo la máquina ejecuta tu código línea por línea, con la memoria en vivo.</p>
+  </div>
+  <div id="stepPanel" style="display:none">
+    <div class="card" style="border-color:var(--gold-dim)">
+      <p class="eyebrow" style="color:var(--gold)">Ejecución paso a paso · así piensa la máquina</p>
+      <div class="grid2">
+        <pre class="codebox" id="stepCode" style="margin:0"></pre>
+        <div><p class="eyebrow">Memoria (tabla de variables)</p>
+          <table class="mini" id="stepVars"></table></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" onclick="nextStep()">Siguiente paso ▶</button>
+        <button class="btn ghost" onclick="stopStep()">Detener</button>
+      </div>
+      <p class="small muted" id="stepMsg" style="margin:8px 0 0"></p>
+    </div>
   </div>
 </section>
 
@@ -692,6 +710,7 @@ const BRK={brk:1},CNT={cnt:1};
 async function execBlock(body,env,ctx){
   for(const s of body){
     ctx.ops++;if(ctx.ops>200000)throw PyErr("RuntimeError","el programa tardó demasiado — revisa si tienes un bucle infinito",s.ln);
+    if(ctx.onstep)await ctx.onstep(s,env);
     const r=await execStmt(s,env,ctx);
     if(r)return r;
   }
@@ -1697,6 +1716,45 @@ document.getElementById("replIn").addEventListener("keydown",async ev=>{
   try{const prog=parseProgram(v);await execBlock(prog,replEnv,ctx)}
   catch(err){TERM.write(traceback(err)+"\n","err")}
 });
+/* ---- depurador visual paso a paso ---- */
+let stepResolve=null;
+function renderStepCode(code,cur){
+  document.getElementById("stepCode").innerHTML=code.replace(/\r/g,"").split("\n").map((l,i)=>
+    '<span class="ln'+(i+1===cur?" on":"")+'">'+String(i+1).padStart(2," ")+"│ "+(hl(l)||"&nbsp;")+"</span>").join("");
+}
+function renderStepVars(env){
+  const rows=[...env.entries()];
+  document.getElementById("stepVars").innerHTML="<tr><th>variable</th><th>tipo</th><th>valor</th></tr>"+
+    (rows.length?rows.map(([k,v])=>"<tr><td class='num'>"+esc(k)+"</td><td>"+typeName(v)+"</td><td class='num'>"+esc(reprV(v))+"</td></tr>").join("")
+    :'<tr><td colspan="3" class="muted">memoria vacía — todavía no existe ninguna variable</td></tr>');
+}
+async function runStepMode(){
+  const code=document.getElementById("pgEditor").value;
+  if(!code.trim()){TERM.write("El editor está vacío: escribe algo que ver paso a paso.\n","sys");return}
+  const panel=document.getElementById("stepPanel");panel.style.display="block";
+  panel.scrollIntoView({behavior:"smooth",block:"center"});
+  document.getElementById("stepMsg").textContent="La línea dorada es la SIGUIENTE en ejecutarse. Mira la memoria, predice qué cambiará, y recién entonces dale a Siguiente.";
+  TERM.write("$ python programa.py  (paso a paso)\n","sys");
+  const ctx={ops:0,repl:false,out:t=>TERM.write(t),echo:()=>{},input:p=>TERM.read(p),
+    onstep:(s,env)=>{renderStepCode(code,s.ln);renderStepVars(env);
+      return new Promise((res,rej)=>{stepResolve={res,rej}})}};
+  try{
+    await execBlock(parseProgram(code),new Map(),ctx);
+    TERM.write("— fin —\n","sys");
+    renderStepCode(code,-1);
+    document.getElementById("stepMsg").textContent="Programa terminado. Arriba queda la memoria final: eso es lo que 'recordaba' tu programa al morir.";
+  }catch(err){
+    if(err&&err.detenido)document.getElementById("stepMsg").textContent="Detenido por ti.";
+    else{TERM.write(traceback(err)+"\n","err");
+      document.getElementById("stepMsg").textContent="El programa explotó — el traceback está en la consola. La línea dorada te dice dónde estaba parado.";}
+  }
+  stepResolve=null;
+}
+function nextStep(){if(stepResolve){const r=stepResolve;stepResolve=null;r.res()}}
+function stopStep(){
+  if(stepResolve){const r=stepResolve;stepResolve=null;r.rej({detenido:1})}
+  document.getElementById("stepPanel").style.display="none";
+}
 async function runPlayground(){
   const code=document.getElementById("pgEditor").value;
   if(!code.trim())return;

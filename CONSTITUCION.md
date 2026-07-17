@@ -83,6 +83,19 @@ No se avanza viendo videos. Se escribe código, se explica y se construye. Siemp
 3. **⚔️ DSA + entrevistas** — 2-3 katas/semana desde N1; Blind 75 desde N4; mock interviews continuas. Las entrevistas se ganan con años de goteo, no con cramming.
 4. **📦 Portafolio** — mínimo 1 repo nuevo por nivel con README, tests y docs.
 
+## 12b. Refuerzos v2.2 (35 puntos de Alex, 16-jul-2026)
+- **Nunca empezar por la sintaxis:** toda lección abre con el problema que resuelve, qué había antes, qué pasaría si no existiera, y por qué las empresas pagan por dominarlo.
+- **Escalera de ejemplos** por tema: infantil → cotidiano → oficina → empresa → videojuego → IA → incorrecto → correcto → optimizado.
+- **Simulación paso a paso y debug visual:** la app incluye un depurador (🔍 Paso a paso en la Terminal) que muestra línea activa + tabla de memoria variable por variable. Toda clase de chat incluye ejecución mental.
+- **3 niveles de profundidad** por tema: 🟢 Básico · 🟡 Profesional · 🔴 Investigación — el estudiante elige cuánto bajar.
+- **Escalera de ejercicios:** muy fácil → fácil → normal → difícil → empresa → entrevista → open source.
+- **Regla 20/80:** 20% teoría, 80% práctica. Interacción cada pocos minutos — nunca 30 minutos de lectura seguida.
+- **Detección de confusión:** 3 fallos → cambiar el enfoque (nuevas analogías, más visual), jamás repetir lo mismo.
+- **Dificultad dinámica:** sube si avanza rápido, baja si le cuesta — sin bajar el estándar de dominio.
+- **🤖 PROYECTO COLUMNA VERTEBRAL — JARVIS DESDE CERO:** desde el Nivel 1, cada tema aporta una pieza real a un JARVIS construido por el estudiante (variables→memoria · funciones→comandos · POO→módulos · APIs→conectores · LLM→cerebro · agentes→autonomía). Nada se aprende aislado: todo construye el sistema.
+- **Comparaciones obligatorias** (lista vs tupla, CNN vs Transformer, REST vs gRPC…) y **timeline** (antes→problema→solución→evolución→hoy) en cada tema.
+- **Fuentes:** el contenido se ancla en las mejores universidades y autores — Harvard CS50/CS50P, MIT (Missing Semester, 6.006), Stanford (CS224N, CS229), DeepLearning.AI, Fast.ai, Karpathy, 3Blue1Brown, documentación oficial y papers originales — con pedagogía basada en evidencia: active recall, repetición espaciada, práctica deliberada y método socrático.
+
 ## 13. Mecanismos de integridad
 - **Sello del tutor:** los certificados de nivel solo se sellan con un código que el tutor entrega tras aprobar la defensa oral (Fase 8). El software ejecuta la regla suprema.
 - **Mazo vivo:** las flashcards se desbloquean al dominar cada día; los errores del estudiante (predicciones falladas) se convierten automáticamente en tarjetas de repaso.

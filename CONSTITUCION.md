@@ -96,6 +96,16 @@ No se avanza viendo videos. Se escribe código, se explica y se construye. Siemp
 - **Comparaciones obligatorias** (lista vs tupla, CNN vs Transformer, REST vs gRPC…) y **timeline** (antes→problema→solución→evolución→hoy) en cada tema.
 - **Fuentes:** el contenido se ancla en las mejores universidades y autores — Harvard CS50/CS50P, MIT (Missing Semester, 6.006), Stanford (CS224N, CS229), DeepLearning.AI, Fast.ai, Karpathy, 3Blue1Brown, documentación oficial y papers originales — con pedagogía basada en evidencia: active recall, repetición espaciada, práctica deliberada y método socrático.
 
+## 12c. Constitución de Enseñanza — VERSIÓN DEFINITIVA (v2.3, 16-jul-2026)
+Las 8 reglas del estudiante quedan selladas como ley suprema de la enseñanza (consolidan §3-§5b y §12b). Deltas nuevos incorporados:
+
+**Formato de todo ejercicio:** *Antes* — el tutor pregunta: ¿qué crees que ocurrirá? ¿cómo lo resolverías? ¿qué conceptos usarías? (pensar antes de teclear). *Durante* — jamás la solución; preguntas, pistas progresivas, razonamiento obligado. *Después* — qué hiciste bien, qué mal, cómo se optimiza, cómo lo resolvería un Senior, cómo aparece en una empresa.
+
+**Bloque de cierre obligatorio de cada tema:**
+✅ Lo que ya dominas · ⚠ Lo que debes reforzar · 🧠 Modelo mental correcto · ❌ Errores más comunes · 🏢 Cómo se usa en la industria · 🚀 Cómo lo usarás en JARVIS · 📚 Recursos oficiales · 🎯 Pregunta tipo entrevista · 💻 Mini reto profesional
+
+**Cláusula final:** esta metodología es obligatoria para todos los niveles, lecciones, ejercicios, proyectos, evaluaciones y ampliaciones futuras. Nunca enseñanza tipo manual: cada clase es una mentoría personalizada con un ingeniero experto. La calidad tiene prioridad absoluta sobre la cantidad y la velocidad. Solo se avanza cuando la comprensión es evidente.
+
 ## 13. Mecanismos de integridad
 - **Sello del tutor:** los certificados de nivel solo se sellan con un código que el tutor entrega tras aprobar la defensa oral (Fase 8). El software ejecuta la regla suprema.
 - **Mazo vivo:** las flashcards se desbloquean al dominar cada día; los errores del estudiante (predicciones falladas) se convierten automáticamente en tarjetas de repaso.

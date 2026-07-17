@@ -1283,6 +1283,162 @@ d6:'USUARIO ─teclea─▶ input() ──str──▶ int()/float() ──▶ L
 d7:'        ┌──────────◀─────────┐\n        ▼                     │\n  ¿condición? ──True──▶ cuerpo del bucle\n        │            (algo DEBE cambiar la condición)\n      False\n        ▼\n  sigue el programa',
 d8:'Traceback (most recent call last):    ← 3º  contexto\n  File "programa.py", línea 2         ← 2º  DÓNDE\nValueError: invalid literal ...        ← 1º  LEE AQUÍ PRIMERO'
 };
+/* ===== CONSTITUCIÓN SUPREMA aplicada: hook, historia, escalera de ejemplos,
+   checkpoint interactivo y síntesis profesional POR CADA TEMA ===== */
+const EXTRA={
+d1:{hook:"Todo lo que una computadora hace visible — desde el 'Escribiendo…' de WhatsApp hasta los logs que un ingeniero de OpenAI revisa a las 3 a.m. — es SALIDA. Dominarla es tener una ventana al interior de cualquier programa. Y sí: leer sistemas por sus salidas (logs) es una habilidad por la que las empresas pagan sueldos internacionales.",
+ hist:"1957: FORTRAN imprimía con PRINT en tarjetas perforadas. Años 70: C exigía printf con códigos crípticos (%d, %s). Python (1991, Guido van Rossum) decidió que mostrar algo debía ser UNA palabra clara: print. En Python 3 (2008) pasó de sentencia a función — la transición rompió millones de programas y le enseñó a la industria una lección de diseño de APIs que estudiarás en el Nivel 7.",
+ ej:[["🧒 Infantil","<code>print('hola mamá')</code> — la computadora repite lo que le dices, como un loro obediente."],
+  ["🏠 Cotidiano","El ticket del súper: cada línea es un print de la caja registradora."],
+  ["🏢 Empresa","Netflix registra cada clic como una línea de log — millones de 'prints' por segundo alimentando sus recomendaciones."],
+  ["🤖 IA","Tu JARVIS emite '🧠 Recuperando contexto…' en cada etapa: prints con uniforme de trabajo."],
+  ["❌ Incorrecto","<code>print(hola)</code> sin comillas → NameError: Python busca una variable llamada hola."],
+  ["⭐ Optimizado","<code>print(f'[{etapa}] {mensaje}')</code> — un Senior imprime con contexto: quién habla y qué dice."]],
+ chk:{q:"print('5') y print(5) muestran lo mismo en pantalla. ¿Son el mismo dato?",
+  o:["Sí, idénticos","No: uno es texto y el otro un número — la pantalla engaña","Depende del sistema operativo"],a:1,
+  e:"La salida visible es igual; el TIPO en memoria no. La pantalla es mala testigo — recuérdalo en el Día 3."},
+ sin:{dom:"Ejecutar programas · print · strings literales · leer un SyntaxError",
+  ref:"La diferencia texto vs expresión (se consolida en el Día 3)",
+  mm:"El código es texto muerto; el intérprete lo convierte en proceso vivo.",
+  ind:"Logs: la caja negra de todo sistema en producción (Sentry, Datadog viven de esto).",
+  jar:"Los mensajes de etapa de JARVIS son prints estructurados emitidos a un WebSocket.",
+  rec:"docs.python.org → Tutorial cap. 3 · CS50P Lecture 0 (Harvard)",
+  ent:"«¿Qué pasa exactamente cuando ejecutas python archivo.py?» — screening real de Google.",
+  reto:"En la Terminal libre: dibuja un cuadro con tu nombre adentro usando solo print y el carácter ═"}},
+d2:{hook:"Sin variables no hay memoria; sin memoria no hay programas: ni juegos que guarden tu puntaje, ni carritos de compra, ni IA que recuerde tu pregunta. Hoy colocas el primer ladrillo de TODO sistema que construirás en 53 meses.",
+ hist:"En los años 50 las 'variables' eran direcciones crudas de memoria: MOV AX, [0x4F2A] — los humanos memorizaban números hexadecimales. FORTRAN y ALGOL introdujeron nombres simbólicos y liberaron al programador. Python heredó esa línea y añadió su modelo radical: TODO es un objeto, y los nombres son etiquetas hacia ellos.",
+ ej:[["🧒 Infantil","<code>puntaje = 0</code> en tu videojuego: la máquina anota como tú en un papelito."],
+  ["🏠 Cotidiano","El número de turno de la farmacia: una etiqueta que apunta a ti, no una copia tuya."],
+  ["🏢 Empresa","Spotify: reproducciones_hoy se actualiza millones de veces por segundo. Estado = variables."],
+  ["🤖 IA","JARVIS guarda contexto = pregunta_del_usuario antes de tocar el modelo."],
+  ["❌ Incorrecto","<code>PrecioTotal = 100</code> — funciona, pero viola PEP 8; el linter de cualquier empresa lo marca."],
+  ["⭐ Optimizado","<code>precio_total_soles = 100</code> — un Senior codifica la UNIDAD en el nombre. Confundir centavos con dólares le ha costado millones a más de una empresa."]],
+ chk:{q:"x = 5, luego y = x, luego x = 9. ¿Cuánto vale y?",
+  o:["9","5","Error"],a:1,
+  e:"y quedó ligada al objeto 5. Mover la etiqueta x después no la afecta. Etiquetas, no cajas."},
+ sin:{dom:"Asignar, reasignar, snake_case, intercambio con auxiliar, modelo etiqueta→objeto",
+  ref:"int vs str al asignar (tu tropiezo del Ejercicio 2 — completamente normal)",
+  mm:"La asignación LIGA un nombre a un objeto; no copia cajas.",
+  ind:"El 'estado' de todo sistema vive en variables: sesiones, contadores, cachés, configuración.",
+  jar:"Cada turno de conversación con JARVIS vive en variables antes de llegar al modelo.",
+  rec:"docs.python.org Tutorial 3.1 · PEP 8 (convenciones de nombres)",
+  ent:"«a=[1]; b=a; a.append(2) — ¿qué contiene b?» — Meta. La trampa de la etiqueta; la dominarás en N1.",
+  reto:"Modela el estado de un semáforo con 3 variables y muéstralo cambiando de rojo a verde."}},
+d3:{hook:"Confundir tipos destruyó el cohete Ariane 5 (370 millones de dólares en 37 segundos) y corrompió miles de papers científicos cuando Excel convirtió genes en fechas. Las empresas pagan por ingenieros que NO cometen ese error. Hoy te vuelves uno.",
+ hist:"Los bits no dicen qué son: 01000001 es el número 65 o la letra A según el manual de lectura. FORTRAN fijó tipos declarados (1957), Lisp probó tipos dinámicos (1958). Python eligió lo mejor de ambos: dinámico (no declaras) pero FUERTE (jamás mezcla a escondidas) — prefiere explotar a mentirte.",
+ ej:[["🧒 Infantil","3 caramelos vs la palabra 'tres': los primeros se comen, la palabra no."],
+  ["🏠 Cotidiano","Código postal 15001 vs S/ 15001: mismos dígitos, operaciones totalmente distintas."],
+  ["🏢 Empresa","Todo formulario web llega como TEXTO al servidor: convertir y validar es el paso 1 de cualquier backend."],
+  ["🤖 IA","Un LLM convierte tu str en tokens (int) y en vectores (float): tres tipos en un solo prompt."],
+  ["❌ Incorrecto","<code>edad = input('Edad: ')</code> y luego <code>edad + 1</code> → el TypeError más famoso del mundo."],
+  ["⭐ Optimizado","<code>edad = int(input('Edad: '))</code> — convertir EN LA FRONTERA, como valida OpenAI cada request de su API con Pydantic."]],
+ chk:{q:"¿Qué devuelve bool('False')?",
+  o:["False","True","Error"],a:1,
+  e:"Cualquier string NO vacío es verdadero — incluso 'False'. Trampa real de entrevistas."},
+ sin:{dom:"int, float, str, bool · type() · conversiones explícitas",
+  ref:"Por qué los floats son inexactos (0.1+0.2) — se profundiza con binario en N3",
+  mm:"Un tipo es un CONTRATO: define qué operaciones son válidas y qué significan.",
+  ind:"Validación de entrada = la mitad de la seguridad de un backend.",
+  jar:"El pipeline str→tokens→floats→str de JARVIS es tu Día 3 a escala industrial.",
+  rec:"docs Tutorial 3.1.1-3.1.2 · CS50P Lecture 1",
+  ent:"«¿Por qué 0.1+0.2 != 0.3 y cómo comparas floats correctamente?» — Amazon.",
+  reto:"En la Terminal: 3 conversiones que funcionan y 2 que explotan — y predice cada resultado ANTES de ejecutar."}},
+d4:{hook:"// y % paginan los resultados de Google, reparten lotes de datos en NVIDIA y calculan la hora en tu reloj. Aritmética de primaria convertida en infraestructura de gigantes — y en tu calculadora del Día 9.",
+ hist:"El % como resto viene de ALGOL y se popularizó con C (1972). Python cometió un error histórico: en Python 2, 7/2 daba 3 (división entera silenciosa) y causó tantos bugs que en Python 3 ROMPIERON la compatibilidad para separar / (real) de // (entera). Cuando una corrección vale romper millones de programas, es que el bug era grave.",
+ ej:[["🧒 Infantil","Repartir 7 galletas entre 2 niños: 3 para cada uno (//) y sobra 1 (%)."],
+  ["🏠 Cotidiano","Película de 145 min = 2h 25m → horas = 145//60, minutos = 145%60."],
+  ["🏢 Empresa","Paginación: el ítem 47 con 10 por página vive en la página 47//10, posición 47%10. Así navega TODO e-commerce."],
+  ["🤖 IA","HERMES reparte 319 PDFs en lotes de 8: 319//8 lotes llenos y 319%8 sueltos."],
+  ["❌ Incorrecto","<code>promedio = 8 + 10 / 2</code> → 13.0. La precedencia no perdona."],
+  ["⭐ Optimizado","<code>es_par = (numero % 2 == 0)</code> — guardar la condición con nombre legible: así se escribe código que otros mantienen."]],
+ chk:{q:"¿Cuánto es 17 % 5?",
+  o:["2","3","3.4"],a:0,
+  e:"17 = 5·3 + 2. El resto es 2. // te daría el 3."},
+ sin:{dom:"Los 7 aritméticos · precedencia · comparaciones · and/or/not",
+  ref:"/ siempre float vs // int — cae seguro en el examen",
+  mm:"Los operadores son funciones con sintaxis especial; el TIPO de los operandos decide el resultado.",
+  ind:"hash % numero_de_buckets: así distribuyen datos Redis y toda base distribuida.",
+  jar:"El batching de documentos y el round-robin de tareas de JARVIS usan % tal cual.",
+  rec:"docs Tutorial 3.1.1 · CS50P Lecture 0",
+  ent:"FizzBuzz — Google lo usó AÑOS como filtro; su corazón es %. Lo harás en el Día 7.",
+  reto:"Convierte 10000 segundos a formato h:m:s usando solo // y %."}},
+d5:{hook:"El 80% de los datos del mundo es texto sucio: correos EN MAYÚSCULAS, espacios invisibles, formatos rotos. Limpiarlo es el trabajo diario de los data engineers — y el paso previo de todo LLM. La cirugía de strings que aprendes hoy la usarás literalmente cada semana de tu carrera.",
+ hist:"Python decidió que los strings fueran INMUTABLES (como Java): cada 'modificación' crea un objeto nuevo. No es capricho: los hace seguros para diccionarios (N1) y para hilos concurrentes (N5). Una decisión de 1991 que sigue pagando dividendos.",
+ ej:[["🧒 Infantil","<code>'HOLA'.lower()</code> = pasar de gritar a hablar."],
+  ["🏠 Cotidiano","Tu autocorrector hace slicing y replace sobre cada mensaje que escribes."],
+  ["🏢 Empresa","Uber normaliza cada dirección (strip, lower, replace) antes de geocodificarla."],
+  ["🤖 IA","Tokenizar 'gato' vs ' Gato' produce tokens DISTINTOS — por eso se normaliza antes (tu Nivel 6)."],
+  ["❌ Incorrecto","<code>correo.upper()</code> sin guardar el resultado: los strings son inmutables, devuelve uno NUEVO."],
+  ["⭐ Optimizado","<code>correo = correo.strip().lower()</code> — la cadena de limpieza estándar de la industria."]],
+ chk:{q:"¿Qué devuelve len('IA ')?",
+  o:["2","3","Error"],a:1,
+  e:"El espacio final cuenta: I, A, espacio = 3."},
+ sin:{dom:"Índices, negativos, slicing, len, métodos encadenados, f-strings con :.2f",
+  ref:"El límite derecho del slicing SIEMPRE se excluye",
+  mm:"Un string es una secuencia INMUTABLE: cada método devuelve un string nuevo — por eso se encadenan.",
+  ind:"La normalización de texto es el 80% del preprocesamiento en datos e IA.",
+  jar:"HERMES normaliza cada PDF igual que tu ejercicio del correo: strip, lower, replace.",
+  rec:"docs Tutorial 3.1.2 · CS50P Lecture 6 (Strings)",
+  ent:"«Invierte un string» — clásico universal (el truco elegante llega en N1).",
+  reto:"Toma '  JARVIS v3  ' y produce exactamente 'jarvis-v3' encadenando métodos."}},
+d6:{hook:"input → procesar → print es el esqueleto de TODO sistema interactivo. ChatGPT es este patrón con un modelo en medio. Los cajeros, los formularios, tu bot de Telegram: todos son el programa de 3 líneas que escribes hoy.",
+ hist:"input() viene de la era de los teletipos (años 60): el programa se DETIENE por completo esperando al humano. Durante décadas fue lo normal. En el Nivel 5 aprenderás a no bloquear (async) para atender a miles a la vez — hoy, bloquear está perfecto.",
+ ej:[["🧒 Infantil","El programa pregunta tu nombre como un portero amable."],
+  ["🏠 Cotidiano","El cajero automático: cada pantalla es un input validado antes de seguir."],
+  ["🏢 Empresa","Los formularios de UniAssiist: cada campo llega como str al backend y se valida en la frontera."],
+  ["🤖 IA","Cada mensaje que le envías a Claude es un input() gigante con historial."],
+  ["❌ Incorrecto","<code>'4' + '8' = '48'</code> — el bug del 48: pegaste papelitos en vez de sumar."],
+  ["⭐ Optimizado","Validar ANTES de convertir: <code>texto.isdigit()</code> hoy, try/except en el Nivel 1."]],
+ chk:{q:"El usuario presiona Enter sin escribir nada. ¿Qué devuelve input()?",
+  o:["None","Un string vacío ''","Error"],a:1,
+  e:"String vacío — que además es 'falso' en un if. Lo usarás en el Día 7."},
+ sin:{dom:"input con prompt · conversión en la frontera · print con sep/end",
+  ref:"Decidir int() vs float() según el dato esperado",
+  mm:"input() es una FRONTERA DE CONFIANZA: todo lo que cruza es str no confiable hasta validarse.",
+  ind:"«Nunca confíes en la entrada del usuario» — la regla #1 de seguridad de toda la industria.",
+  jar:"Tu bot de Telegram (N5) será input/print con esteroides: mismo esqueleto, otra tubería.",
+  rec:"docs Tutorial 3.1 · Automate the Boring Stuff cap. 1",
+  ent:"«¿Por qué jamás confías en el input del usuario?» — pregunta universal de seguridad.",
+  reto:"Mini-chatbot de 3 preguntas (nombre, edad, meta) que al final te presenta en UNA frase con f-string."}},
+d7:{hook:"El corazón de un agente de IA es LITERALMENTE while + if: mientras no haya respuesta final → pensar, decidir, actuar. Hoy escribes la maqueta del corazón de JARVIS. Este es el día más importante del nivel.",
+ hist:"1968: Dijkstra publica «GOTO considered harmful» y mata el código espagueti. Nace la programación estructurada: if/while con bloques claros. Lo que escribes hoy es el resultado directo de esa revolución — sintaxis de 2026, ideas de 1968.",
+ ej:[["🧒 Infantil","SI llueve → paraguas. SI NO → lentes de sol."],
+  ["🏠 Cotidiano","La alarma con snooze: MIENTRAS no la apagues → sonar cada 5 min."],
+  ["🏢 Empresa","Reintentos de pago de Netflix: while intentos < 3 y sin éxito → reintentar."],
+  ["🤖 IA","Un agente en LangGraph: while sin respuesta_final → razonar, usar herramienta, evaluar. Tu JARVIS hace esto AHORA."],
+  ["❌ Incorrecto","while donde nada cambia la condición → bucle infinito (tu Terminal te rescata; producción no)."],
+  ["⭐ Optimizado","<code>while True:</code> + <code>break</code> explícito para menús — el patrón de tu calculadora."]],
+ chk:{q:"n = 3, luego: while n > 0: print(n); n = n - 2. ¿Cuántas líneas imprime?",
+  o:["1","2","3"],a:1,
+  e:"Imprime 3 y 1 (dos líneas). Con n = -1 la condición muere. Simúlalo en el depurador 🔍."},
+ sin:{dom:"if/elif/else · while · break · indentación como sintaxis · validación con bucle",
+  ref:"Razonar TODOS los caminos, no solo el feliz",
+  mm:"El programa es un GRAFO de caminos posibles; diseñar es recorrerlos todos mentalmente.",
+  ind:"Retry loops, validaciones y state machines: el pan diario de cualquier backend.",
+  jar:"El loop agente de JARVIS (LangGraph) = while + ifs con esteroides. Literal.",
+  rec:"docs Tutorial 4.1-4.4 · CS50P Lectures 1-2",
+  ent:"FizzBuzz — el filtro con el que Google descartaba candidatos. Tu desafío de hoy ES una variante.",
+  reto:"Adivina-número: la máquina 'piensa' el 7; insiste hasta que aciertes, contando tus intentos."}},
+d8:{hook:"La diferencia entre un junior y un senior NO es cometer menos errores: es diagnosticarlos en segundos. Los logs de producción de toda empresa son tracebacks acumulados — y tú ya depuraste un 404 real conmigo. Hoy sistematizas ese superpoder.",
+ hist:"Las excepciones nacen en LISP y PL/I (años 60) como alternativa a que el programa muriera en silencio. Python las convirtió en objetos con jerarquía: ValueError, TypeError… En el Nivel 1 las CAPTURARÁS con try/except; hoy aprendes a leerlas como un forense.",
+ ej:[["🧒 Infantil","La maestra no dice 'está mal': señala LA LÍNEA exacta del error en tu tarea."],
+  ["🏠 Cotidiano","El auto no dice 'algo falla': enciende 'check engine' con un código específico."],
+  ["🏢 Empresa","Sentry y Datadog son empresas MILLONARIAS que venden... lectura organizada de tracebacks."],
+  ["🤖 IA","Cuando tu bot de Telegram abortaba en el arranque, su log guardó el traceback exacto que lo delató."],
+  ["❌ Incorrecto","Borrar la línea que explota para que 'no moleste' — el error vuelve, mutado y peor."],
+  ["⭐ Optimizado","Leer tipo → mensaje → línea, formular UNA hipótesis, verificarla. Método científico aplicado."]],
+ chk:{q:"¿Cuál es la línea MÁS informativa de un traceback?",
+  o:["La primera de arriba","La última: tipo de error + mensaje","La del número más grande"],a:1,
+  e:"Abajo está el QUÉ (tipo y mensaje); arriba el DÓNDE. Siempre se empieza por abajo."},
+ sin:{dom:"Leer tracebacks · los 4 errores clásicos · anticipar con if",
+  ref:"Diagnóstico con hipótesis en vez de prueba y error a ciegas",
+  mm:"Los errores son SEÑALES ESTRUCTURADAS del sistema, no fracasos personales.",
+  ind:"El on-call de Amazon empieza cada incidente leyendo un traceback. Es el día a día.",
+  jar:"Los logs de errores de JARVIS son tracebacks — ya los has leído sin saber que entrenabas.",
+  rec:"docs Tutorial 8 (Errors) · CS50P Lecture 3",
+  ent:"«Te llega este traceback de producción: ¿qué haces PRIMERO?» — entrevista on-call de Amazon.",
+  reto:"Provoca a propósito los 4 errores clásicos en la Terminal y explica cada uno en una frase."}},
+};
 /* examen práctico */
 const PRACTICA=[
  {id:"p1",t:"Práctico 1 · Eco en mayúsculas",
@@ -1476,8 +1632,10 @@ function renderClases(){
       (pend.length?'<p class="small" style="margin:7px 0 0;color:var(--warn)">Te falta: '+pend.join(" · ")+"</p>"
         :'<p class="small" style="margin:7px 0 0;color:var(--good)">Día al 100% — verifica tu dominio abajo y continúa.</p>')+"</div>";
   }
+  const EXd=EXTRA[d.id]||{};
   h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0 · camino al dominio</p><h2>"+d.t+"</h2>"+
-    (d.intro?'<p class="small" style="margin:8px 0 0;color:var(--muted)">'+d.intro+"</p>":"")+"</div>";
+    (d.intro?'<p class="small" style="margin:8px 0 0;color:var(--muted)">'+d.intro+"</p>":"")+
+    (EXd.hook?'<p class="small" style="margin:10px 0 0;padding:10px 12px;background:#1c2438;border-left:3px solid var(--gold);border-radius:6px"><strong style="color:var(--gold)">💰 Por qué importa:</strong> '+EXd.hook+"</p>":"")+"</div>";
   const okInt=!d.intuit||p.int,okMcq=okInt&&(!d.mcq||p.mcq);
   // FASE 1 · comprensión e intuición
   if(d.intuit){
@@ -1513,13 +1671,26 @@ function renderClases(){
   else{
     // FASE 3 · visualización
     if(VIZ[d.id])h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Fase 3 · Visualización — 30%</p><pre class="codebox" style="border-left-color:var(--blue)">'+esc(VIZ[d.id])+"</pre></div>";
+    // contexto histórico
+    if(EXd.hist)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">🏛️ Contexto histórico · por qué existe</p><p class="small" style="margin:2px 0 0">'+EXd.hist+"</p></div>";
     // FASES 2-4 · teoría y código guiado
     d.theory.forEach((t,i)=>{
       h+='<div class="card">'+(i===0?'<p class="eyebrow" style="color:var(--gold)">Fase 4 · Código guiado — 40%</p>':"")+
         '<h2 style="font-size:.98rem">'+t[0]+"</h2><div class='small' style='color:var(--text)'>"+t[1]+"</div>";
-      if(t[2])h+='<pre class="codebox">'+hl(t[2])+'</pre><button class="btn ghost" onclick="toPlayground(this)" data-code="'+esc(t[2]).replace(/"/g,"&quot;").replace(/\n/g,"&#10;")+'">Probar en la Terminal →</button>';
+      if(t[2]){const dc=esc(t[2]).replace(/"/g,"&quot;").replace(/\n/g,"&#10;");
+        h+='<pre class="codebox">'+hl(t[2])+'</pre><div class="row">'+
+        '<button class="btn ghost" onclick="toPlayground(this)" data-code="'+dc+'">Probar en la Terminal →</button>'+
+        '<button class="btn ghost" onclick="toPlaygroundStep(this)" data-code="'+dc+'">🔍 Verlo paso a paso</button></div>';}
       h+="</div>";
     });
+    // escalera de ejemplos
+    if(EXd.ej)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">🪜 Escalera de ejemplos · de infantil a profesional</p><table class="mini">'+
+      EXd.ej.map(x=>"<tr><td style='white-space:nowrap'>"+x[0]+"</td><td>"+x[1]+"</td></tr>").join("")+"</table></div>";
+    // checkpoint interactivo
+    if(EXd.chk)h+='<div class="card"><p class="eyebrow" style="color:var(--cyan)">⚡ Checkpoint · piensa antes de seguir</p>'+
+      '<p class="small" style="font-weight:600;margin:2px 0 6px">'+EXd.chk.q+"</p>"+
+      EXd.chk.o.map((o,j)=>'<label class="small" style="display:flex;gap:8px;padding:4px 0;cursor:pointer"><input type="radio" name="chkq" value="'+j+'"><span>'+o+"</span></label>").join("")+
+      '<button class="btn ghost" style="margin-top:8px" onclick="chkEval()">Comprobar</button><div id="chkFb"></div></div>';
     // MENTAL MODEL
     if(d.mental)h+='<div class="card"><p class="eyebrow" style="color:var(--cyan)">🧠 Mental Model · cómo piensa un Senior</p>'+
       '<p class="small" style="margin:4px 0 6px">❌ <strong>Principiante:</strong> '+d.mental.jr+"</p>"+
@@ -1533,6 +1704,11 @@ function renderClases(){
     exs.forEach(e=>h+=exCard(e));
     // errores comunes (lo que haría un junior)
     if(d.errores)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">Errores comunes · lo que haría un Junior</p><ul class="tight small">'+d.errores.map(x=>"<li>"+x+"</li>").join("")+"</ul></div>";
+    // síntesis profesional
+    if(EXd.sin){const s=EXd.sin;
+      h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">📋 Síntesis profesional del tema</p><table class="mini">'+
+      [["✅ Dominarás",s.dom],["⚠ Refuerza",s.ref],["🧠 Modelo mental",s.mm],["🏢 Industria",s.ind],["🚀 En JARVIS",s.jar],["📚 Recursos",s.rec],["🎯 Entrevista",s.ent],["💻 Reto pro",s.reto]]
+      .map(x=>"<tr><td style='white-space:nowrap'>"+x[0]+"</td><td>"+x[1]+"</td></tr>").join("")+"</table></div>";}
     // FASE 6 · proyecto del tema
     if(d.reto){
       if(d.ex.every(e=>S.ex[e.id]))h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fase 6 · Proyecto del tema — 80% · sin pistas, sin ayuda</p></div>'+exCard(d.reto);
@@ -1613,6 +1789,17 @@ function closeDay(){curDay=null;renderClases();window.scrollTo({top:0})}
 function toPlayground(btn){
   document.getElementById("pgEditor").value=btn.dataset.code.replace(/&#10;/g,"\n").replace(/&quot;/g,'"').replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&");
   go("terminal");
+}
+function toPlaygroundStep(btn){
+  toPlayground(btn);
+  setTimeout(runStepMode,250);
+}
+function chkEval(){
+  const d=LEVEL0[curDay],c=EXTRA[d.id]&&EXTRA[d.id].chk;if(!c)return;
+  const sel=document.querySelector('input[name="chkq"]:checked'),fb=document.getElementById("chkFb");
+  if(!sel){fb.innerHTML='<div class="kobox">Elige una opción — pensar es obligatorio aquí.</div>';return}
+  if(+sel.value===c.a)fb.innerHTML='<div class="okbox"><strong>Correcto.</strong> '+c.e+"</div>";
+  else fb.innerHTML='<div class="kobox">No exactamente — era: “'+c.o[c.a]+'”. '+c.e+"</div>";
 }
 function exCard(e){
   const passed=!!S.ex[e.id];

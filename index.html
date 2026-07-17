@@ -1948,7 +1948,11 @@ function renderHome(){
   document.getElementById("aprobadoBox").innerHTML=levelApproved()
     ?'<div class="okbox" style="margin-top:12px"><strong>NIVEL 0 APROBADO por el corrector.</strong> Última puerta: defensa oral y code review con tu tutor en el chat. Después, él desbloquea el Nivel 1 aquí mismo.</div>':"";
 }
-/* ---- nube (Supabase, opcional) ---- */
+/* ---- nube (Supabase) ----
+   La clave publishable es pública por diseño (Supabase la marca "safe to share publicly");
+   la seguridad del progreso viene del código derivado de usuario+contraseña. */
+const SUPA_URL="https://smobnkwayjlndmbneqrz.supabase.co";
+const SUPA_KEY="sb_publishable_m2VxM7fkyjTdviPQaUzVbQ_-3_cfviu";
 const CKEY="academiaPython.cloud";
 let CLOUD=null;try{CLOUD=JSON.parse(localStorage.getItem(CKEY))}catch(e){}
 let cloudTimer=null;
@@ -2046,12 +2050,35 @@ function connectCloud(){
 }
 function forgetCloud(){CLOUD=null;localStorage.removeItem(CKEY);
   cloudUI("nube desactivada en este dispositivo","lock");renderCloudForm()}
+function loginUser(){
+  const u=document.getElementById("cbUser").value.trim().toLowerCase(),
+    p=document.getElementById("cbPass").value;
+  if(u.length<3){cloudUI("el usuario necesita al menos 3 caracteres","bad");return}
+  if(p.length<6){cloudUI("la contraseña necesita al menos 6 caracteres","bad");return}
+  const code="u:"+u+":"+hashCode(p+"|"+u);
+  CLOUD={url:SUPA_URL,key:SUPA_KEY,code,user:u};
+  localStorage.setItem(CKEY,JSON.stringify(CLOUD));
+  renderCloudForm();cloudPull();
+}
 function renderCloudForm(){
   const box=document.getElementById("cloudForm");if(!box)return;
-  if(CLOUD)box.innerHTML='<p class="small muted" style="margin:8px 0 8px">Cada avance se guarda solo, unos segundos después. Abre la app en tu otro dispositivo con el mismo código y verás todo.</p>'+
-    '<div class="row"><button class="btn ghost" onclick="cloudPull()">Sincronizar ahora</button>'+
-    '<button class="btn ghost" onclick="forgetCloud()">Desconectar</button></div>';
-  else box.innerHTML='<p class="small muted" style="margin:8px 0 8px">Conecta tu proyecto Supabase (se configura una sola vez por dispositivo; las claves se guardan solo en tu navegador, nunca en el código):</p>'+
+  if(CLOUD){
+    box.innerHTML='<p class="small" style="margin:8px 0 8px">'+
+      (CLOUD.user?'Sesión: <strong>'+esc(CLOUD.user)+"</strong> · ":"")+
+      '<span class="muted">Cada avance se guarda solo. Entra igual en tu otro dispositivo y verás todo.</span></p>'+
+      '<div class="row"><button class="btn ghost" onclick="cloudPull()">Sincronizar ahora</button>'+
+      '<button class="btn ghost" onclick="forgetCloud()">Cerrar sesión aquí</button></div>';
+    return;
+  }
+  if(SUPA_URL&&SUPA_KEY){
+    box.innerHTML='<p class="small muted" style="margin:8px 0 8px">Crea tu usuario (o entra con el que ya tienes). Mismo usuario y contraseña en PC y celular = mismo avance.</p>'+
+      '<input type="text" id="cbUser" placeholder="usuario (p. ej. alex)" autocomplete="username" style="margin-bottom:6px">'+
+      '<input type="text" id="cbPass" placeholder="contraseña (mín. 6 caracteres — no la olvides: es la llave de tu avance)" style="margin-bottom:8px">'+
+      '<button class="btn" onclick="loginUser()">Entrar / Crear usuario</button>'+
+      '<p class="small muted" style="margin:8px 0 0">La primera vez se crea el usuario con el avance de este dispositivo. Escribe la contraseña EXACTA siempre: una distinta abre un avance vacío.</p>';
+    return;
+  }
+  box.innerHTML='<p class="small muted" style="margin:8px 0 8px">Conecta tu proyecto Supabase (se configura una sola vez por dispositivo; las claves se guardan solo en tu navegador):</p>'+
     '<input type="text" id="cbUrl" placeholder="https://xxxx.supabase.co" style="margin-bottom:6px">'+
     '<input type="text" id="cbKey" placeholder="clave publishable (sb_publishable_…) o anon (eyJ…)" style="margin-bottom:6px">'+
     '<input type="text" id="cbCode" placeholder="tu código secreto (mín. 8 caracteres, invéntalo)" style="margin-bottom:8px">'+

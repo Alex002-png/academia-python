@@ -2098,7 +2098,7 @@ La **existencia y asignación** de estos documentos es normativa; su **estado** 
 |---|---|---|---|---|
 | **DOC-00** | Academy Blueprint | T0 | — (fuente de verdad) | 🔒 Sellado v1.0.0 (2026-07-18) |
 | **DOC-01** | Perfil de Egreso y Marco de Competencias | T1 | §6 (6.1.4, 6.7.5) | ✅ Aprobado v1.0.0 (2026-07-18) — `docs/01-perfil-egreso-marco-competencias.md` |
-| **DOC-02** | Modelo de Evaluación y Rúbricas | T1 | §17; desarrolla rúbricas, instrumentos, banco de ítems, plantillas y procedimientos operativos de evaluación *(descripción corregida por resolución 11.7 del Director, 2026-07-18: el umbral pertenece a §17)* | ⏳ Pendiente |
+| **DOC-02** | Modelo de Evaluación y Rúbricas | T1 | §17; desarrolla rúbricas, instrumentos, banco de ítems, plantillas y procedimientos operativos de evaluación *(descripción corregida por resolución 11.7 del Director, 2026-07-18: el umbral pertenece a §17)* | ✅ Aprobado v1.0.0 (2026-07-18) — `docs/02-modelo-evaluacion-rubricas.md` |
 | **DOC-03** | Especificación de Lección y Metodología Operativa | T1 | §16 | ⏳ Pendiente |
 | **DOC-04** | Contrato e Instanciación del Tutor IA | T1 | §19 (AC-01, AC-13) | ⏳ Pendiente |
 | **DOC-05** | Sistema de Inglés Técnico | T1 | §18 (NNR-15) | ⏳ Pendiente |
@@ -2106,7 +2106,8 @@ La **existencia y asignación** de estos documentos es normativa; su **estado** 
 | **DOC-07** | Especificación de la Plataforma | T1 | §12/S5, §21, QAs aplicables | ⏳ Pendiente |
 | **DOC-08** | Procesos y Auditorías | T1 | 10.5 | ⏳ Pendiente |
 | **DOC-09** | Especificación del Proyecto Columna Vertebral | T1 | 13.5.2, DP-04 | ⏳ Pendiente |
-| **SYL-N0…SYL-N12** | Syllabus por nivel (13 documentos) | T2 | 14.8.3, DOC-01 | ⏳ Pendientes |
+| **SYL-N0** | Syllabus del Nivel 0 · Validación | T2 | 14.8.3, DOC-01 | ✅ Aprobado v1.0.0 (2026-07-18) — `docs/syllabus/syl-n0.md` |
+| **SYL-N1…SYL-N12** | Syllabus por nivel (12 documentos) | T2 | 14.8.3, DOC-01 | ⏳ Pendientes |
 | **CONST** | Constitución v2.3 | Histórico | Documento fundacional (régimen 15.7) | **Histórico** (desde el sellado v1.0.0, 2026-07-18; verificación en Apéndice B) |
 
 Añadir documentos nuevos al catálogo es cambio MINOR mediante este registro; ningún documento puede crearse fuera de él (**regla sin documentos huérfanos**: todo documento tiene autoridad de origen declarada — un documento sin origen en el catálogo es un defecto).
@@ -3656,6 +3657,8 @@ Todo ADR contiene doce campos obligatorios:
 | EVT | Fecha | Tipo | Clas. | Descripción | Referencias |
 |---|---|---|---|---|---|
 | **EVT-015** | 2026-07-18 | Documento / validación | Menor | **Primer documento hijo aprobado: DOC-01 v1.0.0** (64 competencias de nivel, cobertura 31/31), desarrollado como prueba piloto de gobernanza con resultado limpio: 3 fricciones registradas, las 3 clasificadas "Ninguna" — el Blueprint operó como arquitectura generativa. Prefijo `C-Nx-##` registrado en §0.6 por autorización del Director. | DOC-01; §0.6; 15.3; informe de la prueba piloto |
+| **EVT-016** | 2026-07-18 | Documento / cierre de fase | Menor | **DOC-02 v1.0.0 aprobado** (8 rúbricas maestras versionadas, 6 plantillas, matriz canónica 64/64, checklist OBJ-05 saldada). El Director declara **concluida la fase de especificación mínima**: la cadena perfil→competencias→instrumentos→evidencias queda completa; la prioridad pasa a SYL-N0 y toda nueva documentación se subordina al aprendizaje real. | DOC-02; 15.3 |
+| **EVT-017** | 2026-07-18 | Documento / validación | Menor | **SYL-N0 v1.0.0 aprobado — el núcleo mínimo viable de la Academia existe:** la cadena Blueprint→competencias→evaluación→syllabus→contenido→estudiante queda completa sobre un nivel real en producción, con acta de brechas (B-01…04) y Observaciones de ejecución inauguradas con evidencia empírica. La prioridad del proyecto pasa del diseño documental al ciclo estudiar→evidencia→ajustar. | SYL-N0; DOC-01; DOC-02 |
 
 ### E.3 Relación con el sellado, estadísticas y cierre
 
@@ -3665,11 +3668,11 @@ Todo ADR contiene doce campos obligatorios:
 | Métrica | Valor |
 |---|---|
 | Eras | 2 (Era Fundacional, cerrada · Era Operativa, abierta) |
-| Hitos registrados | 15 |
+| Hitos registrados | 17 |
 | — Mayores | 12 |
-| — Menores | 3 |
+| — Menores | 5 |
 | Primer hito | 2026-07-17 (EVT-001) |
-| Último hito | 2026-07-18 (EVT-015, DOC-01 aprobado) |
+| Último hito | 2026-07-18 (EVT-017, SYL-N0 aprobado: el núcleo mínimo viable existe) |
 
 3. **Consecuencia administrativa sobre el Apéndice D.** La aprobación de este apéndice completa la cobertura de la directiva **DOC0-27** (la última pendiente de incorporación, D.4.3). Su incorporación como REQ a la matriz D es una **actualización administrativa prevista por D.4** — la consecuencia automática de la finalización del último requisito pendiente, conforme a las reglas ya aprobadas (D.1.7, D.4.1): **no constituye modificación normativa del Apéndice D, no requiere ADR y no altera la arquitectura aprobada**; únicamente completa el registro vivo.
 4. **Cláusula institucional de cierre:**

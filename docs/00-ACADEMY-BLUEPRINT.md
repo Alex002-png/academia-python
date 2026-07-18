@@ -1,7 +1,7 @@
 # DOCUMENTO 0 — ACADEMY BLUEPRINT
 ### Architecture Design Document · AI Systems Architect Academy
 
-> **ID:** DOC-00 · **Versión:** **1.0.0** · **Estado:** 🔒 **SELLADO** (2026-07-18, por orden del Director) — especificación arquitectónica oficial del proyecto Academy; toda modificación futura se rige por el régimen de gobernanza de este documento · **Aprobador:** Director de la Academia
+> **ID:** DOC-00 · **Versión:** **1.0.1** · **Estado:** 🔒 **SELLADO** (v1.0.0, 2026-07-18, por orden del Director; PATCH 1.0.1 administrativo) — especificación arquitectónica oficial del proyecto Academy; toda modificación futura se rige por el régimen de gobernanza de este documento · **Aprobador:** Director de la Academia
 
 ---
 
@@ -71,7 +71,7 @@
 | **Ubicación canónica** | `docs/00-ACADEMY-BLUEPRINT.md` (repositorio `academia-python`) |
 | **Formato** | Markdown (GitHub Flavored Markdown) |
 | **Idioma** | Español; términos de industria en inglés según convención 0.6 |
-| **Versión actual** | **1.0.0** |
+| **Versión actual** | **1.0.1** |
 | **Estado** | 🔒 **Sellado** (2026-07-18) |
 | **Redactor** | Comité de Diseño (IA) |
 | **Aprobador único** | Director de la Academia (Alex) |
@@ -145,6 +145,7 @@ El documento sigue **versionado semántico adaptado a documentación**: `MAJOR.M
 | 0.31.0-draft | 2026-07-18 | ADR del Apéndice E aprobado (10/10) con 5 ajustes obligatorios; redacción revisada con 1 ajuste de consistencia administrativa (tipificación de la incorporación de DOC0-27 al Apéndice D como actualización administrativa D.4). Apéndice E aprobado oficialmente por el Director (10/10): cuarteto de memoria, definición de Era, plantilla EVT, Era Fundacional inicializada con sus hitos, condición de sellado propia. Ejecutada la actualización administrativa del Apéndice D (REQ-40, DOC0-27; cero directivas pendientes) y levantada el acta EVT-013. **Arquitectura documental del Blueprint completa: 24 secciones + 5 apéndices. El proyecto entra en Revisión Integral previa al sellado 1.0.0.** | **Apéndice E ✅ Aprobado** · Blueprint completo. |
 | 0.31.1-draft | 2026-07-18 | **Blueprint Hardening RC1** (PATCH, autorizado por el Director sobre el Informe de Revisión Integral): corregido M-01 (estatus "candidata"→"formalizada como NNR-10/11/12" en 5.12, 6.9.3 y 7.6); m-01 (compuerta de entrada de N0 = onboarding, 14.4); m-02 (criticidad como síntesis operativa de probabilidad e impacto, 23.1.3); m-03 (claves SYL-Nx y CONST incorporadas a §0.6); observaciones o-02 (REQ-39 destino A–E), o-04 (4.7 en presente con NNRs citadas) y o-05 (21.2.2 señal 20.4). m-04 (Mermaid) queda condicional a verificación de render en la publicación; o-01/o-03/o-06 diferidas a futura MINOR. Sin cambios de significado normativo. | Hardening aplicado · verificación de cierre. |
 | **1.0.0** | 2026-07-18 | **SELLADO INSTITUCIONAL** por orden del Director tras verificación de cierre limpia: el Blueprint deja de ser documento en desarrollo y pasa a constituir la especificación arquitectónica oficial del proyecto Academy. Certificaciones consumadas: Apéndice B (50/50 CU, 0 derogadas) y Apéndice D (40/40 REQ, 0 pendientes); la Constitución v2.3 pasa a estado Histórico (0.5, 15.7, B.4.2). Acta EVT-014 levantada: **cierre de la Era Fundacional y apertura de la Era Operativa.** | **🔒 SELLADO v1.0.0** |
+| 1.0.1 | 2026-07-18 | PATCH administrativo post-sellado, autorizado por el Director en el veredicto de DOC-01: fila `C-Nx-## \| Competencia de nivel \| DOC-01` incorporada al registro §0.6 (vía 15.4.5); catálogo 15.3 actualizado (DOC-01 → ✅ Aprobado v1.0.0); acta EVT-015 levantada (primer documento hijo aprobado; prueba piloto de gobernanza con 3/3 fricciones "Ninguna"). Sin cambio normativo alguno; el sellado v1.0.0 permanece íntegro. | DOC-01 aprobado · piloto cerrado. |
 
 ### 0.5 Autoridad, aprobación y precedencia
 
@@ -185,6 +186,7 @@ Estos términos solo tienen valor normativo cuando aparecen en mayúsculas.
 | `OBJ-XX` | Objetivo general | §3 |
 | `PED-XX` | Principio pedagógico | §7 |
 | `SYL-Nx` | Syllabus de nivel (Document Key) | §15 |
+| `C-Nx-##` | Competencia de nivel | DOC-01 |
 | `CONST` | Constitución v2.3 (Document Key, régimen histórico) | §15 |
 | `DP-XX` | Design Principle | §8 |
 | `AC-XX` | Architecture Constraint | §9 |
@@ -2095,7 +2097,7 @@ La **existencia y asignación** de estos documentos es normativa; su **estado** 
 | Document Key | Documento | Tier | Delegación que lo origina | Estado |
 |---|---|---|---|---|
 | **DOC-00** | Academy Blueprint | T0 | — (fuente de verdad) | 🔒 Sellado v1.0.0 (2026-07-18) |
-| **DOC-01** | Perfil de Egreso y Marco de Competencias | T1 | §6 (6.1.4, 6.7.5) | ⏳ Pendiente |
+| **DOC-01** | Perfil de Egreso y Marco de Competencias | T1 | §6 (6.1.4, 6.7.5) | ✅ Aprobado v1.0.0 (2026-07-18) — `docs/01-perfil-egreso-marco-competencias.md` |
 | **DOC-02** | Modelo de Evaluación y Rúbricas | T1 | §17; desarrolla rúbricas, instrumentos, banco de ítems, plantillas y procedimientos operativos de evaluación *(descripción corregida por resolución 11.7 del Director, 2026-07-18: el umbral pertenece a §17)* | ⏳ Pendiente |
 | **DOC-03** | Especificación de Lección y Metodología Operativa | T1 | §16 | ⏳ Pendiente |
 | **DOC-04** | Contrato e Instanciación del Tutor IA | T1 | §19 (AC-01, AC-13) | ⏳ Pendiente |
@@ -3649,7 +3651,11 @@ Todo ADR contiene doce campos obligatorios:
 
 #### Era Operativa
 
-*Apertura: el sellado institucional v1.0.0 (2026-07-18, EVT-014). La era en que el Blueprint ejerce su función prevista: gobernar la construcción del sistema documental — comenzando por DOC-01 bajo la modalidad de prueba piloto de gobernanza, con el mandato permanente de evaluar toda fricción primero como posible limitación del marco. Sin hitos registrados aún.*
+*Apertura: el sellado institucional v1.0.0 (2026-07-18, EVT-014). La era en que el Blueprint ejerce su función prevista: gobernar la construcción del sistema documental, con el mandato permanente de evaluar toda fricción primero como posible limitación del marco.*
+
+| EVT | Fecha | Tipo | Clas. | Descripción | Referencias |
+|---|---|---|---|---|---|
+| **EVT-015** | 2026-07-18 | Documento / validación | Menor | **Primer documento hijo aprobado: DOC-01 v1.0.0** (64 competencias de nivel, cobertura 31/31), desarrollado como prueba piloto de gobernanza con resultado limpio: 3 fricciones registradas, las 3 clasificadas "Ninguna" — el Blueprint operó como arquitectura generativa. Prefijo `C-Nx-##` registrado en §0.6 por autorización del Director. | DOC-01; §0.6; 15.3; informe de la prueba piloto |
 
 ### E.3 Relación con el sellado, estadísticas y cierre
 
@@ -3659,11 +3665,11 @@ Todo ADR contiene doce campos obligatorios:
 | Métrica | Valor |
 |---|---|
 | Eras | 2 (Era Fundacional, cerrada · Era Operativa, abierta) |
-| Hitos registrados | 14 |
+| Hitos registrados | 15 |
 | — Mayores | 12 |
-| — Menores | 2 |
+| — Menores | 3 |
 | Primer hito | 2026-07-17 (EVT-001) |
-| Último hito | 2026-07-18 (EVT-014, sellado v1.0.0) |
+| Último hito | 2026-07-18 (EVT-015, DOC-01 aprobado) |
 
 3. **Consecuencia administrativa sobre el Apéndice D.** La aprobación de este apéndice completa la cobertura de la directiva **DOC0-27** (la última pendiente de incorporación, D.4.3). Su incorporación como REQ a la matriz D es una **actualización administrativa prevista por D.4** — la consecuencia automática de la finalización del último requisito pendiente, conforme a las reglas ya aprobadas (D.1.7, D.4.1): **no constituye modificación normativa del Apéndice D, no requiere ADR y no altera la arquitectura aprobada**; únicamente completa el registro vivo.
 4. **Cláusula institucional de cierre:**

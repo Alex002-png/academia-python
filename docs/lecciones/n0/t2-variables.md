@@ -1,6 +1,8 @@
 # N0 · T2 — Variables: etiquetas, no cajas
 
-> **Estado:** ✅ **Aprobada por el Director (2026-07-19)** — primera lección real de la Academia construida bajo DOC-11. Con esta aprobación se inaugura oficialmente la etapa de construcción del contenido vivo: el primer artefacto de la Academia cuya finalidad ya no es describir cómo debería aprender un estudiante, sino hacer que un estudiante aprenda.
+> **Estado (3 independientes, DOC-11 §6bis):** **Desarrollo:** ✅ Completado. **Validación:** 🔶 En curso — la sesión real con Alex comenzó (recuperación de T1 respondida); Bloques 2–6 de esta lección aún no impartidos. **Mejora continua:** 1 observación real registrada, ninguna ha motivado cambio todavía.
+>
+> Primera lección real de la Academia construida bajo DOC-11. Con su aprobación se inauguró la etapa de construcción del contenido vivo: el primer artefacto de la Academia cuya finalidad ya no es describir cómo debería aprender un estudiante, sino hacer que un estudiante aprenda.
 
 *El contenido de los Bloques 1, 3 y 4 conserva y eleva el material ya publicado y validado en producción (campus, "Día 2"); DOC-03 §7 ya estableció que N0 no se reescribe — este documento formaliza esa lección bajo el nuevo estándar sin sustituir lo que ya funciona.*
 
@@ -139,6 +141,6 @@ Pregunta: ¿qué imprime? Y piensa: ¿cómo puede `x` ser igual a `x + 1`? — *
 
 | # | Fecha | Observación | Categoría |
 |---|---|---|---|
-| — | *(pendiente de la primera sesión real)* | — | — |
+| 1 | 2026-07-19 | En la recuperación de T1 (Bloque 0), Alex respondió correctamente `print(4 * 2)` → 8, correctamente el diagnóstico de `print("hola` (SyntaxError, se arregla con `")`), y con precisión menor "quién ejecuta el programa" (dijo "la computadora"; se afinó a "el intérprete"). **Pero respondió `print("4 * 2")` → "42"**, no el texto literal esperado — reveló una confusión real no anticipada exactamente en esta forma: parece tratar el contenido de un string como si aun así se evaluara/concatenara, perdiendo el `*` y los espacios. Se le pidió explicar su razonamiento (Socrático) antes de corregir; respuesta pendiente al momento de este registro. | Error espontáneo no previsto en el Bloque 0 original — candidato a incorporarse como bug deliberado adicional en una futura revisión de T2 si se repite con otros estudiantes (DOC-03 §8bis, validación ascendente) |
 
 *Categorías de referencia: mayor conflicto cognitivo real · explicación con mayor cambio de modelo mental · ejercicio demasiado fácil/difícil · pregunta socrática más productiva · duración real por bloque · errores espontáneos no previstos.*

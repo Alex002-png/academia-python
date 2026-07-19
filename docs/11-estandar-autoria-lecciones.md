@@ -50,6 +50,7 @@ Toda lección abre con esta ficha de identidad — el resumen que un tercero nec
 | **La gran pregunta de la lección** *(nueva — más granular que la gran pregunta del módulo, DOC-03 E1)* | Una única pregunta que esta lección específica responde — anidada dentro de la gran pregunta del módulo, nunca repetida de otra lección |
 | **Prerrequisitos** | Temas concretos de los que depende (de este nivel o de niveles anteriores, citados por dirección exacta) |
 | **Competencias servidas** | `C-Nx-##` exactas de DOC-01 |
+| **Estado (3 independientes — §6bis)** | Desarrollo: ✅/🔍 · Validación: ⏳/🔶/✅ · Mejora continua: ver §6 |
 | **Duración estimada** | Heurística, no plazo (14.2) |
 | **Conexión con la lección anterior y la siguiente** *(pregunta 10 del Director)* | Qué tensión deja abierta la anterior que esta resuelve; qué tensión deja abierta esta que la siguiente resolverá — el mismo principio de "inevitabilidad" de las Herencias Declaradas, aplicado ahora entre lecciones consecutivas, no solo entre niveles |
 
@@ -143,6 +144,16 @@ Toda lección conforme a este estándar mantiene, además del contenido de los B
 **Principio de mejora continua** *(Director, 2026-07-19)*: cada lección nueva debe ser mejor que la anterior — no por cambio de estilo, sino porque la evidencia acumulada (este registro + la investigación de §0bis) crece con cada tema. El rol del autor no es ser la fuente del conocimiento: es investigar, contrastar fuentes, sintetizar la mejor evidencia disponible y transformarla en experiencia educativa dentro de esta arquitectura — nunca por intuición.
 
 Este registro es **la materia prima de toda mejora futura de la lección y, cuando corresponda, de este mismo estándar** — la Academia evoluciona por evidencia acumulada de la ejecución real, no por intuición ni por rediseño especulativo.
+
+## 6bis. Los tres estados independientes de una lección *(institucionalizado por el Director, 2026-07-19 — resuelve la tensión entre desarrollo continuo e integridad del registro)*
+
+Toda lección declara en su ficha de control (§1) tres estados **independientes entre sí** — nunca se fusionan en un solo "completado" ambiguo:
+
+1. **Desarrollo** — ✅ Completado / 🔍 En progreso. La investigación pedagógica (§0bis), el diseño de los Bloques 0–6 y su aprobación institucional. No depende de ningún estudiante; avanza a su propio ritmo, lección tras lección, sin esperar validación.
+2. **Validación** — ⏳ Pendiente / 🔶 En curso / ✅ Validada. Si la lección ya fue ejecutada con un estudiante real. Permanece *pendiente* hasta la primera sesión real; pasa a *en curso* cuando la sesión comenzó pero no concluyó (evidencia parcial, real aunque incompleta); pasa a *validada* solo cuando el estudiante completó la lección y demostró la evidencia de dominio de §4.
+3. **Mejora continua** — el estado vivo del registro de §6: cuántas observaciones reales existen y si alguna ya motivó un cambio.
+
+**Regla de integridad — la que resuelve la tensión entre escalar la Academia y no falsificar su evidencia:** el desarrollo (1) nunca se detiene esperando la validación (2) de la lección anterior — la autoría continúa con el siguiente tema en cuanto el Desarrollo del actual está completo. La Validación avanza en su propio tiempo, exclusivamente a partir de sesiones reales, y **jamás se fabrica**: un estado "Validada" sin evidencia real en el registro de §6 es, por definición, un dato institucional falso, y declararlo así queda prohibido sin excepción.
 
 ## 7. Cierre
 

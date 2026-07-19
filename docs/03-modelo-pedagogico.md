@@ -6,13 +6,13 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | DOC-03 · Tier T1 (título del catálogo: "Especificación de Lección y Metodología Operativa"; título de uso: "Modelo Pedagógico de la Academia") |
-| **Versión / Estado** | **1.0.0** · ✅ **Aprobado** por el Director (2026-07-18) — **referencia pedagógica definitiva de la Academia** |
+| **Versión / Estado** | **1.1.0** · ✅ **Aprobado** por el Director (2026-07-19) — **referencia pedagógica definitiva de la Academia**, ampliada por validación ascendente (§8bis) |
 | **Autoridad de origen** | DOC-00 §16.7 (plantillas, heurísticas, profundidades y checklist de conformidad delegadas) |
 | **Depende de** | DOC-00 (§7 PED; §16 método — ley intocable; §17/§19/§20 por referencia) · DOC-01 (competencias) · DOC-02 (rúbricas y plantillas) |
 | **Produce / desarrolla** | La especificación de sesión y tema que TODOS los syllabus futuros y el Tutor IA consumen; las heurísticas de tiempos (16.2.3); la checklist de conformidad (16.7); la ampliación del catálogo de modos del Tutor (19.5.3, registro vivo) |
 | **AC aplicables (9.7)** | AC-05 · AC-09 (los sustitutos del grupo integrados por diseño) · AC-10 · AC-12 (denso, pero revisable por partes) · AC-14 |
 | **Naturaleza** | El ADN de la enseñanza. Enriquece y especializa el método sellado (16.1.3: puede ampliar, jamás eliminar); nada de lo sellado se modifica |
-| **Historial** | 0.1.0-draft (2026-07-18): redacción conforme al ADR aprobado + la elevación de ambición del Director (10 modelos transversales y principio rector) · 0.2.0-draft (2026-07-18): elevación final por orden del Director — auditoría "¿forma ingenieros o solo enseña a programar?"; 4 vacíos cerrados (razonamiento sobre la corrección A5; experimentación científica A6; escritura técnica A7; problema de largo aliento B6) + confrontación de soluciones en M12 · 0.3.0-draft (2026-07-18): auditoría extrema del comité (mandato de ruptura); 2 hallazgos que superan el triple filtro del Director — práctica intercalada (P12, en M10/escalera/checklist) y regla de dosificación con prioridad del núcleo (§5); el resto de ataques, resistidos (acta en la revisión) · **1.0.0 (2026-07-18): aprobado por el Director como estándar pedagógico definitivo. Decisión institucional asociada: el diseño pedagógico queda cerrado; toda mejora futura deberá provenir exclusivamente de evidencia obtenida en la ejecución real y tramitarse por gobernanza — no se rediseñará la pedagogía por hipótesis ni preferencias** |
+| **Historial** | 0.1.0-draft (2026-07-18): redacción conforme al ADR aprobado + la elevación de ambición del Director (10 modelos transversales y principio rector) · 0.2.0-draft (2026-07-18): elevación final por orden del Director — auditoría "¿forma ingenieros o solo enseña a programar?"; 4 vacíos cerrados (razonamiento sobre la corrección A5; experimentación científica A6; escritura técnica A7; problema de largo aliento B6) + confrontación de soluciones en M12 · 0.3.0-draft (2026-07-18): auditoría extrema del comité (mandato de ruptura); 2 hallazgos que superan el triple filtro del Director — práctica intercalada (P12, en M10/escalera/checklist) y regla de dosificación con prioridad del núcleo (§5); el resto de ataques, resistidos (acta en la revisión) · **1.0.0 (2026-07-18): aprobado por el Director como estándar pedagógico definitivo. Decisión institucional asociada: el diseño pedagógico queda cerrado; toda mejora futura deberá provenir exclusivamente de evidencia obtenida en la ejecución real y tramitarse por gobernanza — no se rediseñará la pedagogía por hipótesis ni preferencias** · **1.1.0 (2026-07-19): ampliación por validación ascendente, autorizada por el Director tras la auditoría institucional del corpus completo (Blueprint+DOC-01/02/03/10+SYL-N0/N1/N2).** Se incorpora el nuevo §3.F (8 elementos permanentes de diseño por módulo — gran pregunta, Momento Fundacional, garantía adquirida, supuesto que destruye, limitación humana compensada, lo que deja de sorprender, coste de no enseñarlo, los tres niveles), nacidos y validados de forma independiente durante la construcción y auditoría de SYL-N1 y SYL-N2; y el nuevo §8bis, que registra formalmente el **principio de validación ascendente** como capacidad permanente de la arquitectura documental. Ningún principio previo de este documento se modifica — solo se completa con lo ya demostrado |
 
 ---
 
@@ -148,6 +148,28 @@ La rotación de roles es, además, el principal **sustituto del grupo** que AC-0
 
 La presión legítima tiene cuatro fuentes — y solo cuatro: problemas por encima de la lección (P1) · defensa regular ante repreguntas (P6) · estándar innegociable con criterios visibles (P5, P2) · ritmo sostenido con dedicación pactada (5.4.1). Está **prohibido** generarla con: ambigüedad de enunciados, volumen vacío, dificultad arbitraria o sorpresas de criterio (PED-08: la carga cognitiva se gasta en el problema, no en descifrar qué se pide). Y el termómetro es el borde de capacidad (PED-02): si nunca falla, es demasiado fácil; si falla sin poder progresar con pistas, está mal calibrado — ambos son señales para S4 (20.4).
 
+### 3.F — Arquitectura de la transformación por módulo *(incorporado por validación ascendente, §8bis — nacido y validado durante SYL-N1/N2)*
+
+Ocho elementos que todo módulo o unidad equivalente de un syllabus DEBE declarar en su diseño. **Naturaleza:** son instrumentos de diseño y de auditoría de coherencia, dirigidos a quien construye y revisa el syllabus — no un guion que el tutor recita en sesión ni una lista que el estudiante escucha enunciada. En el aula, estas ideas emergen como conclusiones que el propio estudiante articula durante la defensa (M13) y la reflexión (M14) — nunca como una lección declarada. Si alguna vez se sintieran como fórmula repetida, la falla sería de la sesión que las convirtió en libreto, no del criterio.
+
+**E1 · La gran pregunta.** Cada módulo se abre con una única pregunta de ingeniería, muy visible — la brújula intelectual y emocional que explica por qué existe cada tema. Los módulos se definen por grandes preguntas, jamás por tecnologías; uno que no pueda resumirse en una gran pregunta no está suficientemente refinado.
+
+**E2 · El Momento Fundacional.** Un único instante —no varios, no repartidos— donde cambia definitivamente la manera de pensar del estudiante respecto a la gran pregunta del módulo. Se declara con precisión quirúrgica: el segundo exacto, no el tema completo que lo contiene.
+
+**E3 · La garantía adquirida.** Qué propiedad nueva sostiene el sistema —o la capacidad del estudiante— al cerrar el módulo. No qué tecnología aparece: qué se puede dar por sentado ahora que antes no se podía.
+
+**E4 · El supuesto que se destruye.** Qué creencia anterior deja de ser válida. No solo qué enseña el módulo — qué idea previa, plausible pero falsa, dejó de sostenerse.
+
+**E5 · La limitación humana que se compensa.** Ningún mecanismo de ingeniería se enseña "porque es buena práctica" en abstracto: existe porque compensa una limitación humana real — olvido, distracción, error, exceso de confianza, dificultad para razonar sobre lo simultáneo. Nombrarla conecta la técnica con su motivo profesional.
+
+**E6 · Lo que deja de sorprender.** Qué aspecto de la realidad profesional reduce su distancia con la intuición del estudiante tras este módulo. La Academia no enseña únicamente conocimientos: reduce progresivamente la distancia entre la intuición del estudiante y la realidad de la ingeniería profesional.
+
+**E7 · El coste de no enseñarlo.** Todo tema se justifica respondiendo: si se eliminara, ¿aparecería una carencia observable en el ingeniero formado? Si la ausencia no cambia significativamente el perfil de egreso, el tema sobra o debe integrarse en otro.
+
+**E8 · Los tres niveles.** Ningún tema se queda en el primero: **operativo** (sabe usar la herramienta) · **ingenieril** (comprende por qué existe, qué resuelve, cuáles son sus límites) · **arquitectónico** (decide cuándo usarla, cuándo no, y qué consecuencias tiene esa decisión para un sistema completo).
+
+*Trazabilidad de origen: E1–E8 nacieron durante la construcción de SYL-N1 (E1, E7, E8 y el precedente de "institución de la ingeniería" e "idea de diez años") y se completaron durante SYL-N2 (E2–E6), sobreviviendo en ambos casos a su auditoría adversarial de cierre y a la auditoría institucional del corpus completo (2026-07-19) — el primer caso registrado del principio de validación ascendente (§8bis).*
+
 ## 4. Matriz de integración transversal
 
 *El mandato "transversal, no aislado", verificable de un vistazo:*
@@ -184,6 +206,24 @@ Un tema es conforme cuando — verificación A1, cobertura del 100 % de los elem
 
 Este modelo no exige reescribir el contenido de N0 (SYL-N0 es retrofit aprobado): el contenido publicado ya cumple la mayor parte de la checklist (hooks, historia, escaleras, checkpoints, ejecución mental, síntesis). Lo que el modelo añade en N0 se añade **por conducción del Tutor, no por código**: los 5 actos como guion de sesión sobre el material existente, la defensa semanal M13, el diario de errores, los trade-offs verbales en los retos, el ritual "¿cómo sabes que funciona?" (A5), el experimento "¿y si…?" en el playground (A6), la explicación escrita semanal (A7), y Beyond the Curriculum como conversación. El **problema de largo aliento de N0.M1 ya existe**: es la calculadora — abierta desde temprano, conviviendo con los temas, cerrada con triple vara y argumento de corrección (B6 no exige crear nada nuevo en N0). La primera sesión bajo este modelo es la que ya está abierta: **T2, con el contador esperando** — y su `"10"` es, exactamente, el conflicto cognitivo M5 del próximo tema.
 
-## 8. Cierre
+## 8bis. Validación ascendente del modelo pedagógico
 
-Los syllabus futuros se construyen sobre este documento sin volver a discutir cómo enseñar: SYL-Nx declara *qué* temas; DOC-03 dicta *cómo se vive* cada uno. Toda mejora futura de este modelo deberá nacer de las Observaciones de ejecución — de la evidencia de un estudiante real aprendiendo — y tramitarse por su proceso. El ADN está escrito; ahora se expresa enseñando.
+*(Registrado por decisión del Director, 2026-07-19, tras la auditoría institucional del corpus completo — no es una excepción a la arquitectura documental: es una capacidad deliberada de ella.)*
+
+El flujo normal de la Academia desciende: Blueprint fija, los documentos T1 desarrollan, los syllabus (T2) instancian (DOC-00 15.4–15.5, regla de flujo 12.6.6). Este modelo declara, para sí mismo, el complemento necesario de ese flujo: **también puede ascender.**
+
+> Cuando un principio pedagógico nace de forma independiente durante la construcción de más de un syllabus, sobrevive a su propia auditoría de coherencia y a una auditoría adversarial con mandato de ruptura, y demuestra mejorar objetivamente el diseño del aprendizaje — deja de ser una decisión local de ese syllabus y se incorpora aquí, en DOC-03, como estándar permanente de la Academia.
+
+Esto no relaja la jerarquía documental: es la vía por la que la experiencia real de **construir** la Academia corrige y completa su autoridad pedagógica — exactamente la misma exigencia de evidencia objetiva que la política de no reapertura impone a los syllabus, aplicada ahora en la dirección inversa. La evidencia que autoriza la reapertura de un SYL viene de un estudiante ejecutando el currículo; la evidencia que autoriza una ampliación de DOC-03 viene de la construcción y auditoría independiente de la propia arquitectura curricular — ambas objetivas, de naturaleza distinta.
+
+**Condición de ascenso — las tres pruebas que un principio debe superar antes de incorporarse a este documento:**
+
+1. **Recurrencia real.** El principio surgió de forma independiente, no planificada desde el inicio, durante la construcción de más de un syllabus — nunca a partir de un solo caso o de una preferencia de diseño.
+2. **Supervivencia auditada.** Resistió tanto la revisión módulo por módulo como una auditoría adversarial con mandato de ruptura, sin ser refutado ni reducido.
+3. **Mejora demostrable.** Su ausencia produciría una carencia observable en la calidad del diseño — el mismo criterio del coste de no enseñarlo (E7), aplicado ahora a la propia arquitectura pedagógica.
+
+Los ocho elementos de §3.F son el primer caso registrado de esta vía: nacieron de forma independiente durante SYL-N1 y SYL-N2, sobrevivieron a las auditorías adversariales de cierre de ambos niveles y a la auditoría institucional del corpus completo, y demostraron mejorar el diseño en dos niveles construidos por separado. Este registro es el precedente que **autoriza y limita** todo ascenso futuro: nada se incorpora a DOC-03 por preferencia — solo por haber superado, con evidencia, exactamente estas tres pruebas.
+
+## 9. Cierre
+
+Los syllabus futuros se construyen sobre este documento sin volver a discutir cómo enseñar: SYL-Nx declara *qué* temas; DOC-03 dicta *cómo se vive* cada uno. Toda mejora futura de este modelo deberá nacer de las Observaciones de ejecución — de la evidencia de un estudiante real aprendiendo — o del principio de validación ascendente (§8bis), y tramitarse por su proceso correspondiente. El ADN está escrito; ahora se expresa enseñando.

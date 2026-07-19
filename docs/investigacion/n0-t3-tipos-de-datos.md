@@ -100,6 +100,15 @@ Aquí la predicción natural y **correcta** emerge sola: nadie espera que la lat
 | Reutilización del error real de Alex (`contador = "10"`) como puente T2→T3 | **Adopta como hipótesis a probar, no como hecho confirmado** (degradado tras revisión crítica, Hallazgo 5) | Plausible y coincide con la literatura, pero sin la explicación real de Alex no puede llamarse "convergencia confirmada" — el diagnóstico relámpago de T3 se diseña para probar la causa real, no asumirla | Registro de observaciones de T2 (O real, 2026-07-19); revisión crítica de este documento |
 | Ausencia de referencia comparable en Oxford/Cambridge | **Se declara, no se rellena** | Honestidad metodológica (principio 2, DOC-11 §0bis) | Búsqueda sin resultado citable para este micro-concepto |
 
+## Principio de falsabilidad aplicado a las decisiones clave
+
+| Decisión | ¿Qué la haría abandonarse? |
+|---|---|
+| Vocabulario técnico después del conflicto cognitivo, no antes | Si el registro de observaciones (§6, DOC-11) muestra en varios estudiantes que introducirlo antes no genera confusión adicional, se reconsideraría el orden |
+| Rechazo de la analogía de la maleta | Si se demuestra que un estudiante con base previa distinta (sin el T2 de esta Academia) no comete el error de predicción descrito en la traza, el rechazo dejaría de aplicar fuera de nuestro contexto (ya declarado como contextual) |
+| Hipótesis sobre la causa del error de Alex | Se abandona en cuanto Alex explique su razonamiento real — lo confirme o lo refute |
+| `type()` como verificación activa desde el primer ejercicio | Si el registro muestra que retrasarlo no perjudica el hábito de verificación en niveles posteriores, se reconsideraría su posición temprana |
+
 ## Bibliografía citada
 
 - [MIT OCW 6.0001 — Syllabus y Lecture 1](https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/)
@@ -111,4 +120,4 @@ Aquí la predicción natural y **correcta** emerge sola: nadie espera que la lat
 
 ## Estado
 
-**Desarrollo de la investigación:** ✅ Completa. **Revisión crítica:** ✅ Completa (5 hallazgos, 2 ajustes de diseño aplicados). Pendiente de aprobación final del Director antes de iniciar la redacción de la lección N0·T3 bajo DOC-11. *Documento vivo (DOC-11 §0bis, principio 4): se actualizará si la validación real con Alex aporta evidencia nueva — en particular, la explicación pendiente de su razonamiento sobre `"4 * 2" → "42"` y `contador = "10"`.*
+**Desarrollo:** ✅ Completa. **Revisión crítica:** ✅ Completa (5 hallazgos, 2 ajustes aplicados). **Aprobación final:** ✅ **Cerrada y aprobada por el Director (2026-07-19).** Autorizada la redacción de la lección; la validación con Alex continúa como proceso independiente, sin bloquear T4 en adelante. *Documento vivo (DOC-11 §0bis, principio 4): se actualizará si la validación real aporta evidencia nueva — en particular, la explicación pendiente de Alex sobre `"4 * 2" → "42"` y `contador = "10"`.*

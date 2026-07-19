@@ -1,6 +1,6 @@
 # N0 · T3 — Tipos de datos
 
-> **Estado (3 independientes, DOC-11 §6bis):** **Desarrollo:** ✅ Completado. **Validación:** ⏳ Pendiente. **Mejora continua:** 0 observaciones (aún sin sesión real). **Investigación pedagógica:** ✅ aprobada — [`docs/investigacion/n0-t3-tipos-de-datos.md`](../../investigacion/n0-t3-tipos-de-datos.md), con revisión crítica y 2 ajustes ya incorporados abajo.
+> **Estado (3 independientes, DOC-11 §6bis):** **Desarrollo:** ✅ **Completado — la lección está terminada como documento; no bloquea T4 ni el resto de la Academia.** **Validación:** ⏳ Pendiente de validación *(nunca "pendiente de desarrollo" — DOC-11, regla de nomenclatura)*: la hipótesis del Bloque 0 sobre la causa real del error de Alex espera evidencia real, sin detener nada. **Mejora continua:** 0 observaciones (aún sin sesión real). **Investigación pedagógica:** ✅ aprobada — [`docs/investigacion/n0-t3-tipos-de-datos.md`](../../investigacion/n0-t3-tipos-de-datos.md), con revisión crítica y 2 ajustes ya incorporados abajo.
 
 *El contenido de los Bloques 1, 3 (parcial) y 4 conserva y organiza el material ya publicado y validado en producción (campus, "Día 3"): hook, historia real, intuición `"3"+"4"` vs `3+4`, checkpoint, síntesis, y los tres ejercicios + reto ya escritos. DOC-03 §7 establece que N0 no se reescribe.*
 

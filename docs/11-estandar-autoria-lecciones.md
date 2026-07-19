@@ -28,7 +28,7 @@ DOC-03 dicta **el modelo**: la secuencia de 14 momentos, los principios que la f
 
 Ninguna lección se diseña ya solo con el criterio del autor o con la experiencia acumulada de lecciones previas. Antes de redactar el contenido (Bloques 0–6), se produce y se aprueba, como documento independiente, una **"Investigación Pedagógica de N#·T#"**, con esta estructura mínima:
 
-1. **Cómo enseñan este concepto exacto** — no el área general, el concepto específico — al menos: MIT, Carnegie Mellon, Harvard (CS50 cuando aplique), y Stanford/Oxford/Cambridge cuando aporten algo distintivo. Con fuente citable (curso, lectura, syllabus público) — nunca una impresión genérica de "así se enseña en las universidades".
+1. **Cómo enseñan este concepto exacto** — no el área general, el concepto específico — al menos: MIT, Carnegie Mellon, Harvard (CS50 cuando aplique), y Stanford/Oxford/Cambridge cuando aporten algo distintivo; **documentación oficial** de la tecnología en juego y **estándares de industria** cuando correspondan. Con fuente citable — nunca una impresión genérica de "así se enseña en las universidades".
 2. **Qué concluye la investigación en Computer Science Education / Learning Sciences específicamente sobre este concepto** — no los principios generales ya incorporados a DOC-03 (P1–P12), sino evidencia puntual del tema exacto (¿hay estudios sobre el orden óptimo de enseñar esto frente a lo siguiente? ¿cuál es el error de novato más universal y documentado en este concepto preciso?).
 3. **Síntesis crítica, nunca colección.** Qué hace excepcional a cada enfoque, qué evidencia lo respalda, y qué limitación tiene frente a la identidad pedagógica propia (DOC-03) — jamás copiar una institución entera: identificar el mecanismo específico que funciona, y por qué.
 4. **La estrategia óptima propuesta**, con cada decisión de diseño justificada explícitamente y citando su respaldo (de esta investigación o de DOC-03): por qué este ejemplo y no otro, por qué este orden, por qué este laboratorio, por qué esta analogía, por qué esta pregunta socrática, por qué este error deliberado, por qué esta secuencia de dificultad.
@@ -139,6 +139,8 @@ Toda lección conforme a este estándar mantiene, además del contenido de los B
 4. **Qué pregunta socrática produjo las mejores respuestas** — candidata a reemplazar o acompañar las preguntas de defensa del Bloque 6.
 5. **Duración real por bloque**, contrastada con la estimación de la ficha de control.
 6. **Errores espontáneos no previstos** — candidatos a incorporarse como nuevos errores deliberados (Bloque 0) en la próxima revisión de la lección, por el mismo principio de validación ascendente que rige DOC-03 (§8bis): una observación que se repite en más de una ejecución y demuestra mejorar el diagnóstico puede ascender de "observación" a "elemento de diseño".
+
+**Principio de mejora continua** *(Director, 2026-07-19)*: cada lección nueva debe ser mejor que la anterior — no por cambio de estilo, sino porque la evidencia acumulada (este registro + la investigación de §0bis) crece con cada tema. El rol del autor no es ser la fuente del conocimiento: es investigar, contrastar fuentes, sintetizar la mejor evidencia disponible y transformarla en experiencia educativa dentro de esta arquitectura — nunca por intuición.
 
 Este registro es **la materia prima de toda mejora futura de la lección y, cuando corresponda, de este mismo estándar** — la Academia evoluciona por evidencia acumulada de la ejecución real, no por intuición ni por rediseño especulativo.
 

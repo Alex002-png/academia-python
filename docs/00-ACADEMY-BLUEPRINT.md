@@ -1,7 +1,7 @@
 # DOCUMENTO 0 — ACADEMY BLUEPRINT
 ### Architecture Design Document · AI Systems Architect Academy
 
-> **ID:** DOC-00 · **Versión:** **1.0.2** · **Estado:** 🔒 **SELLADO** (v1.0.0, 2026-07-18, por orden del Director; PATCH 1.0.1 y 1.0.2 administrativos) — especificación arquitectónica oficial del proyecto Academy; toda modificación futura se rige por el régimen de gobernanza de este documento · **Aprobador:** Director de la Academia
+> **ID:** DOC-00 · **Versión:** **1.1.0** · **Estado:** 🔒 **SELLADO** (v1.0.0, 2026-07-18, por orden del Director; PATCH 1.0.1/1.0.2 administrativos; MINOR 1.1.0 aprobada por el Director: AC-15 + DOC-10) — especificación arquitectónica oficial del proyecto Academy; toda modificación futura se rige por el régimen de gobernanza de este documento · **Aprobador:** Director de la Academia
 
 ---
 
@@ -147,6 +147,7 @@ El documento sigue **versionado semántico adaptado a documentación**: `MAJOR.M
 | **1.0.0** | 2026-07-18 | **SELLADO INSTITUCIONAL** por orden del Director tras verificación de cierre limpia: el Blueprint deja de ser documento en desarrollo y pasa a constituir la especificación arquitectónica oficial del proyecto Academy. Certificaciones consumadas: Apéndice B (50/50 CU, 0 derogadas) y Apéndice D (40/40 REQ, 0 pendientes); la Constitución v2.3 pasa a estado Histórico (0.5, 15.7, B.4.2). Acta EVT-014 levantada: **cierre de la Era Fundacional y apertura de la Era Operativa.** | **🔒 SELLADO v1.0.0** |
 | 1.0.1 | 2026-07-18 | PATCH administrativo post-sellado, autorizado por el Director en el veredicto de DOC-01: fila `C-Nx-## \| Competencia de nivel \| DOC-01` incorporada al registro §0.6 (vía 15.4.5); catálogo 15.3 actualizado (DOC-01 → ✅ Aprobado v1.0.0); acta EVT-015 levantada (primer documento hijo aprobado; prueba piloto de gobernanza con 3/3 fricciones "Ninguna"). Sin cambio normativo alguno; el sellado v1.0.0 permanece íntegro. | DOC-01 aprobado · piloto cerrado. |
 | 1.0.2 | 2026-07-18 | PATCH administrativo post-sellado, autorizado por el Director en el veredicto de DOC-03 y en la directiva de autonomía: catálogo 15.3 actualizado (DOC-02 y SYL-N0 ya constaban; **DOC-03 → ✅ Aprobado v1.0.0**, referencia pedagógica definitiva — cierre del diseño pedagógico); catálogo de modos 19.5.3 ampliado con el repertorio multi-rol de DOC-03 §3.D (registro vivo, 19.8.4); actas **EVT-018** (cierre del diseño pedagógico) y **EVT-019** (directiva de autonomía de plataforma; auditoría con 0 dependencias de APIs de IA halladas) levantadas; directiva de autonomía registrada como pendiente en D.4.3 (candidata a AC en próxima MINOR). Sin cambio normativo alguno; el sellado v1.0.0 permanece íntegro. | DOC-03 aprobado · diseño pedagógico cerrado. |
+| **1.1.0** | 2026-07-18 | **MINOR consolidada, aprobada por el Director (acta EVT-020) — única revisión normativa de cierre de la construcción institucional:** (1) **AC-15 · Autonomía del funcionamiento esencial** incorporada a 9.6 (formulación refinada del Director; REQ-41 en D.2; el Campus completable con navegador + Internet + cuenta, sin APIs de IA; lo opcional jamás se vuelve requisito); (2) **DOC-10 · Plan Maestro del Currículo** incorporado al catálogo 15.3 (T1; los SYL-Nx instancian desde él; la clave DOC-04 permanece intacta); (3) índices afectados actualizados: 9.6 (nota "todas"), 9.7 (fila Plataforma), 9.9.1 (AC-01…AC-15), D.4.3 (pendientes: ninguna), D.4.4 (41 REQ). Ningún otro contenido normativo alterado. | **MINOR 1.1.0** · DOC-10 en revisión. |
 
 ### 0.5 Autoridad, aprobación y precedencia
 
@@ -1302,7 +1303,7 @@ Espejo del procedimiento 7.7: el Comité PUEDE proponer incorporar, refinar o re
 
 ### 9.6 Restricciones de sostenibilidad arquitectónica
 
-*Distintas de las anteriores: no las impone la realidad ni el proceso — el Director las autoimpone para proteger el futuro del proyecto. Ambas son blandas por naturaleza y sin condición de caducidad externa: solo una decisión MAJOR podría retirarlas.*
+*Distintas de las anteriores: no las impone la realidad ni el proceso — el Director las autoimpone para proteger el futuro del proyecto. Todas son blandas por naturaleza y sin condición de caducidad externa: solo una decisión MAJOR podría retirarlas.*
 
 **AC-13 — Independencia tecnológica**
 - **Enunciado:** ninguna tecnología concreta puede convertirse en requisito estructural del proyecto. Todos los componentes críticos — modelo de IA, hosting, base de datos, motor de repaso, formato de contenido — DEBEN poder sustituirse por alternativas equivalentes; la arquitectura minimiza el vendor lock-in en toda decisión.
@@ -1318,12 +1319,19 @@ Espejo del procedimiento 7.7: el Comité PUEDE proponer incorporar, refinar o re
 - **Impacto:** las propuestas de funcionalidad incluyen su coste de mantenimiento estimado; las auditorías revisan la carga acumulada; "lo construimos y lo mantendremos para siempre" no es un plan — todo componente tiene dueño, propósito medible (DP-12) y derecho a ser retirado.
 - **Caducidad:** ninguna prevista; si AC-07 caduca (más personas), se recalibra el umbral coste/beneficio, no el principio.
 
+**AC-15 — Autonomía del funcionamiento esencial** *(incorporada en la MINOR 1.1.0 por directiva del Director, 2026-07-18; actas EVT-019/EVT-020)*
+- **Enunciado:** el funcionamiento esencial del Campus — clases, terminal Python, ejercicios, proyectos, evaluaciones y progreso — NUNCA dependerá de APIs de modelos de IA ni de servicios externos opcionales. El estudiante DEBE poder completar toda la Academia utilizando únicamente un navegador, conexión a Internet y una cuenta de usuario. **Ninguna mejora futura puede convertir una funcionalidad opcional en requisito para utilizar el Campus.**
+- **Origen:** autoimpuesta por directiva del Director (formulación refinada tras la auditoría de EVT-019, que halló 0 dependencias); deriva de AC-04, AC-13 y QA-13.
+- **Tipo:** blanda autoimpuesta, tratada como permanente.
+- **Impacto:** el Tutor IA es componente externo y opcional que acompaña el aprendizaje sin sostener la plataforma; los servicios externos opcionales (búsqueda semántica, generación de ejercicios, análisis avanzado, productividad) son admisibles solo si su ausencia no impide estudiar ni completar la Academia; toda funcionalidad declara si es esencial u opcional, y la degradación elegante del Campus sin sus opcionales es verificable en auditoría.
+- **Caducidad:** ninguna prevista; revisable solo por decisión MAJOR del Director.
+
 ### 9.7 Impacto transversal en el diseño
 
 | Subsistema | Restricciones dominantes | Obligación resultante |
 |---|---|---|
 | **Currículo** | AC-05, AC-06, AC-09, AC-10 | Proyectos dimensionados a hardware modesto + nube gratuita; transición navegador→entorno real como hito; sustitutos de grupo por diseño; idioma por tramo según §18. |
-| **Plataforma** | AC-02, AC-03, AC-04, AC-06, AC-14 | Arquitectura estática con servicios gestionados; exportabilidad verificable; techo claro del laboratorio embebido; carga de mantenimiento acotada. |
+| **Plataforma** | AC-02, AC-03, AC-04, AC-06, AC-14, AC-15 | Arquitectura estática con servicios gestionados; exportabilidad verificable; techo claro del laboratorio embebido; carga de mantenimiento acotada; funcionamiento esencial autónomo (navegador + Internet + cuenta, sin APIs de IA ni opcionales convertidos en requisito). |
 | **Tutor IA** | AC-01, AC-11, AC-13 | Contrato portable entre proveedores; memoria explícita en datos; ninguna conducta crítica atada a un proveedor. |
 | **Documentos** | AC-11, AC-12, AC-14 | Modularidad y autosuficiencia; tamaño revisable; sin conocimiento implícito. |
 
@@ -1338,7 +1346,7 @@ Espejo del procedimiento 7.7: el Comité PUEDE proponer incorporar, refinar o re
 
 ### 9.9 Función normativa
 
-1. Son **normativos**: los enunciados, tipos e impactos de AC-01…AC-14, la obligación de declaración de 9.7 y el procedimiento de gestión de 9.8. Son **descriptivos**: los orígenes, las condiciones de caducidad y las notas de diseño.
+1. Son **normativos**: los enunciados, tipos e impactos de AC-01…AC-15, la obligación de declaración de 9.7 y el procedimiento de gestión de 9.8. Son **descriptivos**: los orígenes, las condiciones de caducidad y las notas de diseño.
 2. Ningún documento, funcionalidad o contenido del proyecto PUEDE especificar algo que viole una AC vigente; detectarlo es un hallazgo de auditoría (OBJ-14) y se resuelve corrigiendo el diseño o tramitando la caducidad de la restricción por 9.8 — nunca ignorándola.
 3. Cláusula de cambio: conforme a 9.8.
 
@@ -2107,6 +2115,7 @@ La **existencia y asignación** de estos documentos es normativa; su **estado** 
 | **DOC-07** | Especificación de la Plataforma | T1 | §12/S5, §21, QAs aplicables | ⏳ Pendiente |
 | **DOC-08** | Procesos y Auditorías | T1 | 10.5 | ⏳ Pendiente |
 | **DOC-09** | Especificación del Proyecto Columna Vertebral | T1 | 13.5.2, DP-04 | ⏳ Pendiente |
+| **DOC-10** | Plan Maestro del Currículo (PMC) *(incorporado en la MINOR 1.1.0; la carrera completa: desglose modular N0–N12, proyectos, capstones, bibliografía y trazabilidad curricular — los SYL-Nx instancian desde él)* | T1 | §13/§14 + DOC-01 (MINOR 1.1.0, EVT-020) | ✅ Aprobado v1.0.0 (2026-07-18) — `docs/10-plan-maestro-curriculo.md` · **plan de estudios oficial; cierre de la construcción institucional (EVT-021)** |
 | **SYL-N0** | Syllabus del Nivel 0 · Validación | T2 | 14.8.3, DOC-01 | ✅ Aprobado v1.0.0 (2026-07-18) — `docs/syllabus/syl-n0.md` |
 | **SYL-N1…SYL-N12** | Syllabus por nivel (12 documentos) | T2 | 14.8.3, DOC-01 | ⏳ Pendientes |
 | **CONST** | Constitución v2.3 | Histórico | Documento fundacional (régimen 15.7) | **Histórico** (desde el sellado v1.0.0, 2026-07-18; verificación en Apéndice B) |
@@ -3558,7 +3567,8 @@ Todo ADR contiene doce campos obligatorios:
 | REQ-37 | DOC0-28 | El Blueprint primero: no avanzar a otros documentos hasta terminarlo y aprobarlo | Satisfecho | 15.3 (catálogo con DOC-01…DOC-09 y SYL en ⏳, ninguno iniciado) | El cumplimiento es verificable en el propio catálogo |
 | REQ-38 | DOC0-29 | Trabajo estrictamente sección por sección, una a la vez | Satisfecho | 0.9.1; historial 0.4 | La crónica del changelog lo evidencia ciclo a ciclo |
 | REQ-39 | VER-§6 | Flujo ADR-primero: toda sección se diseña (ADR), se revisa y se aprueba antes de redactarse | Satisfecho | Cabeceras de §6–§23 y Apéndices A–E; ADR-00 | Instituido por el Director en el ciclo de §6 y sostenido hasta el final; *relacionado con* ADR-00 (C.4) |
-| REQ-40 | DOC0-27 | Incorporar el Apéndice E — Architecture Evolution Timeline | Satisfecho | Apéndice E | Incorporado por actualización administrativa D.4/E.3.3 al aprobarse el Apéndice E (2026-07-18); última directiva pendiente resuelta |
+| REQ-40 | DOC0-27 | Incorporar el Apéndice E — Architecture Evolution Timeline | Satisfecho | Apéndice E | Incorporado por actualización administrativa D.4/E.3.3 al aprobarse el Apéndice E (2026-07-18); última directiva pendiente de la Era Fundacional resuelta |
+| REQ-41 | VER-EVT-019 | Autonomía del funcionamiento esencial del Campus: completable con navegador + Internet + cuenta; sin APIs de modelos de IA; lo opcional jamás se vuelve requisito | Satisfecho | AC-15 (9.6) | Directiva de la Era Operativa (2026-07-18), refinada por el Director tras la auditoría de EVT-019 e incorporada como AC-15 en la MINOR 1.1.0 (EVT-020) |
 
 ### D.3 Certificación por referencia de los requisitos de ciclo
 
@@ -3570,20 +3580,18 @@ Todo ADR contiene doce campos obligatorios:
 
 1. **Mantenimiento.** Toda directiva futura del Director con contenido exigible se evalúa para incorporación como REQ **al aprobarse la pieza que la satisface** (D.1.7); añadir filas y actualizar estados es actualización administrativa; la numeración es *append-only* (D.1.3); alterar las reglas de D.1 exige proceso normativo.
 2. **Auditoría.** La auditoría documental A3 verifica periódicamente: que todo destino citado existe y satisface razonablemente su REQ (muestreo, QA-07/08); que no existen directivas exigibles sin fila ni certificación por referencia (un hallazgo conforme a 10.6); y la vigencia de las estadísticas.
-3. **Directivas pendientes de incorporación** *(sección informativa; registro vivo — no forma parte de la matriz, conforme a D.1.7)*: **una.**
-   - **[Pendiente] Directiva de autonomía del funcionamiento esencial** (Director, 2026-07-18; acta EVT-019; *formulación refinada por el Director el 2026-07-18 tras aprobar la auditoría — sustituye a la prohibición absoluta inicial*): **"El funcionamiento esencial del Campus nunca dependerá de APIs de modelos de IA ni de servicios externos opcionales. El estudiante debe poder completar toda la Academia utilizando únicamente un navegador, conexión a Internet y una cuenta de usuario."** Corolarios: (a) el Campus — clases, terminal Python, ejercicios, proyectos, evaluaciones y progreso — permanece completamente autónomo; (b) el Tutor IA es componente externo y opcional que acompaña el aprendizaje, no sostiene la plataforma; (c) podrán incorporarse servicios externos opcionales (búsqueda semántica, generación de ejercicios, análisis avanzado, productividad) siempre que su ausencia no impida estudiar ni completar la Academia; (d) **ninguna mejora futura podrá convertir una funcionalidad opcional en requisito para utilizar el Campus** (invariante anti-regresión, verificable en auditoría). La auditoría de incorporación verificó que la arquitectura sellada y la aplicación ya la cumplen (AC-01, AC-13, 19.7.1); **candidata a formalizarse como AC en la próxima MINOR con esta formulación.**
-   *(Histórico: la directiva DOC0-27, el Apéndice E, fue incorporada como REQ-40 el 2026-07-18 mediante la actualización administrativa prevista por D.4 y E.3.3.)*
+3. **Directivas pendientes de incorporación** *(sección informativa; registro vivo — no forma parte de la matriz, conforme a D.1.7)*: **ninguna.** La directiva de autonomía del funcionamiento esencial (EVT-019, formulación refinada por el Director) fue incorporada como **REQ-41 → AC-15** en la MINOR 1.1.0 (2026-07-18, EVT-020). *(Histórico: la directiva DOC0-27, el Apéndice E, fue incorporada como REQ-40 el 2026-07-18 vía D.4/E.3.3.)*
 4. **Estadísticas** *(registro vivo; corresponden únicamente a los REQ registrados en la matriz)*:
 
 | Métrica | Valor |
 |---|---|
-| REQ registrados | 40 |
-| — Satisfechos | 39 |
+| REQ registrados | 41 |
+| — Satisfechos | 40 |
 | — Satisfechos con evolución aprobada | 1 |
 | — Diferidos | 0 |
 | — Reemplazados | 0 |
 | **Cobertura de los REQ registrados** | **100 %** |
-| Directivas pendientes de incorporación (fuera de matriz, D.4.3) | 1 |
+| Directivas pendientes de incorporación (fuera de matriz, D.4.3) | 0 |
 
 5. **Cláusula de certificación institucional:**
 
@@ -3665,6 +3673,8 @@ Todo ADR contiene doce campos obligatorios:
 | **EVT-017** | 2026-07-18 | Documento / validación | Menor | **SYL-N0 v1.0.0 aprobado — el núcleo mínimo viable de la Academia existe:** la cadena Blueprint→competencias→evaluación→syllabus→contenido→estudiante queda completa sobre un nivel real en producción, con acta de brechas (B-01…04) y Observaciones de ejecución inauguradas con evidencia empírica. La prioridad del proyecto pasa del diseño documental al ciclo estudiar→evidencia→ajustar. | SYL-N0; DOC-01; DOC-02 |
 | **EVT-018** | 2026-07-18 | Documento / cierre de fase | Menor | **DOC-03 v1.0.0 aprobado — cierre del diseño pedagógico institucional.** Tras el cambio de filosofía académica (Academia personal, no comercial), investigación de pedagogía de élite (MIT, CS50, CMU, Berkeley, ETH, Oxford + evidencia CS-ed), tres rondas de elevación y una auditoría extrema con mandato de ruptura (2 hallazgos finales: práctica intercalada P12 y regla de dosificación), el Director declara DOC-03 **referencia pedagógica definitiva**: 14 momentos en 5 actos sobre F1–F9, 17 modelos transversales, checklist de conformidad 16.7 saldada y heurísticas 16.2.3 saldadas. Decisión asociada: **la fase de diseño institucional y pedagógico queda finalizada** — toda mejora futura solo por evidencia empírica de ejecución real; el éxito se medirá por la calidad de los ingenieros formados, no de los documentos. Repertorio multi-rol incorporado al catálogo de modos (19.5.3). | DOC-03; 15.3; 19.5.3 |
 | **EVT-019** | 2026-07-18 | Decisión / arquitectura | Menor | **Directiva de autonomía de plataforma:** la Academia debe funcionar completa con solo un navegador e Internet — sin claves API del estudiante, sin costos variables por consumo, sin software adicional; el Tutor IA es **componente externo de acompañamiento** (orienta, revisa, toma defensas), no requisito de funcionamiento de la plataforma. Auditoría ejecutada sobre la aplicación y toda la documentación: **cero dependencias de APIs de IA encontradas** — la arquitectura sellada ya era agnóstica por diseño (AC-01, AC-13, invariancia 19.7.1) y el campus opera 100 % autónomo (intérprete, corrector y exámenes en el navegador; persistencia propia con credenciales públicas embebidas). Directiva registrada como pendiente de incorporación (D.4.3), candidata a formalizarse como AC en la próxima MINOR. | D.4.3; §9; §12; index.html (auditada) |
+| **EVT-020** | 2026-07-18 | Norma / MINOR | Menor | **MINOR 1.1.0 — la única revisión normativa de cierre de la construcción institucional**, consolidada por orden del Director en dos actos: **(1) AC-15 · Autonomía del funcionamiento esencial** formalizada en 9.6 con la formulación refinada del Director (REQ-41; el principio de EVT-019 deja de ser directiva pendiente y pasa a restricción arquitectónica permanente); **(2) DOC-10 · Plan Maestro del Currículo** incorporado al catálogo 15.3 (la clave DOC-04 permanece asignada al Contrato del Tutor — permanencia de Document Keys respetada). Índices y estadísticas actualizados (9.7, D.2, D.4.4). El Director declara que no abrirá otra revisión normativa salvo necesidad real evidenciada. | AC-15; DOC-10; 15.3; D.2 (REQ-41); 9.7 |
+| **EVT-021** | 2026-07-18 | Documento / cierre de era | **Mayor** | **DOC-10 v1.0.0 aprobado — CIERRE DEFINITIVO DE LA CONSTRUCCIÓN INSTITUCIONAL.** Tras la Auditoría Curricular Extrema (comité con mandato de ruptura; 6 correcciones imprescindibles aplicadas: datos en N4, concurrencia y seguridad en N2, post-entrenamiento en N7, fundamentos SO/memoria en N1/N10, regla de perennidad; candidatos de amplitud académica rechazados con disciplina curricular), el Director aprueba el Plan Maestro del Currículo como plan de estudios oficial y declara **concluida la fase fundacional del proyecto**. El corpus queda completo: Blueprint 1.1.0 + DOC-01/02/03/10 + SYL-N0. La Academia entra en su **etapa de desarrollo de contenido y operación docente**: el foco cambia de forma permanente al desarrollo de niveles y a la formación del estudiante; revisiones estructurales solo por evidencia objetiva de la enseñanza real. | DOC-10; 15.3; toda la cadena documental |
 
 ### E.3 Relación con el sellado, estadísticas y cierre
 
@@ -3678,7 +3688,7 @@ Todo ADR contiene doce campos obligatorios:
 | — Mayores | 12 |
 | — Menores | 5 |
 | Primer hito | 2026-07-17 (EVT-001) |
-| Último hito | 2026-07-18 (EVT-018/EVT-019: DOC-03 aprobado — el diseño pedagógico queda cerrado; directiva de autonomía de plataforma registrada) |
+| Último hito | 2026-07-18 (EVT-021: DOC-10 v1.0.0 aprobado — construcción institucional definitivamente cerrada; etapa de desarrollo de contenido y operación docente) |
 
 3. **Consecuencia administrativa sobre el Apéndice D.** La aprobación de este apéndice completa la cobertura de la directiva **DOC0-27** (la última pendiente de incorporación, D.4.3). Su incorporación como REQ a la matriz D es una **actualización administrativa prevista por D.4** — la consecuencia automática de la finalización del último requisito pendiente, conforme a las reglas ya aprobadas (D.1.7, D.4.1): **no constituye modificación normativa del Apéndice D, no requiere ADR y no altera la arquitectura aprobada**; únicamente completa el registro vivo.
 4. **Cláusula institucional de cierre:**

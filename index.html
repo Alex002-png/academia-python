@@ -1224,6 +1224,7 @@ const LEVEL0=[
   ["input(): la trampa clásica número 1",T('<code>input("mensaje")</code> muestra el mensaje, espera a que el usuario escriba, y devuelve lo escrito. Grábatelo a fuego: <strong>input() SIEMPRE devuelve str</strong>. Si el usuario escribe 4, tú recibes <code>"4"</code>. Por eso <code>input() + input()</code> con 4 y 8 da <code>"48"</code>, no 12. Todo número que entre por input debe pasar por <code>int()</code> o <code>float()</code>.'),
    'numero_1 = float(input("Primer número: "))\nnumero_2 = float(input("Segundo número: "))\nprint(f"Suma: {numero_1 + numero_2}")'],
   ["print() con opciones",T('<code>print()</code> acepta varios valores separados por comas y dos parámetros útiles: <code>sep</code> (separador entre valores, por defecto un espacio) y <code>end</code> (qué poner al final, por defecto salto de línea). <code>print("a", "b", sep="-")</code> imprime <code>a-b</code>.')],
+  ["El bucle de validación — nombrado, no construible aún",T('La respuesta profesional completa a "¿y si el dato es inconvertible?" no es solo detectarlo una vez — es <strong>volver a preguntar hasta obtener un dato válido</strong>, en un bucle. Hoy no puedes construirlo todavía (eso exige <code>while</code>, que llega en el Día 7) — pero puedes al menos detectar el problema con <code>.isdigit()</code> y avisar en vez de explotar, en lugar de fingir que el dato siempre viene limpio.')],
  ],
  ex:[
   {id:"d6e1",t:"Ejercicio 1 · Saludo interactivo",
@@ -1247,7 +1248,27 @@ const LEVEL0=[
      if(!/f["']/.test(c))return"La frase final debe usar una f-string.";
      return /\b26\b/.test(norm(o[0]))?true:"Con 2000 debe aparecer 26 (2026 - 2000)."},
    hints:["Tres pasos: leer, convertir, restar de 2026.","f\"Cumples {2026 - anio} años\" — la cuenta puede ir dentro de las llaves."]},
- ]},
+  {id:"d6e4",t:"Ejercicio 4 · Detecta el dato inconvertible",
+   d:'Pide una edad con <code>input()</code>. Si NO son puros dígitos (usa <code>.isdigit()</code>), imprime <code>entrada inválida</code> en vez de intentar convertir y explotar; si sí lo son, imprime la edad más 1. Se probará con <code>veinte</code> (debe avisar) y con <code>20</code> (debe imprimir <code>21</code>).',
+   starter:"",runs:[["veinte"],["20"]],
+   check:(o,c)=>{if(!/\.isdigit\s*\(/.test(c))return"Usa .isdigit() para verificar antes de convertir.";
+     if(!/\bif\b/.test(c))return"La decisión se toma con if.";
+     if(!norm(o[0]).includes("entrada inválida"))return"Con 'veinte' debe avisar: entrada inválida";
+     return norm(o[1]).includes("21")?true:"Con 20 debe imprimir 21."},
+   hints:[".isdigit() devuelve True solo si el texto son puros dígitos — 'veinte' no lo es, '20' sí.","if texto.isdigit(): conviertes y sumas 1. else: avisas 'entrada inválida'."]},
+  {id:"d6e5",t:"Ejercicio 5 · Refactoriza el paso intermedio",
+   d:'Este código funciona, pero tiene una variable intermedia innecesaria. Simplifícalo para que siga imprimiendo <code>7.0</code> con la entrada <code>7</code>.',
+   starter:'texto = input("Número: ")\nnumero = float(texto)\nresultado = numero\nprint(resultado)',runs:[["7"]],
+   check:(o,c)=>{if(/resultado\s*=\s*numero/.test(c))return"Todavía tienes la variable 'resultado' que solo copia 'numero' sin transformarlo — elimínala.";
+     return norm(o[0])==="7.0"?true:"Debe imprimir: 7.0"},
+   hints:["'resultado' solo copia 'numero' sin cambiar nada — esa línea no aporta.","print(float(input(\"Número: \"))) ya hace todo el trabajo en una línea, si prefieres esa ruta."]},
+ ],
+ retoFinal:{id:"d6x",t:"Desafío final · inédito — robustez ante espacios",
+  d:'Pide el precio de un producto y la cantidad comprada, en ese orden. El precio podría llegar con espacios de más (como <code>" 10.5 "</code>) — tu programa debe funcionar igual. Imprime EXACTAMENTE <code>Total: 31.50</code> con precio <code>" 10.5 "</code> y cantidad <code>3</code>.',
+  starter:"",runs:[[" 10.5 ","3"]],
+  hints:["float() ya ignora los espacios de sobra alrededor del número — no necesitas limpiarlo tú mismo con métodos de string.","Total = precio * cantidad, mostrado con f-string y formato :.2f."],
+  check:(o,c)=>{if(!/:\.2f/.test(c))return"El formato de 2 decimales exige una f-string con :.2f";
+    return norm(o[0])==="Total: 31.50"?true:"Esperaba: Total: 31.50\nObtuve:\n"+norm(o[0])}}},
 {id:"d7",n:"Día 7",t:"Decisiones y repetición",
  intro:"Éste es el día más importante del nivel. if y while convierten tus guiones lineales en programas que DECIDEN y PERSISTEN. Después de hoy, tu código deja de ser una lista de pasos y se vuelve lógica viva.",
  intuit:{code:"n = 4\nwhile n > 2:\n    print(n)\n    n = n - 1",
@@ -1271,6 +1292,8 @@ const LEVEL0=[
    'nota = 15\nif nota >= 18:\n    print("Excelente")\nelif nota >= 11:\n    print("Aprobado")\nelse:\n    print("Desaprobado")'],
   ["while: repetir hasta que…",T('<code>while condicion:</code> repite su bloque mientras la condición sea verdadera. La estructura clásica del menú (tu proyecto) es <code>while True:</code> con un <code>break</code> cuando el usuario elige salir. Regla de oro: algo DENTRO del bucle debe poder cambiar la condición — si no, bucle infinito (esta terminal te lo detectará, la vida real no siempre).'),
    'contador = 3\nwhile contador > 0:\n    print(contador)\n    contador = contador - 1\nprint("fin")'],
+  ["Una condición YA es un valor",T('Una comparación como <code>edad &gt;= 18</code> ya produce <code>True</code> o <code>False</code> por sí misma — no necesitas un if/else de cuatro líneas solo para guardar ese resultado en una variable.'),
+   'edad = 20\n# innecesario:\n# if edad >= 18: es_mayor = True\n# else: es_mayor = False\nes_mayor = edad >= 18   # lo mismo, en una línea\nprint(es_mayor)'],
  ],
  ex:[
   {id:"d7e1",t:"Ejercicio 1 · Par o impar",
@@ -1295,7 +1318,30 @@ const LEVEL0=[
    check:(o,c)=>{if(!/\bwhile\b/.test(c))return"La insistencia se logra con while.";
      return norm(o[0]).includes("Elegiste 2")?true:"Tras rechazar 9 y 0, con 2 debe imprimir: Elegiste 2"},
    hints:["Patrón: leer una vez ANTES del while; condición: opcion != \"1\" and opcion != \"2\"; volver a leer DENTRO.","input() devuelve texto: compara con \"1\" y \"2\" entre comillas, o convierte a int."]},
- ]},
+  {id:"d7e4",t:"Ejercicio 4 · Caza la rama inalcanzable",
+   d:'Con <code>nota = 19</code>, este código responde <code>Aprobado</code> en vez de <code>Excelente</code> — un bug silencioso, sin ningún error de Python. Reordena las condiciones para que <code>19</code> sí se reconozca como <code>Excelente</code>, sin perder ningún caso.',
+   starter:'nota = 19\nif nota >= 11:\n    print("Aprobado")\nelif nota >= 18:\n    print("Excelente")\nelse:\n    print("Desaprobado")',runs:[[]],
+   check:(o,c)=>{if(!/nota\s*>=\s*18/.test(c)||!/nota\s*>=\s*11/.test(c))return"Conserva ambas condiciones (>= 18 y >= 11) — solo cambia su orden.";
+     return norm(o[0])==="Excelente"?true:"Con nota = 19 debe imprimir: Excelente"},
+   hints:["Python evalúa las condiciones en orden y se detiene en la primera que sea True — si la más amplia va primero, la más estricta nunca se alcanza.","La condición más exigente (>= 18) debe ir ANTES que la más permisiva (>= 11)."]},
+  {id:"d7e5",t:"Ejercicio 5 · Refactoriza el if/else de cuatro líneas",
+   d:'Simplifica este código a una sola línea de asignación, con el mismo resultado (<code>True</code> con edad 20).',
+   starter:'edad = 20\nif edad >= 18:\n    es_mayor = True\nelse:\n    es_mayor = False\nprint(es_mayor)',runs:[[]],
+   check:(o,c)=>{if(/if\s+edad/.test(c))return"Todavía usas el if/else de cuatro líneas — la comparación ya es un valor por sí misma.";
+     return norm(o[0])==="True"?true:"Debe imprimir: True"},
+   hints:["edad >= 18 ya es True o False — no necesita un if para 'traducirlo'.","es_mayor = edad >= 18 — una sola línea, mismo resultado."]},
+ ],
+ retoFinal:{id:"d7x",t:"Desafío final · inédito — ¿es primo?",
+  d:'Lee un número con <code>input()</code> y determina, con <code>while</code>, si es primo (divisible solo por 1 y por sí mismo). Imprime tu respuesta con la palabra "primo" incluida cuando lo sea, y "no primo" cuando no. Pruébalo con <code>7</code> (primo) y <code>8</code> (no primo). Ningún ejercicio anterior mostró este patrón — tienes que diseñarlo desde cero.',
+  starter:"",runs:[["7"],["8"]],
+  hints:["Un número es primo si NINGÚN número entre 2 y el anterior a él lo divide exacto (resto 0 con %).","Recorre los posibles divisores con while, empezando en 2; si alguno divide exacto, ya sabes que no es primo — pero sigue probando con los demás patrones de esta lección: una bandera (variable booleana) que empiece en True y se vuelva False si encuentras un divisor."],
+  check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Se resuelve con while, recorriendo posibles divisores.";
+    if(!/%/.test(c))return"Necesitas % para detectar si un número divide exacto a otro.";
+    const t0=norm(o[0]);
+    if(t0.includes("no primo")||!t0.includes("primo"))return"Con 7 (que sí es primo) tu programa debe indicarlo como primo, sin el 'no'.";
+    const t1=norm(o[1]);
+    if(!t1.includes("no primo"))return"Con 8 (que no es primo) tu programa debe indicarlo como no primo.";
+    return true}}},
 {id:"d8",n:"Día 8",t:"Errores y tracebacks",
  intro:"Los programadores mediocres temen a los errores; los ingenieros los leen como mapas. Hoy transformas tu relación con los tracebacks: de enemigo que asusta a informante que te dice exactamente dónde mirar. Ya depuraste un 404 real conmigo — esto te va a sonar familiar.",
  intuit:{code:'print(int("12.5"))',
@@ -1579,7 +1625,23 @@ d6:{hook:"input → procesar → print es el esqueleto de TODO sistema interacti
   jar:"Tu bot de Telegram (N5) será input/print con esteroides: mismo esqueleto, otra tubería.",
   rec:"docs Tutorial 3.1 · Automate the Boring Stuff cap. 1",
   ent:"«¿Por qué jamás confías en el input del usuario?» — pregunta universal de seguridad.",
-  reto:"Mini-chatbot de 3 preguntas (nombre, edad, meta) que al final te presenta en UNA frase con f-string."}},
+  reto:"Mini-chatbot de 3 preguntas (nombre, edad, meta) que al final te presenta en UNA frase con f-string."},
+ recursos:[
+  {t:"Python docs — input()",autor:"Python Software Foundation",idioma:"EN",dur:"~5 min",nivel:"Introductorio",motivo:"Referencia oficial exacta de la función central de esta lección.",url:"https://docs.python.org/3/library/functions.html#input",tag:"🟢"},
+  {t:"CS50P — librería cs50 (get_int, get_float)",autor:"Harvard (CS50)",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Origen del patrón 'bucle de validación' nombrado en esta lección — código real.",url:"https://cs50.readthedocs.io/libraries/cs50/python/",tag:"🔵"},
+  {t:"Real Python — Python's input() Function",autor:"Real Python",idioma:"EN",dur:"~25 min",nivel:"Introductorio-Intermedio",motivo:"Profundiza el manejo de errores de conversión sin adelantar T8.",url:"https://realpython.com/python-input-output/",tag:"🟣"},
+  {t:"Real Python — String split() methods",autor:"Real Python",idioma:"EN",dur:"~15 min",nivel:"Intermedio",motivo:"Para quien quiera ver más allá de lo que este entorno permite construir hoy.",url:"https://realpython.com/python-string-split-methods/",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué input() nunca devuelve directamente un número, ni siquiera si el usuario escribe solo dígitos?",
+  "Compara esto con tu propio error de T2 (contador = \"10\"): ¿en qué se parecen y en qué no?",
+  "(inédita) Si input() intentara 'adivinar' el tipo automáticamente, ¿qué nuevo problema crearía?",
+ ],
+ metacog:[
+  "¿En qué se parece tu propio error de T2 a la trampa de esta lección? ¿Lograste verlo tú antes de que se te explicara?",
+  "¿Qué se siente saber que un problema (validar de verdad, en bucle) tiene una solución que todavía no puedes construir?",
+  "Si tuvieras que explicarle a alguien qué es una 'frontera de confianza' sin usar esa frase, ¿qué ejemplo de la vida real usarías?",
+ ]},
 d7:{hook:"El corazón de un agente de IA es LITERALMENTE while + if: mientras no haya respuesta final → pensar, decidir, actuar. Hoy escribes la maqueta del corazón de JARVIS. Este es el día más importante del nivel.",
  hist:"1968: Dijkstra publica «GOTO considered harmful» y mata el código espagueti. Nace la programación estructurada: if/while con bloques claros. Lo que escribes hoy es el resultado directo de esa revolución — sintaxis de 2026, ideas de 1968.",
  ej:[["🧒 Infantil","SI llueve → paraguas. SI NO → lentes de sol."],
@@ -1598,7 +1660,23 @@ d7:{hook:"El corazón de un agente de IA es LITERALMENTE while + if: mientras no
   jar:"El loop agente de JARVIS (LangGraph) = while + ifs con esteroides. Literal.",
   rec:"docs Tutorial 4.1-4.4 · CS50P Lectures 1-2",
   ent:"FizzBuzz — el filtro con el que Google descartaba candidatos. Tu desafío de hoy ES una variante.",
-  reto:"Adivina-número: la máquina 'piensa' el 7; insiste hasta que aciertes, contando tus intentos."}},
+  reto:"Adivina-número: la máquina 'piensa' el 7; insiste hasta que aciertes, contando tus intentos."},
+ recursos:[
+  {t:"CS50 — While Loops",autor:"Harvard (CS50)",idioma:"EN",dur:"~10 min",nivel:"Introductorio",motivo:"Fuente directa ya usada en la investigación de esta lección.",url:"https://cs50.harvard.edu/python/shorts/while_loops/",tag:"🟢"},
+  {t:"CMU 15-110 — While Loops (slides)",autor:"Carnegie Mellon",idioma:"EN",dur:"~20 min",nivel:"Introductorio",motivo:"Segunda fuente con tratamiento formal de la condición de parada.",url:"https://www.cs.cmu.edu/~15110-s22/slides/week3-3-while-loops.pdf",tag:"🔵"},
+  {t:"Composing Programs — Control",autor:"UC Berkeley (CS61A)",idioma:"EN",dur:"~20 min",nivel:"Introductorio-Intermedio",motivo:"Confirma con una tercera institución la regla central: algo debe volver falsa la condición.",url:"https://www.composingprograms.com/",tag:"🟣"},
+  {t:"Real Python — Python while Loops",autor:"Real Python",idioma:"EN",dur:"~30 min",nivel:"Intermedio",motivo:"Profundiza patrones de bucle (acumuladores, banderas) más allá de lo cubierto aquí.",url:"https://realpython.com/python-while-loop/",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué la indentación es sintaxis y no estética en Python?",
+  "¿Qué asegura que un while no sea infinito?",
+  "(inédita) Si tuvieras que explicar el error de límite (< vs <=) a alguien que nunca programó, ¿qué ejemplo cotidiano usarías?",
+ ],
+ metacog:[
+  "¿En qué momento tuviste que 'ejecutar el bucle con el dedo' (trazar a mano) para entender por qué se detenía donde se detenía?",
+  "¿Qué estrategia usarás en el futuro para prevenir un error de límite antes de que ocurra, no solo para corregirlo después?",
+  "De todo lo que integraste hasta hoy (T1 a T7), ¿qué pieza sentiste más 'tuya', ya dominada, y cuál todavía insegura?",
+ ]},
 d8:{hook:"La diferencia entre un junior y un senior NO es cometer menos errores: es diagnosticarlos en segundos. Los logs de producción de toda empresa son tracebacks acumulados — y tú ya depuraste un 404 real conmigo. Hoy sistematizas ese superpoder.",
  hist:"Las excepciones nacen en LISP y PL/I (años 60) como alternativa a que el programa muriera en silencio. Python las convirtió en objetos con jerarquía: ValueError, TypeError… En el Nivel 1 las CAPTURARÁS con try/except; hoy aprendes a leerlas como un forense.",
  ej:[["🧒 Infantil","La maestra no dice 'está mal': señala LA LÍNEA exacta del error en tu tarea."],

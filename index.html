@@ -1030,8 +1030,24 @@ const LEVEL0=[
   d:'Imprime EXACTAMENTE estas tres líneas:<pre class="codebox">== RECIBO ==\nTotal: 25 soles\nGracias, Alex</pre>',
   starter:"",runs:[[]],hints:[],
   check:(o)=>norm(o[0])==="== RECIBO ==\nTotal: 25 soles\nGracias, Alex"?true:"La salida no coincide. Compara carácter por carácter. Obtuve:\n"+norm(o[0])},
- theory:[],
- ex:[],
+ theory:[
+  ["print() con varios valores, y \\n dentro de un string",T('<code>print()</code> puede recibir más de un valor separado por comas — los junta con un espacio automático: <code>print("Alex", 25)</code> imprime <code>Alex 25</code>. Y dentro de un mismo string, <code>\\n</code> es un salto de línea real: un solo <code>print("Hola\\nAdios")</code> imprime dos líneas, sin necesitar dos print().'),
+   'print("Alex", 25)\nprint("Hola\\nAdios")'],
+ ],
+ ex:[
+  {id:"d1e6",t:"Ejercicio 6 · Un solo print, dos valores",
+   d:'Imprime, con un ÚNICO <code>print()</code>, tu nombre <code>"Alex"</code> seguido de tu edad <code>25</code> — sepáralos con una coma dentro del print; no escribas el espacio a mano.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if((c.match(/print\s*\(/g)||[]).length!==1)return"Debe ser un ÚNICO print(), con los dos valores separados por coma dentro.";
+     return norm(o[0])==="Alex 25"?true:"Esperaba: Alex 25\nObtuve:\n"+norm(o[0])},
+   hints:["print(\"Alex\", 25) — la coma dentro del print separa los valores; Python agrega el espacio solo.","No uses + para unirlos: eso exigiría convertir 25 a texto primero."]},
+  {id:"d1e7",t:"Ejercicio 7 · Dos líneas, un solo print",
+   d:'Imprime estas DOS líneas usando un ÚNICO <code>print()</code> (prohibido usar dos print): <code>Hola</code> y luego <code>Adios</code>.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if((c.match(/print\s*\(/g)||[]).length!==1)return"Debe ser un solo print() — usa \\n dentro del string para el salto de línea.";
+     return norm(o[0])==="Hola\nAdios"?true:"Esperaba:\nHola\nAdios\nObtuve:\n"+norm(o[0])},
+   hints:["\\n dentro de un string es un salto de línea real, no dos caracteres sueltos.","print(\"Hola\\nAdios\") — una sola llamada, dos líneas de salida."]},
+ ],
  retoFinal:{id:"d1x",t:"Desafío final · inédito — comillas dentro de comillas",
   d:'Imprime EXACTAMENTE esta línea, incluidas las comillas dentro del texto: <pre class="codebox">Ella dijo "hola" y se fue</pre> Ningún ejercicio anterior mostró cómo incluir comillas dentro de un string delimitado por el mismo tipo de comillas — vas a descubrirlo usando la anatomía del error como herramienta de diagnóstico.',
   starter:"",runs:[[]],
@@ -1098,8 +1114,24 @@ const LEVEL0=[
   starter:'moneda_izquierda = "sol"\nmoneda_derecha = "dolar"',runs:[[]],hints:[],
   check:(o,c)=>{if(/moneda_izquierda\s*=\s*"dolar"/.test(c)||/moneda_derecha\s*=\s*"sol"/.test(c))return"Tramposo: reasignaste los textos a mano. El intercambio debe usar una variable auxiliar.";
     return norm(o[0])==="dolar\nsol"?true:"Esperaba:\ndolar\nsol\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Acumular reasignando la misma etiqueta",T('Un patrón que vas a usar toda tu carrera: una variable que empieza en un valor y se reasigna varias veces SOBRE SÍ MISMA para ir acumulando — <code>contador = contador + 10</code>. Cada reasignación mueve la etiqueta a un objeto nuevo (el anterior no se modifica, N0.T2 ya lo estableció), pero el nombre sigue siendo el mismo.'),
+   'contador = 0\ncontador = contador + 10\ncontador = contador + 10\nprint(contador)'],
+ ],
+ ex:[
+  {id:"d2e6",t:"Ejercicio 6 · Acumula reasignando",
+   d:'Empieza con <code>contador = 0</code> y, SIN escribir el resultado final a mano, reasigna <code>contador = contador + 10</code> tres veces seguidas. Imprime el valor final.',
+   starter:"contador = 0",runs:[[]],
+   check:(o,c)=>{if((c.match(/contador\s*=\s*contador\s*\+\s*10/g)||[]).length<3)return"Necesitas la reasignación contador = contador + 10 escrita (o repetida) tres veces.";
+     return norm(o[0])==="30"?true:"Esperaba: 30\nObtuve:\n"+norm(o[0])},
+   hints:["Cada vez que reasignas, la etiqueta se mueve al nuevo resultado — el valor anterior no se \"acumula\" solo, tú lo sumas explícitamente.","Tres líneas iguales: contador = contador + 10, repetida tres veces, luego el print."]},
+  {id:"d2e7",t:"Ejercicio 7 · Una variable calculada desde otras dos",
+   d:'Crea <code>base = 5</code> y <code>altura = 8</code>, y crea <code>area</code> a partir de MULTIPLICAR esas dos variables (no escribas 40 directamente). Imprime <code>area</code>.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if(!/area\s*=\s*base\s*\*\s*altura/.test(c))return"area debe crearse como base * altura, usando las variables, no el número final.";
+     return norm(o[0])==="40"?true:"Esperaba: 40\nObtuve:\n"+norm(o[0])},
+   hints:["Una variable nueva puede crearse a partir de una OPERACIÓN entre otras dos variables, no solo copiando una.","area = base * altura — la etiqueta area apunta al resultado de esa cuenta."]},
+ ],
  retoFinal:{id:"d2x",t:"Desafío final · inédito — el intercambio que no intercambia",
   d:'Dado <code>a = 10</code> y <code>b = 20</code>, alguien escribió <code>a = b</code> seguido de <code>b = a</code> pensando que así se intercambian los valores. Predice qué imprimirían <code>print(a)</code> y <code>print(b)</code> al final de ESE código (sin arreglarlo primero) y luego escribe la versión que si intercambia de verdad, usando una variable auxiliar, imprimiendo primero a y luego b.',
   starter:"a = 10\nb = 20",runs:[[]],
@@ -1165,8 +1197,26 @@ const LEVEL0=[
   check:(o,c)=>{if(/120/.test(c))return"Prohibido escribir 120: debe salir del cálculo precio - descuento.";
     if(!/int\s*\(/.test(c))return"El precio llega como str: conviértelo con int().";
     return norm(o[0])==="Pagas: 120"?true:"Esperaba exactamente: Pagas: 120\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["El secreto de bool: es un int disfrazado",T('<code>bool</code> es, técnicamente, una subclase de <code>int</code>: <code>True</code> se comporta como <code>1</code> y <code>False</code> como <code>0</code> en cualquier operación aritmética. <code>True + True</code> imprime <code>2</code>, no un error. Esto no es algo que debas usar a propósito para sumar — pero explica errores confusos donde un bool se cuela sin querer en una cuenta numérica.'),
+   'print(True + True)\nprint(False + 5)'],
+ ],
+ ex:[
+  {id:"d3e6",t:"Ejercicio 6 · Verifica el tipo antes de operar",
+   d:'Dado <code>texto = "42"</code>, imprime primero su <code>type()</code>, y luego, después de convertirlo con <code>int()</code>, el resultado de sumarle 8.',
+   starter:'texto = "42"',runs:[[]],
+   check:(o,c)=>{if(!/type\s*\(/.test(c))return"Falta imprimir type(texto) primero.";
+     if(!/int\s*\(/.test(c))return"Necesitas convertir con int() antes de sumar 8.";
+     return norm(o[0])==="<class 'str'>\n50"?true:"Esperaba:\n<class 'str'>\n50\nObtuve:\n"+norm(o[0])},
+   hints:["Primera línea: print(type(texto)) — todavía es str, sin convertir.","Segunda línea: print(int(texto) + 8) — ahora sí es un número."]},
+  {id:"d3e7",t:"Ejercicio 7 · Concatenación real con +",
+   d:'Dado <code>edad = 16</code>, arma e imprime EXACTAMENTE la frase <code>Tengo 16 años</code> usando <code>+</code> (concatenación de strings, no f-string) — necesitas convertir <code>edad</code> a texto primero.',
+   starter:"edad = 16",runs:[[]],
+   check:(o,c)=>{if(!/str\s*\(\s*edad\s*\)/.test(c))return"Convierte edad con str(edad) antes de concatenar con +.";
+     if(/f["']/.test(c))return"Esta vez sin f-string — practica la concatenación directa con +.";
+     return norm(o[0])==="Tengo 16 años"?true:"Esperaba: Tengo 16 años\nObtuve:\n"+norm(o[0])},
+   hints:["\"Tengo \" + edad explota: no puedes pegar str con int directamente.","\"Tengo \" + str(edad) + \" años\" — tres piezas de texto unidas con +."]},
+ ],
  retoFinal:{id:"d3x",t:"Desafío final · inédito — un tercer comportamiento de *",
   d:'Predice, ANTES de ejecutar, qué imprime <code>"10" * 3</code> — sabiendo que <code>"10" + "10"</code> pega texto y <code>10 * 3</code> multiplica. Aquí un operando es string y el otro es int: ningún ejemplo de esta lección mostró esta combinación. Luego escribe el código que lo demuestre.',
   starter:"",runs:[[]],
@@ -1233,8 +1283,24 @@ const LEVEL0=[
   check:(o,c)=>{if(!/\/\//.test(c)||!/%/.test(c))return"Obligatorio usar // (horas) y % (minutos sobrantes).";
     if(/3\s*horas/.test(c))return'Prohibido escribir "3 horas" a mano: las cifras deben salir del cálculo.';
     return norm(o[0])==="3 horas y 20 minutos"?true:"Esperaba: 3 horas y 20 minutos\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["** también acepta exponentes fraccionarios",T('<code>**</code> no es solo para potencias enteras: elevar a <code>0.5</code> es sacar raíz cuadrada (<code>81 ** 0.5</code> da <code>9.0</code>), y elevar a <code>1/3</code> sería raíz cúbica — es la misma operación de potencia, generalizada a cualquier exponente.'),
+   'print(81 ** 0.5)\nprint(27 ** (1/3))'],
+ ],
+ ex:[
+  {id:"d4e6",t:"Ejercicio 6 · Horas y minutos sobrantes",
+   d:'Imprime, en dos líneas, cuántos días completos hay en <code>100</code> horas y cuántas horas sobran — usando <code>//</code> y <code>%</code>.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if(!/\/\//.test(c)||!/%/.test(c))return"Necesitas // (días completos) y % (horas sobrantes).";
+     return norm(o[0])==="4\n4"?true:"Esperaba:\n4\n4\nObtuve:\n"+norm(o[0])},
+   hints:["100 // 24 te da los días completos; 100 % 24, las horas que sobran.","Dos prints, en ese orden: días primero, luego horas sobrantes."]},
+  {id:"d4e7",t:"Ejercicio 7 · Cuadrado y raíz cuadrada",
+   d:'Imprime, en dos líneas, el cuadrado de <code>6</code> y la raíz cuadrada de <code>81</code>, usando <code>**</code> en ambos casos.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if((c.match(/\*\*/g)||[]).length<2)return"Usa ** para ambas operaciones — el cuadrado y la raíz cuadrada.";
+     return norm(o[0])==="36\n9.0"?true:"Esperaba:\n36\n9.0\nObtuve:\n"+norm(o[0])},
+   hints:["6 ** 2 es el cuadrado.","81 ** 0.5 es la raíz cuadrada — nota que el resultado es float (9.0), no int."]},
+ ],
  retoFinal:{id:"d4x",t:"Desafío final · inédito — and/or combinados",
   d:'Dado <code>x = 10</code>, predice el valor de <code>x &gt; 5 and x &lt; 20 or x == 100</code> ANTES de ejecutar — combinando comparación con dos operadores lógicos de distinta precedencia (<code>and</code> se evalúa antes que <code>or</code>, algo que ningún bloque anterior mencionó explícitamente). Luego escribe el código que lo demuestre.',
   starter:"x = 10",runs:[[]],
@@ -1303,8 +1369,25 @@ const LEVEL0=[
   check:(o,c)=>{if(/"alex@gmail\.com"/.test(c)||/'alex@gmail\.com'/.test(c))return"Prohibido escribir el resultado a mano: transforma la variable con métodos.";
     if(!/\.strip\s*\(/.test(c)||!/\.lower\s*\(/.test(c))return"Necesitas .strip() para los bordes y .lower() para las mayúsculas.";
     return norm(o[0])==="alex@gmail.com"?true:"Esperaba: alex@gmail.com\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["El slicing acepta un tercer número: el paso",T('<code>texto[a:b:paso]</code> — el tercer número es el PASO con el que se avanza. <code>texto[::-1]</code> recorre el string completo con paso <code>-1</code>, es decir, de atrás hacia adelante: la forma más simple de invertir un string sin escribir ningún bucle.'),
+   'palabra = "python"\nprint(palabra[::-1])   # nohtyp'],
+ ],
+ ex:[
+  {id:"d5e6",t:"Ejercicio 6 · Cuenta sin espacios",
+   d:'Dado <code>frase = "hola mundo"</code>, imprime cuántos caracteres tiene SIN contar el espacio, combinando <code>len()</code> y <code>.replace()</code>.',
+   starter:'frase = "hola mundo"',runs:[[]],
+   check:(o,c)=>{if(!/\.replace\s*\(/.test(c))return"Usa .replace() para quitar el espacio antes de contar.";
+     if(!/len\s*\(/.test(c))return"Usa len() para contar los caracteres restantes.";
+     return norm(o[0])==="9"?true:"Esperaba: 9\nObtuve:\n"+norm(o[0])},
+   hints:["frase.replace(\" \", \"\") quita todos los espacios, no solo los de los bordes (a diferencia de .strip()).","len(frase.replace(\" \", \"\")) — todo en una línea."]},
+  {id:"d5e7",t:"Ejercicio 7 · Invierte con slicing",
+   d:'Dado <code>palabra = "python"</code>, imprime la palabra invertida usando slicing con paso <code>-1</code> — sin ningún bucle.',
+   starter:'palabra = "python"',runs:[[]],
+   check:(o,c)=>{if(!/\[\s*::\s*-1\s*\]/.test(c))return"Usa exactamente el slicing [::-1] para invertir.";
+     return norm(o[0])==="nohtyp"?true:"Esperaba: nohtyp\nObtuve:\n"+norm(o[0])},
+   hints:["palabra[::-1] — sin índices de inicio/fin, solo el paso -1.","No necesitas ningún while ni función: el slicing lo hace en una línea."]},
+ ],
  retoFinal:{id:"d5x",t:"Desafío final · inédito — censura las vocales",
   d:'Dado <code>apodo = "alexito"</code>, produce <code>*l*x*t*</code> reemplazando cada vocal (a, e, i, o) por <code>*</code> — encadenando <code>.replace()</code> tantas veces como haga falta. Ningún ejercicio anterior encadenó más de dos métodos seguidos; aquí vas a necesitar varios, en el orden correcto, sin que ninguno deshaga el trabajo del anterior.',
   starter:'apodo = "alexito"',runs:[[]],
@@ -1374,8 +1457,24 @@ const LEVEL0=[
   check:(o,c)=>{if(!/\.upper\s*\(/.test(c))return"El nombre debe salir en MAYÚSCULAS con .upper().";
     if(!/f["']/.test(c))return"El formato final debe construirse con una f-string.";
     return norm(o[0]).includes("ALEX: 15 puntos")?true:"Con alex y 15 esperaba: ALEX: 15 puntos"}},
- theory:[],
- ex:[],
+ theory:[
+  ["Combinando sep y end en el mismo programa",T('<code>sep</code> y <code>end</code> no son excluyentes: puedes usar uno, otro, o ambos en distintas llamadas del mismo programa. Un <code>print(..., end="")</code> "deja la línea abierta" para que el siguiente print continúe justo donde el anterior terminó, sin saltar de línea.'),
+   'print("Cargando...", end="")\nprint("listo")'],
+ ],
+ ex:[
+  {id:"d6e6",t:"Ejercicio 6 · Fecha con sep personalizado",
+   d:'Dado <code>anio = 2026</code>, <code>mes = 11</code>, <code>dia = 20</code>, imprime <code>2026-11-20</code> con un ÚNICO print() usando <code>sep="-"</code> — sin concatenar nada a mano.',
+   starter:"anio = 2026\nmes = 11\ndia = 20",runs:[[]],
+   check:(o,c)=>{if(!/sep\s*=/.test(c))return"Usa el parámetro sep= del print, no concatenación manual.";
+     return norm(o[0])==="2026-11-20"?true:"Esperaba: 2026-11-20\nObtuve:\n"+norm(o[0])},
+   hints:["print(anio, mes, dia, sep=\"-\") — sep reemplaza el espacio automático entre valores por el separador que elijas.","No necesitas convertir nada a texto: print() lo hace por ti."]},
+  {id:"d6e7",t:"Ejercicio 7 · Misma línea con end",
+   d:'Imprime <code>Cargando...</code> y, en la MISMA línea, inmediatamente después, <code>listo</code> — usando <code>end=""</code> en el primer print para evitar el salto de línea automático.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if(!/end\s*=\s*["']["']/.test(c))return"Usa end=\"\" en el primer print para que no salte de línea.";
+     return norm(o[0])==="Cargando...listo"?true:"Esperaba: Cargando...listo\nObtuve:\n"+norm(o[0])},
+   hints:["print(\"Cargando...\", end=\"\") deja la línea abierta.","El segundo print (\"listo\") continúa justo donde terminó el primero."]},
+ ],
  retoFinal:{id:"d6x",t:"Desafío final · inédito — robustez ante espacios",
   d:'Pide el precio de un producto y la cantidad comprada, en ese orden. El precio podría llegar con espacios de más (como <code>" 10.5 "</code>) — tu programa debe funcionar igual. Imprime EXACTAMENTE <code>Total: 31.50</code> con precio <code>" 10.5 "</code> y cantidad <code>3</code>.',
   starter:"",runs:[[" 10.5 ","3"]],
@@ -1447,8 +1546,26 @@ const LEVEL0=[
   check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while.";
     if(!/%/.test(c))return"Detectar múltiplos de 3 exige el operador %.";
     return norm(o[0]).includes("1\n2\nfizz\n4\n5\nfizz\n7")?true:"Con 7 esperaba:\n1\n2\nfizz\n4\n5\nfizz\n7\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["El patrón acumulador",T('Una variable que empieza en <code>0</code> (o en <code>1</code>) y se actualiza DENTRO de un bucle, sumando o multiplicando en cada vuelta, es el patrón <strong>acumulador</strong> — la base de casi cualquier bucle que "totaliza" algo: sumar una lista, contar cuántos cumplen una condición, multiplicar un factorial.'),
+   'total = 0\nn = 1\nwhile n <= 5:\n    total = total + n\n    n = n + 1\nprint(total)'],
+ ],
+ ex:[
+  {id:"d7e6",t:"Ejercicio 6 · Suma acumulada con while",
+   d:'Con <code>while</code> (prohibido escribir 15 a mano), suma los números del 1 al 5 e imprime el total.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while, acumulando en una variable.";
+     if(/print\s*\(\s*15\s*\)/.test(c))return"Prohibido escribir 15 directamente — el total debe salir de la suma acumulada.";
+     return norm(o[0])==="15"?true:"Esperaba: 15\nObtuve:\n"+norm(o[0])},
+   hints:["Dos variables: una que cuenta (n, empieza en 1) y otra que acumula (total, empieza en 0).","Dentro del while: total = total + n, luego n = n + 1."]},
+  {id:"d7e7",t:"Ejercicio 7 · Cuenta los pares en un rango",
+   d:'Con <code>while</code>, cuenta cuántos números pares hay entre 1 y 10 (ambos incluidos) e imprime el conteo.',
+   starter:"",runs:[[]],
+   check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while.";
+     if(!/%/.test(c))return"Necesitas % para detectar si cada número es par.";
+     return norm(o[0])==="5"?true:"Esperaba: 5\nObtuve:\n"+norm(o[0])},
+   hints:["Un contador acumulador (pares = 0) que sube 1 cada vez que n % 2 == 0.","Recorre n desde 1 hasta 10 con while, verificando la paridad en cada vuelta."]},
+ ],
  retoFinal:{id:"d7x",t:"Desafío final · inédito — ¿es primo?",
   d:'Lee un número con <code>input()</code> y determina, con <code>while</code>, si es primo (divisible solo por 1 y por sí mismo). Imprime tu respuesta con la palabra "primo" incluida cuando lo sea, y "no primo" cuando no. Pruébalo con <code>7</code> (primo) y <code>8</code> (no primo). Ningún ejercicio anterior mostró este patrón — tienes que diseñarlo desde cero.',
   starter:"",runs:[["7"],["8"]],
@@ -1522,8 +1639,27 @@ const LEVEL0=[
     if(!/:\.2f/.test(c))return"Los 2 decimales exigen f-string con :.2f";
     if(!norm(o[0]).includes("Resultado: 2.25"))return"Con 9 y 4 esperaba: Resultado: 2.25";
     return norm(o[1]).includes("no se puede dividir entre cero")?true:"Con 5 y 0 debe avisar: no se puede dividir entre cero"}},
- theory:[],
- ex:[],
+ theory:[
+  ["Anticipar combina varias validaciones, no solo una",T('El cierre integral del nivel combina lo de T6 (¿son dígitos válidos, con <code>.isdigit()</code>?) con lo de hoy (¿es cero, antes de dividir?) — dos anticipaciones distintas, en el mismo bloque de código, evaluadas en el orden correcto: primero si el dato es siquiera convertible, después si el valor convertido es seguro de usar.')],
+ ],
+ ex:[
+  {id:"d8e6",t:"Ejercicio 6 · Valida antes de indexar",
+   d:'Lee un texto con <code>input()</code>. Si NO está vacío, imprime su primera letra; si está vacío, imprime <code>vacío</code> — sin que tu programa explote con IndexError. Pruebas: cadena vacía y <code>"hola"</code>.',
+   starter:"",runs:[[""],["hola"]],
+   check:(o,c)=>{if(!/\bif\b/.test(c))return"Anticipa el caso vacío con if, antes de indexar.";
+     if(!norm(o[0]).includes("vacío"))return"Con la cadena vacía debe imprimir: vacío";
+     return norm(o[1])==="h"?true:"Con 'hola' debe imprimir: h"},
+   hints:["if texto == \"\": aviso. else: imprime texto[0].","Indexar [0] sobre un string vacío lanza IndexError — por eso hay que anticipar antes de tocar el índice."]},
+  {id:"d8e7",t:"Ejercicio 7 · Dos anticipaciones combinadas",
+   d:'Lee un texto con <code>input()</code>. Si NO son puros dígitos, imprime <code>entrada invalida</code>. Si lo son, conviértelo e imprime <code>10</code> dividido entre ese número con 2 decimales — salvo que sea <code>0</code>, en cuyo caso imprime <code>no se puede dividir entre cero</code>. Pruebas: <code>"abc"</code>, <code>"0"</code>, <code>"5"</code>.',
+   starter:"",runs:[["abc"],["0"],["5"]],
+   check:(o,c)=>{if(!/\.isdigit\s*\(/.test(c))return"Usa .isdigit() para la primera anticipación (¿es convertible?).";
+     if(!/:\.2f/.test(c))return"El resultado de la división debe mostrarse con 2 decimales (:.2f).";
+     if(!norm(o[0]).includes("entrada invalida"))return"Con 'abc' debe imprimir: entrada invalida";
+     if(!norm(o[1]).includes("no se puede dividir entre cero"))return"Con '0' debe imprimir: no se puede dividir entre cero";
+     return norm(o[2])==="2.00"?true:"Con '5' debe imprimir: 2.00"},
+   hints:["Primero verifica .isdigit(); si falla, avisa y no sigas.","Si es dígito, conviértelo con int() y RECIÉN AHÍ verifica si es 0, antes de dividir."]},
+ ],
  retoFinal:{id:"d8x",t:"Desafío final · inédito — dos errores, dos clases distintas",
   d:'Este programa tiene DOS errores simultáneos, de clases distintas: uno que Python detecta antes de ejecutar, y otro que solo aparece al correr. Diagnostícalos y repáralos en el orden correcto (el que Python te obliga a seguir), sin que se te diga cuántos hay ni de qué tipo son. Al final debe imprimir <code>HOLA</code> y luego <code>10</code>.',
   starter:'mensaje = "hola"\nif len(mensaje) > 3\n    print(mensaje.upper())\ntotal = 10\nprint(total + valor_extra)',runs:[[]],
@@ -1665,8 +1801,24 @@ const LEVEL1=[
     if(norm(o[1])!=="Numero: 0\n0 es primo: False\n0 es par: True\n0! = 1")return"Con 0 (caso límite) esperaba:\nNumero: 0\n0 es primo: False\n0 es par: True\n0! = 1\nObtuve:\n"+norm(o[1]);
     if(norm(o[2])!=="Numero: 1\n1 es primo: False\n1 es par: False\n1! = 1")return"Con 1 (caso límite) esperaba:\nNumero: 1\n1 es primo: False\n1 es par: False\n1! = 1\nObtuve:\n"+norm(o[2]);
     return true}},
- theory:[["🔭 Extensión opcional · anotaciones de tipo","No es examinable hoy — es una puerta que vas a cruzar más adelante. Puedes escribir el tipo esperado de cada parámetro y del retorno, directamente en la firma de la función: <code>def es_primo(n: int) -> bool:</code>. Python no te obliga a que sea verdad (nadie te impide pasar un texto donde dice <code>int</code>) — por ahora es solo documentación que el propio código lleva encima, para que quien lo lea sepa qué espera cada función sin adivinar. Prueba a reescribir una de tus tres funciones de hoy con su anotación de tipo y ejecútala igual que antes — el comportamiento no cambia en nada. Vas a volver a ver exactamente esta sintaxis cuando aprendas a validar datos de verdad más adelante — por eso conviene que ya te resulte familiar antes de que también tenga que cargar con esa responsabilidad.","def es_primo(n: int) -> bool:\n    if n < 2:\n        return False\n    for i in range(2, n):\n        if n % i == 0:\n            return False\n    return True\n\nprint(es_primo(5))"]],
- ex:[],
+ theory:[["🔭 Extensión opcional · anotaciones de tipo","No es examinable hoy — es una puerta que vas a cruzar más adelante. Puedes escribir el tipo esperado de cada parámetro y del retorno, directamente en la firma de la función: <code>def es_primo(n: int) -> bool:</code>. Python no te obliga a que sea verdad (nadie te impide pasar un texto donde dice <code>int</code>) — por ahora es solo documentación que el propio código lleva encima, para que quien lo lea sepa qué espera cada función sin adivinar. Prueba a reescribir una de tus tres funciones de hoy con su anotación de tipo y ejecútala igual que antes — el comportamiento no cambia en nada. Vas a volver a ver exactamente esta sintaxis cuando aprendas a validar datos de verdad más adelante — por eso conviene que ya te resulte familiar antes de que también tenga que cargar con esa responsabilidad.","def es_primo(n: int) -> bool:\n    if n < 2:\n        return False\n    for i in range(2, n):\n        if n % i == 0:\n            return False\n    return True\n\nprint(es_primo(5))"],
+  ["Múltiples puntos de salida: el primer return que se ejecuta, gana",T('Una función puede tener varios <code>return</code>, en distintas ramas de <code>if</code> — apenas se ejecuta el PRIMERO, la función termina ahí mismo: el resto del cuerpo, aunque esté escrito debajo, ya no corre. Es una forma más directa de expresar "clasificar en una de varias categorías" que acumular el resultado en una variable y devolverla al final.'),
+   'def clasificar(nota):\n    if nota >= 18:\n        return "Excelente"\n    if nota >= 11:\n        return "Aprobado"\n    return "Desaprobado"\n\nprint(clasificar(19))'],
+ ],
+ ex:[
+  {id:"n1d1e6",py:true,t:"Ejercicio 6 · Clasifica con múltiples returns",
+   d:'Escribe <code>clasificar(nota)</code> que devuelva <code>"Excelente"</code> si <code>nota &gt;= 18</code>, <code>"Aprobado"</code> si <code>nota &gt;= 11</code>, y <code>"Desaprobado"</code> en cualquier otro caso — usando un <code>return</code> distinto en cada rama, sin variable intermedia. Pruébala con <code>19</code>, <code>15</code> y <code>5</code>.',
+   starter:'def clasificar(nota):\n    pass  # tu codigo aqui\n\nprint(clasificar(19))\nprint(clasificar(15))\nprint(clasificar(5))',runs:[[]],
+   check:(o,c)=>{if((c.match(/\breturn\b/g)||[]).length<3)return"Usa un return distinto en cada rama (al menos 3 en total), no una sola variable acumulada.";
+     return norm(o[0])==="Excelente\nAprobado\nDesaprobado"?true:"Esperaba:\nExcelente\nAprobado\nDesaprobado\nObtuve:\n"+norm(o[0])},
+   hints:["if nota >= 18: return \"Excelente\" — apenas se ejecuta, la función termina ahí.","Los casos siguientes (>= 11, y el resto) van después, cada uno con su propio return."]},
+  {id:"n1d1e7",py:true,t:"Ejercicio 7 · Composición de dos funciones propias",
+   d:'Escribe <code>duplicar(n)</code> (devuelve <code>n * 2</code>) e <code>incrementar(n)</code> (devuelve <code>n + 1</code>). Imprime el resultado de aplicar <code>duplicar</code> sobre el resultado de <code>incrementar(5)</code> — sin ninguna variable intermedia, una función usando el resultado de la otra directamente.',
+   starter:'def duplicar(n):\n    pass\n\ndef incrementar(n):\n    pass\n\n# tu print aqui, componiendo ambas funciones',runs:[[]],
+   check:(o,c)=>{if(!/duplicar\s*\(\s*incrementar\s*\(/.test(c))return"Compón las funciones directamente: duplicar(incrementar(5)), sin variable intermedia.";
+     return norm(o[0])==="12"?true:"Esperaba: 12\nObtuve:\n"+norm(o[0])},
+   hints:["incrementar(5) da 6; duplicar(6) da 12.","print(duplicar(incrementar(5))) — el resultado de una función entra directo como argumento de la otra."]},
+ ],
  retoFinal:{id:"n1d1x",py:true,t:"Desafío final · inédito — el contador que no cuenta",
   d:'Predice, ANTES de ejecutar, qué imprimen estas tres llamadas seguidas a <code>contador()</code> — y por qué NO se comporta como un contador real que acumula. Luego ejecútalo para confirmar.',
   starter:'def contador():\n    veces = 0\n    veces = veces + 1\n    return veces\n\nprint(contador())\nprint(contador())\nprint(contador())',runs:[[]],
@@ -1744,8 +1896,25 @@ const LEVEL1=[
       if(rep!==esp[i])return"Con la prueba "+(i+1)+" esperaba:\n"+esp[i]+"\nObtuve:\n"+rep;
     }
     return true}},
- theory:[],
- ex:[],
+ theory:[
+  ["list() como copia real, alternativa al slicing",T('<code>lista[:]</code> no es la única forma de copiar una lista: <code>list(lista)</code> hace exactamente lo mismo — construye una lista NUEVA con los mismos elementos, independiente de la original. Ambas formas son copias superficiales (shallow): sirven perfecto para listas de números o strings; con listas de listas, el Nivel 3 mostrará su límite.'),
+   'original = [1, 2, 3]\ncopia = list(original)\ncopia.append(4)\nprint(original)   # [1, 2, 3] -- intacta\nprint(copia)      # [1, 2, 3, 4]'],
+ ],
+ ex:[
+  {id:"n1d2e6",py:true,t:"Ejercicio 6 · Descuento sin romper la auditoría",
+   d:'El área de auditoría necesita conservar los precios ORIGINALES intactos, pero ventas quiere aplicar un 10% de descuento para una promoción. Escribe <code>aplicar_descuento_seguro(precios)</code> que devuelva una lista NUEVA con cada precio multiplicado por <code>0.9</code>, sin mutar <code>precios</code> — construida con un <code>for</code> + <code>.append()</code> (todavía sin comprehensions). Imprime primero <code>precios</code> (deben seguir intactos) y luego el resultado de la función.',
+   starter:'def aplicar_descuento_seguro(precios):\n    pass\n\nprecios = [100, 200, 50]',runs:[[]],
+   check:(o,c)=>{if(/def\s+aplicar_descuento_seguro[\s\S]*?precios\s*\[\s*\d/.test(c)&&/precios\s*=\s*\d/.test(c))return"No reasignes elementos de 'precios' dentro de la función — construye una lista NUEVA.";
+     return norm(o[0])==="[100, 200, 50]\n[90.0, 180.0, 45.0]"?true:"Esperaba:\n[100, 200, 50]\n[90.0, 180.0, 45.0]\nObtuve:\n"+norm(o[0])},
+   hints:["descontados = []; for p in precios: descontados.append(p * 0.9); return descontados","Si 'precios' cambia después de llamar la función, la auditoría ya no tiene los datos originales — ese es exactamente el bug que este ejercicio evita."]},
+  {id:"n1d2e7",py:true,t:"Ejercicio 7 · Reporte de ventas sobre el promedio",
+   d:'Dada una lista de tuplas <code>(nombre, monto)</code>, escribe <code>promedio_ventas(ventas)</code> (con <code>for</code> + acumulador, sin <code>sum()</code>) y luego construye <code>reporte</code>: una lista NUEVA de tuplas <code>(nombre, esta_sobre_promedio)</code> — sin mutar <code>ventas</code>. Imprime primero <code>ventas</code> y luego <code>reporte</code>.',
+   starter:'def promedio_ventas(ventas):\n    pass\n\nventas = [("Ana", 300), ("Luis", 100), ("Eva", 500)]',runs:[[]],
+   check:(o,c)=>{if(/\bsum\s*\(/.test(c))return"Calcula el promedio con un acumulador (for + variable), sin usar sum().";
+     if(!/for\s+\w+\s*,\s*\w+\s+in\s+ventas/.test(c))return"Recorre 'ventas' desempaquetando cada tupla: for nombre, monto in ventas.";
+     return norm(o[0])==="[('Ana', 300), ('Luis', 100), ('Eva', 500)]\n[('Ana', False), ('Luis', False), ('Eva', True)]"?true:"Esperaba:\n[('Ana', 300), ('Luis', 100), ('Eva', 500)]\n[('Ana', False), ('Luis', False), ('Eva', True)]\nObtuve:\n"+norm(o[0])},
+   hints:["promedio_ventas: total = 0; for nombre, monto in ventas: total = total + monto; return total / len(ventas)","reporte: for nombre, monto in ventas: reporte.append((nombre, monto > promedio))"]},
+ ],
  retoFinal:{id:"n1d2x",py:true,t:"Desafío final · inédito — la protección que no existía",
   d:'Predice, ANTES de ejecutar, qué imprime este programa que intenta "proteger" una configuración pasándola a una función. Luego ejecútalo para confirmar, y piensa qué cambiarías para que la protección fuera real.',
   starter:'def crear_reporte(config):\n    config.append("procesado")\n    return len(config)\n\nconfiguracion = ["modo_debug", "version_2"]\ntotal = crear_reporte(configuracion)\nprint(configuracion)\nprint(total)',runs:[[]],
@@ -1821,8 +1990,25 @@ const LEVEL1=[
       if(rep!==esp[i])return"Con la prueba "+(i+1)+" esperaba:\n"+esp[i]+"\nObtuve:\n"+rep;
     }
     return true}},
- theory:[],
- ex:[],
+ theory:[
+  ["set() como conversor: de lista con duplicados a únicos",T('Envolver cualquier lista con <code>set(lista)</code> descarta los duplicados solo, sin ningún for ni if manual — es la forma más directa de responder "¿cuántos valores distintos hay aquí?" combinando <code>set()</code> con <code>len()</code>.'),
+   'compras = ["pan", "leche", "pan", "huevos"]\nprint(len(set(compras)))   # 3 -- productos unicos, sin contar a mano'],
+ ],
+ ex:[
+  {id:"n1d3e6",py:true,t:"Ejercicio 6 · Categorías únicas y total por categoría",
+   d:'Dado un inventario <code>{producto: (categoria, precio)}</code>, escribe <code>reporte_categorias(inv)</code> (devuelve un SET con las categorías únicas presentes, recorriendo con <code>.items()</code>) y <code>total_por_categoria(inv, categoria)</code> (suma, con acumulador, los precios de esa categoría). Imprime <code>sorted(...)</code> de las categorías y el total de <code>"bebida"</code>.',
+   starter:'inventario = {"agua": ("bebida", 3), "gaseosa": ("bebida", 5), "pan": ("comida", 4)}\n\ndef reporte_categorias(inv):\n    pass\n\ndef total_por_categoria(inv, categoria):\n    pass',runs:[[]],
+   check:(o,c)=>{if(!/\.items\s*\(\s*\)/.test(c))return"Recorre el inventario con .items() en ambas funciones.";
+     if(!/\.add\s*\(/.test(c))return"reporte_categorias debe construir un set con .add(), no una lista.";
+     return norm(o[0])==="['bebida', 'comida']\n8"?true:"Esperaba:\n['bebida', 'comida']\n8\nObtuve:\n"+norm(o[0])},
+   hints:["reporte_categorias: categorias = set(); for producto, datos in inv.items(): categorias.add(datos[0])","total_por_categoria: total = 0; for producto, datos in inv.items(): if datos[0] == categoria: total += datos[1]"]},
+  {id:"n1d3e7",py:true,t:"Ejercicio 7 · Clasifica pedidos con .get(), sin KeyError",
+   d:'Dado un inventario y una lista de pedidos, escribe <code>clasificar_pedidos(inv, pedidos)</code> que devuelva DOS listas — <code>disponibles</code> (existen en el inventario) y <code>no_disponibles</code> (no existen) — usando <code>.get()</code> para verificar, sin ningún <code>try/except</code>. Imprime ambas listas.',
+   starter:'inventario = {"pan": 5, "leche": 12}\npedidos = ["pan", "queso", "leche", "huevos"]\n\ndef clasificar_pedidos(inv, pedidos):\n    pass\n\ndisp, no_disp = clasificar_pedidos(inventario, pedidos)\nprint(disp)\nprint(no_disp)',runs:[[]],
+   check:(o,c)=>{if(!/\.get\s*\(/.test(c))return"Usa .get() para verificar si el producto existe, sin KeyError ni try/except.";
+     return norm(o[0])==="['pan', 'leche']\n['queso', 'huevos']"?true:"Esperaba:\n['pan', 'leche']\n['queso', 'huevos']\nObtuve:\n"+norm(o[0])},
+   hints:["if inv.get(producto) is not None: disponibles.append(producto) — else: no_disponibles.append(producto)","La función debe devolver AMBAS listas: return disponibles, no_disponibles (una tupla implícita)."]},
+ ],
  retoFinal:{id:"n1d3x",py:true,t:"Desafío final · inédito — la misma clave, dos objetos distintos",
   d:'Predice, ANTES de ejecutar, cuántas entradas tiene <code>cache</code> al final — <code>(1, 2)</code> aparece construida por separado en dos líneas distintas. Luego ejecútalo para confirmar.',
   starter:'cache = {}\ncache[(1, 2)] = "primero"\ncache[(1, 2)] = "segundo"\nprint(cache)\nprint(len(cache))',runs:[[]],
@@ -1891,8 +2077,24 @@ const LEVEL1=[
   check:(o,c)=>{
     const exp="Aprobados: ['Ana', 'Eva', 'Tom']\nNotas: {'Ana': 15, 'Eva': 12, 'Tom': 18}\nPromedio: 15.0";
     return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Expresión condicional dentro de la comprehension (no es un filtro)",T('El <code>if</code> que ya conoces (<code>... for x in lista if condicion</code>) FILTRA: descarta elementos. Hay una forma distinta — <code>valor_a if condicion else valor_b for x in lista</code> — que va ANTES del for y NO filtra: transforma cada elemento en uno de dos valores posibles, conservando la lista completa. Son dos mecanismos distintos que se parecen en la palabra "if" pero hacen cosas opuestas.'),
+   'temps = [15, 22, 30]\nfiltrado = [t for t in temps if t >= 20]              # filtra: [22, 30]\netiquetado = ["calor" if t >= 20 else "fresco" for t in temps]  # transforma TODOS: [\'fresco\', \'calor\', \'calor\']'],
+ ],
+ ex:[
+  {id:"n1d4e6",py:true,t:"Ejercicio 6 · if/else DENTRO de la expresión, no como filtro",
+   d:'Dado <code>temps = [15, 22, 30, 18, 25]</code>, usa una comprehension con expresión condicional (<code>valor_si if condicion else valor_no</code>, dentro de la expresión, no un if que filtre) para producir una lista donde cada temperatura ≥ 20 se marque como <code>"calor"</code> y las demás como <code>"fresco"</code> — debe conservar los 5 elementos, ninguno se descarta.',
+   starter:"temps = [15, 22, 30, 18, 25]",runs:[[]],
+   check:(o,c)=>{if(!/if[^\n]*else/.test(c))return"Necesitas la forma if/else DENTRO de la expresión (x if cond else y), no un if que filtre.";
+     const exp="['fresco', 'calor', 'calor', 'fresco', 'calor']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["A diferencia del if-filtro (que descarta elementos), este if/else transforma TODOS los elementos, sin descartar ninguno.","[\"calor\" if t >= 20 else \"fresco\" for t in temps] — el if/else va ANTES del for, no después."]},
+  {id:"n1d4e7",py:true,t:"Ejercicio 7 · Dict comprehension + expresión condicional, combinadas",
+   d:'Dada una lista de tuplas <code>(nombre, nota)</code>, con UNA sola dict comprehension construye un diccionario nombre→<code>"aprobado"</code> o <code>"desaprobado"</code> (nota ≥ 11) — combinando la expresión condicional del ejercicio anterior CON una dict comprehension, desempaquetando la tupla en el propio for.',
+   starter:'notas = [("Ana", 15), ("Luis", 8), ("Eva", 12)]\n# tu dict comprehension aqui, combinando if/else con {clave: valor for ...}\n',runs:[[]],
+   check:(o,c)=>{if(!/\{[^\n]*:[^\n]*if[^\n]*else[^\n]*for[^\n]*\}/.test(c))return"Necesitas UNA dict comprehension con if/else dentro de la expresión de valor, no un for explícito ni una comprehension de filtro.";
+     const exp="{'Ana': 'aprobado', 'Luis': 'desaprobado', 'Eva': 'aprobado'}";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["{nombre: (\"aprobado\" if nota >= 11 else \"desaprobado\") for nombre, nota in notas}","La clave (nombre) sale directo del unpacking; el valor usa la MISMA forma if/else del ejercicio 6, ahora dentro de una dict comprehension."]},
+ ],
  retoFinal:{id:"n1d4x",py:true,t:"Desafío final · inédito — la comprehension que se usa mal",
   d:'Predice, ANTES de ejecutar, qué contienen <code>registro</code> y <code>resultado</code> — y por qué <code>resultado</code> es una lista "inútil" aunque el código funcione sin errores. Luego ejecútalo para confirmar.',
   starter:'datos = [3, -1, 4, -5, 9, -2]\nregistro = []\nresultado = [registro.append(x) for x in datos if x > 0]\nprint(registro)\nprint(resultado)',runs:[[]],
@@ -1968,8 +2170,26 @@ const LEVEL1=[
       if(rep!==esp[i])return"Con la prueba "+(i+1)+" esperaba:\n"+esp[i]+"\nObtuve:\n"+rep;
     }
     return true}},
- theory:[],
- ex:[],
+ theory:[
+  ["raise: lanzar tu propia excepción",T('Hasta ahora atrapaste errores que Python lanzaba solo. <code>raise</code> te permite lanzar los TUYOS, con tu propio mensaje, cuando tu propio código detecta un caso inválido — quien te llame puede atraparlo con <code>except</code> exactamente igual que cualquier error incorporado.'),
+   'def validar_edad(edad):\n    if edad < 0:\n        raise ValueError("edad invalida")\n    return edad\n\ntry:\n    validar_edad(-5)\nexcept ValueError as e:\n    print(e)   # edad invalida'],
+  ["Un solo except para varios tipos, con una tupla",T('<code>except (ValueError, ZeroDivisionError):</code> atrapa CUALQUIERA de los dos tipos con un solo bloque, cuando ambos deben tratarse igual. Úsalo cuando de verdad compartan el mismo manejo — si necesitan mensajes distintos (como en el laboratorio de hoy), separarlos en dos except sigue siendo más claro.'),
+   'try:\n    resultado = int("abc") / 0\nexcept (ValueError, ZeroDivisionError):\n    resultado = "operacion invalida"'],
+ ],
+ ex:[
+  {id:"n1d5e6",py:true,t:"Ejercicio 6 · Lanza tu propia excepción",
+   d:'Escribe <code>validar_edad(edad)</code> que LANCE un <code>ValueError</code> con el mensaje <code>"edad invalida"</code> si <code>edad</code> es negativa, y devuelva la edad sin cambios si es válida. Captura el error al llamarla con <code>-5</code> (imprime el mensaje del error) y luego llama con <code>20</code> (imprime el resultado).',
+   starter:'def validar_edad(edad):\n    pass\n\ntry:\n    print(validar_edad(-5))\nexcept ValueError as e:\n    print(e)\nprint(validar_edad(20))',runs:[[]],
+   check:(o,c)=>{if(!/raise\s+ValueError/.test(c))return"La función debe LANZAR el error con raise ValueError(\"edad invalida\"), no solo devolver un mensaje.";
+     return norm(o[0])==="edad invalida\n20"?true:"Esperaba:\nedad invalida\n20\nObtuve:\n"+norm(o[0])},
+   hints:["if edad < 0: raise ValueError(\"edad invalida\") — y si no, return edad.","except ValueError as e: print(e) imprime el mensaje que le diste al ValueError."]},
+  {id:"n1d5e7",py:true,t:"Ejercicio 7 · Un except para dos tipos, con tupla",
+   d:'Escribe <code>segura(texto, divisor)</code> que devuelva <code>int(texto) / divisor</code>, o <code>"operacion invalida"</code> si ocurre CUALQUIERA de estos dos errores — usando un ÚNICO <code>except</code> que atrape ambos tipos a la vez, con una tupla. Pruébala con <code>("10", 2)</code>, <code>("abc", 2)</code> y <code>("10", 0)</code>.',
+   starter:'def segura(texto, divisor):\n    pass\n\nprint(segura("10", 2))\nprint(segura("abc", 2))\nprint(segura("10", 0))',runs:[[]],
+   check:(o,c)=>{if(!/except\s*\(\s*ValueError\s*,\s*ZeroDivisionError\s*\)/.test(c))return"Usa un único except (ValueError, ZeroDivisionError): — con tupla, no dos except separados.";
+     return norm(o[0])==="5.0\noperacion invalida\noperacion invalida"?true:"Esperaba:\n5.0\noperacion invalida\noperacion invalida\nObtuve:\n"+norm(o[0])},
+   hints:["try: return int(texto) / divisor","except (ValueError, ZeroDivisionError): return \"operacion invalida\" — un solo bloque para ambos casos."]},
+ ],
  retoFinal:{id:"n1d5x",py:true,t:"Desafío final · inédito — el finally que se traga el error",
   d:'Predice, ANTES de ejecutar, qué imprime esto. <code>riesgoso()</code> lanza un <code>ValueError</code> dentro del try — pero el <code>finally</code> tiene su propio <code>return</code>. ¿Cuál gana?',
   starter:'def riesgoso():\n    try:\n        raise ValueError("algo fallo")\n        return "del try"\n    finally:\n        return "del finally"\n\nprint(riesgoso())',runs:[[]],
@@ -2210,10 +2430,11 @@ const LEVEL1=[
   {n:1,titulo:"Elige un repositorio ya publicado",exp:"Tu calculadora de N0, o cualquiera de los laboratorios de M4."},
   {n:2,titulo:"Escribe el README.md",exp:"Nombre y descripción de una línea, instalación paso a paso, un ejemplo de uso copiable y ejecutable literalmente, y una sección de autoría/licencia."},
   {n:3,titulo:"Revisa tu historia de commits",cmd:"git log --oneline",resultado:"Una lista de tus commits — pregúntate si cuenta una historia legible o es solo 'cambios varios' repetido."},
-  {n:4,titulo:"Documenta lo que la historia no explica",exp:"Si encuentras commits ilegibles, no los reescribas (reescribir historia ya publicada queda fuera de alcance) — documenta en el README lo que esos commits no explican por sí solos."}],
+  {n:4,titulo:"Documenta lo que la historia no explica",exp:"Si encuentras commits ilegibles, no los reescribas (reescribir historia ya publicada queda fuera de alcance) — documenta en el README lo que esos commits no explican por sí solos."},
+  {n:5,titulo:"Pruébalo tú mismo desde cero, en una carpeta nueva",exp:"Clona tu propio repositorio en una carpeta distinta (o crea una carpeta vacía y sigue el README línea por línea), sin usar nada de lo que ya sabes del proyecto de memoria — si un paso falla o asume algo no explicado, corrígelo antes de continuar."}],
  errorVivo:{texto:"Pídele a alguien (o al tutor en rol Cliente) que intente instalar y usar tu programa SOLO con el README, sin preguntarte nada. Observa en qué paso se atasca, si alguno, antes de intervenir.",cmd:null},
  comprension:["¿Qué diferencia hay entre describir cómo se instala algo y darlo como instrucciones copiables y ejecutables?","¿Por qué 'ya sé cómo funciona' es la trampa más común al escribir tu propio README?"],
- checkpoints:[{id:"cp0",label:"README con las 5 secciones mínimas (qué/por qué/instalación/uso ejecutable/autoría)."},{id:"cp1",label:"Revisé mi historia de commits con git log --oneline."},{id:"cp2",label:"Un tercero (o el tutor en rol Cliente) instaló y usó mi proyecto solo con el README."}],
+ checkpoints:[{id:"cp0",label:"README con las 5 secciones mínimas (qué/por qué/instalación/uso ejecutable/autoría)."},{id:"cp1",label:"Revisé mi historia de commits con git log --oneline."},{id:"cp2",label:"Un tercero (o el tutor en rol Cliente) instaló y usó mi proyecto solo con el README."},{id:"cp3",label:"Probé mi propio README desde cero, en una carpeta nueva, sin apoyarme en lo que ya sé del proyecto."}],
  diagnostico:[
   {error:"Instrucciones que asumen contexto no explicado",causa:"Se escribió para alguien que ya sabe cómo funciona el proyecto, no para un extraño real.",diag:"Pídele a alguien externo que lo intente, o simula ser un extraño tú mismo (deja pasar un día y vuelve a leerlo).",hip:"¿Cada comando del README funciona copiado y pegado literalmente, sin adivinar nada?",sol:"Reescribe cada paso como si el lector no supiera absolutamente nada del proyecto.",prev:"Probar el README completo desde cero, en una carpeta nueva, antes de darlo por terminado."},
   {error:"Ejemplo de uso no copiable tal cual",causa:"Contiene placeholders como <tu-nombre> sin explicar que hay que reemplazarlos.",diag:"Revisa si copiar y pegar el ejemplo, sin editar nada, funcionaría.",hip:"¿Un extraño sabría qué reemplazar y por qué?",sol:"Usar un ejemplo 100% funcional tal cual, o explicar explícitamente qué reemplazar.",prev:"Probar el ejemplo exacto del README, copiado y pegado, antes de publicarlo."},
@@ -2378,8 +2599,24 @@ const LEVEL1=[
   runs:[[]],hints:["def lineas_con_error(lineas):\\n    for linea in lineas:\\n        if \"ERROR\" in linea:\\n            yield linea","sum(1 for _ in lineas_con_error(lineas)) crea un generador NUEVO solo para contar — no reutiliza el que ya se recorrió en el for."],
   check:(o,c)=>{if(!/\byield\b/.test(c))return"lineas_con_error debe ser un generador real, con yield — no una lista.";
     const exp='ERROR falla disco\nERROR timeout\nTotal: 2';return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["next() con valor por defecto, sin StopIteration",T('<code>next(gen)</code> a secas lanza <code>StopIteration</code> cuando el generador ya se agotó. <code>next(gen, valor_por_defecto)</code> devuelve ese valor en su lugar, sin ninguna excepción — útil cuando "ya no queda nada" es un caso esperado, no un error.'),
+   'gen = (x for x in [1, 2])\nnext(gen); next(gen)\nprint(next(gen, "agotado"))   # agotado, sin StopIteration'],
+ ],
+ ex:[
+  {id:"n1d7e6",py:true,t:"Ejercicio 6 · next() con valor por defecto",
+   d:'Este generador ya fue agotado con <code>list(gen)</code>. Usa <code>next(gen, "agotado")</code> para pedir un valor más, SIN que explote con <code>StopIteration</code>.',
+   starter:'def contar_hasta(n):\n    for i in range(1, n+1):\n        yield i\n\ngen = contar_hasta(2)\nlist(gen)\n# tu codigo aqui: pide un valor mas, sin que explote',runs:[[]],
+   check:(o,c)=>{if(!/next\s*\(\s*gen\s*,/.test(c))return"Usa next(gen, \"agotado\") con el segundo argumento — el valor por defecto.";
+     return norm(o[0])==="agotado"?true:"Esperaba: agotado\nObtuve:\n"+norm(o[0])},
+   hints:["next(gen, \"agotado\") devuelve \"agotado\" en vez de lanzar StopIteration.","list(gen) ya consumió todo — cualquier next() normal (sin default) explotaría aquí."]},
+  {id:"n1d7e7",py:true,t:"Ejercicio 7 · yield en ambas ramas de un if",
+   d:'Escribe el generador <code>pares_o_impares(numeros)</code> que, por cada número, produzca la tupla <code>("par", n)</code> si es par o <code>("impar", n)</code> si es impar — un solo generador, con <code>yield</code> en las dos ramas de un <code>if</code>. Imprime <code>list(...)</code> del resultado sobre <code>[1, 2, 3, 4]</code>.',
+   starter:'def pares_o_impares(numeros):\n    pass\n\nprint(list(pares_o_impares([1, 2, 3, 4])))',runs:[[]],
+   check:(o,c)=>{if(!/\byield\b/.test(c))return"Debe ser un generador real, con yield en cada rama del if.";
+     return norm(o[0])==="[('impar', 1), ('par', 2), ('impar', 3), ('par', 4)]"?true:"Esperaba: [('impar', 1), ('par', 2), ('impar', 3), ('par', 4)]\nObtuve:\n"+norm(o[0])},
+   hints:["for n in numeros: if n % 2 == 0: yield (\"par\", n) — else: yield (\"impar\", n).","Un generador puede tener varios yield en ramas distintas — cada llamada a next() ejecuta hasta el próximo yield que se alcance."]},
+ ],
  retoFinal:{id:"n1d7x",py:true,t:"Desafío final · inédito — dos generadores, ¿comparten memoria?",
   d:'Predice, ANTES de ejecutar, qué imprime la ÚLTIMA línea. <code>g1</code> y <code>g2</code> vienen de la MISMA función — ¿comparten su "por dónde iba", o cada uno tiene el suyo?',
   starter:'def contador():\n    n = 0\n    while n < 3:\n        yield n\n        n += 1\n\ng1 = contador()\ng2 = contador()\nprint(next(g1))\nprint(next(g1))\nprint(next(g2))',runs:[[]],
@@ -2446,8 +2683,25 @@ const LEVEL1=[
     if(!/json\.dump\(/.test(c))return"Guarda el resultado con json.dump() en ruta_json.";
     const exp="[{'nombre': 'Ana', 'edad': 15}, {'nombre': 'Luis', 'edad': None}, {'nombre': 'Eva', 'edad': None}, {'nombre': 'Tom', 'edad': 20}]";
     return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["JSON anidado: las claves se acceden en cadena",T('Un JSON puede anidar diccionarios dentro de diccionarios. Tras <code>json.load()</code>, la estructura ya es Python normal — se accede a los valores anidados encadenando corchetes, exactamente como cualquier diccionario dentro de otro.'),
+   'import json\ndatos = {"usuario": {"nombre": "Ana", "edad": 25}}\nreleido = json.loads(json.dumps(datos))\nprint(releido["usuario"]["nombre"])   # Ana'],
+ ],
+ ex:[
+  {id:"n1d8e6",py:true,t:"Ejercicio 6 · Cuenta líneas con una palabra clave",
+   d:'Escribe <code>log_texto</code> en un archivo con <code>with</code>, luego cuenta cuántas líneas contienen la palabra <code>"ERROR"</code>, iterando el archivo DIRECTO con <code>for</code> (sin <code>.readlines()</code>).',
+   starter:'log_texto = "INFO ok\\nERROR falla\\nINFO ok\\nERROR timeout\\n"\n\n# escribe log_texto en "log_e6.txt" con with, luego cuenta las lineas con ERROR\n\nprint(total)',runs:[[]],
+   check:(o,c)=>{if(/readlines\(\)/.test(c))return"No uses .readlines() — itera el archivo directo con for.";
+     if(!/\bwith\b/.test(c))return"Usa with tanto para escribir como para leer.";
+     return norm(o[0])==="2"?true:"Esperaba: 2\nObtuve:\n"+norm(o[0])},
+   hints:["Primero escribe con with open(..., \"w\", encoding=\"utf-8\") as f: f.write(log_texto)","Luego with open(..., encoding=\"utf-8\") as f: for linea in f: if \"ERROR\" in linea: total += 1"]},
+  {id:"n1d8e7",py:true,t:"Ejercicio 7 · Acceder a JSON anidado",
+   d:'Dado <code>datos = {"usuario": {"nombre": "Ana", "edad": 25}}</code>, guárdalo con <code>json.dump</code> en un archivo, reléelo con <code>json.load</code>, e imprime SOLO el nombre del usuario, accediendo a las claves anidadas.',
+   starter:'import json\n\ndatos = {"usuario": {"nombre": "Ana", "edad": 25}}\n# guarda con json.dump, relee con json.load, imprime solo el nombre',runs:[[]],
+   check:(o,c)=>{if(!/\[\s*["\']usuario["\']\s*\]\s*\[\s*["\']nombre["\']\s*\]/.test(c))return"Accede encadenando las claves: releido['usuario']['nombre'].";
+     return norm(o[0])==="Ana"?true:"Esperaba: Ana\nObtuve:\n"+norm(o[0])},
+   hints:["Guarda con with open(..., \"w\", encoding=\"utf-8\") as f: json.dump(datos, f)","Al releer: releido[\"usuario\"][\"nombre\"] — dos corchetes encadenados, uno por cada nivel de anidamiento."]},
+ ],
  retoFinal:{id:"n1d8x",py:true,t:"Desafío final · inédito — la escritura segura",
   d:'Predice, ANTES de ejecutar, qué imprime esto. <code>guardar_seguro()</code> escribe primero a un archivo TEMPORAL, y solo al final lo renombra al nombre real con <code>os.replace()</code>. ¿Por qué eso hace que "config_final.json" nunca quede corrupto, sin importar cuándo se interrumpiera el programa?',
   starter:'import os, json\n\ndef guardar_seguro(ruta, datos):\n    temp = ruta + ".tmp"\n    with open(temp, "w", encoding="utf-8") as f:\n        json.dump(datos, f)\n    os.replace(temp, ruta)\n\nguardar_seguro("config_final.json", {"version": 1})\nwith open("config_final.json", encoding="utf-8") as f:\n    print(json.load(f))\nprint(os.path.exists("config_final.json.tmp"))',runs:[[]],
@@ -2511,8 +2765,24 @@ const LEVEL1=[
   starter:'class Producto:\n    def __init__(self, nombre, precio, stock):\n        pass\n    def vender(self, cantidad):\n        pass\n    def reponer(self, cantidad):\n        pass\n\nprod = Producto("pan", 5, 10)\nprint(prod.vender(3))\nprint(prod.stock)\nprint(prod.vender(100))\nprint(prod.stock)\nprod.reponer(5)\nprint(prod.stock)',
   runs:[[]],hints:["vender: if cantidad > self.stock: return 'Stock insuficiente' — si no, self.stock -= cantidad; return 'Vendido'","reponer: self.stock += cantidad, sin devolver nada especial."],
   check:(o,c)=>{const exp="Vendido\n7\nStock insuficiente\n7\n12";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Un método puede modificar el estado de OTRA instancia",T('Nada impide que un método (o una función) reciba dos instancias distintas y module el estado de ambas — igual que "transferir dinero entre dos cuentas" toca dos objetos, no uno. Cada instancia sigue siendo dueña de sus propios atributos; la función solo orquesta el cambio en ambas.'),
+   'def transferir_stock(origen, destino, cantidad):\n    if cantidad > origen.stock:\n        return "Transferencia invalida"\n    origen.stock -= cantidad\n    destino.stock += cantidad\n    return "Transferido"'],
+ ],
+ ex:[
+  {id:"n1m2t1e6",py:true,t:"Ejercicio 6 · Valor total del inventario",
+   d:'Dada una lista de instancias de <code>Producto</code>, escribe <code>valor_total_inventario(productos)</code> que devuelva la suma de <code>precio * stock</code> de TODOS los productos, usando un acumulador (sin <code>sum()</code>).',
+   starter:'class Producto:\n    def __init__(self, nombre, precio, stock):\n        self.nombre = nombre\n        self.precio = precio\n        self.stock = stock\n\nproductos = [Producto("pan", 5, 10), Producto("leche", 12, 5)]\n\ndef valor_total_inventario(productos):\n    pass\n\nprint(valor_total_inventario(productos))',runs:[[]],
+   check:(o,c)=>{if(/\bsum\s*\(/.test(c))return"Calcula el total con un acumulador (for + variable), sin sum().";
+     if(!/\.precio\b/.test(c)||!/\.stock\b/.test(c))return"Accede a .precio y .stock de cada instancia dentro del for.";
+     return norm(o[0])==="110"?true:"Esperaba: 110\nObtuve:\n"+norm(o[0])},
+   hints:["total = 0; for p in productos: total = total + p.precio * p.stock","110 = (5*10) + (12*5) = 50 + 60"]},
+  {id:"n1m2t1e7",py:true,t:"Ejercicio 7 · Transferencia de stock entre dos instancias",
+   d:'Escribe <code>transferir_stock(origen, destino, cantidad)</code>: si <code>origen</code> tiene suficiente stock, resta de <code>origen</code> y suma a <code>destino</code>, devolviendo <code>"Transferido"</code>; si no, devuelve <code>"Transferencia invalida"</code> SIN modificar ninguno de los dos. Pruébala con una transferencia válida y luego una inválida, imprimiendo el resultado y el stock de ambos productos después de cada intento.',
+   starter:'class Producto:\n    def __init__(self, nombre, precio, stock):\n        self.nombre = nombre\n        self.precio = precio\n        self.stock = stock\n\ndef transferir_stock(origen, destino, cantidad):\n    pass\n\np1 = Producto("pan", 5, 10)\np2 = Producto("pan", 5, 3)\nprint(transferir_stock(p1, p2, 4))\nprint(p1.stock, p2.stock)\nprint(transferir_stock(p1, p2, 100))\nprint(p1.stock, p2.stock)',runs:[[]],
+   check:(o,c)=>{const exp="Transferido\n6 7\nTransferencia invalida\n6 7";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["if cantidad > origen.stock: return \"Transferencia invalida\" — ANTES de modificar nada.","Si alcanza: origen.stock -= cantidad; destino.stock += cantidad; return \"Transferido\"."]},
+ ],
  retoFinal:{id:"n1m2t1x",py:true,t:"Desafío final · inédito — el carrito compartido por accidente",
   d:'Predice, ANTES de ejecutar, qué imprime la última línea. <code>c1</code> y <code>c2</code> son carritos DISTINTOS — pero <code>items</code> está definido como atributo de clase, no de instancia.',
   starter:'class Carrito:\n    items = []\n    def __init__(self, dueno):\n        self.dueno = dueno\n    def agregar(self, item):\n        self.items.append(item)\n\nc1 = Carrito("Ana")\nc2 = Carrito("Luis")\nc1.agregar("pan")\nprint(c2.items)',runs:[[]],
@@ -2577,8 +2847,25 @@ const LEVEL1=[
   runs:[[]],hints:["agregar/quitar: igual que en los ejercicios 4 y 5.","transferir: self.quitar(n) seguido de otro.agregar(n) — reutiliza lo que ya funciona, no repitas la validación a mano."],
   check:(o,c)=>{if(!/self\.quitar\(/.test(c)||!/\.agregar\(/.test(c))return"transferir debe reutilizar self.quitar(n) y otro.agregar(n), no reimplementar la lógica.";
     return norm(o[0])==="1 2"?true:"Esperaba: 1 2\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Registrar solo lo que de verdad ocurrió",T('Un historial de operaciones debe registrar únicamente lo que EFECTIVAMENTE sucedió — si un método valida y lanza una excepción antes de modificar el estado, esa operación fallida no debería dejar rastro en el historial. El orden importa: primero se valida, luego se modifica el estado Y se registra, en ese orden, dentro del mismo método.'),
+   'def agregar(self, n):\n    if self._cantidad + n > self.capacidad:\n        raise ValueError("Excede la capacidad")\n    self._cantidad += n\n    self.historial.append(("agregar", n))   # solo si no exploto antes'],
+ ],
+ ex:[
+  {id:"n1m2t2e6",py:true,t:"Ejercicio 6 · Interés compuesto sin romper el invariante",
+   d:'Amplía <code>CuentaBancaria</code> con <code>aplicar_interes(tasa)</code> (multiplica el saldo por <code>(1 + tasa)</code>, redondeado a 2 decimales con <code>round(..., 2)</code>) y <code>retirar(monto)</code> (ya validado). Aplica 10% de interés a una cuenta con 100, retira 50, y luego intenta retirar 100 (debe fallar). Imprime el saldo tras cada operación exitosa y el mensaje de la que falla.',
+   starter:'class CuentaBancaria:\n    def __init__(self, saldo):\n        self.saldo = saldo\n    def aplicar_interes(self, tasa):\n        pass\n    def retirar(self, monto):\n        pass\n\nc = CuentaBancaria(100)\nc.aplicar_interes(0.1)\nprint(c.saldo)\nc.retirar(50)\nprint(c.saldo)\ntry:\n    c.retirar(100)\nexcept ValueError as e:\n    print(e)',runs:[[]],
+   check:(o,c)=>{if(!/round\s*\(/.test(c))return"Redondea el resultado de aplicar_interes con round(..., 2) — evita el ruido de coma flotante.";
+     if(!/raise\s+ValueError/.test(c))return"retirar debe seguir lanzando ValueError si el monto excede el saldo.";
+     return norm(o[0])==="110.0\n60.0\nFondos insuficientes"?true:"Esperaba:\n110.0\n60.0\nFondos insuficientes\nObtuve:\n"+norm(o[0])},
+   hints:["self.saldo = round(self.saldo * (1 + tasa), 2)","retirar: if monto > self.saldo: raise ValueError(\"Fondos insuficientes\") — igual que en el ejercicio 1."]},
+  {id:"n1m2t2e7",py:true,t:"Ejercicio 7 · Historial de operaciones exitosas",
+   d:'Amplía <code>Inventario</code> con <code>self.historial = []</code> en <code>__init__</code>, y haz que <code>agregar</code>/<code>quitar</code> agreguen una tupla <code>("agregar", n)</code> o <code>("quitar", n)</code> al historial — SOLO cuando la operación tiene éxito (las que lanzan ValueError no deben registrarse). Agrega 5, intenta agregar 100 (falla, se ignora con try/except), quita 2, e imprime el historial final.',
+   starter:'class Inventario:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = 0\n        self.historial = []\n    def cantidad(self):\n        return self._cantidad\n    def agregar(self, n):\n        pass\n    def quitar(self, n):\n        pass\n\ninv = Inventario(10)\ninv.agregar(5)\ntry:\n    inv.agregar(100)\nexcept ValueError:\n    pass\ninv.quitar(2)\nprint(inv.historial)',runs:[[]],
+   check:(o,c)=>{if(!/historial\.append/.test(c))return"Cada operación exitosa debe agregarse a self.historial con .append().";
+     return norm(o[0])==="[('agregar', 5), ('quitar', 2)]"?true:"Esperaba: [('agregar', 5), ('quitar', 2)]\nObtuve:\n"+norm(o[0])},
+   hints:["El append va DESPUÉS de la validación y del cambio de _cantidad — si el raise ya ocurrió, esa línea nunca se alcanza.","self.historial.append((\"agregar\", n)) al final de agregar; lo mismo con \"quitar\" al final de quitar."]},
+ ],
  retoFinal:{id:"n1m2t2x",py:true,t:"Desafío final · inédito — el invariante roto desde adentro",
   d:'Predice, ANTES de ejecutar, qué imprime esto. <code>ajustar()</code> es un método "de mantenimiento" de la MISMA clase que <code>agregar()</code> — ¿respeta la misma capacidad de 10?',
   starter:'class InventarioRoto:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = 0\n    def agregar(self, n):\n        if self._cantidad + n > self.capacidad:\n            raise ValueError("Excede capacidad")\n        self._cantidad += n\n    def ajustar(self, n):\n        self._cantidad = n\n    def cantidad(self):\n        return self._cantidad\n\nir = InventarioRoto(10)\nir.agregar(5)\nir.ajustar(999)\nprint(ir.cantidad())',runs:[[]],
@@ -2643,8 +2930,24 @@ const LEVEL1=[
   starter:'class Producto:\n    def __init__(self, nombre, precio, descuento=0, envio_gratis=False, garantia_meses=0):\n        pass\n    def precio_final(self):\n        pass\n\np = Producto("laptop", 1000, descuento=0.1, envio_gratis=True, garantia_meses=12)\nprint(p.precio_final())\nprint(p.envio_gratis, p.garantia_meses)',
   runs:[[]],hints:["__init__: guarda los 5 parámetros como self.nombre, self.precio, self.descuento, self.envio_gratis, self.garantia_meses.","precio_final: return self.precio * (1 - self.descuento)"],
   check:(o,c)=>{const exp="900.0\nTrue 12";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["super() también sirve DENTRO de un método sobreescrito, no solo en __init__",T('<code>super().__init__(...)</code> ya lo usaste para reutilizar la inicialización del padre. La misma idea aplica a CUALQUIER método: si una subclase sobreescribe un método pero quiere conservar el comportamiento del padre Y agregar algo extra, llama a <code>super().metodo(...)</code> dentro del nuevo método, en vez de reescribir toda la lógica desde cero.'),
+   'class GerenteEmpleado(Empleado):\n    def contar_expertas(self, umbral):\n        return super().contar_expertas(umbral) + 1   # reutiliza + agrega'],
+ ],
+ ex:[
+  {id:"n1m2t3e6",py:true,t:"Ejercicio 6 · Empleado TIENE una lista de Habilidades",
+   d:'Escribe <code>Habilidad(nombre, nivel)</code> y <code>Empleado(nombre)</code> que TIENE <code>self.habilidades = []</code> (composición). Agrega <code>agregar_habilidad(habilidad)</code> y <code>contar_expertas(umbral)</code> (cuenta, con acumulador, cuántas habilidades tienen <code>nivel &gt;= umbral</code>). Crea un empleado con 3 habilidades (niveles 8, 5, 9) y cuenta las de nivel ≥ 7.',
+   starter:'class Habilidad:\n    def __init__(self, nombre, nivel):\n        self.nombre = nombre\n        self.nivel = nivel\n\nclass Empleado:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.habilidades = []\n    def agregar_habilidad(self, habilidad):\n        pass\n    def contar_expertas(self, umbral):\n        pass\n\ne = Empleado("Ana")\ne.agregar_habilidad(Habilidad("Python", 8))\ne.agregar_habilidad(Habilidad("SQL", 5))\ne.agregar_habilidad(Habilidad("Git", 9))\nprint(e.contar_expertas(7))',runs:[[]],
+   check:(o,c)=>{if(/class\s+Habilidad\s*\(\s*Empleado\s*\)|class\s+Empleado\s*\(\s*Habilidad\s*\)/.test(c))return"Habilidad y Empleado no se heredan entre sí — Empleado TIENE habilidades, no ES una.";
+     return norm(o[0])==="2"?true:"Esperaba: 2\nObtuve:\n"+norm(o[0])},
+   hints:["agregar_habilidad: self.habilidades.append(habilidad)","contar_expertas: total = 0; for h in self.habilidades: if h.nivel >= umbral: total += 1; return total"]},
+  {id:"n1m2t3e7",py:true,t:"Ejercicio 7 · Sobreescribir reutilizando con super()",
+   d:'Escribe <code>GerenteEmpleado(Empleado)</code> que sobreescribe <code>contar_expertas(umbral)</code> para devolver lo mismo que el padre, MÁS un bono fijo de <code>1</code> — reutilizando <code>super().contar_expertas(umbral)</code>, sin repetir la lógica del acumulador.',
+   starter:'class GerenteEmpleado(Empleado):\n    def contar_expertas(self, umbral):\n        pass\n\ng = GerenteEmpleado("Luis")\ng.agregar_habilidad(Habilidad("Python", 9))\ng.agregar_habilidad(Habilidad("SQL", 3))\nprint(g.contar_expertas(7))',runs:[[]],
+   check:(o,c)=>{if(!/super\(\)\.contar_expertas/.test(c))return"Reutiliza super().contar_expertas(umbral) — no reimplementes el acumulador desde cero.";
+     return norm(o[0])==="2"?true:"Esperaba: 2\nObtuve:\n"+norm(o[0])},
+   hints:["return super().contar_expertas(umbral) + 1","Python (nivel 9) cuenta como experta; SQL (nivel 3) no — 1 del padre + 1 de bono = 2."]},
+ ],
  retoFinal:{id:"n1m2t3x",py:true,t:"Desafío final · inédito — el atributo que nunca se inicializó",
   d:'Predice, ANTES de ejecutar, qué mensaje EXACTO de error captura el <code>except</code> — y por qué <code>descuento</code> sí existe en <code>p</code>, pero <code>nombre</code> no.',
   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\nclass ProductoConDescuento(Producto):\n    def __init__(self, nombre, precio, descuento):\n        self.descuento = descuento\n\np = ProductoConDescuento("pan", 5, 0.1)\ntry:\n    print(p.nombre)\nexcept AttributeError as e:\n    print(e)',runs:[[]],
@@ -2709,8 +3012,25 @@ const LEVEL1=[
   runs:[[]],hints:["__eq__: usa isinstance(otro, Producto) — si no lo es, return False de inmediato, antes de acceder a otro.nombre.","__str__ y __len__ ya los practicaste en los ejercicios 1 y 3."],
   check:(o,c)=>{if(!/isinstance\(/.test(c))return"__eq__ debe usar isinstance(otro, Producto) para manejar el caso de comparar contra algo que no es un Producto.";
     const exp="Producto: pan ($5)\nTrue\n10\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["__hash__: sin él, __eq__ rompe el uso en sets y dicts",T('Definir <code>__eq__</code> SIN <code>__hash__</code> hace que Python marque la clase como no-hashable: ya no puede vivir en un <code>set</code> ni ser clave de un diccionario (conecta con Diccionarios y sets: las claves deben ser inmutables/hashables). <code>__hash__</code> debe basarse en los MISMOS atributos que <code>__eq__</code>, envueltos en una tupla y pasados a <code>hash()</code>.'),
+   'class Producto:\n    def __eq__(self, otro):\n        return self.nombre == otro.nombre and self.precio == otro.precio\n    def __hash__(self):\n        return hash((self.nombre, self.precio))'],
+ ],
+ ex:[
+  {id:"n1m2t4e6",py:true,t:"Ejercicio 6 · __hash__ para vivir en un set",
+   d:'Agrega <code>__hash__</code> a <code>Producto</code> (basado en <code>nombre</code> y <code>precio</code>, igual que <code>__eq__</code>) para que dos productos "iguales" según tu <code>__eq__</code> ocupen UN solo lugar en un <code>set</code>. Crea dos productos iguales, mételos en un set, e imprime su longitud.',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n    def __eq__(self, otro):\n        return self.nombre == otro.nombre and self.precio == otro.precio\n    def __hash__(self):\n        pass\n\na = Producto("pan", 5)\nb = Producto("pan", 5)\nconjunto = {a, b}\nprint(len(conjunto))',runs:[[]],
+   check:(o,c)=>{if(!/def\s+__hash__\s*\(\s*self\s*\)/.test(c))return"Define def __hash__(self): — sin él, {a, b} lanzaría TypeError: unhashable type.";
+     return norm(o[0])==="1"?true:"Esperaba: 1\nObtuve:\n"+norm(o[0])},
+   hints:["return hash((self.nombre, self.precio)) — los MISMOS campos que usa __eq__, en una tupla.","Si dos objetos son == entre sí, DEBEN tener el mismo hash — si no, sets y dicts se comportan mal."]},
+  {id:"n1m2t4e7",py:true,t:"Ejercicio 7 · __lt__ para que sorted() funcione solo",
+   d:'Agrega <code>__lt__</code> a <code>Producto</code> (compara por <code>precio</code>) para que <code>sorted()</code> pueda ordenar una lista de productos SIN pasarle ningún <code>key=</code> — aprovechando que <code>sorted()</code> usa <code>__lt__</code> automáticamente cuando existe. Imprime el nombre de cada producto, en orden de precio ascendente.',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n    def __lt__(self, otro):\n        pass\n\nproductos = [Producto("laptop", 1000), Producto("pan", 5), Producto("mouse", 20)]\nfor p in sorted(productos):\n    print(p.nombre)',runs:[[]],
+   check:(o,c)=>{if(!/def\s+__lt__\s*\(\s*self/.test(c))return"Define def __lt__(self, otro): comparando self.precio < otro.precio.";
+     if(/key\s*=/.test(c))return"No uses key= — el punto es que sorted() use __lt__ automáticamente, sin ayuda extra.";
+     return norm(o[0])==="pan\nmouse\nlaptop"?true:"Esperaba:\npan\nmouse\nlaptop\nObtuve:\n"+norm(o[0])},
+   hints:["return self.precio < otro.precio","sorted() ya sabe comparar cualquier objeto que implemente __lt__ — no necesita que le digas cómo con key=."]},
+ ],
  retoFinal:{id:"n1m2t4x",py:true,t:"Desafío final · inédito — el __eq__ que ignora una coordenada",
   d:'Predice, ANTES de ejecutar, qué imprime esto. <code>__eq__</code> de <code>Punto</code> solo compara <code>x</code> — ¿deberían <code>a</code> y <code>b</code> considerarse iguales, con coordenadas <code>y</code> tan distintas?',
   starter:'class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __eq__(self, otro):\n        return self.x == otro.x\n\na = Punto(1, 2)\nb = Punto(1, 999)\nprint(a == b)',runs:[[]],
@@ -2772,8 +3092,25 @@ const LEVEL1=[
   starter:'# 1. funcion pura\ndef a_mayusculas(lista):\n    pass\n\n# 2. clase con estado\nclass Carrito:\n    def __init__(self):\n        pass\n    def agregar(self, nombre, precio):\n        pass\n    def total(self):\n        pass\n\n# 3. funcion pura\ndef parsear_csv(linea):\n    pass\n\nprint(a_mayusculas(["hola", "mundo"]))\ncr = Carrito()\ncr.agregar("pan", 5)\ncr.agregar("leche", 12)\nprint(cr.total())\nprint(parsear_csv("a,b,c"))',
   runs:[[]],hints:["a_mayusculas: [s.upper() for s in lista]","Carrito: self.items=[] en __init__; agregar hace append((nombre,precio)); total suma los precios.","parsear_csv: linea.strip().split(',')"],
   check:(o,c)=>{const exp="['HOLA', 'MUNDO']\n17\n['a', 'b', 'c']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Un sistema real casi siempre combina ambos paradigmas",T('La elección función-vs-clase no es "todo lo uno o todo lo otro" dentro de un mismo sistema: una clase con estado real puede, y debe, apoyarse en funciones puras para sus cálculos internos — cada pieza usa el paradigma que le corresponde a SU propia responsabilidad, no al sistema completo.'),
+   'def formatear_precio(precio):\n    return f"${precio:.2f}"   # funcion pura: sin estado\n\nclass Carrito:                # clase: SI tiene estado real\n    def total_formateado(self):\n        return formatear_precio(self.total())'],
+ ],
+ ex:[
+  {id:"n1m2t5e6",py:true,t:"Ejercicio 6 · Función pura DENTRO de una clase con estado",
+   d:'Escribe la función pura <code>formatear_precio(precio)</code> (devuelve el precio con 2 decimales y el símbolo <code>$</code>, ej. <code>"$5.00"</code>) y una clase <code>Carrito</code> con estado (<code>items</code>) cuyo método <code>total_formateado()</code> USA <code>formatear_precio</code> sobre la suma de sus items. Agrega "pan" (5) y "leche" (12.5), e imprime el total formateado.',
+   starter:'def formatear_precio(precio):\n    pass\n\nclass Carrito:\n    def __init__(self):\n        self.items = []\n    def agregar(self, nombre, precio):\n        self.items.append((nombre, precio))\n    def total_formateado(self):\n        pass\n\nc = Carrito()\nc.agregar("pan", 5)\nc.agregar("leche", 12.5)\nprint(c.total_formateado())',runs:[[]],
+   check:(o,c)=>{if(!/def\s+formatear_precio/.test(c))return"formatear_precio debe ser una función pura, fuera de la clase.";
+     if(!/formatear_precio\s*\(/.test(c.slice(c.indexOf("class Carrito"))))return"total_formateado debe LLAMAR a formatear_precio(), no reimplementar el formato ahí mismo.";
+     return norm(o[0])==="$17.50"?true:"Esperaba: $17.50\nObtuve:\n"+norm(o[0])},
+   hints:["formatear_precio: return f\"${precio:.2f}\"","total_formateado: suma los precios con un acumulador, y al final return formatear_precio(total)."]},
+  {id:"n1m2t5e7",py:true,t:"Ejercicio 7 · Un caso nuevo: ¿por qué SÍ es una clase?",
+   d:'Un sistema de login debe BLOQUEAR una cuenta tras 3 intentos fallidos consecutivos (un intento exitoso reinicia el contador, pero no desbloquea una cuenta ya bloqueada). Implementa <code>ValidadorLogin</code> con <code>intentar(clave_correcta, clave_ingresada)</code>, que devuelve <code>"aceptado"</code>, <code>"rechazado"</code> o <code>"bloqueado"</code>. Identifica primero qué señales de esta lección confirman que esto merece una clase.',
+   starter:'class ValidadorLogin:\n    def __init__(self):\n        self.fallos = 0\n        self.bloqueado = False\n    def intentar(self, clave_correcta, clave_ingresada):\n        pass\n\nv = ValidadorLogin()\nprint(v.intentar("1234", "0000"))\nprint(v.intentar("1234", "1111"))\nprint(v.intentar("1234", "2222"))\nprint(v.intentar("1234", "1234"))',runs:[[]],
+   check:(o,c)=>{if(!/self\.bloqueado/.test(c))return"El estado 'bloqueado' debe persistir en self y afectar intentos futuros, incluso con la clave correcta.";
+     return norm(o[0])==="rechazado\nrechazado\nrechazado\nbloqueado"?true:"Esperaba:\nrechazado\nrechazado\nrechazado\nbloqueado\nObtuve:\n"+norm(o[0])},
+   hints:["Si self.bloqueado ya es True, intentar() devuelve 'bloqueado' SIEMPRE, sin importar la clave — ni siquiera la correcta lo desbloquea.","Tres fallos consecutivos (self.fallos >= 3) activan self.bloqueado = True — las señales de T5: estado que persiste, invariante a proteger."]},
+ ],
  retoFinal:{id:"n1m2t5x",py:true,t:"Desafío final · inédito — un problema nuevo, sin patrón previo",
   d:'Un sistema recibe lecturas de un sensor y debe alertar si superan un umbral, recordando el historial de las últimas 5 lecturas. Antes de programar: ¿por qué este problema SÍ merece una clase? Luego implementa <code>MonitorSensor</code> y verifica.',
   starter:'class MonitorSensor:\n    def __init__(self, umbral):\n        pass\n    def registrar(self, lectura):\n        pass\n\nm = MonitorSensor(30)\nprint(m.registrar(25))\nprint(m.registrar(35))\nprint(m.historial)\nfor x in [10, 20, 30, 40, 50, 60]:\n    m.registrar(x)\nprint(m.historial)',runs:[[]],
@@ -2834,8 +3171,24 @@ const LEVEL1=[
   runs:[[]],hints:["vistos = set(); duplicados = []","for x in lista: if x in vistos and x not in duplicados: duplicados.append(x) — luego vistos.add(x) siempre."],
   check:(o,c)=>{if(!/set\(\)/.test(c))return"Usa un set() para 'vistos' — esa es la clave de que sea O(n), no O(n²).";
     const exp="[2, 1]\n[]\n[7]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["El O(n²) escondido también vive dentro de comprehensions",T('El mismo patrón peligroso de "x in vistos" sobre una lista no desaparece por escribirlo como comprehension — <code>[x for x in items if x in permitidos]</code>, con <code>permitidos</code> como lista, sigue siendo O(n²) si <code>items</code> es grande. La comprehension es más corta de escribir, pero no cambia la complejidad de lo que hace por dentro.'),
+   'permitidos = set(permitidos)   # convertir UNA vez, antes de la comprehension\nresultado = [x for x in items if x in permitidos]   # cada in ahora es O(1)'],
+ ],
+ ex:[
+  {id:"n1m3t1e6",py:true,t:"Ejercicio 6 · O(n²) escondido en una comprehension",
+   d:'Esta comprehension esconde el mismo problema: <code>x in permitidos</code> corre sobre una LISTA, dentro de otra iteración. Arréglala convirtiendo <code>permitidos</code> a <code>set</code> ANTES de la comprehension.',
+   starter:'def filtrar_permitidos(items, permitidos):\n    return [x for x in items if x in permitidos]\n\nprint(filtrar_permitidos([1, 2, 3, 4, 5], [2, 4]))',runs:[[]],
+   check:(o,c)=>{if(!/set\s*\(\s*permitidos\s*\)/.test(c))return"Convierte permitidos a set con set(permitidos) antes de usarlo en la comprehension.";
+     return norm(o[0])==="[2, 4]"?true:"Esperaba: [2, 4]\nObtuve:\n"+norm(o[0])},
+   hints:["permitidos = set(permitidos) — una sola vez, antes de construir la lista final.","La comprehension en sí no cambia: [x for x in items if x in permitidos] — solo cambió el TIPO de 'permitidos'."]},
+  {id:"n1m3t1e7",py:true,t:"Ejercicio 7 · Verificar en O(n) antes de pagar O(n log n)",
+   d:'Escribe <code>esta_ordenada(lista)</code> que verifique, en UN SOLO recorrido O(n) (sin usar <code>sorted()</code> ni <code>.sort()</code>), si una lista ya está en orden ascendente — evitando el costo de ordenar cuando ni siquiera hace falta.',
+   starter:'def esta_ordenada(lista):\n    pass\n\nprint(esta_ordenada([1, 2, 3, 4]))\nprint(esta_ordenada([1, 3, 2, 4]))',runs:[[]],
+   check:(o,c)=>{if(/sorted\s*\(|\.sort\s*\(/.test(c))return"No ordenes nada — verifica con un solo recorrido, comparando cada elemento con el siguiente.";
+     return norm(o[0])==="True\nFalse"?true:"Esperaba:\nTrue\nFalse\nObtuve:\n"+norm(o[0])},
+   hints:["for i in range(len(lista) - 1): if lista[i] > lista[i+1]: return False","Si nunca encuentras un par fuera de orden, al final: return True."]},
+ ],
  retoFinal:{id:"n1m3t1x",py:true,t:"Desafío final · inédito — no todo bucle anidado es O(n²)",
   d:'Predice, ANTES de ejecutar, la complejidad REAL de esta función — ¿es O(n²) por tener dos bucles anidados? El segundo bucle SIEMPRE recorre exactamente 3 elementos.',
   starter:'def procesar(lista):\n    resultado = []\n    for x in lista:\n        for i in range(3):\n            resultado.append(x + i)\n    return resultado\n\nprint(procesar([10, 20]))\nprint(len(procesar(list(range(1000)))))',runs:[[]],
@@ -2894,8 +3247,23 @@ const LEVEL1=[
   starter:'def lineal_contada(lista, objetivo):\n    pasos = 0\n    for x in lista:\n        pasos += 1\n        if x == objetivo:\n            return pasos\n    return pasos\n\ndef binaria_contada(lista, objetivo):\n    pass\n\nlista1000 = list(range(1000))\nd = {x: True for x in range(1000)}\nprint(lineal_contada(lista1000, 999))\nprint(binaria_contada(lista1000, 999))\nprint(1 if 999 in d else 1)',
   runs:[[]],hints:["binaria_contada: igual que busqueda_binaria, sumando 1 a pasos en cada vuelta del while.","El resultado esperado es 1000, 10, 1 — la diferencia entre las tres velocidades, medida."],
   check:(o,c)=>{const exp="1000\n10\n1";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Variante real: encontrar DÓNDE insertar, no solo SI existe",T('Una variante muy usada en la práctica (el módulo estándar <code>bisect</code> la implementa) no busca un valor exacto — busca el índice donde ese valor DEBERÍA insertarse para mantener la lista ordenada, exista ya o no. Es la misma idea de descartar la mitad, con una condición de corte ligeramente distinta.'),
+   'def punto_insercion(lista, valor):\n    izq, der = 0, len(lista)\n    while izq < der:\n        medio = (izq + der) // 2\n        if lista[medio] < valor:\n            izq = medio + 1\n        else:\n            der = medio\n    return izq'],
+ ],
+ ex:[
+  {id:"n1m3t2e6",py:true,t:"Ejercicio 6 · Punto de inserción (variante de binaria)",
+   d:'Escribe <code>punto_insercion(lista, valor)</code>: devuelve el índice donde <code>valor</code> DEBERÍA insertarse en <code>lista</code> (ya ordenada) para mantener el orden — exista ya el valor o no. Pruébalo con un valor que cae entre dos existentes, uno menor que todos, y uno mayor que todos.',
+   starter:'def punto_insercion(lista, valor):\n    pass\n\nlista = [1, 3, 5, 7, 9]\nprint(punto_insercion(lista, 6))\nprint(punto_insercion(lista, 0))\nprint(punto_insercion(lista, 10))',runs:[[]],
+   check:(o,c)=>{const exp="3\n0\n5";return norm(o[0])===exp?true:"Esperaba:\n3\n0\n5\nObtuve:\n"+norm(o[0])},
+   hints:["izq, der = 0, len(lista) — nota que der empieza en len(lista), no len(lista)-1, porque el resultado puede ser 'al final'.","while izq < der: si lista[medio] < valor: izq = medio + 1; si no: der = medio. Al final, izq ES la respuesta."]},
+  {id:"n1m3t2e7",py:true,t:"Ejercicio 7 · Binaria sobre tuplas, comparando un campo",
+   d:'Dada una lista de tuplas <code>(nombre, edad)</code> YA ordenada por edad, escribe <code>busqueda_binaria_por_edad(personas, edad_buscada)</code> que devuelva el NOMBRE de la persona con esa edad, o <code>None</code> si no existe — adaptando la búsqueda binaria para comparar <code>personas[medio][1]</code> en vez de un valor suelto.',
+   starter:'def busqueda_binaria_por_edad(personas, edad_buscada):\n    pass\n\npersonas = [("Ana", 20), ("Luis", 25), ("Eva", 30), ("Tom", 35)]\nprint(busqueda_binaria_por_edad(personas, 30))\nprint(busqueda_binaria_por_edad(personas, 99))',runs:[[]],
+   check:(o,c)=>{if(!/\[\s*medio\s*\]\s*\[\s*1\s*\]/.test(c))return"Compara personas[medio][1] (la edad dentro de la tupla), no la tupla completa.";
+     return norm(o[0])==="Eva\nNone"?true:"Esperaba:\nEva\nNone\nObtuve:\n"+norm(o[0])},
+   hints:["La lógica de izq/der/medio es IDÉNTICA a busqueda_binaria — solo cambia qué se compara: personas[medio][1] en vez de lista[medio].","Si se encuentra, return personas[medio][0] (el nombre) — si el bucle termina sin encontrar, return None."]},
+ ],
  retoFinal:{id:"n1m3t2x",py:true,t:"Desafío final · inédito — el bug que rompe un solo candidato",
   d:'Predice, ANTES de ejecutar, qué devuelve esto — la lista tiene UN SOLO elemento, exactamente el buscado. <code>while izq < der</code> en vez de <code>izq <= der</code>: ¿importa la diferencia aquí?',
   starter:'def busqueda_binaria_bug(lista, objetivo):\n    izq, der = 0, len(lista) - 1\n    while izq < der:\n        medio = (izq + der) // 2\n        if lista[medio] == objetivo:\n            return medio\n        elif lista[medio] < objetivo:\n            izq = medio + 1\n        else:\n            der = medio - 1\n    return -1\n\nprint(busqueda_binaria_bug([5], 5))',runs:[[]],
@@ -2960,8 +3328,25 @@ const LEVEL1=[
   check:(o,c)=>{if(!/sorted\(/.test(c))return"Usa sorted(catalogo, key=...) tres veces, una por criterio.";
     const exp="[('huevos', 3, 5), ('leche', 12, 20), ('pan', 5, 10)]\n[('huevos', 3, 5), ('pan', 5, 10), ('leche', 12, 20)]\n[('huevos', 3, 5), ('pan', 5, 10), ('leche', 12, 20)]";
     return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["reverse=True: invertir sin cambiar el criterio",T('<code>sorted(..., key=funcion, reverse=True)</code> aplica el MISMO criterio de orden, pero de mayor a menor en vez de menor a mayor — sin tener que invertir la función key ni el resultado a mano con slicing [::-1] (que además rompería la estabilidad).'),
+   'ranking = sorted(ventas.items(), key=por_monto, reverse=True)   # de mayor a menor monto'],
+ ],
+ ex:[
+  {id:"n1m3t3e6",py:true,t:"Ejercicio 6 · Ranking de ventas: dict + sorted + reverse",
+   d:'Dado un diccionario <code>ventas</code> (nombre→monto), ordénalo de MAYOR a MENOR monto — usando <code>sorted()</code> sobre <code>.items()</code>, con <code>key</code> y <code>reverse=True</code>. Imprime la lista resultante de tuplas.',
+   starter:'ventas = {"Ana": 300, "Luis": 800, "Eva": 150}\n\ndef por_monto(item):\n    pass\n\n# ordena ventas.items() con sorted, key=por_monto, reverse=True\n',runs:[[]],
+   check:(o,c)=>{if(!/reverse\s*=\s*True/.test(c))return"Usa reverse=True para ordenar de mayor a menor.";
+     if(!/\.items\s*\(\s*\)/.test(c))return"Ordena sobre ventas.items(), no sobre ventas directo.";
+     return norm(o[0])==="[('Luis', 800), ('Ana', 300), ('Eva', 150)]"?true:"Esperaba: [('Luis', 800), ('Ana', 300), ('Eva', 150)]\nObtuve:\n"+norm(o[0])},
+   hints:["por_monto(item): return item[1] — cada item de .items() es una tupla (nombre, monto).","sorted(ventas.items(), key=por_monto, reverse=True)"]},
+  {id:"n1m3t3e7",py:true,t:"Ejercicio 7 · Mediana con sorted()",
+   d:'Escribe <code>mediana(lista)</code> que devuelva el valor central de la lista ORDENADA (usa <code>sorted()</code>, nunca <code>.sort()</code>, para no mutar la lista original) — asume longitud impar en las pruebas.',
+   starter:'def mediana(lista):\n    pass\n\nprint(mediana([5, 1, 9, 3, 7]))\nprint(mediana([10]))',runs:[[]],
+   check:(o,c)=>{if(!/sorted\s*\(/.test(c))return"Usa sorted() para ordenar sin mutar la lista original.";
+     return norm(o[0])==="5\n10"?true:"Esperaba:\n5\n10\nObtuve:\n"+norm(o[0])},
+   hints:["ordenada = sorted(lista) — luego el índice central es len(ordenada) // 2.","Para [1,3,5,7,9] (ya ordenada), el índice 2 (posición central) es 5."]},
+ ],
  retoFinal:{id:"n1m3t3x",py:true,t:"Desafío final · inédito — la estabilidad de sorted()",
   d:'Predice, ANTES de ejecutar, el orden EXACTO del resultado. A y C tienen el mismo precio (10); B y D tienen el mismo precio (5). ¿Cuál queda primero en cada empate?',
   starter:'productos = [("A", 10), ("B", 5), ("C", 10), ("D", 5)]\ndef precio(p):\n    return p[1]\nprint(sorted(productos, key=precio))',runs:[[]],
@@ -3022,8 +3407,24 @@ const LEVEL1=[
   starter:'def balanceado(texto):\n    pass\n\nprint(balanceado("(a[b]{c})"))\nprint(balanceado("(a[b)c]"))\nprint(balanceado(""))\nprint(balanceado(")("))\nprint(balanceado("((("))',
   runs:[[]],hints:["pares = {')': '(', ']': '[', '}': '{'}","Por cada caracter de apertura: apila. Por cada cierre: si la pila está vacía o el tope no coincide con el par esperado, return False; si no, desapila. Al final: pila vacía."],
   check:(o,c)=>{const exp="True\nFalse\nTrue\nFalse\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Dos pilas resuelven deshacer/rehacer",T('Un editor real (deshacer/rehacer) es dos pilas trabajando juntas: una guarda lo hecho, otra lo deshecho. Una acción NUEVA siempre vacía la pila de rehacer — el historial de "adelante" deja de tener sentido en cuanto el usuario hace algo distinto a lo que había deshecho.'),
+   'class EditorConHistorial:\n    def __init__(self):\n        self.hechas = []\n        self.deshechas = []\n    def hacer(self, accion):\n        self.hechas.append(accion)\n        self.deshechas = []   # una accion nueva invalida el "rehacer"'],
+ ],
+ ex:[
+  {id:"n1m3t4e6",py:true,t:"Ejercicio 6 · Deshacer/rehacer con dos pilas",
+   d:'Implementa <code>EditorConHistorial</code> con <code>hacer(accion)</code> (agrega y VACÍA la pila de rehacer), <code>deshacer()</code> (mueve la última acción a la pila de rehacer y la devuelve) y <code>rehacer()</code> (lo inverso). Prueba: hacer A, hacer B, deshacer, rehacer, hacer C, rehacer (debe dar None — C invalidó el historial de rehacer).',
+   starter:'class EditorConHistorial:\n    def __init__(self):\n        self.hechas = []\n        self.deshechas = []\n    def hacer(self, accion):\n        pass\n    def deshacer(self):\n        pass\n    def rehacer(self):\n        pass\n\ne = EditorConHistorial()\ne.hacer("escribir A")\ne.hacer("escribir B")\nprint(e.deshacer())\nprint(e.rehacer())\ne.hacer("escribir C")\nprint(e.rehacer())',runs:[[]],
+   check:(o,c)=>{if(!/self\.deshechas\s*=\s*\[\]/.test(c))return"hacer() debe VACIAR self.deshechas — una acción nueva invalida el historial de rehacer.";
+     return norm(o[0])==="escribir B\nescribir B\nNone"?true:"Esperaba:\nescribir B\nescribir B\nNone\nObtuve:\n"+norm(o[0])},
+   hints:["hacer: self.hechas.append(accion); self.deshechas = []","deshacer: accion = self.hechas.pop(); self.deshechas.append(accion); return accion — rehacer es exactamente lo inverso."]},
+  {id:"n1m3t4e7",py:true,t:"Ejercicio 7 · Palíndromo: pila vs. cola sobre los mismos datos",
+   d:'Escribe <code>es_palindromo(palabra)</code> que compare DOS reconstrucciones de la misma palabra: una sacando caracteres de una PILA (lista, con <code>.pop()</code> — sale invertida) y otra de una COLA (<code>deque</code>, con <code>.popleft()</code> — sale en el mismo orden). Si ambas cadenas resultantes son iguales, la palabra es palíndromo.',
+   starter:'from collections import deque\n\ndef es_palindromo(palabra):\n    pila = list(palabra)\n    cola = deque(palabra)\n    pass\n\nprint(es_palindromo("reconocer"))\nprint(es_palindromo("python"))',runs:[[]],
+   check:(o,c)=>{if(!/\.pop\(\)/.test(c)||!/\.popleft\(\)/.test(c))return"Usa .pop() sobre la pila (invierte) y .popleft() sobre la cola (mantiene el orden) — y compara ambos resultados.";
+     return norm(o[0])==="True\nFalse"?true:"Esperaba:\nTrue\nFalse\nObtuve:\n"+norm(o[0])},
+   hints:["invertida = ''; while pila: invertida += pila.pop()","normal = ''; while cola: normal += cola.popleft() — al final: return invertida == normal"]},
+ ],
  retoFinal:{id:"n1m3t4x",py:true,t:"Desafío final · inédito — la pila escondida en el botón atrás",
   d:'Antes de ejecutar: ¿por qué el botón "atrás" de un navegador es naturalmente una PILA, no una cola? Predice el resultado exacto de las dos llamadas a <code>atras()</code>.',
   starter:'class Navegador:\n    def __init__(self):\n        self.historial = []\n    def visitar(self, url):\n        self.historial.append(url)\n    def atras(self):\n        if len(self.historial) <= 1:\n            return None\n        self.historial.pop()\n        return self.historial[-1]\n\nn = Navegador()\nn.visitar("inicio.com")\nn.visitar("pagina2.com")\nn.visitar("pagina3.com")\nprint(n.atras())\nprint(n.atras())',runs:[[]],
@@ -3084,8 +3485,25 @@ const LEVEL1=[
   runs:[[]],hints:["if isinstance(estructura, (int, float)): return estructura","if isinstance(estructura, list): suma sumar_anidado(elemento) para cada elemento, con un for."],
   check:(o,c)=>{if(!/isinstance/.test(c))return"Usa isinstance() para distinguir un número de una lista anidada.";
     const exp="28\n0\n6";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Memoización: guardar lo ya calculado para no repetirlo",T('Una función recursiva puede recalcular el MISMO subproblema miles de veces (fibonacci es el ejemplo clásico). Memoización es guardar cada resultado en un diccionario (clave = argumento, valor = resultado ya calculado) — si ya está, se devuelve directo; si no, se calcula UNA vez y se guarda. Conecta directo con la lección de hoy sobre valores por defecto mutables: se usa <code>cache=None</code> y se crea el diccionario adentro, nunca <code>cache={}</code> en la firma.'),
+   'def fibonacci_memo(n, cache=None):\n    if cache is None:\n        cache = {}\n    if n in cache:\n        return cache[n]\n    if n <= 1:\n        return n\n    resultado = fibonacci_memo(n-1, cache) + fibonacci_memo(n-2, cache)\n    cache[n] = resultado\n    return resultado'],
+ ],
+ ex:[
+  {id:"n1m3t5e6",py:true,t:"Ejercicio 6 · Contar archivos en un árbol de carpetas (dict anidado)",
+   d:'Un sistema de carpetas es un diccionario anidado — las hojas son archivos (strings), el resto son subcarpetas (más diccionarios). Escribe <code>contar_archivos(estructura)</code> que cuente, recursivamente, cuántos archivos hay en TODOS los niveles.',
+   starter:'def contar_archivos(estructura):\n    pass\n\nfs = {"docs": {"a.txt": "contenido", "sub": {"b.txt": "x", "c.txt": "y"}}, "img": {"foto.png": "data"}}\nprint(contar_archivos(fs))',runs:[[]],
+   check:(o,c)=>{if(!/isinstance/.test(c))return"Usa isinstance() para distinguir un archivo (str) de una subcarpeta (dict).";
+     return norm(o[0])==="4"?true:"Esperaba: 4\nObtuve:\n"+norm(o[0])},
+   hints:["if isinstance(estructura, str): return 1 — caso base: una hoja es un archivo.","Si es dict: recorre con .items() y suma contar_archivos(valor) de cada subcarpeta/archivo."]},
+  {id:"n1m3t5e7",py:true,t:"Ejercicio 7 · Fibonacci con memoización",
+   d:'<code>fibonacci</code> puro recalcula los mismos subproblemas miles de veces. Escribe <code>fibonacci_memo(n, cache=None)</code> que guarde cada resultado en un diccionario para no recalcularlo — usando <code>cache=None</code> (nunca <code>cache={}</code> en la firma, por la lección de hoy sobre valores por defecto compartidos).',
+   starter:'def fibonacci_memo(n, cache=None):\n    pass\n\nprint(fibonacci_memo(10))\nprint(fibonacci_memo(30))',runs:[[]],
+   check:(o,c)=>{if(/def\s+fibonacci_memo\s*\(\s*n\s*,\s*cache\s*=\s*\{\}/.test(c))return"NUNCA uses cache={} en la firma — usa cache=None y crea el diccionario adentro, evitando el bug del desafío final.";
+     if(!/cache\s*is\s*None/.test(c))return"Verifica 'if cache is None: cache = {}' al inicio de la función.";
+     return norm(o[0])==="55\n832040"?true:"Esperaba:\n55\n832040\nObtuve:\n"+norm(o[0])},
+   hints:["if cache is None: cache = {} — el diccionario se crea de nuevo en CADA llamada externa, nunca se comparte entre llamadas distintas.","if n in cache: return cache[n] — antes de calcular nada, revisa si ya existe."]},
+ ],
  retoFinal:{id:"n1m3t5x",py:true,t:"Desafío final · inédito — el valor por defecto compartido",
   d:'Predice, ANTES de ejecutar, qué imprime la SEGUNDA llamada — ¿solo los pares de [5,6,7,8], o algo más?',
   starter:'def recolectar_pares(lista, resultado=[]):\n    if not lista:\n        return resultado\n    if lista[0] % 2 == 0:\n        resultado.append(lista[0])\n    return recolectar_pares(lista[1:], resultado)\n\nprint(recolectar_pares([1, 2, 3, 4]))\nprint(recolectar_pares([5, 6, 7, 8]))',runs:[[]],
@@ -3145,8 +3563,24 @@ const LEVEL1=[
   starter:'def subarreglo_mas_corto(lista, k):\n    pass\n\nprint(subarreglo_mas_corto([2, 1, 5, 2, 3, 2], 7))\nprint(subarreglo_mas_corto([1, 1, 1, 1], 100))\nprint(subarreglo_mas_corto([1, 1, 1, 1], 4))',
   runs:[[]],hints:["Expande la ventana (der avanza, suma acumula) hasta alcanzar k; luego contrae (izq avanza, suma resta) mientras siga alcanzando k, guardando el largo más corto visto."],
   check:(o,c)=>{const exp="2\nNone\n4";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Ventana de tamaño FIJO: no recalcules la suma completa",T('Cuando el tamaño de la ventana es fijo (no variable como en el laboratorio de hoy), no hace falta sumar todos sus elementos en cada posición — basta restar el elemento que SALE por la izquierda y sumar el que ENTRA por la derecha. La suma de la ventana anterior ya contenía casi todo lo que necesitas.'),
+   'suma_actual = suma_actual - lista[i-k] + lista[i]   # O(1) por posicion, no O(k)'],
+ ],
+ ex:[
+  {id:"n1m3t6e6",py:true,t:"Ejercicio 6 · Ventana deslizante de tamaño fijo",
+   d:'Escribe <code>max_suma_ventana(lista, k)</code>: la MÁXIMA suma de cualquier subarreglo contiguo de tamaño EXACTAMENTE <code>k</code> — sin recalcular la suma completa en cada posición (resta el elemento que sale, suma el que entra).',
+   starter:'def max_suma_ventana(lista, k):\n    pass\n\nprint(max_suma_ventana([2, 1, 5, 2, 8, 1], 3))\nprint(max_suma_ventana([1, 1, 1, 1], 2))',runs:[[]],
+   check:(o,c)=>{if(/sum\s*\(\s*lista\s*\[\s*i/.test(c))return"No recalcules sum() de un slice en cada vuelta — actualiza la suma restando/sumando un elemento a la vez.";
+     return norm(o[0])==="15\n2"?true:"Esperaba:\n15\n2\nObtuve:\n"+norm(o[0])},
+   hints:["suma_actual = sum(lista[:k]); mejor = suma_actual — la primera ventana sí se suma completa, una vez.","for i in range(k, len(lista)): suma_actual += lista[i] - lista[i-k]; actualiza mejor si suma_actual es mayor."]},
+  {id:"n1m3t6e7",py:true,t:"Ejercicio 7 · Cuenta TODOS los pares que suman, con dict",
+   d:'A diferencia de dos_suman (¿existe UN par?), escribe <code>contar_pares_que_suman(lista, objetivo)</code> que cuente CUÁNTOS pares <code>(i, j)</code> con <code>i &lt; j</code> suman <code>objetivo</code> — usando un diccionario de frecuencias, sin fuerza bruta O(n²).',
+   starter:'def contar_pares_que_suman(lista, objetivo):\n    pass\n\nprint(contar_pares_que_suman([1, 5, 3, 3, 7], 8))',runs:[[]],
+   check:(o,c)=>{if(!/\.get\s*\(/.test(c)&&!/frecuencia\[/.test(c))return"Usa un diccionario de frecuencias (con .get() o acceso directo) para contar sin fuerza bruta.";
+     return norm(o[0])==="3"?true:"Esperaba: 3\nObtuve:\n"+norm(o[0])},
+   hints:["Por cada x, el complemento es objetivo - x. Si el complemento YA está en el diccionario de frecuencias, suma su frecuencia al contador — ANTES de agregar x al diccionario.","frecuencia[x] = frecuencia.get(x, 0) + 1 — el mismo patrón de contar_frecuencias que ya conoces."]},
+ ],
  retoFinal:{id:"n1m3t6x",py:true,t:"Desafío final · inédito — dos punteros también exige orden",
   d:'Predice, ANTES de ejecutar. 2+7=9, y ambos están en la lista — pero <code>[15, 2, 11, 7]</code> NO está ordenada. ¿La función lo encuentra?',
   starter:'def dos_suman_punteros(lista, objetivo):\n    izq, der = 0, len(lista) - 1\n    while izq < der:\n        suma = lista[izq] + lista[der]\n        if suma == objetivo:\n            return True\n        elif suma < objetivo:\n            izq += 1\n        else:\n            der -= 1\n    return False\n\nprint(dos_suman_punteros([15, 2, 11, 7], 9))',runs:[[]],
@@ -3194,7 +3628,24 @@ const LEVEL1=[
  mental:{jr:"'la petición simplemente llega' — sin modelo de las capas intermedias",sr:"traza el viaje completo: DNS resuelve el nombre, TCP garantiza la entrega, HTTP da significado a los bytes — y sabe en cuál de las tres pudo morir una petición rota",err:"tratar 'no cargó la página' como un solo tipo de fallo, en vez de diagnosticar en qué capa ocurrió"},
  ing:"Cuando un servicio en producción 'no responde', un ingeniero experimentado primero descarta capas: ¿resuelve DNS? ¿conecta el puerto? ¿responde HTTP con algún código? Ese orden de diagnóstico es exactamente la pila de este tema, aplicada a un incidente real."},
 {id:"n1m6t1b",n:"Día 38",t:"El acuerdo imposible · Parte 2: laboratorio y desafío",
- theory:[],ex:[],
+ theory:[
+  ["urlparse + parse_qs, combinados",T('Una URL real casi siempre necesita AMBAS herramientas a la vez: <code>urlparse</code> para separar la ruta de la query, y <code>parse_qs</code> para leer un parámetro específico dentro de esa query — no son alternativas, son pasos consecutivos del mismo análisis.'),
+   'u = urlparse(url)\nq = parse_qs(u.query)   # la query ya separada por urlparse, ahora como diccionario'],
+ ],
+ ex:[
+  {id:"n1m6t1e6",py:true,t:"Ejercicio 6 · urlparse + parse_qs juntos",
+   d:'Escribe <code>extraer_info(url)</code> que reciba una URL completa (con query) y devuelva una tupla <code>(path, valor_de_page)</code> — combinando <code>urlparse</code> (para el path y la query cruda) y <code>parse_qs</code> (para leer el parámetro <code>"page"</code>).',
+   starter:'from urllib.parse import urlparse, parse_qs\n\ndef extraer_info(url):\n    pass\n\nprint(extraer_info("https://api.ejemplo.com/items?page=3&size=10"))',runs:[[]],
+   check:(o,c)=>{if(!/urlparse\s*\(/.test(c)||!/parse_qs\s*\(/.test(c))return"Usa urlparse Y parse_qs juntos — uno para el path, otro para leer el parámetro.";
+     return norm(o[0])==="('/items', '3')"?true:"Esperaba: ('/items', '3')\nObtuve:\n"+norm(o[0])},
+   hints:["u = urlparse(url); q = parse_qs(u.query)","return (u.path, q.get(\"page\", [None])[0]) — recuerda que parse_qs devuelve LISTAS de valores."]},
+  {id:"n1m6t1e7",py:true,t:"Ejercicio 7 · Clasificar muchas peticiones por capa, con dict",
+   d:'Dada una lista de códigos de status (asumiendo DNS y conexión ya exitosos), escribe <code>clasificar_por_capas(statuses)</code> que cuente cuántos son éxito (&lt;400), error de cliente (400-499) y error de servidor (≥500), devolviendo un diccionario con las tres categorías.',
+   starter:'def clasificar_por_capas(statuses):\n    pass\n\nprint(clasificar_por_capas([200, 404, 500, 200, 403, 200]))',runs:[[]],
+   check:(o,c)=>{if(!/\{[^}]*exito[^}]*\}|conteo\s*=\s*\{/.test(c))return"Construye un diccionario acumulador con las tres categorías, y ve incrementando cada una.";
+     return norm(o[0])==="{'exito': 3, 'error_cliente': 2, 'error_servidor': 1}"?true:"Esperaba: {'exito': 3, 'error_cliente': 2, 'error_servidor': 1}\nObtuve:\n"+norm(o[0])},
+   hints:["conteo = {\"exito\": 0, \"error_cliente\": 0, \"error_servidor\": 0} — luego recorre statuses clasificando cada uno.","El orden de verificación importa: primero >= 500, luego >= 400, si no, éxito — igual que en el diagnóstico de capas."]},
+ ],
  reto:{id:"n1m6t1r",py:true,t:"Laboratorio · El detective de peticiones rotas",
   d:"Construye <code>diagnosticar_peticion(log)</code> desde cero: recibe un diccionario con claves <code>dns</code>, <code>conexion</code>, <code>status</code> (o None si nunca llegó tan lejos). Debe devolver exactamente: <code>\"fallo de DNS: el nombre nunca se resolvio\"</code> si <code>dns</code> es False; <code>\"fallo de conexion: el servidor no respondio\"</code> si <code>conexion</code> es False; <code>\"error del servidor: recibio la peticion pero fallo al procesarla\"</code> si <code>status</code> ≥ 500; <code>\"error del cliente: la peticion misma estaba mal formada o el recurso no existe\"</code> si <code>status</code> ≥ 400; o <code>\"exito: viaje completo sin fallos\"</code> en cualquier otro caso. No se te da el orden de las comprobaciones esta vez — decídelo tú, razonando qué capa hay que descartar primero. Pruébalo contra los 4 casos que se te dan.",
   starter:'def diagnosticar_peticion(log):\n    # tu código aquí — decide tú el orden correcto de las comprobaciones\n    pass\n\ncasos = [\n    {"dns": False, "conexion": False, "status": None},\n    {"dns": True, "conexion": False, "status": None},\n    {"dns": True, "conexion": True, "status": 404},\n    {"dns": True, "conexion": True, "status": 200},\n]\nfor c in casos:\n    print(diagnosticar_peticion(c))',runs:[[]],
@@ -3246,7 +3697,22 @@ const LEVEL1=[
  mental:{jr:"'pedí los datos y los usé' — sin verificar si la petición realmente tuvo éxito",sr:"verifica el status_code antes de tocar los datos, y nunca deja una credencial real en el código fuente",err:"tratar una API como una fuente infalible de datos, en vez de un contrato que puede cumplirse o romperse"},
  ing:"Casi ningún sistema profesional moderno está solo: integrar servicios ajenos con robustez —verificando status, sin credenciales expuestas— ES el trabajo diario de un ingeniero de backend."},
 {id:"n1m6t2b",n:"Día 40",t:"La conversación: APIs · Parte 2: laboratorio y desafío",
- theory:[],ex:[],
+ theory:[
+  ["Diagnosticar varios servicios a la vez","En un sistema real casi nunca dependes de una sola API — dependes de varias, y cada una puede estar arriba o caída de forma independiente. El patrón profesional es recorrerlas todas, clasificar cada una según su status_code, y acumular un conteo — así un solo reporte te dice de un vistazo cuántas fallaron, sin tener que leer petición por petición.",""],
+  ["Cachear para no repetir una petición ya hecha","Cada llamada a una API real cuesta tiempo de red y, en muchos servicios, cuenta contra un límite de peticiones por minuto. Si ya preguntaste por el usuario 1, preguntar de nuevo es trabajo desperdiciado. La solución es un diccionario 'cache': antes de llamar a la API, revisas si el resultado ya está guardado; solo llamas de verdad si no lo está.",""],
+ ],
+ ex:[
+  {id:"n1m6t2e6",py:true,t:"Ejercicio 6 · Diagnóstico de varios servicios",
+   d:"Escribe <code>diagnosticar_servicios(urls)</code> que recorra una lista de URLs, llame a <code>api_get</code> por cada una, y devuelva una tupla <code>(resultado, fallos)</code> donde <code>resultado</code> es un diccionario url→\"disponible\" o url→\"no disponible\" (según status_code), y <code>fallos</code> es el conteo de las que no fueron 200. Pruébalo con estas tres URLs: <code>[\"https://jsonplaceholder.typicode.com/users/1\", \"https://jsonplaceholder.typicode.com/users/999\", \"https://jsonplaceholder.typicode.com/down\"]</code>.",
+   starter:API_PREAMBLE+'def diagnosticar_servicios(urls):\n    resultado = {}\n    fallos = 0\n    # tu código aquí\n    return resultado, fallos\n\nurls = ["https://jsonplaceholder.typicode.com/users/1", "https://jsonplaceholder.typicode.com/users/999", "https://jsonplaceholder.typicode.com/down"]\nprint(diagnosticar_servicios(urls))',runs:[[]],
+   hints:["for url in urls: r = api_get(url); if r.status_code==200: resultado[url]='disponible' else: resultado[url]='no disponible'; fallos+=1"],
+   check:(o,c)=>{if(!/for\s+\w+\s+in\s+urls/.test(c))return"Recorre la lista urls con un for.";const exp="({'https://jsonplaceholder.typicode.com/users/1': 'disponible', 'https://jsonplaceholder.typicode.com/users/999': 'no disponible', 'https://jsonplaceholder.typicode.com/down': 'no disponible'}, 2)";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n1m6t2e7",py:true,t:"Ejercicio 7 · Un cliente que no repite peticiones",
+   d:"Escribe <code>obtener_usuario_cacheado(user_id, cache)</code>: si <code>user_id</code> ya está en <code>cache</code>, devuelve ese valor sin llamar a <code>api_get</code>; si no, pide el usuario, guarda en <code>cache[user_id]</code> el nombre (o <code>\"no encontrado\"</code> si status != 200), y lo devuelve. Luego, con <code>cache = {}</code> y la lista de ids <code>[1, 999, 1, 999]</code>, cuenta cuántas veces se necesitó una llamada real (el id no estaba aún en cache) e imprime ese conteo y el diccionario <code>cache</code> final.",
+   starter:API_PREAMBLE+'def obtener_usuario_cacheado(user_id, cache):\n    # tu código aquí\n    pass\n\ncache = {}\nids = [1, 999, 1, 999]\nllamadas_reales = 0\nfor uid in ids:\n    # tu código aquí: cuenta la llamada real si hace falta, y llama a obtener_usuario_cacheado\n    pass\nprint(llamadas_reales)\nprint(cache)',runs:[[]],
+   hints:["if user_id in cache: return cache[user_id] — si no, arma la url, llama a api_get, decide el resultado y guárdalo en cache[user_id] antes de devolverlo.","En el for: if uid not in cache: llamadas_reales += 1 — y llama siempre a obtener_usuario_cacheado(uid, cache)."],
+   check:(o,c)=>{if(!/in\s+cache/.test(c))return"Verifica si el id ya está en cache antes de llamar a la API.";const exp="2\n{1: 'Leanne Graham', 999: 'no encontrado'}";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  reto:{id:"n1m6t2r",py:true,t:"Laboratorio · Cliente de perfil de usuario",
   d:"Escribe <code>resumen_usuario(user_id)</code> que pida <code>\"https://jsonplaceholder.typicode.com/users/\" + str(user_id)</code>, y si el status es 200, devuelva un string <code>\"nombre (ciudad)\"</code>; si no, devuelva <code>\"usuario no encontrado\"</code>. Pruébalo con el id 1 (existe) y 999 (no existe).",
   starter:API_PREAMBLE+'def resumen_usuario(user_id):\n    r = api_get("https://jsonplaceholder.typicode.com/users/" + str(user_id))\n    # tu código aquí\n\nprint(resumen_usuario(1))\nprint(resumen_usuario(999))',runs:[[]],
@@ -3297,7 +3763,22 @@ const LEVEL1=[
  mental:{jr:"asume que la API siempre devuelve exactamente la estructura del ejemplo de la documentación",sr:"trata todo dato ajeno como hostil por defecto — navega con .get() y valores por defecto, valida tipos antes de usarlos",err:"un KeyError o TypeError en producción, disparado por el primer usuario cuyos datos no calzan con el caso feliz que se probó"},
  ing:"Esta es la línea directa a la validación formal con Pydantic que verás en N2 — el mismo instinto (nunca confiar en datos externos sin inspeccionarlos), con herramientas más potentes."},
 {id:"n1m6t3b",n:"Día 42",t:"La frontera de datos · Parte 2: laboratorio y desafío",
- theory:[],ex:[],
+ theory:[
+  ["De un dato a una lista completa de datos ajenos","Navegar con .get() encadenado un solo diccionario es el primer paso — el patrón real aparece cuando tienes una LISTA de respuestas de la API, cada una potencialmente incompleta de forma distinta. Ahí el .get() seguro se combina con un for (o una comprehension) que recorre todos los casos, sin que ninguno rompa el resto.",""],
+  ["Coerción aplicada a una colección, no a un solo valor","Una función que normaliza un solo valor (como distinguir int, string numérico, o dato inválido) se vuelve mucho más útil cuando se aplica a cada elemento de una lista, descartando silenciosamente los que no se pueden convertir — así construyes una lista limpia sin que un solo dato corrupto detenga todo el proceso.",""],
+ ],
+ ex:[
+  {id:"n1m6t3e6",py:true,t:"Ejercicio 6 · Ciudades de varios usuarios, con conteo de ausentes",
+   d:"Escribe <code>resumen_direcciones(usuarios)</code>: recibe una lista de diccionarios de usuario y devuelve una tupla <code>(ciudades, sin_dato)</code> donde <code>ciudades</code> es la lista de ciudades presentes (navegando con .get() seguro) y <code>sin_dato</code> es el conteo de usuarios sin ciudad. Pruébalo con estos 4 usuarios: uno con ciudad, uno sin 'address', uno con otra ciudad, y uno con 'address' vacío.",
+   starter:'def resumen_direcciones(usuarios):\n    ciudades = []\n    sin_dato = 0\n    # tu código aquí\n    return ciudades, sin_dato\n\nusuarios = [\n    {"address": {"city": "Gwenborough"}},\n    {"nombre": "sin address"},\n    {"address": {"city": "Lima"}},\n    {"address": {}},\n]\nprint(resumen_direcciones(usuarios))',runs:[[]],
+   hints:["for u in usuarios: ciudad = u.get('address', {}).get('city') — if ciudad: ciudades.append(ciudad) else: sin_dato += 1"],
+   check:(o,c)=>{if(!/for\s+\w+\s+in\s+usuarios/.test(c))return"Recorre la lista usuarios con un for.";const exp="(['Gwenborough', 'Lima'], 2)";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n1m6t3e7",py:true,t:"Ejercicio 7 · Precios válidos de toda una lista de productos",
+   d:"Reutiliza la idea de <code>normalizar_precio</code> (Parte 1, Ejercicio 5) dentro de <code>precios_validos(productos)</code>: recibe una lista de diccionarios y devuelve solo los precios que se pudieron normalizar a float, descartando silenciosamente cualquier producto con precio ausente o no numérico. Pruébalo con: 19.99 (float), '9.50' (string numérico), 'gratis' (string no numérico), un diccionario sin 'precio', y 5 (int).",
+   starter:'def normalizar_precio(data):\n    v = data.get("precio")\n    if isinstance(v, (int, float)) and not isinstance(v, bool):\n        return float(v)\n    if isinstance(v, str):\n        try:\n            return float(v)\n        except ValueError:\n            return None\n    return None\n\ndef precios_validos(productos):\n    resultado = []\n    # tu código aquí\n    return resultado\n\nproductos = [{"precio": 19.99}, {"precio": "9.50"}, {"precio": "gratis"}, {}, {"precio": 5}]\nprint(precios_validos(productos))',runs:[[]],
+   hints:["for p in productos: precio = normalizar_precio(p); if precio is not None: resultado.append(precio)"],
+   check:(o,c)=>{if(!/normalizar_precio\s*\(/.test(c))return"Reutiliza normalizar_precio dentro de tu recorrido.";const exp="[19.99, 9.5, 5.0]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  reto:{id:"n1m6t3r",py:true,t:"Laboratorio · Sobrevive a la batería hostil",
   d:"Escribe <code>extraer_ciudad(data)</code> que devuelva la ciudad del usuario o <code>\"desconocida\"</code>, y pruébala contra 4 respuestas distintas: completa, sin 'address', con 'address' pero sin 'city', y un diccionario vacío. Ninguna debe lanzar una excepción.",
   starter:'def extraer_ciudad(data):\n    # tu código aquí\n    pass\n\ncasos = [\n    {"address": {"city": "Gwenborough"}},\n    {"nombre": "sin address"},\n    {"address": {}},\n    {},\n]\nfor c in casos:\n    print(extraer_ciudad(c))',runs:[[]],
@@ -3349,7 +3830,22 @@ const LEVEL1=[
  mental:{jr:"'atrapa la excepción y sigue' — sin distinguir qué tipo de fallo fue ni si insistir tiene sentido",sr:"clasifica el fallo (4xx vs 5xx), decide si reintentar tiene sentido, y si reintenta, lo hace con límite y espera creciente",err:"un except genérico que oculta el problema real, hasta que el sistema falla en producción de una forma que nadie puede diagnosticar"},
  ing:"La política de reintentos que definas aquí —cuántos, con qué espera, ante qué códigos— es exactamente el tipo de decisión de ingeniería que un capstone o un sistema real en producción exige documentar y justificar."},
 {id:"n1m6t4b",n:"Día 44",t:"Cuando la comunicación falla · Parte 2: cierre de M6",
- theory:[],ex:[],
+ theory:[
+  ["Backoff y reintento, en una sola función","Clasificar el fallo (Parte 1) y calcular la espera exponencial (Parte 1) no sirven de nada si viven separados — el patrón real los combina: en cada intento fallido, acumulas la espera que Google SRE recomienda, y solo sigues reintentando ante un 5xx, nunca ante un 4xx.",""],
+  ["Auditar varios endpoints a la vez, no solo uno","Un sistema real rara vez depende de un único servicio — un resumen de cuántos intentos costó cada endpoint (y con qué resultado final) es exactamente el tipo de reporte que un ingeniero revisa para decidir si un servicio necesita atención.",""],
+ ],
+ ex:[
+  {id:"n1m6t4e6",py:true,t:"Ejercicio 6 · Reintento con backoff real, hasta el resultado final",
+   d:"Escribe <code>reintentar_con_backoff(url, max_intentos=3)</code>: en cada intento llama a <code>api_get(url)</code>; si el status es menor a 500, devuelve <code>(status, espera_total)</code> de inmediato (sin seguir intentando); si es 5xx, acumula <code>2**intento</code> a <code>espera_total</code> (intento empieza en 0) y sigue con el siguiente intento. Si se agotan los intentos, devuelve igual el último status junto a la espera acumulada.",
+   starter:API_PREAMBLE+'def reintentar_con_backoff(url, max_intentos=3):\n    espera_total = 0\n    # tu código aquí\n    return None\n\nprint(reintentar_con_backoff("https://jsonplaceholder.typicode.com/users/1"))\nprint(reintentar_con_backoff("https://jsonplaceholder.typicode.com/users/999"))\nprint(reintentar_con_backoff("https://jsonplaceholder.typicode.com/down"))',runs:[[]],
+   hints:["for intento in range(max_intentos): r = api_get(url); if r.status_code < 500: return r.status_code, espera_total; espera_total += 2**intento","Al final del for (si nunca hizo return), devuelve r.status_code, espera_total de todos modos."],
+   check:(o,c)=>{if(!/2\s*\*\*\s*intento/.test(c))return"Acumula 2**intento en espera_total ante cada fallo de servidor.";const exp="(200, 0)\n(404, 0)\n(503, 7)";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n1m6t4e7",py:true,t:"Ejercicio 7 · Auditoría de reintentos en varios endpoints",
+   d:"Escribe <code>resumen_reintentos(urls)</code>: para cada url de la lista, reintenta hasta 3 veces (deteniéndote apenas el status sea menor a 500), y guarda en un diccionario <code>url → (status_final, intentos_usados)</code>. Devuelve ese diccionario. Pruébalo con las 3 urls de siempre (users/1, users/999, down).",
+   starter:API_PREAMBLE+'def resumen_reintentos(urls):\n    resumen = {}\n    for url in urls:\n        intentos = 0\n        # tu código aquí: bucle de hasta 3 intentos, cuenta intentos y guarda el status final\n        pass\n    return resumen\n\nurls = ["https://jsonplaceholder.typicode.com/users/1", "https://jsonplaceholder.typicode.com/users/999", "https://jsonplaceholder.typicode.com/down"]\nprint(resumen_reintentos(urls))',runs:[[]],
+   hints:["for i in range(3): r = api_get(url); intentos += 1; if r.status_code < 500: break","resumen[url] = (r.status_code, intentos) — fuera del bucle interno, dentro del bucle de urls."],
+   check:(o,c)=>{if(!/for\s+\w+\s+in\s+urls/.test(c))return"Recorre la lista urls con un for externo.";const exp="{'https://jsonplaceholder.typicode.com/users/1': (200, 1), 'https://jsonplaceholder.typicode.com/users/999': (404, 1), 'https://jsonplaceholder.typicode.com/down': (503, 3)}";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  reto:{id:"n1m6t4r",py:true,t:"Laboratorio · Política de reintentos documentada (cierre B-M6)",
   d:"Escribe <code>peticion_robusta(url)</code> desde cero: reintenta hasta 3 veces solo ante errores de servidor (5xx), nunca ante errores de cliente (4xx) — un 4xx no se arregla reintentando, el problema es la petición misma —, y devuelve un diccionario <code>{\"exito\": bool, \"status\": int}</code> con el resultado final. Documenta en un comentario tu política: cuántos intentos, ante qué códigos, y por qué. Sin código de partida esta vez — decide tú la estructura del bucle y la condición de corte.",
   starter:API_PREAMBLE+'def peticion_robusta(url):\n    # tu código aquí -- documenta tu política en un comentario\n    pass\n\nprint(peticion_robusta("https://jsonplaceholder.typicode.com/users/1"))\nprint(peticion_robusta("https://jsonplaceholder.typicode.com/users/999"))\nprint(peticion_robusta("https://jsonplaceholder.typicode.com/down"))',runs:[[]],
@@ -3396,7 +3892,22 @@ const LEVEL1=[
  mental:{jr:"guarda todo en un solo archivo o tabla, sin pensar en relaciones ni identidad",sr:"diseña el esquema como un contrato: entidades separadas, claves primarias que dan identidad, claves foráneas que garantizan relaciones válidas",err:"un archivo JSON gigante que 'funciona' hasta que dos partes del programa lo interpretan de forma distinta, sin que nada lo impida"},
  ing:"Todo backend real vive sobre este modelo — el diseño de esquema de hoy es literalmente el mismo ejercicio que hará un ingeniero de datos en producción, solo que con millones de filas en vez de dos."},
 {id:"n1m7t1b",n:"Día 46",t:"El modelo relacional · Parte 2: laboratorio y desafío",
- theory:[],ex:[],
+ theory:[
+  ["La relación sirve para agregar, no solo para consultar un dato suelto","Hasta ahora usaste la clave foránea para ir de un registro a otro (un libro → su autor). El siguiente paso natural es usarla para resumir: ¿cuántos libros tiene cada autor? Eso combina JOIN (unir las tablas relacionadas) con GROUP BY (agrupar por autor) y COUNT (contar) — la razón real por la que el modelo relacional gana frente a un JSON suelto.",""],
+  ["NOT NULL protege incluso cuando el programa tiene un bug","La garantía de NOT NULL no es solo para el caso donde tú lo pruebas a propósito — protege contra el bug real que algún día va a intentar insertar un producto sin precio por accidente. Un programa robusto no deja que ese intento tumbe todo el proceso: captura el IntegrityError, cuenta cuántos fallaron, y sigue con los demás.",""],
+ ],
+ ex:[
+  {id:"n1m7t1e5",py:true,t:"Ejercicio 5 · Cuántos libros tiene cada autor",
+   d:"Con <code>autores</code> y <code>libros</code> ya creadas (mismo esquema de Parte 1) e insertados 2 autores (Isabel Allende, Gabriel Garcia Marquez) donde Isabel tiene 2 libros y Gabriel 1, escribe <code>contar_libros_por_autor(cur)</code> que devuelva un diccionario <code>nombre_autor → cantidad_de_libros</code>, ordenado alfabéticamente por nombre.",
+   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE autores (id INTEGER PRIMARY KEY, nombre TEXT)")\ncur.execute("CREATE TABLE libros (id INTEGER PRIMARY KEY, titulo TEXT, autor_id INTEGER, FOREIGN KEY(autor_id) REFERENCES autores(id))")\ncur.execute("INSERT INTO autores (nombre) VALUES (\'Isabel Allende\'), (\'Gabriel Garcia Marquez\')")\ncur.execute("INSERT INTO libros (titulo, autor_id) VALUES (\'La casa de los espiritus\', 1), (\'Eva Luna\', 1), (\'Cien anios de soledad\', 2)")\n\ndef contar_libros_por_autor(cur):\n    # tu código aquí\n    pass\n\nprint(contar_libros_por_autor(cur))',runs:[[]],
+   hints:["SELECT autores.nombre, COUNT(libros.id) FROM autores JOIN libros ON autores.id = libros.autor_id GROUP BY autores.nombre ORDER BY autores.nombre","return {nombre: cnt for nombre, cnt in cur.fetchall()}"],
+   check:(o,c)=>{if(!/JOIN/i.test(c)||!/GROUP BY/i.test(c))return"Usa JOIN y GROUP BY juntos para agregar por autor.";const exp="{'Gabriel Garcia Marquez': 1, 'Isabel Allende': 2}";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n1m7t1e6",py:true,t:"Ejercicio 6 · Inserciones que sobreviven a datos incompletos",
+   d:"Con la tabla <code>productos (id INTEGER PRIMARY KEY, nombre TEXT NOT NULL, precio REAL NOT NULL)</code> ya creada, escribe <code>insertar_productos_seguros(cur, productos)</code>: recibe una lista de tuplas (nombre, precio) e intenta insertar cada una; si SQLite rechaza una por violar NOT NULL, captúralo y sigue con las demás. Devuelve <code>(exitos, fallos)</code>. Prueba con 4 productos donde 2 tienen un campo en None.",
+   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE productos (id INTEGER PRIMARY KEY, nombre TEXT NOT NULL, precio REAL NOT NULL)")\n\ndef insertar_productos_seguros(cur, productos):\n    exitos = 0\n    fallos = 0\n    # tu código aquí\n    return exitos, fallos\n\nproductos = [("Libro", 19.99), ("Lapiz", None), ("Cuaderno", 5.50), (None, 3.0)]\nprint(insertar_productos_seguros(cur, productos))',runs:[[]],
+   hints:["for nombre, precio in productos: try: cur.execute(...); exitos += 1 except sqlite3.IntegrityError: fallos += 1"],
+   check:(o,c)=>{if(!/IntegrityError/.test(c))return"Captura específicamente sqlite3.IntegrityError, la excepción real que NOT NULL dispara.";const exp="(2, 2)";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  reto:{id:"n1m7t1r",py:true,t:"Laboratorio · Modela tu propio dominio",
   d:"Diseña desde cero un esquema de 2 tablas relacionadas para el dominio 'artistas' y 'canciones': <code>artistas(id INTEGER PRIMARY KEY, nombre TEXT)</code> y <code>canciones(id INTEGER PRIMARY KEY, titulo TEXT, artista_id INTEGER, FOREIGN KEY(artista_id) REFERENCES artistas(id))</code>. Créalas, inserta 'Artista Uno' y 'Artista Dos' (en ese orden), luego 'Cancion A' del primer artista y 'Cancion B' del segundo. Demuestra la relación SIN usar JOIN todavía (eso es T2): consulta primero 'Cancion A' para obtener su artista_id, y con ese id, consulta el nombre del artista — imprime solo ese nombre.",
   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\n# crea las dos tablas, inserta los datos, y haz la consulta en dos pasos\n',runs:[[]],
@@ -3448,7 +3959,22 @@ const LEVEL1=[
  mental:{jr:"trae toda la tabla a Python con SELECT * y filtra con un for — ignorando que la base de datos ya sabe hacerlo mejor",sr:"describe exactamente el resultado que necesita en SQL (WHERE, JOIN, GROUP BY) y deja que el motor decida cómo ejecutarlo",err:"un programa que se vuelve lento al crecer los datos, porque filtraba en Python en vez de dejar que la base de datos usara sus índices"},
  ing:"El problema N+1 (documentado oficialmente en SQLAlchemy) es exactamente este error a escala: mil consultas sueltas donde un solo JOIN bastaba — uno de los errores de rendimiento más comunes en backends reales."},
 {id:"n1m7t2b",n:"Día 48",t:"Consultas declarativas · Parte 2: laboratorio y desafío",
- theory:[],ex:[],
+ theory:[
+  ["LEFT JOIN + GROUP BY: contar sin perder a quien tiene cero","COUNT(columna) solo cuenta filas donde esa columna NO es NULL — por eso, al combinar LEFT JOIN con GROUP BY, un autor sin libros aparece con 0 en vez de desaparecer del resultado (como pasaría con un JOIN normal). Esa combinación es la forma correcta de responder '¿cuántos tiene cada uno, incluyendo los que tienen cero?'.",""],
+  ["HAVING filtra DESPUÉS de agrupar, WHERE filtra ANTES","WHERE no puede filtrar por un COUNT() porque ese conteo todavía no existe cuando WHERE actúa — para eso existe HAVING, que se aplica después de GROUP BY, sobre el resultado ya agregado. Es la diferencia entre 'filtra las filas' (WHERE) y 'filtra los grupos ya resumidos' (HAVING).",""],
+ ],
+ ex:[
+  {id:"n1m7t2e6",py:true,t:"Ejercicio 6 · Contar incluyendo a los que tienen cero",
+   d:"Con <code>autores</code> (uno con 2 libros, otro sin ninguno) y <code>libros</code>, escribe <code>libros_por_autor_todos(cur)</code> que devuelva una lista de tuplas (nombre, cantidad) para TODOS los autores —incluyendo el que tiene 0— ordenada por nombre. Combina LEFT JOIN con GROUP BY y COUNT.",
+   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE autores (id INTEGER PRIMARY KEY, nombre TEXT)")\ncur.execute("CREATE TABLE libros (id INTEGER PRIMARY KEY, titulo TEXT, autor_id INTEGER)")\ncur.execute("INSERT INTO autores VALUES (1, \'Autor Con Libros\'), (2, \'Autor Sin Libros\')")\ncur.executemany("INSERT INTO libros (titulo, autor_id) VALUES (?, ?)", [("Un libro", 1), ("Otro libro", 1)])\n\ndef libros_por_autor_todos(cur):\n    # tu código aquí\n    pass\n\nprint(libros_por_autor_todos(cur))',runs:[[]],
+   hints:["SELECT autores.nombre, COUNT(libros.id) FROM autores LEFT JOIN libros ON autores.id=libros.autor_id GROUP BY autores.nombre ORDER BY autores.nombre","Con un JOIN normal (sin LEFT), 'Autor Sin Libros' desaparecería del resultado."],
+   check:(o,c)=>{if(!/LEFT\s+JOIN/i.test(c))return"Usa LEFT JOIN, no un JOIN normal — si no, el autor sin libros desaparece.";const exp="[('Autor Con Libros', 2), ('Autor Sin Libros', 0)]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n1m7t2e7",py:true,t:"Ejercicio 7 · HAVING: filtrar sobre el grupo ya resumido",
+   d:"Con 4 autores (2 de Colombia, 1 de Chile, 1 de Peru) y libros repartidos entre ellos, escribe <code>paises_con_dos_o_mas(cur)</code> que devuelva (pais, cantidad_total_de_libros) SOLO para los países cuyo total combinado de libros sea 2 o más — usando JOIN + GROUP BY + HAVING (no un if en Python después).",
+   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE autores (id INTEGER PRIMARY KEY, nombre TEXT, pais TEXT)")\ncur.execute("CREATE TABLE libros (id INTEGER PRIMARY KEY, titulo TEXT, autor_id INTEGER)")\ncur.executemany("INSERT INTO autores (nombre, pais) VALUES (?, ?)", [("Gabriel Garcia Marquez", "Colombia"), ("Isabel Allende", "Chile"), ("Mario Vargas Llosa", "Peru"), ("Otro Colombiano", "Colombia")])\ncur.executemany("INSERT INTO libros (titulo, autor_id) VALUES (?, ?)", [("Libro1", 1), ("Libro2", 1), ("Libro3", 2), ("Libro4", 3), ("Libro5", 4)])\n\ndef paises_con_dos_o_mas(cur):\n    # tu código aquí\n    pass\n\nprint(paises_con_dos_o_mas(cur))',runs:[[]],
+   hints:["SELECT autores.pais, COUNT(libros.id) FROM autores JOIN libros ON autores.id=libros.autor_id GROUP BY autores.pais HAVING COUNT(libros.id) >= 2 ORDER BY autores.pais"],
+   check:(o,c)=>{if(!/HAVING/i.test(c))return"Usa HAVING para filtrar sobre el conteo ya agrupado — WHERE no puede filtrar por COUNT().";const exp="[('Colombia', 3)]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  reto:{id:"n1m7t2r",py:true,t:"Laboratorio · Pregunta de negocio a consulta",
   d:"Traduce esta pregunta a SQL: '¿cuántos libros escribió cada autor?' — usa GROUP BY para agrupar por autor, mostrando nombre y cantidad, ordenado alfabéticamente por nombre.",
   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE autores (id INTEGER PRIMARY KEY, nombre TEXT, pais TEXT)")\ncur.execute("CREATE TABLE libros (id INTEGER PRIMARY KEY, titulo TEXT, autor_id INTEGER, anio INTEGER)")\ncur.executemany("INSERT INTO autores (nombre, pais) VALUES (?, ?)", [("Gabriel Garcia Marquez", "Colombia"), ("Isabel Allende", "Chile"), ("Mario Vargas Llosa", "Peru")])\ncur.executemany("INSERT INTO libros (titulo, autor_id, anio) VALUES (?, ?, ?)", [("Cien anios de soledad", 1, 1967), ("El amor en los tiempos del colera", 1, 1985), ("La casa de los espiritus", 2, 1982), ("La ciudad y los perros", 3, 1963)])\ncon.commit()\n\n# tu consulta con GROUP BY aquí\n',runs:[[]],
@@ -3490,7 +4016,22 @@ const LEVEL1=[
  mental:{jr:"construye el SQL pegando strings con datos del usuario, confiando en que 'nadie va a poner algo raro ahí'",sr:"usa placeholders siempre, sin excepción, y agrupa cambios relacionados en una transacción que se puede deshacer completa",err:"un login que cualquiera puede saltarse con un payload de una línea — la vulnerabilidad más documentada y más prevenible de la historia del software"},
  ing:"La inyección SQL lleva décadas en el top de vulnerabilidades de OWASP — no porque sea difícil de prevenir (una consulta parametrizada la elimina por completo), sino porque alguien, en algún punto, decidió que concatenar era 'más rápido'."},
 {id:"n1m7t3b",n:"Día 50",t:"CRUD y transacciones · Parte 2: laboratorio y desafío",
- theory:[],ex:[],
+ theory:[
+  ["Insertar varios registros como todo-o-nada","Cuando insertas varios registros relacionados (ej. un lote de usuarios), no quieres que la mitad quede guardada si uno falla a mitad de camino. La transacción lo resuelve: intentas todos los INSERT dentro del mismo try, y si CUALQUIERA falla (ej. un nombre duplicado con UNIQUE), rollback deshace TODOS, no solo el que falló.",""],
+  ["Verificar antes de mutar, con la misma disciplina del login seguro","El mismo patrón de <code>login_seguro</code> (verificar con SELECT parametrizado antes de confiar) se aplica antes de un UPDATE: primero confirmas que la clave vieja es correcta (SELECT), y SOLO si coincide, ejecutas el UPDATE — así un intento con la clave incorrecta nunca toca la base de datos.",""],
+ ],
+ ex:[
+  {id:"n1m7t3e4",py:true,t:"Ejercicio 4 · Todo o nada: registro por lotes",
+   d:"Escribe <code>registrar_usuarios_atomico(cur, con, usuarios)</code>: recibe una lista de tuplas (nombre, clave) e intenta insertarlas todas dentro de un mismo try. Si todas tienen éxito, haz commit y devuelve <code>\"todos registrados\"</code>; si cualquiera falla (la tabla tiene <code>nombre TEXT UNIQUE</code>, así que un nombre repetido causa IntegrityError), haz rollback de TODAS (incluidas las que sí se habían insertado en este intento) y devuelve <code>\"ninguno registrado (transaccion revertida)\"</code>. Ya existe 'admin' en la tabla; intenta insertar [('alex','clave1'), ('admin','clave2')] — el segundo choca con el 'admin' ya existente.",
+   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE usuarios (nombre TEXT UNIQUE, clave TEXT)")\ncur.execute("INSERT INTO usuarios (nombre, clave) VALUES (\'admin\', \'secreta123\')")\ncon.commit()\n\ndef registrar_usuarios_atomico(cur, con, usuarios):\n    # tu código aquí\n    pass\n\nprint(registrar_usuarios_atomico(cur, con, [("alex", "clave1"), ("admin", "clave2")]))\ncur.execute("SELECT COUNT(*) FROM usuarios")\nprint(cur.fetchone()[0])',runs:[[]],
+   hints:["try: for nombre, clave in usuarios: cur.execute('INSERT INTO usuarios (nombre, clave) VALUES (?, ?)', (nombre, clave)); con.commit(); return 'todos registrados'","except sqlite3.IntegrityError: con.rollback(); return 'ninguno registrado (transaccion revertida)' — el COUNT final debe seguir siendo 1: ni 'alex' quedó guardado."],
+   check:(o,c)=>{if(!/rollback/.test(c))return"Sin con.rollback() en el except, 'alex' quedaría guardado a medias aunque el lote completo fallara.";const exp="ninguno registrado (transaccion revertida)\n1";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n1m7t3e5",py:true,t:"Ejercicio 5 · Cambiar una clave, solo si la vieja es correcta",
+   d:"Escribe <code>cambiar_clave_segura(cur, con, nombre, clave_vieja, clave_nueva)</code>: primero verifica con un SELECT parametrizado que (nombre, clave_vieja) existe; si NO existe, devuelve False sin tocar la base de datos; si SÍ existe, ejecuta un UPDATE parametrizado con la clave_nueva, haz commit, y devuelve True. Prueba primero con la clave vieja incorrecta (debe fallar y no cambiar nada), luego con la correcta (debe cambiarla).",
+   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE usuarios (nombre TEXT, clave TEXT)")\ncur.execute("INSERT INTO usuarios (nombre, clave) VALUES (\'admin\', \'vieja123\')")\ncon.commit()\n\ndef cambiar_clave_segura(cur, con, nombre, clave_vieja, clave_nueva):\n    # tu código aquí\n    pass\n\nprint(cambiar_clave_segura(cur, con, "admin", "clave-incorrecta", "nueva456"))\ncur.execute("SELECT clave FROM usuarios WHERE nombre=\'admin\'")\nprint(cur.fetchone()[0])\nprint(cambiar_clave_segura(cur, con, "admin", "vieja123", "nueva456"))\ncur.execute("SELECT clave FROM usuarios WHERE nombre=\'admin\'")\nprint(cur.fetchone()[0])',runs:[[]],
+   hints:["cur.execute('SELECT * FROM usuarios WHERE nombre = ? AND clave = ?', (nombre, clave_vieja)); if cur.fetchone() is None: return False","cur.execute('UPDATE usuarios SET clave = ? WHERE nombre = ?', (clave_nueva, nombre)); con.commit(); return True"],
+   check:(o,c)=>{if(!/execute\([^,]*\?/.test(c))return"Usa placeholders (?) tanto en el SELECT de verificación como en el UPDATE.";const exp="False\nvieja123\nTrue\nnueva456";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  reto:{id:"n1m7t3r",py:true,t:"Laboratorio · Transferencia que no deja rastro",
   d:"Se te da una tabla <code>cuentas</code> con 'A' (saldo 100) y 'B' (saldo 50), ya creada. Construye tú, desde cero, una transferencia que reste 30 de 'A' y sume 30 a una cuenta que NO existe ('ZZZ') — deliberadamente, para simular un fallo a mitad de camino. Envuélvela en <code>try/except</code> con <code>con.rollback()</code> en el except, de forma que tras el fallo el saldo de 'A' quede exactamente como antes (100), sin rastro de la transferencia fallida. Imprime el saldo final de 'A'.",
   starter:'import sqlite3\ncon = sqlite3.connect(":memory:")\ncur = con.cursor()\ncur.execute("CREATE TABLE cuentas (nombre TEXT, saldo INTEGER)")\ncur.execute("INSERT INTO cuentas VALUES (\'A\', 100)")\ncur.execute("INSERT INTO cuentas VALUES (\'B\', 50)")\ncon.commit()\n\n# tu código aquí -- try/except con rollback\n',runs:[[]],
@@ -3531,7 +4072,22 @@ const LEVEL1=[
  mental:{jr:"diseña la primera estructura que 'funciona' con los datos de ejemplo que tiene enfrente",sr:"diseña pensando en las consultas reales del negocio y en qué cambio futuro debe ser trivial de soportar",err:"un esquema que funciona perfecto en la demo y se vuelve una pesadilla de migraciones en cuanto llega el primer requisito real nuevo"},
  ing:"Este es exactamente el salto de nivel entre 'usar una base de datos' y 'diseñar una' — la habilidad que un ingeniero de datos ejerce todos los días, y que este módulo cierra con el largo aliento B-M7: un documento de diseño que otro podría implementar sin hablarte."},
 {id:"n1m7t4b",n:"Día 52",t:"Diseñar memoria que perdure · Parte 2: cierre de M7",
- theory:[],ex:[],
+ theory:[
+  ["Una sola auditoría, varios tipos de problema","Un esquema real casi nunca falla de una sola forma — puede faltarle una clave primaria en una tabla y tener una columna sin normalizar en otra, al mismo tiempo. Una auditoría profesional revisa varias reglas de diseño en la misma pasada, no una función distinta por cada regla que nunca se ejecutan juntas.",""],
+  ["De 'necesita tabla intermedia' a nombrarla","Saber que una relación N-M necesita una tercera tabla (Parte 1) es el primer paso — el siguiente es decidir, de forma sistemática, cómo se llamará esa tabla para cada par de entidades relacionadas, sin inventar un nombre distinto cada vez.",""],
+ ],
+ ex:[
+  {id:"n1m7t4e4",py:true,t:"Ejercicio 4 · Auditoría combinada de un esquema",
+   d:"Escribe <code>auditar_diseno(tablas)</code>: para cada tabla (dict con 'nombre' y 'columnas'), acumula un problema <code>nombre + \": sin clave primaria\"</code> si falta 'id', Y un problema <code>nombre + \": autor_nombre sin normalizar\"</code> si tiene 'autor_nombre' pero no 'autor_id' — una tabla puede tener AMBOS problemas o ninguno. Si no hay problemas, devuelve <code>[\"esquema valido\"]</code>.",
+   starter:'def auditar_diseno(tablas):\n    problemas = []\n    # tu código aquí\n    return problemas if problemas else ["esquema valido"]\n\ntablas = [{"nombre": "libros", "columnas": ["id", "titulo", "autor_nombre"]}, {"nombre": "autores", "columnas": ["titulo"]}]\nprint(auditar_diseno(tablas))\nprint(auditar_diseno([{"nombre": "libros", "columnas": ["id", "titulo", "autor_id"]}]))',runs:[[]],
+   hints:["for t in tablas: if 'id' not in t['columnas']: problemas.append(t['nombre']+': sin clave primaria')","if 'autor_nombre' in t['columnas'] and 'autor_id' not in t['columnas']: problemas.append(t['nombre']+': autor_nombre sin normalizar') — como un if aparte, no un elif, porque ambos pueden ser ciertos a la vez."],
+   check:(o,c)=>{const exp="['libros: autor_nombre sin normalizar', 'autores: sin clave primaria']\n['esquema valido']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n1m7t4e5",py:true,t:"Ejercicio 5 · Nombrar la tabla intermedia de cada relación",
+   d:"Escribe <code>disenar_relaciones(relaciones)</code>: recibe una lista de tuplas (tabla1, tabla2, tipo); para cada una, si el tipo es <code>\"N-M\"</code>, agrega a la lista de resultado el nombre sugerido de tabla intermedia <code>tabla1 + \"_\" + tabla2</code>; para cualquier otro tipo, agrega <code>None</code> (no hace falta tabla intermedia).",
+   starter:'def disenar_relaciones(relaciones):\n    resultado = []\n    # tu código aquí\n    return resultado\n\nprint(disenar_relaciones([("libros", "autores", "N-M"), ("libros", "editoriales", "1-N")]))',runs:[[]],
+   hints:["for t1, t2, tipo in relaciones: if tipo == 'N-M': resultado.append(t1 + '_' + t2) else: resultado.append(None)"],
+   check:(o,c)=>{const exp="['libros_autores', None]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  reto:{id:"n1m7t4r",py:true,t:"Laboratorio · Documento de esquema verificable (cierre B-M7)",
   d:"Diseña (en código, como estructura de datos) el esquema completo de un dominio a tu elección con al menos 3 tablas relacionadas. Represéntalo como una lista de diccionarios (nombre, columnas, relaciones) y verifica con <code>valida_esquema</code> que las 3 tienen clave primaria.",
   starter:'def valida_esquema(tablas):\n    problemas = []\n    for t in tablas:\n        if "id" not in t["columnas"]:\n            problemas.append(t["nombre"] + ": sin clave primaria")\n    return problemas if problemas else ["esquema valido"]\n\nmi_esquema = [\n    {"nombre": "usuarios", "columnas": ["id", "nombre", "email"], "relaciones": []},\n    {"nombre": "pedidos", "columnas": ["id", "usuario_id", "fecha"], "relaciones": ["usuarios"]},\n    {"nombre": "productos", "columnas": ["id", "nombre", "precio"], "relaciones": []},\n]\nprint(valida_esquema(mi_esquema))',runs:[[]],
@@ -3671,8 +4227,24 @@ const LEVEL2=[
   starter:'# escribe contar_llamadas aqui\n\n@contar_llamadas\ndef procesar():\n    return "ok"\n\nprocesar()\nprocesar()\nprocesar()\nprint(procesar.veces)',runs:[[]],
   hints:["def contar_llamadas(func):\\n    def envoltura(*args, **kwargs):\\n        envoltura.veces += 1\\n        return func(*args, **kwargs)\\n    envoltura.veces = 0\\n    return envoltura","Una función también es un objeto: puede tener sus propios atributos, como envoltura.veces."],
   check:(o,c)=>{const exp="3";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])}},
- theory:[],
- ex:[],
+ theory:[
+  ["Un decorador puede validar antes de dejar pasar",T('Un decorador no solo envuelve — puede decidir si la función original se ejecuta en absoluto. Un decorador de validación revisa los argumentos ANTES de llamar a func, y si algo no cumple una condición, lanza una excepción (o devuelve otra cosa) sin ejecutar el cuerpo real. Combinado con functools.wraps, el error sigue reportando el nombre correcto de la función que falló.'),
+   'def validador(func):\n    @functools.wraps(func)\n    def envoltura(*args, **kwargs):\n        if not condicion(args):\n            raise ValueError(f"{func.__name__}: argumento invalido")\n        return func(*args, **kwargs)\n    return envoltura'],
+  ["Un decorador parametrizado puede controlar CUÁNDO se ejecuta la función, no solo cuántas veces se llamó",T('contar_llamadas (el laboratorio de hoy) solo lleva la cuenta. Un decorador parametrizado puede ir más allá: usar ese conteo para decidir si la llamada de verdad procede o no — por ejemplo, dejar de ejecutar la función real después de un número máximo de usos, devolviendo otra cosa en su lugar.'),
+   'def limitar(maximo):\n    def decorador(func):\n        def envoltura(*args, **kwargs):\n            if envoltura.usos >= maximo:\n                return "limite alcanzado"\n            envoltura.usos += 1\n            return func(*args, **kwargs)\n        envoltura.usos = 0\n        return envoltura\n    return decorador'],
+ ],
+ ex:[
+  {id:"n2m1t1e6",py:true,t:"Ejercicio 6 · Decorador que valida antes de ejecutar",
+   d:'Escribe <code>requiere_positivo(func)</code>: un decorador (con <code>functools.wraps</code>) que revisa TODOS los argumentos posicionales antes de llamar a <code>func</code>; si alguno es menor o igual a 0, lanza <code>ValueError(f"{func.__name__} requiere valores positivos, recibio {a}")</code> (donde <code>a</code> es el valor inválido encontrado) SIN ejecutar la función original. Pruébalo con <code>raiz_cuadrada(16)</code> (debe funcionar) y <code>raiz_cuadrada(-4)</code> (debe lanzar el error, captúralo e imprime su mensaje). Al final, imprime también <code>raiz_cuadrada.__name__</code> para confirmar que wraps conservó el nombre.',
+   starter:'import functools\n\ndef requiere_positivo(func):\n    # tu código aquí\n    pass\n\n@requiere_positivo\ndef raiz_cuadrada(x):\n    return x ** 0.5\n\nprint(raiz_cuadrada(16))\ntry:\n    raiz_cuadrada(-4)\nexcept ValueError as e:\n    print(str(e))\nprint(raiz_cuadrada.__name__)',runs:[[]],
+   hints:["@functools.wraps(func)\\ndef envoltura(*args, **kwargs):\\n    for a in args:\\n        if a <= 0:\\n            raise ValueError(f'{func.__name__} requiere valores positivos, recibio {a}')\\n    return func(*args, **kwargs)"],
+   check:(o,c)=>{if(!/functools\.wraps/.test(c))return"Usa functools.wraps para que raiz_cuadrada.__name__ siga siendo el correcto.";const exp="4.0\nraiz_cuadrada requiere valores positivos, recibio -4\nraiz_cuadrada";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+  {id:"n2m1t1e7",py:true,t:"Ejercicio 7 · Decorador parametrizado con límite de usos",
+   d:'Escribe <code>limitar_llamadas(maximo)</code> — una función que devuelve un decorador (closure dentro de closure, como <code>repetir</code>). El decorador debe permitir que la función original se ejecute normalmente hasta <code>maximo</code> veces; en cada llamada adicional, debe devolver <code>"limite alcanzado"</code> SIN ejecutar la función real. Pruébalo con <code>@limitar_llamadas(2)</code> sobre <code>consultar</code>, llamándola 3 veces.',
+   starter:'def limitar_llamadas(maximo):\n    # tu código aquí: devuelve un decorador\n    pass\n\n@limitar_llamadas(2)\ndef consultar(msg):\n    return msg\n\nprint(consultar("a"))\nprint(consultar("b"))\nprint(consultar("c"))',runs:[[]],
+   hints:["def decorador(func):\\n    def envoltura(*args, **kwargs):\\n        if envoltura.usos >= maximo:\\n            return 'limite alcanzado'\\n        envoltura.usos += 1\\n        return func(*args, **kwargs)\\n    envoltura.usos = 0\\n    return envoltura","No olvides: limitar_llamadas(maximo) debe devolver decorador, no envoltura directamente."],
+   check:(o,c)=>{const exp="a\nb\nlimite alcanzado";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ ],
  retoFinal:{id:"n2m1t1x",py:true,t:"Desafío final · inédito — cuando un decorador olvida el nombre de otro",
   d:'Predice, ANTES de ejecutar, las TRES líneas EXACTAS que imprime este código — presta atención especial a qué nombre usa <code>log_entrada</code> para identificar la función que envuelve. Pista: <code>duplicar</code> no usa functools.wraps.',
   starter:'def log_entrada(func):\n    def envoltura(*args, **kwargs):\n        print(f"entrando a {func.__name__}")\n        resultado = func(*args, **kwargs)\n        print(f"saliendo de {func.__name__}")\n        return resultado\n    return envoltura\n\ndef duplicar(func):\n    def envoltura(*args, **kwargs):\n        return func(*args, **kwargs) * 2\n    return envoltura\n\n@log_entrada\n@duplicar\ndef numero():\n    return 5\n\nprint(numero())',runs:[[]],
@@ -4187,8 +4759,10 @@ const LEVEL2=[
   {n:4,titulo:"Identifica el endpoint más crítico SIN prueba",exp:"¿Cuál sería el más costoso de romper sin darte cuenta?",cmd:"# tu identificacion justificada",resultado:"El primer candidato real para B-M4 (que arrancará en Laboratorio 30)."}],
  errorVivo:{texto:"Antes del paso 2, predice cuántos de tus endpoints crees que tienen prueba real. Ahora cuenta de verdad con pytest -v. Compara la predicción contra el número real — la brecha, si existe, es exactamente el punto de este tema.",cmd:"pytest -v --collect-only"},
  comprension:["¿Por qué \"lo probé una vez cuando lo escribí\" no es lo mismo que \"sé que sigue funcionando ahora\"?","¿Qué endpoint te sorprendió más al descubrir que no tenía prueba real?","¿Qué tan seguro estarías, en este momento, de que un cambio en un endpoint no relacionado no rompió otro sin que lo notaras?"],
- checkpoints:[{id:"cp0",label:"Lista completa de endpoints de M1-M3, sin omitir ninguno."},{id:"cp1",label:"Clasificación honesta: verificado / no verificado / parcial, por endpoint."},{id:"cp2",label:"Identificación justificada del endpoint más crítico sin prueba real."}],
- diagnostico:[{error:"La lista de endpoints del paso 1 está incompleta",causa:"Se listó de memoria en vez de revisar el código completo, línea por línea.",diag:"Busca en tu código cada decorador @app.get/@app.post/@app.put/@app.delete y confirma que todos están en tu lista.",hip:"Cuenta los decoradores de ruta en tu código vs. las filas de tu lista — si no coinciden, faltan.",sol:"Completa la lista revisando el código fuente completo, no la memoria.",prev:"Para cualquier auditoría honesta, revisar el artefacto real, nunca confiar en el recuerdo de lo que \"debería\" estar ahí."}],
+ checkpoints:[{id:"cp0",label:"Lista completa de endpoints de M1-M3, sin omitir ninguno."},{id:"cp1",label:"Clasificación honesta: verificado / no verificado / parcial, por endpoint."},{id:"cp2",label:"Identificación justificada del endpoint más crítico sin prueba real."},{id:"cp3",label:"Predicción escrita ANTES de contar con pytest, comparada contra el número real de endpoints con prueba."}],
+ diagnostico:[{error:"La lista de endpoints del paso 1 está incompleta",causa:"Se listó de memoria en vez de revisar el código completo, línea por línea.",diag:"Busca en tu código cada decorador @app.get/@app.post/@app.put/@app.delete y confirma que todos están en tu lista.",hip:"Cuenta los decoradores de ruta en tu código vs. las filas de tu lista — si no coinciden, faltan.",sol:"Completa la lista revisando el código fuente completo, no la memoria.",prev:"Para cualquier auditoría honesta, revisar el artefacto real, nunca confiar en el recuerdo de lo que \"debería\" estar ahí."},
+  {error:"Un endpoint 'probado a mano una vez con curl' se clasifica como verificado",causa:"Se confunde haber ejecutado la petición una vez, durante el desarrollo, con tener una prueba automática que se ejecuta cada vez.",diag:"Para cada endpoint marcado como verificado, confirma que existe una función test_* real en el código, no solo un recuerdo de haberlo probado.",hip:"¿pytest -v --collect-only muestra una prueba con ese endpoint en el nombre? Si no aparece ahí, no está verificado, sin importar cuántas veces se haya probado a mano.",sol:"Reclasifica como 'no verificado' cualquier endpoint sin una prueba real que pytest pueda recolectar y ejecutar.",prev:"Solo contar como verificado lo que una herramienta automática puede confirmar, nunca lo que la memoria asegura."},
+  {error:"Todos los endpoints sin prueba quedan marcados como igual de críticos",causa:"Evitar comprometerse con un ranking real es más cómodo que decidir cuál se rompería con más costo.",diag:"Para cada endpoint no verificado, pregunta explícitamente: si esto se rompe sin que nadie lo note, ¿a quién afecta y qué tan rápido se notaría?",hip:"¿Hay al menos un endpoint del que Bitácora depende directamente? Ese es un candidato más crítico que uno usado solo ocasionalmente.",sol:"Fuerza un orden, aunque sea aproximado, en vez de dejar la lista sin priorizar.",prev:"Una auditoría sin priorización no ayuda a decidir qué atacar primero en B-M4 — el ranking, aunque imperfecto, es el punto."}],
  miniLab:"Repite el mismo inventario, esta vez incluyendo el criterio de \"qué tan crítico es este endpoint para Bitácora específicamente\", sin mirar esta guía.",
  desafio:"Sin mirar la guía: para cada endpoint clasificado como \"no verificado\", escribe una sola frase explicando exactamente qué podría romperse sin que nadie lo note, y ordénalos de más a menos crítico.",
  buenasPracticas:["Una auditoría honesta empieza por admitir lo que NO está probado, no por defenderlo.","\"Lo probé a mano una vez\" nunca es evidencia de que sigue funcionando ahora.","El inventario completo (no una muestra) es la única base confiable para decidir qué priorizar."],
@@ -4213,8 +4787,10 @@ const LEVEL2=[
   {n:4,titulo:"Refactoriza sin romper la prueba",exp:"Mejora el diseño (por ejemplo, extrae la función de conteo) sin cambiar el comportamiento.",cmd:'def contar_productos_de(dueno):\n    return sum(1 for p in productos_db.values() if p["dueno"] == dueno)\n\n@app.get("/productos/total")\nasync def total_productos(token: str):\n    return {"total": contar_productos_de(usuario_actual(token))}',resultado:"pytest -v sigue en PASSED — el refactor no cambió el comportamiento, solo el diseño interno."}],
  errorVivo:{texto:"Antes del paso 3, ejecuta pytest -v y confirma con tus propios ojos el mensaje de fallo EXACTO — el rojo real, no imaginado.",cmd:"pytest -v"},
  comprension:["¿Por qué escribir la prueba primero cambia lo que realmente estás verificando?","¿Qué hubiera pasado si hubieras escrito el código primero y la prueba después, copiando el resultado que el código ya daba?","¿El refactor del paso 4 cambió el comportamiento del endpoint? ¿Cómo lo sabes con certeza?"],
- checkpoints:[{id:"cp0",label:"Prueba escrita ANTES del código, con fallo real observado (rojo)."},{id:"cp1",label:"Código mínimo escrito que hace pasar la prueba (verde)."},{id:"cp2",label:"Refactor aplicado sin romper la prueba, confirmado con pytest."}],
- diagnostico:[{error:"La prueba pasa desde el primer intento, nunca se vio el rojo",causa:"La funcionalidad ya existía de alguna forma, o la prueba se escribió después del código sin darse cuenta.",diag:"Confirma que el endpoint realmente no existía antes de escribir la prueba.",hip:"Comenta temporalmente la ruta y vuelve a correr pytest — si ahora sí falla, confirmas que el ciclo se hizo en el orden correcto; si no, repite el ciclo desde cero con una funcionalidad genuinamente nueva.",sol:"Elige una funcionalidad que verdaderamente no exista todavía, y escribe la prueba antes que cualquier línea de implementación.",prev:"El valor de TDD depende de ver el rojo real — sin eso, no hay forma de confirmar que la prueba realmente verificaba algo."}],
+ checkpoints:[{id:"cp0",label:"Prueba escrita ANTES del código, con fallo real observado (rojo)."},{id:"cp1",label:"Código mínimo escrito que hace pasar la prueba (verde)."},{id:"cp2",label:"Refactor aplicado sin romper la prueba, confirmado con pytest."},{id:"cp3",label:"Ciclo completo (rojo-verde-refactor) repetido una segunda vez, en una funcionalidad distinta, sin mirar la guía."}],
+ diagnostico:[{error:"La prueba pasa desde el primer intento, nunca se vio el rojo",causa:"La funcionalidad ya existía de alguna forma, o la prueba se escribió después del código sin darse cuenta.",diag:"Confirma que el endpoint realmente no existía antes de escribir la prueba.",hip:"Comenta temporalmente la ruta y vuelve a correr pytest — si ahora sí falla, confirmas que el ciclo se hizo en el orden correcto; si no, repite el ciclo desde cero con una funcionalidad genuinamente nueva.",sol:"Elige una funcionalidad que verdaderamente no exista todavía, y escribe la prueba antes que cualquier línea de implementación.",prev:"El valor de TDD depende de ver el rojo real — sin eso, no hay forma de confirmar que la prueba realmente verificaba algo."},
+  {error:"El código del paso 3 (verde) ya incluye funcionalidad que la prueba nunca pidió",causa:"Se escribió pensando en el diseño final completo, en vez de exactamente lo mínimo que el rojo exigía.",diag:"Revisa cada línea del código nuevo: ¿hay alguna rama, validación o caso que ninguna prueba actual ejercita?",hip:"Si comentaras esa línea de más, ¿alguna prueba fallaría? Si ninguna falla, esa línea no era necesaria todavía.",sol:"Elimina el código no exigido por ninguna prueba — se agrega en un ciclo rojo-verde posterior, cuando una prueba nueva lo pida.",prev:"TDD limita el código al mínimo que hace pasar la prueba actual — anticipar funcionalidad futura sin una prueba que la exija rompe la disciplina del ciclo."},
+  {error:"El 'refactor' del paso 4 en realidad cambió el comportamiento observable",causa:"Se confundió refactorizar (mejorar el diseño interno) con reimplementar (cambiar qué hace el código).",diag:"Compara la prueba antes y después del refactor: ¿tuviste que modificarla para que siguiera pasando?",hip:"Si la prueba original ya no pasa tal cual estaba escrita, no fue un refactor — fue un cambio de comportamiento disfrazado de refactor.",sol:"Deshaz el cambio y repítelo asegurándote de que la prueba existente pasa sin ninguna modificación.",prev:"Un refactor real nunca exige tocar la prueba que ya lo cubría — si la exige, el comportamiento cambió."}],
  miniLab:"Aplica el mismo ciclo (rojo-verde-refactor) a una segunda funcionalidad nueva, sin mirar esta guía.",
  desafio:"Sin mirar la guía: aplica TDD a una funcionalidad que involucre un caso de error (no solo el camino feliz) — escribe primero la prueba de que la funcionalidad rechaza correctamente un caso inválido, antes de implementar el manejo de ese error.",
  buenasPracticas:["La prueba se escribe ANTES del código que la satisface, sin excepción, cuando se practica TDD.","Ver el rojo real (la prueba fallando) es la única forma de confirmar que la prueba verifica algo genuino.","El refactor se verifica con la MISMA prueba, sin modificarla — si hay que cambiar la prueba para que el refactor pase, no era un refactor real."],
@@ -4239,8 +4815,10 @@ const LEVEL2=[
   {n:4,titulo:"Decide con criterio: ¿todo punto ciego merece una prueba nueva?",exp:"No — algunos casos son aceptables de dejar sin cubrir.",cmd:"# tu criterio documentado sobre al menos un punto ciego que decides NO cubrir, y por que",resultado:"Una decisión explícita, no la persecución ciega del 100%."}],
  errorVivo:{texto:"Antes del paso 2, predice qué porcentaje de cobertura crees que tiene tu servicio. Genera el reporte real y compara. La diferencia entre tu predicción y el número real es información — no una sorpresa que descartar.",cmd:"# tu prediccion, por escrito, antes de correr el reporte"},
  comprension:["¿Por qué un 95% de cobertura no significa \"95% libre de bugs\"?","¿Qué diferencia hay entre una línea que \"se ejecutó\" bajo prueba y una línea que \"se verificó de verdad\" bajo prueba?","¿Por qué perseguir el 100% de cobertura, como meta en sí misma, puede ser contraproducente?"],
- checkpoints:[{id:"cp0",label:"Reporte de cobertura generado, con líneas faltantes identificadas."},{id:"cp1",label:"Al menos un punto ciego real cubierto con una prueba nueva."},{id:"cp2",label:"Al menos una decisión documentada de NO cubrir un caso, con su justificación."}],
- diagnostico:[{error:"El comando pytest --cov no reconoce el paquete",causa:"pytest-cov no está instalado, o el argumento --cov apunta a un módulo/carpeta que no coincide con la estructura real del proyecto.",diag:"Confirma con pip show pytest-cov que está instalado en el entorno activo.",hip:"Prueba con --cov=. (el directorio actual) en vez de un nombre de módulo específico.",sol:"Instala pytest-cov si falta, y ajusta el argumento --cov a la estructura real de tu proyecto.",prev:"Verificar la instalación de cualquier plugin de pytest en el entorno virtual correcto antes de asumir un error de configuración."}],
+ checkpoints:[{id:"cp0",label:"Reporte de cobertura generado, con líneas faltantes identificadas."},{id:"cp1",label:"Al menos un punto ciego real cubierto con una prueba nueva."},{id:"cp2",label:"Al menos una decisión documentada de NO cubrir un caso, con su justificación."},{id:"cp3",label:"Predicción de cobertura escrita ANTES de generar el reporte, comparada contra el número real."}],
+ diagnostico:[{error:"El comando pytest --cov no reconoce el paquete",causa:"pytest-cov no está instalado, o el argumento --cov apunta a un módulo/carpeta que no coincide con la estructura real del proyecto.",diag:"Confirma con pip show pytest-cov que está instalado en el entorno activo.",hip:"Prueba con --cov=. (el directorio actual) en vez de un nombre de módulo específico.",sol:"Instala pytest-cov si falta, y ajusta el argumento --cov a la estructura real de tu proyecto.",prev:"Verificar la instalación de cualquier plugin de pytest en el entorno virtual correcto antes de asumir un error de configuración."},
+  {error:"Se trata el 100% de cobertura como la meta del ejercicio",causa:"Se prioriza el número del reporte sobre el criterio de qué realmente merece una prueba — justo lo que la propia explicación del tema advierte que está fuera de alcance.",diag:"Revisa si el paso 4 (decidir con criterio qué NO cubrir) se completó de verdad, o si se saltó por perseguir el número más alto posible.",hip:"¿Puedes nombrar al menos un punto ciego real que decidiste dejar sin prueba, con una razón concreta? Si no puedes, probablemente perseguiste el número en vez del criterio.",sol:"Vuelve al reporte y elige explícitamente al menos un punto ciego para NO cubrir, documentando por qué es aceptable dejarlo así.",prev:"coverage.py es una linterna que señala huecos, no un certificado — el número alto nunca reemplaza el criterio sobre qué importa cubrir."},
+  {error:"Una línea aparece 'cubierta' en el reporte, pero la prueba que la ejecuta no verifica nada real",causa:"Se escribió una prueba que llama al código sin ningún assert significativo, solo para que el reporte marque la línea como ejecutada.",diag:"Revisa la prueba que cubre esa línea: ¿tiene al menos un assert que fallaría si el comportamiento fuera incorrecto?",hip:"Si borraras el cuerpo de la función probada y dejaras solo 'pass', ¿esa prueba seguiría pasando? Si sí, no estaba verificando nada real.",sol:"Reescribe la prueba con un assert que realmente dependa del comportamiento correcto de esa línea.",prev:"'Ejecutada bajo prueba' y 'verificada de verdad' no son lo mismo — coverage.py mide lo primero, nunca lo segundo, por diseño."}],
  miniLab:"Encuentra y cubre un segundo punto ciego real de tu sistema, sin mirar esta guía.",
  desafio:"Sin mirar la guía: identifica una rama de tu código que tenga 0% de cobertura y que, si fallara en producción, sería particularmente costosa de no detectar — prioriza cubrirla primero, y explica por qué la elegiste antes que otras.",
  buenasPracticas:["Cobertura alta es una señal útil, nunca una garantía de ausencia de bugs.","Cada punto ciego se evalúa con criterio — no todos merecen una prueba nueva.","Priorizar cubrir lo más crítico primero, no lo más fácil de cubrir."],

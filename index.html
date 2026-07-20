@@ -1739,6 +1739,83 @@ const LEVEL1=[
   starter:'def crear_reporte(config):\n    config.append("procesado")\n    return len(config)\n\nconfiguracion = ["modo_debug", "version_2"]\ntotal = crear_reporte(configuracion)\nprint(configuracion)\nprint(total)',runs:[[]],
   hints:["config es un PARÁMETRO, pero sigue siendo la MISMA lista que configuracion — mutarla dentro de la función también la muta afuera.","Para proteger de verdad 'configuracion' haría falta pasarle una copia (configuracion[:]) o usar una tupla si nunca debía cambiar — la pregunta ingenieril de esta lección."],
   check:(o,c)=>{const exp="['modo_debug', 'version_2', 'procesado']\n3";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
+{id:"n1d3",n:"Día 5",t:"Diccionarios y sets · Parte 1: fundamentos",
+ intro:"Hasta hoy, para encontrar algo en una colección tenías que revisarla de principio a fin. Hoy usas una estructura que te lleva directo a lo que buscas, sin revisar nada más — nombrando datos por lo que SON, no por dónde están.",
+ intuit:{code:'inventario = {"pan": 5, "leche": 12}\ninventario["pan"] = 8\nprint(inventario)',py:true,
+  q:"Sin ejecutar: ¿el diccionario termina con 2 entradas o con 3? ¿Qué pasó con el 5 original?",
+  req:["2","actualiz"],out:"{'pan': 8, 'leche': 12}",
+  e:"Sigue teniendo 2 entradas. Una clave nunca se repite dentro de un diccionario — asignar a una clave que ya existe ACTUALIZA su valor, no agrega una entrada nueva. El 5 original ya no existe en ningún lado."},
+ mcq:[
+  {q:"¿Qué pasa si asignas un valor a una clave que YA existe en un diccionario?",o:["Se agrega una segunda entrada con la misma clave","Se actualiza el valor de esa clave, sin duplicar nada","Python lanza un error","No pasa nada, se ignora la asignación"],a:1,e:"Un diccionario nunca tiene claves repetidas — asignar a una clave existente siempre actualiza su valor."},
+  {q:"¿Cuál de estas SÍ puede usarse como clave de un diccionario?",o:["Una lista: [1, 2]","Una tupla: (1, 2)","Otro diccionario","Ninguna de las anteriores"],a:1,e:"Solo los tipos inmutables pueden ser clave. Una tupla lo es (si a su vez solo contiene elementos inmutables); una lista nunca, porque es mutable."}],
+ ing:"Modelar datos como pares clave→valor (un usuario, un producto, una configuración) es el primer paso hacia pensar en objetos — la antesala directa de la Programación Orientada a Objetos que viene en M2.",
+ errores:["Buscar por VALOR recorriendo el diccionario con un for, cuando el objetivo era buscar por CLAVE directo","Acceder con corchetes a una clave que no existe (KeyError) en vez de usar .get() cuando la ausencia es un caso válido","Intentar usar una lista como clave (TypeError: unhashable type) — las claves deben ser inmutables"],
+ mental:{jr:"“Un diccionario es una lista pero con nombres en vez de números.”",sr:"“Un diccionario es un índice: de una clave a un valor, en un salto, sin recorrer nada — el costo de buscar no crece aunque el diccionario crezca.”",err:"Recorrer un diccionario con un for para encontrar un valor, en vez de acceder directo por la clave que ya conoces."},
+ theory:[
+  ["Sintaxis esencial",T('El diccionario como <strong>índice de un libro</strong> — de una clave a un valor, en un salto, sin recorrer.'),
+   'inventario = {"pan": 5, "leche": 12}\nprint(inventario["pan"])           # 5\ninventario["huevos"] = 8            # agrega una clave nueva\nprint("pan" in inventario)          # True -- pertenencia, sin buscar el valor\ndel inventario["leche"]             # elimina una clave\nfor clave, valor in inventario.items():\n    print(clave, valor)'],
+  ["KeyError vs. .get()",T('Acceder con corchetes a una clave que no existe lanza <code>KeyError</code> — un diccionario no asume nada por ti. <code>.get(clave, default)</code> pide el valor y, si la clave no está, devuelve el default en vez de tronar. Usa corchetes cuando la clave DEBE existir; usa .get() cuando la ausencia es un caso válido.'),
+   'inventario = {"pan": 5}\nprint(inventario.get("queso", 0))   # 0 -- sin KeyError\nprint(inventario["queso"])          # KeyError: \'queso\''],
+  ["Sets: valores únicos, sin clave ni orden",T('Un set es una colección de valores <strong>únicos</strong> — el duplicado desaparece solo. Responde una sola pregunta ("¿esto ya está aquí?") igual de directo que un diccionario responde "¿cuál es el valor de esta clave?".'),
+   'vistos = {"ana", "luis", "ana", "eva"}\nprint(vistos)          # {\'ana\', \'luis\', \'eva\'}\nprint("ana" in vistos) # True'],
+  ["Claves inmutables — conecta con Listas y tuplas",T('Una clave debe ser de un tipo inmutable: string, número, o tupla (si a su vez solo contiene elementos inmutables). <strong>Una lista nunca puede ser clave.</strong> No es una restricción arbitraria: una clave que pudiera cambiar por dentro rompería la estructura que hace posible la búsqueda instantánea.'),
+   'cache = {}\ncache[(2, 3)] = "resultado"   # una tupla SÍ puede ser clave\nprint(cache[(2, 3)])\ncache[[2, 3]] = "esto truena" # TypeError: unhashable type: \'list\''],
+ ],
+ ex:[
+  {id:"n1d3e1",py:true,t:"Ejercicio 1 · .get() en vez de KeyError",
+   d:'Este programa consulta el precio de <code>"queso"</code>, que no está en el inventario, y truena con <code>KeyError</code>. Arréglalo para que imprima <code>No disponible</code> en vez de fallar, usando <code>.get()</code>.',
+   starter:'inventario = {"pan": 5, "leche": 12}\nprecio = inventario["queso"]\nprint(precio)',runs:[[]],
+   check:(o,c)=>norm(o[0])==="No disponible"?true:"Esperaba: No disponible\nObtuve:\n"+norm(o[0]),
+   hints:["inventario.get('queso', 'No disponible') pide el valor y devuelve el default si la clave no existe.","No necesitas ningún if — .get() ya resuelve el caso de la clave ausente por ti."]},
+  {id:"n1d3e2",py:true,t:"Ejercicio 2 · Buscar por clave, no por valor",
+   d:'Esta función busca el precio de un producto recorriendo TODO el diccionario con un <code>for</code>, comparando nombres uno por uno. Reescríbela para buscar DIRECTO por clave, sin ningún <code>for</code>.',
+   starter:'inventario = {"pan": 5, "leche": 12, "huevos": 8}\ndef precio_de(producto):\n    for clave in inventario:\n        if clave == producto:\n            return inventario[clave]\n    return None\n\nprint(precio_de("leche"))',runs:[[]],
+   check:(o,c)=>{if(/for\s+\w+\s+in\s+inventario/.test(c))return"Todavía recorres el diccionario con un for — busca DIRECTO por clave, sin recorrer nada.";
+     return norm(o[0])==="12"?true:"Esperaba: 12\nObtuve:\n"+norm(o[0])},
+   hints:["inventario.get(producto) devuelve el valor directo, sin recorrer nada.","Toda la función se reduce a una sola línea: return inventario.get(producto)."]},
+  {id:"n1d3e3",py:true,t:"Ejercicio 3 · De listas paralelas a diccionario",
+   d:'Convierte estas dos listas paralelas (sincronizadas por posición) en un solo diccionario <code>inventario</code> nombre→precio. Luego imprime el diccionario completo y si <code>"leche"</code> está en él.',
+   starter:'nombres = ["pan", "leche", "huevos"]\nprecios = [5, 12, 8]\ninventario = {}\n# construye el diccionario aqui\n\nprint(inventario)\nprint("leche" in inventario)',runs:[[]],
+   check:(o,c)=>{const exp="{'pan': 5, 'leche': 12, 'huevos': 8}\nTrue";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Recorre con for i in range(len(nombres)): y asigna inventario[nombres[i]] = precios[i].","El resultado debe tener las 3 claves, en el mismo orden en que aparecen en 'nombres'."]},
+  {id:"n1d3e4",py:true,t:"Ejercicio 4 · Contar frecuencias",
+   d:'Escribe <code>contar_frecuencias(palabras)</code>, que recibe una lista de strings y devuelve un diccionario palabra → cuántas veces aparece. No debe usar print() por dentro.',
+   starter:'def contar_frecuencias(palabras):\n    pass\n\nprint(contar_frecuencias(["sol", "luna", "sol", "sol", "luna"]))',runs:[[]],
+   check:(o,c)=>{if(!/\.get\(/.test(c))return"Usa frecuencias.get(palabra, 0) + 1 para contar sin necesitar un if aparte.";
+     const exp="{'sol': 3, 'luna': 2}";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Empieza con frecuencias = {} y recorre 'palabras' con un for.","frecuencias[palabra] = frecuencias.get(palabra, 0) + 1 — funciona tanto si 'palabra' es nueva como si ya existía."]},
+  {id:"n1d3e5",py:true,t:"Ejercicio 5 · Clave inmutable: tupla en vez de lista",
+   d:'Este código intenta usar una lista como clave de un diccionario para cachear un resultado según dos números, y truena. Arréglalo usando una <strong>tupla</strong> en su lugar, de forma que imprima <code>resultado de 2 y 3</code>.',
+   starter:'cache = {}\ncache[[2, 3]] = "resultado de 2 y 3"\nprint(cache[[2, 3]])',runs:[[]],
+   check:(o,c)=>{if(/cache\[\[/.test(c))return"Todavía usas una lista ([...]) como clave — las claves deben ser inmutables. Usa una tupla (...) en su lugar.";
+     return norm(o[0])==="resultado de 2 y 3"?true:"Esperaba: resultado de 2 y 3\nObtuve:\n"+norm(o[0])},
+   hints:["Cambia los corchetes [2, 3] por paréntesis (2, 3) en las dos líneas donde se usan como clave.","Una tupla es inmutable, así que SÍ puede ser clave de un diccionario."]},
+ ]},
+{id:"n1d3b",n:"Día 6",t:"Diccionarios y sets · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que un diccionario busca por clave en vez de recorrer, y que solo lo inmutable puede ser clave. Hoy lo usas para contar palabras de un texto real — y cierras con un desafío sobre qué significa, exactamente, que dos claves sean 'la misma'.",
+ reto:{id:"n1d3r",py:true,t:"Laboratorio · Contador de palabras",
+  d:'<code>contar(texto)</code> debe devolver un diccionario palabra → cantidad de apariciones (usa <code>.lower().split()</code> para separar el texto en palabras). <code>mas_frecuente(frecuencias)</code> debe devolver la palabra con mayor conteo. Ninguna de las dos debe usar print() — el programa principal es el único que imprime, exactamente:<pre class="codebox">Frecuencias: {diccionario completo}\nMas frecuente: palabra</pre>Se probará con un texto de 6 palabras, uno de 6 palabras distinto, y uno de una sola palabra.',
+  starter:'def contar(texto):\n    pass\n\ndef mas_frecuente(frecuencias):\n    pass\n\ntexto = input("Texto: ")\nfrecuencias = contar(texto)\nprint("Frecuencias:", frecuencias)\nprint("Mas frecuente:", mas_frecuente(frecuencias))',
+  runs:[["sol luna sol sol luna sol"],["gato perro gato pez gato perro"],["unica"]],
+  hints:["contar: usa el patrón de contar_frecuencias del Bloque 4 — frecuencias.get(palabra, 0) + 1.","mas_frecuente: max(frecuencias, key=frecuencias.get) devuelve la clave con mayor valor, sin ningún for manual."],
+  check:(o,c)=>{
+    const esp=["Frecuencias: {'sol': 4, 'luna': 2}\nMas frecuente: sol",
+      "Frecuencias: {'gato': 3, 'perro': 2, 'pez': 1}\nMas frecuente: gato",
+      "Frecuencias: {'unica': 1}\nMas frecuente: unica"];
+    for(let i=0;i<o.length;i++){
+      const n=norm(o[i]),idx=n.indexOf("Frecuencias:");
+      if(idx===-1)return"No encuentro la línea 'Frecuencias: ...' en la prueba "+(i+1)+".";
+      const rep=n.slice(idx);
+      if(rep!==esp[i])return"Con la prueba "+(i+1)+" esperaba:\n"+esp[i]+"\nObtuve:\n"+rep;
+    }
+    return true}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1d3x",py:true,t:"Desafío final · inédito — la misma clave, dos objetos distintos",
+  d:'Predice, ANTES de ejecutar, cuántas entradas tiene <code>cache</code> al final — <code>(1, 2)</code> aparece construida por separado en dos líneas distintas. Luego ejecútalo para confirmar.',
+  starter:'cache = {}\ncache[(1, 2)] = "primero"\ncache[(1, 2)] = "segundo"\nprint(cache)\nprint(len(cache))',runs:[[]],
+  hints:["Dos tuplas construidas por separado, con los mismos valores, son objetos distintos en memoria — pero como CLAVE de diccionario, lo que importa es su VALOR, no si son literalmente el mismo objeto.","Esto es un matiz nuevo sobre la inmutabilidad: (1,2) == (1,2) por valor, así que la segunda asignación ACTUALIZA la primera clave — el mismo mecanismo del Bloque 2, ahora con tuplas."],
+  check:(o,c)=>{const exp="{(1, 2): 'segundo'}\n1";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -2078,6 +2155,23 @@ n1d2:{hist:"En C, los arrays son de tamaño fijo, reservado de antemano — agre
   "¿En qué ejercicio asumiste que \"asignar\" era lo mismo que \"copiar\", y qué te hizo darte cuenta de que no lo era?",
   "¿Cómo se conecta el aliasing de hoy con el modelo de scope que aprendiste en Funciones a fondo?",
   "¿Qué harías distinto si tuvieras que revisar código ajeno buscando bugs de aliasing?",
+ ]},
+n1d3:{hist:"Los diccionarios de Python están construidos, desde el origen del lenguaje, sobre una estructura pensada para que buscar por clave sea prácticamente instantáneo sin importar cuántos elementos tenga — a diferencia de una lista, donde buscar un valor exige, en el peor caso, revisar cada elemento uno por uno. Cómo logran esa velocidad por dentro es contenido de Algoritmos y Estructuras de Datos (N1.M3); aquí basta con el comportamiento observable.",
+ recursos:[
+  {t:"MIT 6.0001 — Lecture 6",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Introduce el diccionario justo después de listas/tuplas, la misma secuencia que esta Academia sigue.",url:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/resources/lecture-6-recursion-and-dictionaries/",tag:"🟢"},
+  {t:"CS50P — Dictionaries",autor:"Harvard (CS50)",idioma:"EN",dur:"~10 min",nivel:"Introductorio",motivo:"Unidad dedicada exclusivamente a diccionarios, confirmando que el tema merece tratamiento propio.",url:"https://cs50.harvard.edu/python/shorts/dictionaries/",tag:"🔵"},
+  {t:"Python docs — 5. Data Structures",autor:"Python Software Foundation",idioma:"EN",dur:"~20 min",nivel:"Introductorio",motivo:"Referencia oficial de diccionarios y sets, incluida la regla exacta de claves inmutables.",url:"https://docs.python.org/3/tutorial/datastructures.html",tag:"🔵"},
+  {t:"Students' Misconceptions and Other Difficulties in Introductory Programming: A Literature Review",autor:"Qian & Lehman, ACM TOCE 2018",idioma:"EN",dur:"~40 min",nivel:"Avanzado",motivo:"Revisión general de misconceptions — no específica de diccionarios, pero confirma que estas confusiones son un fenómeno real y estudiado.",url:"https://dl.acm.org/doi/10.1145/3077618",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué asignar a una clave que ya existe actualiza el valor en vez de duplicar la entrada?",
+  "¿Qué diferencia, en la forma de buscar, a inventario[\"pan\"] de recorrer el diccionario con un for comparando valores?",
+  "(inédita) Si tuvieras que explicarle un diccionario de Python a alguien usando solo la idea de la lista de contactos de un celular, ¿qué dirías?",
+ ],
+ metacog:[
+  "¿En qué ejercicio buscaste por valor cuando debiste buscar por clave, y qué te hizo darte cuenta?",
+  "¿Cómo se conecta la regla \"las claves deben ser inmutables\" con lo que aprendiste sobre aliasing en Listas y tuplas?",
+  "¿Qué escenario real (fuera de esta lección) modelarías con un diccionario en vez de con una lista?",
  ]},
 };
 /* examen práctico */

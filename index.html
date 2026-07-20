@@ -2031,6 +2031,74 @@ const LEVEL1=[
   starter:'def contador():\n    n = 0\n    while n < 3:\n        yield n\n        n += 1\n\ng1 = contador()\ng2 = contador()\nprint(next(g1))\nprint(next(g1))\nprint(next(g2))',runs:[[]],
   hints:["Cada llamada a contador() crea un objeto generador INDEPENDIENTE, con su propio estado.","g2 nunca fue tocado antes de esta línea — por eso empieza en 0, sin importar cuánto haya avanzado g1."],
   check:(o,c)=>{const exp="0\n1\n0";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
+{id:"n1d8",n:"Día 13",t:"Ficheros y formatos · Parte 1: fundamentos",
+ intro:"Todo lo que tu programa calculó hasta ahora vivía solo mientras el programa corría. Hoy escribes el primer programa que sobrevive a su propia ejecución.",
+ intuit:{code:'f = open("notas.txt", "w")\nf.write("primera linea")\n# el programa "termina" aqui sin f.close()',py:true,
+  q:"Sin ejecutar: ¿está GARANTIZADO que 'notas.txt' contiene 'primera linea' después de esto?",
+  req:["no","garantiz"],out:"",
+  e:"Este código no imprime nada — el punto no es la salida en pantalla, sino el estado del archivo. NO está garantizado que 'notas.txt' tenga el texto: sin close() (o with), Python puede mantener el contenido en un buffer en memoria que nunca llega a escribirse físicamente si el programa se interrumpe. Funciona casi siempre en la práctica — pero 'casi siempre' no es una garantía."},
+ mcq:[
+  {q:"¿Por qué existe el 'with' para trabajar con archivos, en vez de solo open()/close() manual?",o:["Es más corto de escribir, nada más","Garantiza que el archivo se cierre SIEMPRE, incluso si ocurre una excepción a mitad del bloque","with es obligatorio, open() solo no funciona","No hay ninguna diferencia real"],a:1,e:"with es, literalmente, un try/finally que el lenguaje escribe por ti — cierra el archivo pase lo que pase adentro del bloque."},
+  {q:"json.loads(texto) y json.load(archivo), ¿qué diferencia real hay entre ellos?",o:["Ninguna, son sinónimos","loads (con 's') convierte TEXTO a estructura Python; load (sin 's') lee DIRECTO de un archivo abierto","load es más rápido que loads","loads solo funciona con listas, load solo con diccionarios"],a:1,e:"La 's' significa 'string' — loads/dumps trabajan con texto; load/dump trabajan directo con un archivo ya abierto."}],
+ ing:"Ningún programa profesional confía en que un archivo externo está limpio — todo dato que cruza la frontera de un CSV o un JSON se valida y se convierte, exactamente el modelo mental de esta lección, aplicado literalmente todos los días en cualquier pipeline de datos real.",
+ errores:["Abrir un archivo con open() sin with ni close() explícito — funciona casi siempre, pero sin garantía real","Confundir el TEXTO de un JSON (un string) con la ESTRUCTURA Python que representa (un dict/lista)","Asumir que un CSV real siempre tiene todos los campos llenos y con el tipo esperado"],
+ mental:{jr:"“Un archivo es donde guardo cosas, como una variable pero permanente.”",sr:"“Un archivo es una frontera entre mi programa y el mundo: todo lo que cruza se valida y se convierte — igual que validar un input(), pero del otro lado de la ejecución del programa.”",err:"Tratar la lectura de un archivo como si estuviera garantizada correcta, sin manejar el caso de que no exista o esté sucio."},
+ theory:[
+  ["with: la garantía real de cierre",T('<code>with open(ruta, modo) as f:</code> garantiza que el archivo se cierre SIEMPRE al salir del bloque, haya habido error o no — igual que un try/finally (Excepciones) que el lenguaje escribe por ti. Modos: "r" leer, "w" escribir (SOBRESCRIBE todo lo anterior), "a" agregar al final sin borrar.'),
+   'with open("notas.txt", "w", encoding="utf-8") as f:\n    f.write("primera linea\\n")\n# aqui f.close() ya se ejecuto SIEMPRE'],
+  ["csv y json: dos módulos con tratamiento propio",T('csv.DictReader lee cada fila como un diccionario, usando la primera fila como encabezados. json.dumps/loads convierten entre TEXTO y estructura Python; json.dump/load hacen lo mismo directo con un archivo abierto.'),
+   'import csv, json\n\nwith open("datos.csv", encoding="utf-8", newline="") as f:\n    for fila in csv.DictReader(f):\n        print(fila["nombre"])\n\ntexto = json.dumps({"a": 1})   # estructura -> texto\ndatos = json.loads(texto)      # texto -> estructura'],
+  ["Leer código: iterar un archivo, conecta Iteradores y generadores",T('Sin ejecutar: ¿por qué se puede iterar "f" directamente con for, sin llamar a ningún método antes?'),
+   'with open("registro.txt", encoding="utf-8") as f:\n    for linea in f:\n        print(linea.strip())'],
+ ],
+ ex:[
+  {id:"n1d8e1",py:true,t:"Ejercicio 1 · with en vez de open sin cerrar",
+   d:'Este código abre un archivo con <code>open()</code> pero nunca lo cierra explícitamente. Arréglalo usando <code>with</code> para escribir Y para leer, con el mismo resultado.',
+   starter:'f = open("notas_e1.txt", "w")\nf.write("comprar pan\\nllamar a mama\\n")\n\ncon = open("notas_e1.txt", "r").read()\nprint(con)',runs:[[]],
+   check:(o,c)=>{if(!/\bwith\b/.test(c))return"Usa 'with open(...) as f:' — no abras el archivo sin with.";
+     const exp="comprar pan\nllamar a mama";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["with open('notas_e1.txt', 'w', encoding='utf-8') as f:\\n    f.write(...)","Repite el patrón with para la lectura: with open(..., 'r', ...) as f: con = f.read()"]},
+  {id:"n1d8e2",py:true,t:"Ejercicio 2 · Capturar FileNotFoundError",
+   d:'Este código truena al intentar leer un archivo que no existe. Captura <code>FileNotFoundError</code> (conecta con Excepciones) e imprime <code>Archivo no encontrado</code> en vez de dejar que el programa se caiga.',
+   starter:'with open("no_existe_e2.txt", "r") as f:\n    contenido = f.read()\nprint(contenido)',runs:[[]],
+   check:(o,c)=>{if(!/except\s+FileNotFoundError/.test(c))return"Usa 'except FileNotFoundError:' para capturar específicamente ese error.";
+     return norm(o[0])==="Archivo no encontrado"?true:"Esperaba: Archivo no encontrado\nObtuve:\n"+norm(o[0])},
+   hints:["Envuelve el with completo en un try — except FileNotFoundError: print('Archivo no encontrado')","El open() debe quedar DENTRO del try, no antes."]},
+  {id:"n1d8e3",py:true,t:"Ejercicio 3 · 'w' sobrescribe, 'a' agrega",
+   d:'Este código debería conservar AMBAS líneas, pero la segunda escritura usa <code>"w"</code> y borra la primera. Arregla el modo del SEGUNDO open para que el archivo final tenga las dos líneas, en orden.',
+   starter:'with open("notas_e3.txt", "w", encoding="utf-8") as f:\n    f.write("primera version\\n")\nwith open("notas_e3.txt", "w", encoding="utf-8") as f:\n    f.write("segunda version\\n")\nwith open("notas_e3.txt", "r", encoding="utf-8") as f:\n    print(f.read())',runs:[[]],
+   check:(o,c)=>{const exp="primera version\nsegunda version";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Cambia el modo del SEGUNDO open de 'w' a 'a' (append) — así agrega en vez de sobrescribir.","El primer open debe quedar en 'w' (es la primera escritura, no hay nada que conservar todavía)."]},
+  {id:"n1d8e4",py:true,t:"Ejercicio 4 · Iterar un archivo sin readlines()",
+   d:'Cuenta cuántas líneas tiene el archivo iterándolo DIRECTO con <code>for linea in f:</code> — sin usar <code>.readlines()</code> ni <code>.read()</code>.',
+   starter:'with open("lineas_e4.txt", "w", encoding="utf-8") as f:\n    f.write("uno\\ndos\\ntres\\n")\n\ntotal = 0\n# cuenta las lineas iterando "for linea in f", sin readlines()\n\nprint(total)',runs:[[]],
+   check:(o,c)=>{if(/readlines\(\)/.test(c))return"No uses .readlines() — itera el archivo directo con for linea in f:, como un iterador real.";
+     return norm(o[0])==="3"?true:"Esperaba: 3\nObtuve:\n"+norm(o[0])},
+   hints:["with open('lineas_e4.txt', encoding='utf-8') as f:\\n    for linea in f:\\n        total += 1","Un archivo abierto ya es un iterador — no necesitas cargarlo entero para recorrerlo."]},
+  {id:"n1d8e5",py:true,t:"Ejercicio 5 · Guardar y releer JSON",
+   d:'Guarda <code>datos</code> en <code>"datos_e5.json"</code> con <code>json.dump</code>, luego reléelo con <code>json.load</code> en una variable <code>releido</code>, e imprime <code>releido</code> y si es igual a <code>datos</code>.',
+   starter:'import json\n\ndatos = [{"nombre": "Ana", "nota": 15}, {"nombre": "Luis", "nota": 9}]\n# guarda "datos" con json.dump, luego relee con json.load en "releido"\n\nprint(releido)\nprint(releido == datos)',runs:[[]],
+   check:(o,c)=>{if(!/json\.dump\(/.test(c)||!/json\.load\(/.test(c))return"Usa json.dump() para guardar y json.load() para releer — ambos directo con el archivo abierto (sin 's').";
+     const exp="[{'nombre': 'Ana', 'nota': 15}, {'nombre': 'Luis', 'nota': 9}]\nTrue";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["with open('datos_e5.json', 'w', encoding='utf-8') as f:\\n    json.dump(datos, f)","with open('datos_e5.json', encoding='utf-8') as f:\\n    releido = json.load(f)"]},
+ ]},
+{id:"n1d8b",n:"Día 14",t:"Ficheros y formatos · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que with garantiza el cierre real de un archivo, y que el texto de un JSON no es lo mismo que la estructura Python. Hoy procesas un CSV sucio de verdad — el cierre de todo Funciones a fondo hasta hoy — y terminas con la idea de ingeniería que responde qué pasa si tu programa se interrumpe a medio escribir.",
+ reto:{id:"n1d8r",py:true,t:"Laboratorio · CSV sucio a JSON limpio",
+  d:'<code>procesar_csv(ruta_csv, ruta_json)</code> lee un CSV (encabezados <code>nombre,edad</code>) con <code>csv.DictReader</code>, convierte "edad" a entero o a <code>None</code> si está vacío o no es válido (con try/except), guarda el resultado como JSON con <code>json.dump</code>, y lo devuelve. El CSV de prueba tiene un campo vacío y uno inválido — el caso hostil real.',
+  starter:'import csv, json\n\ncsv_texto = "nombre,edad\\nAna,15\\nLuis,\\nEva,abc\\nTom,20\\n"\nwith open("estudiantes.csv", "w", encoding="utf-8") as f:\n    f.write(csv_texto)\n\ndef procesar_csv(ruta_csv, ruta_json):\n    pass\n\nresultado = procesar_csv("estudiantes.csv", "estudiantes.json")\nprint(resultado)',
+  runs:[[]],hints:["with open(ruta_csv, encoding='utf-8', newline='') as f:\\n    lector = csv.DictReader(f)\\n    for fila in lector: ...","Para cada fila: try: edad = int(fila['edad']) except ValueError: edad = None — así 'Luis' (vacío) y 'Eva' (abc) quedan como None sin tronar."],
+  check:(o,c)=>{if(!/csv\.DictReader/.test(c))return"Usa csv.DictReader para leer el CSV — no separes las líneas a mano con .split(',').";
+    if(!/json\.dump\(/.test(c))return"Guarda el resultado con json.dump() en ruta_json.";
+    const exp="[{'nombre': 'Ana', 'edad': 15}, {'nombre': 'Luis', 'edad': None}, {'nombre': 'Eva', 'edad': None}, {'nombre': 'Tom', 'edad': 20}]";
+    return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1d8x",py:true,t:"Desafío final · inédito — la escritura segura",
+  d:'Predice, ANTES de ejecutar, qué imprime esto. <code>guardar_seguro()</code> escribe primero a un archivo TEMPORAL, y solo al final lo renombra al nombre real con <code>os.replace()</code>. ¿Por qué eso hace que "config_final.json" nunca quede corrupto, sin importar cuándo se interrumpiera el programa?',
+  starter:'import os, json\n\ndef guardar_seguro(ruta, datos):\n    temp = ruta + ".tmp"\n    with open(temp, "w", encoding="utf-8") as f:\n        json.dump(datos, f)\n    os.replace(temp, ruta)\n\nguardar_seguro("config_final.json", {"version": 1})\nwith open("config_final.json", encoding="utf-8") as f:\n    print(json.load(f))\nprint(os.path.exists("config_final.json.tmp"))',runs:[[]],
+  hints:["os.replace() es ATÓMICA: o renombra el archivo completo, o no hace nada — nunca queda a medias.","Si el programa se interrumpe ANTES de os.replace(), el .tmp puede quedar incompleto, pero 'config_final.json' nunca fue tocado hasta ese último paso instantáneo — sigue con su versión anterior completa, o la nueva completa, nunca una mezcla rota."],
+  check:(o,c)=>{const exp="{'version': 1}\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -2438,6 +2506,23 @@ n1d7:{hist:"yield se agregó a Python en la versión 2.2 (2001, PEP 255) precisa
   "¿En qué ejercicio esperaste que un generador \"se comportara como una lista\", y qué te hizo notar que no era así?",
   "¿Cómo se conecta la expresión generadora de hoy con las comprehensions?",
   "¿En qué proyecto propio (fuera de esta lección) usarías un generador en vez de una lista?",
+ ]},
+n1d8:{hist:"El with statement se agregó a Python en la versión 2.5 (2006, PEP 343) precisamente para garantizar que un recurso (como un archivo) se cierre siempre, incluso si ocurre una excepción a mitad del bloque — antes de eso, había que escribir manualmente un try/finally cada vez que se abría un archivo, y era fácil de olvidar. with es, literalmente, un try/finally que el lenguaje escribe por ti.",
+ recursos:[
+  {t:"CS50P — Week 6, File I/O",autor:"Harvard (CS50)",idioma:"EN",dur:"~1h",nivel:"Introductorio",motivo:"Semana completa dedicada a open/with/CSV, con el mismo \"por qué\" de esta lección.",url:"https://cs50.harvard.edu/python/weeks/6/",tag:"🟢"},
+  {t:"Python docs — csv module",autor:"Python Software Foundation",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Referencia oficial exacta de csv.DictReader/csv.writer.",url:"https://docs.python.org/3/library/csv.html",tag:"🔵"},
+  {t:"Python docs — json module",autor:"Python Software Foundation",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Referencia oficial exacta de dump/dumps/load/loads.",url:"https://docs.python.org/3/library/json.html",tag:"🔵"},
+  {t:"CS50P — Reading and Writing CSVs",autor:"Harvard (CS50)",idioma:"EN",dur:"~10 min",nivel:"Introductorio",motivo:"Ejemplos prácticos cortos de lectura/escritura de CSV.",url:"https://cs50.harvard.edu/python/shorts/reading_and_writing_csvs/",tag:"🟣"},
+ ],
+ defensa:[
+  "¿Por qué el archivo del conflicto de esta lección no tiene garantizado el texto sin close()/with?",
+  "¿Qué diferencia real hay entre el TEXTO de un JSON y la estructura Python que representa?",
+  "(inédita) Si tu programa se interrumpe A MITAD de escribir un archivo, ¿en qué estado quedan los datos, y cómo diseñarías para que la respuesta nunca importe?",
+ ],
+ metacog:[
+  "¿En qué ejercicio asumiste que un archivo o un CSV estaba \"limpio\", y qué te hizo notar que no lo estaba?",
+  "¿Cómo se conecta el with de hoy con el finally de Excepciones?",
+  "¿Qué dato de tu propio proyecto (fuera de esta lección) valdría la pena persistir en un archivo?",
  ]},
 };
 /* examen práctico */

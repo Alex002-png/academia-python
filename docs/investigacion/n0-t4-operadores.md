@@ -61,3 +61,7 @@
 ## Estado
 
 **Desarrollo:** ✅ Completa. **Revisión crítica:** ✅ Completa (3 autocríticas, 1 ajuste real de diseño). **Pendiente:** aprobación del Director. La validación con estudiantes reales queda, como corresponde, pendiente de validación — no bloquea la redacción de la lección ni el desarrollo de T5.
+
+## Addendum v2.0.1 (2026-07-19) — UC Berkeley
+
+Verificado para la institución añadida por el Director: CS61A no tiene un equivalente directo de "enseñar precedencia de operadores infijos" — su proyecto de intérprete usa notación prefija (estilo Scheme/Calculator), donde el propio diseño del lenguaje elimina el problema de precedencia en vez de enseñarlo (*"prefix notation naturally takes care of operator precedence"*). Se declara honestamente: no aporta un punto de comparación directo para este concepto exacto porque la elección de diseño de su lenguaje de estudio es distinta a la de Python (infijo). Es, en sí mismo, un dato interesante — confirma que la precedencia infija es un problema real y no trivial (una forma legítima de evitarlo es no usar notación infija), pero no cambia ninguna decisión de esta lección, que enseña Python tal como es. *(Fuente: [CS61A, Calculator/Scheme project materials](https://amirkamil.com/teaching/sp13/slides/33-Calculator_6pp.pdf).)*

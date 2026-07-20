@@ -22,3 +22,15 @@
 ## Estado
 
 ✅ Completa con revisión crítica integrada. Pendiente de validación (no bloquea T6).
+
+## Addendum v2.0.1 (2026-07-19) — UC Berkeley, hallazgo real aplicado
+
+**Hallazgo:** el material de CS61A recomienda, para enseñar slicing, **no contar los elementos, sino contar los espacios entre ellos** — una técnica visual concreta (los índices son "cortes" entre caracteres, no los caracteres mismos) que resuelve de raíz la confusión de off-by-one que el slicing produce en casi todo principiante. Es una técnica de enseñanza específica, no solo una descripción del comportamiento — exactamente el tipo de intervención prescriptiva que las investigaciones anteriores de esta Academia (T3, T4) señalaron como ausente en la mayoría de las fuentes. *(Fuente: material de CS61A sobre slicing, UC Berkeley.)*
+
+**Ajuste real:** se incorpora esta técnica ("cuenta los cortes, no los caracteres") como parte explícita del Bloque 3, con un diagrama en texto que marca las posiciones de corte entre letras — no reemplaza la explicación ya existente, la hace más concreta.
+
+| Decisión | Adopta/Modifica | Evidencia |
+|---|---|---|
+| Técnica visual "contar cortes, no caracteres" para slicing | Modifica (ajuste real, nuevo) | CS61A — intervención pedagógica específica, no solo descripción del comportamiento |
+
+**Falsabilidad:** se abandonaría si el registro muestra que el diagrama de cortes confunde más de lo que ayuda frente a la explicación puramente verbal ya existente.

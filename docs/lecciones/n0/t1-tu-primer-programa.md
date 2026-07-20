@@ -210,4 +210,4 @@ Ningún ejercicio anterior de la lección mostró cómo incluir comillas dentro 
 
 | # | Fecha | Observación | Categoría |
 |---|---|---|---|
-| — | *(pendiente)* | — | — |
+| 1 | 2026-07-19 | Evidencia real indirecta (registrada originalmente en el §6 de T2, no fabricada aquí): durante la recuperación activa de T2 — misma forma exacta del conflicto de esta lección, pero con otros números — Alex respondió `print("4 * 2")` → **"42"**, no el texto literal `4 * 2` esperado. Es una instancia distinta de exactamente el conflicto del Bloque 2 de esta lección (`"2 + 3"` vs. `2 + 3`), y sugiere que el modelo no transfirió del todo a una variación trivial (mismo patrón, otro operador y otros números). | Errores espontáneos no previstos — candidato real a incorporar un caso adicional de predicción con `*` en el Bloque 4 de una futura revisión, si se repite con más estudiantes (DOC-03 §8bis, validación ascendente). No se actúa todavía sobre una sola observación — se registra y se deja pendiente de validación, nunca de desarrollo. |

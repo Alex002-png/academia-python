@@ -1060,7 +1060,7 @@ const LEVEL0=[
   {id:"d3e4",t:"Ejercicio 4 · Caza el ValueError (distinto del TypeError)",
    d:'Este error NO es una mezcla de tipos como el ejercicio anterior — es una <strong>conversión inválida</strong>: <code>int()</code> no interpreta el punto decimal. Repáralo para que imprima <code>18</code>.',
    starter:'edad_texto = "17.5"\nprint(int(edad_texto) + 1)',runs:[[]],
-   check:(o,c)=>{if(!/int\s*\(\s*float\s*\(/.test(c))return"El camino correcto es int(float(edad_texto)) — primero a float, luego a entero.";
+   check:(o,c)=>{if(!/float\s*\(/.test(c)||!/int\s*\(/.test(c))return"Necesitas ambas conversiones: primero float() (que sí interpreta el punto), luego int() (que trunca).";
      return norm(o[0])==="18"?true:"Debe imprimir: 18"},
    hints:["int('17.5') falla porque int() sobre un string no acepta el punto.","Primero float('17.5') (da 17.5), después int(...) (da 17), luego suma 1."]},
   {id:"d3e5",t:"Ejercicio 5 · Refactoriza la variable intermedia",
@@ -1364,6 +1364,8 @@ const LEVEL0=[
  theory:[
   ["El traceback es tu amigo",T('Cuando un programa explota, Python deja un informe: el <strong>traceback</strong>. Se lee <strong>de abajo hacia arriba</strong>: la última línea dice el TIPO de error y el mensaje; encima, el archivo y la línea exacta. Tus cuatro sospechosos habituales: <code>NameError</code> (variable mal escrita o no creada), <code>TypeError</code> (mezclar tipos incompatibles), <code>ValueError</code> (conversión imposible, como <code>int("hola")</code>) y <code>ZeroDivisionError</code>.')],
   ["Dos familias de errores",T('<code>SyntaxError</code> se detecta ANTES de ejecutar: Python ni siquiera arranca (paréntesis sin cerrar, dos puntos faltantes). Los errores de ejecución solo aparecen cuando esa línea corre — el programa puede funcionar 100 veces y explotar en la 101, cuando alguien escribe "hola" donde iba un número. Programar profesionalmente es anticiparlos: hoy con if, en el Nivel 1 con try/except.')],
+  ["Convención profesional: prints de diagnóstico, marcados",T('Cuando uses <code>print()</code> temporalmente para investigar un bug — la misma herramienta del Día 1, ahora con más madurez — prefija el texto con <code>"DEBUG: "</code>. Así lo distingues a simple vista de la salida real, y lo encuentras fácil para borrarlo antes de entregar el código (convención de UC Berkeley, CS61A).'),
+   'x = 5\nprint("DEBUG: valor de x =", x)   # rastro, no salida real\nprint(x + 3)                       # esto sí es el resultado'],
  ],
  ex:[
   {id:"d8e1",t:"Ejercicio 1 · Caza el NameError",
@@ -1384,7 +1386,26 @@ const LEVEL0=[
      if(!norm(o[0]).includes("no se puede dividir entre cero"))return"Con 0 debe imprimir: no se puede dividir entre cero";
      return norm(o[1]).includes("2.5")?true:"Con 4 debe imprimir 2.5"},
    hints:["if divisor == 0: mensaje. else: la división.","Convierte el input a float (o int) antes de comparar con 0."]},
- ]},
+  {id:"d8e4",t:"Ejercicio 4 · Caza el IndexError en contexto",
+   d:'Este programa explota, pero el error no está aislado como en T5 — está entre otras líneas que sí funcionan. Repáralo para que imprima <code>Az</code>, sin adivinar cuántas letras tiene "Lopez".',
+   starter:'nombre = "Ana"\ninicial = nombre[0]\napellido = "Lopez"\ninicial2 = apellido[10]\nprint(inicial + inicial2)',runs:[[]],
+   check:(o,c)=>{if(/apellido\s*\[\s*10\s*\]/.test(c))return"Sigues pidiendo un índice fijo fuera de rango — usa uno que funcione sin importar la longitud.";
+     return norm(o[0])==="Az"?true:"Debe imprimir: Az"},
+   hints:["'Lopez' tiene 5 letras (índices 0 a 4) — el índice 10 no existe.","apellido[-1] siempre da la última letra, sin importar cuán larga sea la palabra."]},
+  {id:"d8e5",t:"Ejercicio 5 · Aplica la convención DEBUG:",
+   d:'El primer print de este código es un rastro de depuración que quedó pegado, no información real para quien use el programa. Márcalo con <code>DEBUG:</code> o elimínalo — pero el resultado real (<code>8</code>) debe seguir imprimiéndose al final.',
+   starter:'x = 5\nprint("valor de x:", x)\ny = x + 3\nprint(y)',runs:[[]],
+   check:(o,c)=>{const lines=norm(o[0]).split("\n");
+     if(lines[lines.length-1]!=="8")return"El resultado real (y = 8) debe seguir imprimiéndose al final.";
+     if(lines.length>1&&!o[0].includes("DEBUG:"))return"Si conservas el print de diagnóstico, márcalo con el prefijo DEBUG: para distinguirlo de la salida real.";
+     return true},
+   hints:["O bien borras la línea de diagnóstico por completo, o la prefijas con \"DEBUG: \".","print(\"DEBUG: valor de x:\", x) dejaría claro que esa línea no es el resultado real."]},
+ ],
+ retoFinal:{id:"d8x",t:"Desafío final · inédito — dos errores, dos clases distintas",
+  d:'Este programa tiene DOS errores simultáneos, de clases distintas: uno que Python detecta antes de ejecutar, y otro que solo aparece al correr. Diagnostícalos y repáralos en el orden correcto (el que Python te obliga a seguir), sin que se te diga cuántos hay ni de qué tipo son. Al final debe imprimir <code>HOLA</code> y luego <code>10</code>.',
+  starter:'mensaje = "hola"\nif len(mensaje) > 3\n    print(mensaje.upper())\ntotal = 10\nprint(total + valor_extra)',runs:[[]],
+  hints:["El primer error impide que el programa arranque siquiera — revisa la anatomía de un error de T1: dónde, qué tipo, qué mensaje.","Cuando repares el primero, aparecerá un segundo error distinto: una referencia a algo que nunca se definió. Puedes quitar esa referencia, o definir la variable con un valor que no cambie el resultado esperado."],
+  check:(o,c)=>norm(o[0])==="HOLA\n10"?true:"Esperaba:\nHOLA\n10\nObtuve:\n"+norm(o[0])}},
 {id:"d9",n:"Días 8–9",t:"PROYECTO · Calculadora profesional",project:true,
  intro:"Fases 7, 8 y 9 en una sola misión: CONSTRUYES (proyecto), lo escribes como profesional (nombres, estructura, robustez) y lo OPTIMIZAS tras el veredicto del corrector. Aquí se junta todo el nivel. Después del corrector viene mi code review en el chat — y ahí seré más duro que la máquina.",
  theory:[
@@ -1695,7 +1716,23 @@ d8:{hook:"La diferencia entre un junior y un senior NO es cometer menos errores:
   jar:"Los logs de errores de JARVIS son tracebacks — ya los has leído sin saber que entrenabas.",
   rec:"docs Tutorial 8 (Errors) · CS50P Lecture 3",
   ent:"«Te llega este traceback de producción: ¿qué haces PRIMERO?» — entrevista on-call de Amazon.",
-  reto:"Provoca a propósito los 4 errores clásicos en la Terminal y explica cada uno en una frase."}},
+  reto:"Provoca a propósito los 4 errores clásicos en la Terminal y explica cada uno en una frase."},
+ recursos:[
+  {t:"Python docs — Errors and Exceptions",autor:"Python Software Foundation",idioma:"EN",dur:"~20 min",nivel:"Introductorio",motivo:"Referencia oficial completa de las clases de error de esta lección.",url:"https://docs.python.org/3/tutorial/errors.html",tag:"🟢"},
+  {t:"CS61A — Debugging",autor:"UC Berkeley",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Origen de la convención DEBUG: incorporada en esta lección.",url:"https://inst.eecs.berkeley.edu/~cs61a/fa21/articles/debugging/",tag:"🔵"},
+  {t:"Prather et al. — On Novices' Interaction with Compiler Error Messages",autor:"J. Prather et al., ICER 2017",idioma:"EN",dur:"~30 min",nivel:"Avanzado",motivo:"El estudio detrás de la disciplina de lectura bottom-up de esta lección.",url:"https://dl.acm.org/doi/abs/10.1145/3105726.3106169",tag:"🟣"},
+  {t:"Real Python — Python Exceptions: An Introduction",autor:"Real Python",idioma:"EN",dur:"~25 min",nivel:"Intermedio",motivo:"Puente natural hacia try/except, que N1 introducirá.",url:"https://realpython.com/python-exceptions/",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué se lee un traceback de abajo hacia arriba y no al revés?",
+  "¿Qué distingue un SyntaxError de los demás?",
+  "(inédita) Si un programa nunca ha fallado en cien ejecuciones, ¿eso significa que está libre de errores? ¿Por qué sí o por qué no?",
+ ],
+ metacog:[
+  "De las ocho lecciones de N0, ¿cuál sientes hoy genuinamente dominada — capaz de explicar, predecir, corregir, modificar y usar en un proyecto sin ayuda — y cuál todavía te genera dudas?",
+  "¿Cómo cambió tu relación con los errores de Python entre T1 (donde un SyntaxError probablemente se sintió como un muro) y hoy?",
+  "Si tuvieras que darle un consejo a alguien que empieza N0 mañana, basado en lo que a ti te costó más, ¿cuál sería?",
+ ]},
 };
 /* examen práctico */
 const PRACTICA=[

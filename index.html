@@ -2547,6 +2547,72 @@ const LEVEL1=[
   starter:'def busqueda_binaria_bug(lista, objetivo):\n    izq, der = 0, len(lista) - 1\n    while izq < der:\n        medio = (izq + der) // 2\n        if lista[medio] == objetivo:\n            return medio\n        elif lista[medio] < objetivo:\n            izq = medio + 1\n        else:\n            der = medio - 1\n    return -1\n\nprint(busqueda_binaria_bug([5], 5))',runs:[[]],
   hints:["Con un solo elemento, izq y der empiezan IGUALES (ambos 0).","'izq < der' es False desde el inicio cuando izq==der — el bucle nunca revisa ese único candidato. Con '<=' sí lo revisaría."],
   check:(o,c)=>norm(o[0])==="-1"?true:"Esperaba: -1\nObtuve:\n"+norm(o[0])}},
+{id:"n1m3t3",n:"Día 29",t:"Ordenación · Parte 1: fundamentos",
+ intro:"Hasta ahora buscaste. Hoy aprendes por qué a veces vale la pena ordenar PRIMERO — y descubres que ya usaste, sin saberlo, una de las ideas más profundas de la programación: pasar una función como valor.",
+ intuit:{code:'def por_precio(producto):\n    return producto[1]\n\nproductos = [("pan", 5), ("leche", 12), ("huevos", 3)]\nordenado = sorted(productos, key=por_precio)\nprint(ordenado)',py:true,
+  q:"¿Qué hace exactamente key=por_precio (sin paréntesis) — llama a la función, o le PASA la función?",
+  req:["valor","llama internamente"],out:"[('huevos', 3), ('pan', 5), ('leche', 12)]",
+  e:"por_precio SIN paréntesis es la función misma, como valor — igual que en Funciones a fondo. sorted() la llama internamente, una vez por cada elemento, para decidir el orden. Con key=por_precio() (con paréntesis) sería un TypeError real."},
+ mcq:[
+  {q:"¿Qué complejidad tienen burbuja e inserción en el peor caso?",o:["O(n)","O(log n)","O(n²)","O(1)"],a:2,e:"Ambas comparan/mueven elementos de a pares en bucles anidados sobre la misma entrada — O(n²), simples de escribir, caras en producción con datos grandes."},
+  {q:"¿Qué complejidad garantiza sorted() (Timsort) en Python?",o:["O(n²) siempre","O(n log n)","O(log n)","Depende del hardware, no se puede saber"],a:1,e:"Timsort garantiza O(n log n) — muy por encima de burbuja/inserción para listas grandes, y la razón por la que sorted() es la herramienta profesional real."}],
+ ing:"'Implementar para entender, librería para producir' es un criterio real que vas a aplicar toda tu carrera — hoy lo practicas con ordenación, la primera vez que la Academia te pide implementar algo deliberadamente para NO usarlo en producción.",
+ errores:["Reimplementar burbuja 'a mano' en producción cuando sorted() ya existe y es mejor","key mal entendida: key=funcion() (llamando la función) en vez de key=funcion (pasándola como valor)","Memorizar los algoritmos sin entender POR QUÉ cuestan lo que cuestan"],
+ mental:{jr:"“Ordenar es ordenar, cualquier forma sirve igual.”",sr:"“Ordenar es una inversión que compra búsquedas baratas: pagas O(n log n) una vez para preguntar O(log n) muchas — y casi nunca deberías pagar ese costo escribiendo tu propio algoritmo.”",err:"Creer que dominar POO/algoritmos significa reimplementar todo a mano, en vez de saber cuándo confiar en la biblioteca estándar."},
+ theory:[
+  ["Burbuja e inserción — O(n²)",T('Burbuja: intercambia adyacentes fuera de orden, repetidamente. Inserción: construye la parte ordenada de a un elemento, insertando cada uno en su posición correcta.'),
+   'def burbuja(lista):\n    lista = lista[:]\n    n = len(lista)\n    for i in range(n):\n        for j in range(0, n - i - 1):\n            if lista[j] > lista[j+1]:\n                lista[j], lista[j+1] = lista[j+1], lista[j]\n    return lista'],
+  ["sorted(): la herramienta profesional",T('Timsort garantiza O(n log n). key= acepta cualquier función que devuelva el criterio de orden — "implementar para entender, librería para producir".'),
+   'def insercion(lista):\n    lista = lista[:]\n    for i in range(1, len(lista)):\n        actual = lista[i]\n        j = i - 1\n        while j >= 0 and lista[j] > actual:\n            lista[j+1] = lista[j]\n            j -= 1\n        lista[j+1] = actual\n    return lista'],
+ ],
+ ex:[
+  {id:"n1m3t3e1",py:true,t:"Ejercicio 1 · Implementa burbuja",
+   d:'Escribe <code>burbuja(lista)</code> desde cero — no destructiva (usa <code>lista[:]</code> para copiar).',
+   starter:'# escribe burbuja aqui\n\nprint(burbuja([5, 2, 8, 1, 9]))',runs:[[]],
+   check:(o,c)=>{const exp="[1, 2, 5, 8, 9]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["for i in range(n):\\n    for j in range(0, n-i-1):\\n        if lista[j]>lista[j+1]: intercambia"]},
+  {id:"n1m3t3e2",py:true,t:"Ejercicio 2 · Implementa inserción",
+   d:'Escribe <code>insercion(lista)</code> desde cero — no destructiva.',
+   starter:'# escribe insercion aqui\n\nprint(insercion([5, 2, 8, 1, 9]))',runs:[[]],
+   check:(o,c)=>{const exp="[1, 2, 5, 8, 9]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["for i in range(1, len(lista)): actual=lista[i]; j=i-1; while j>=0 and lista[j]>actual: desplaza; lista[j+1]=actual"]},
+  {id:"n1m3t3e3",py:true,t:"Ejercicio 3 · Reemplaza burbuja casero por sorted()",
+   d:'Esta función reimplementa burbuja para ordenar productos por precio. Reemplázala con <code>sorted(key=...)</code> — misma salida, sin ningún bucle de ordenación manual.',
+   starter:'def ordenar_productos(productos):\n    productos = productos[:]\n    n = len(productos)\n    for i in range(n):\n        for j in range(0, n - i - 1):\n            if productos[j][1] > productos[j+1][1]:\n                productos[j], productos[j+1] = productos[j+1], productos[j]\n    return productos\n\n# reemplaza el cuerpo de ordenar_productos con sorted(key=...)\n\nprint(ordenar_productos([("pan",5),("leche",12),("huevos",3)]))',runs:[[]],
+   check:(o,c)=>{if(!/sorted\(/.test(c))return"Usa sorted(productos, key=...) — sin ningún for que compare/intercambie manualmente.";
+     if(/for[^\n]*:\s*\n\s*for/.test(c))return"Todavía queda el bucle anidado de burbuja — elimínalo, sorted() reemplaza todo eso.";
+     const exp="[('huevos', 3), ('pan', 5), ('leche', 12)]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["def por_precio(p):\\n    return p[1]","return sorted(productos, key=por_precio)"]},
+  {id:"n1m3t3e4",py:true,t:"Ejercicio 4 · Criterio compuesto: categoría, luego precio",
+   d:'Ordena por categoría primero, y por precio dentro de cada categoría, usando una función <code>key</code> que devuelva una TUPLA <code>(categoria, precio)</code>.',
+   starter:'productos = [("pan","comida",5), ("jabon","limpieza",8), ("leche","comida",12), ("detergente","limpieza",3)]\n\n# define una funcion key que devuelva (categoria, precio) y ordena con sorted()\n\nprint(resultado)',runs:[[]],
+   check:(o,c)=>{if(!/sorted\(/.test(c))return"Usa sorted(productos, key=...).";
+     const exp="[('pan', 'comida', 5), ('leche', 'comida', 12), ('detergente', 'limpieza', 3), ('jabon', 'limpieza', 8)]";
+     return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["def por_categoria_precio(p):\\n    return (p[1], p[2])","resultado = sorted(productos, key=por_categoria_precio) — Python compara tuplas elemento por elemento."]},
+  {id:"n1m3t3e5",py:true,t:"Ejercicio 5 · Corrige key=funcion() por key=funcion",
+   d:'Este código llama a <code>por_precio()</code> con paréntesis (TypeError real) en vez de pasarla como valor. Arréglalo.',
+   starter:'def por_precio(p):\n    return p[1]\n\nproductos = [("pan", 5), ("leche", 12), ("huevos", 3)]\nordenado = sorted(productos, key=por_precio())\nprint(ordenado)',runs:[[]],
+   check:(o,c)=>{if(/key\s*=\s*por_precio\s*\(\s*\)/.test(c))return"key=por_precio() todavía tiene los paréntesis — quítalos: key=por_precio.";
+     const exp="[('huevos', 3), ('pan', 5), ('leche', 12)]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["key=por_precio — sin paréntesis, pasando la función como valor, no llamándola."]},
+ ]},
+{id:"n1m3t3b",n:"Día 30",t:"Ordenación · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que ordenar es una inversión, y que key=funcion pasa una función como valor. Hoy ordenas un catálogo por tres criterios distintos, sin implementar ningún algoritmo a mano — y cierras M3.T3 con un matiz real de sorted(): la estabilidad.",
+ reto:{id:"n1m3t3r",py:true,t:"Laboratorio · Catálogo con tres criterios",
+  d:'Ordena el mismo catálogo por nombre, por precio, y por stock — usando tres funciones <code>key</code> nombradas distintas, SIN ningún for que ordene manualmente.',
+  starter:'catalogo = [("pan", 5, 10), ("leche", 12, 20), ("huevos", 3, 5)]\n\n# define por_nombre, por_precio, por_stock -- cada una recibe una tupla y devuelve el campo correspondiente\n\nprint(sorted(catalogo, key=por_nombre))\nprint(sorted(catalogo, key=por_precio))\nprint(sorted(catalogo, key=por_stock))',
+  runs:[[]],hints:["por_nombre(p) return p[0] — por_precio(p) return p[1] — por_stock(p) return p[2]"],
+  check:(o,c)=>{if(!/sorted\(/.test(c))return"Usa sorted(catalogo, key=...) tres veces, una por criterio.";
+    const exp="[('huevos', 3, 5), ('leche', 12, 20), ('pan', 5, 10)]\n[('huevos', 3, 5), ('pan', 5, 10), ('leche', 12, 20)]\n[('huevos', 3, 5), ('pan', 5, 10), ('leche', 12, 20)]";
+    return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1m3t3x",py:true,t:"Desafío final · inédito — la estabilidad de sorted()",
+  d:'Predice, ANTES de ejecutar, el orden EXACTO del resultado. A y C tienen el mismo precio (10); B y D tienen el mismo precio (5). ¿Cuál queda primero en cada empate?',
+  starter:'productos = [("A", 10), ("B", 5), ("C", 10), ("D", 5)]\ndef precio(p):\n    return p[1]\nprint(sorted(productos, key=precio))',runs:[[]],
+  hints:["sorted() es ESTABLE: entre elementos con la misma clave, conserva el orden relativo que tenían en la lista original.","B llegó antes que D en la lista original, así que B queda antes que D. A llegó antes que C, así que A queda antes que C."],
+  check:(o,c)=>{const exp="[('B', 5), ('D', 5), ('A', 10), ('C', 10)]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -3078,6 +3144,21 @@ n1m3t2:{hist:"La búsqueda binaria es uno de los algoritmos más antiguos y estu
   "¿En qué ejercicio el off-by-one te costó más encontrar, y qué patrón usarás para evitarlo la próxima vez?",
   "¿Cómo se conecta la precondición de orden de la binaria con el concepto de invariante de Atributos, métodos y estado?",
   "¿En qué proyecto propio (fuera de esta lección) tienes datos que ya están ordenados y podrías estar buscando linealmente sin necesidad?",
+ ]},
+n1m3t3:{hist:"Bubble sort es uno de los algoritmos de ordenación más antiguos y estudiados — célebre en cualquier curso de algoritmos del mundo como el ejemplo canónico de \"fácil de escribir, malo para producción\". Donald Knuth, figura seminal de la informática, analizó formalmente su ineficiencia ya en The Art of Computer Programming.",
+ recursos:[
+  {t:"MIT 6.0001 — Lecture 12",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Misma lección de Búsqueda, cubre bubble/selection/merge sort.",url:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/resources/lecture-12-searching-and-sorting/",tag:"🟢"},
+  {t:"CS50x — Week 3, Algorithms",autor:"Harvard (CS50x)",idioma:"EN",dur:"~1h",nivel:"Introductorio",motivo:"Mismo trío de algoritmos elementales, con complejidad exacta.",url:"https://cs50.harvard.edu/x/weeks/3/",tag:"🔵"},
+ ],
+ defensa:[
+  "¿Qué hace exactamente key=por_precio (sin paréntesis)?",
+  "¿Por qué inserción es O(n²)? Explícalo con las manos.",
+  "(inédita) ¿Cuándo reimplementarías algo que la librería ya hace mejor — y qué te dice de un ingeniero que responde \"nunca\" o \"siempre\"?",
+ ],
+ metacog:[
+  "¿En qué ejercicio confundiste pasar una función como valor con llamarla?",
+  "¿Cómo se conecta el trade-off de \"implementar vs. usar librería\" de hoy con el criterio de diseño OOP de M2?",
+  "¿En qué proyecto propio (fuera de esta lección) reimplementaste algo que una función de biblioteca estándar ya resolvía mejor?",
  ]},
 };
 /* examen práctico */

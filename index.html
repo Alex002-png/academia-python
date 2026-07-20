@@ -2041,7 +2041,7 @@ function renderClases(){
     if(EXd.hist)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">🏛️ Contexto histórico · por qué existe</p><p class="small" style="margin:2px 0 0">'+EXd.hist+"</p></div>";
     // FASES 2-4 · teoría y código guiado
     d.theory.forEach((t,i)=>{
-      h+='<div class="card">'+(i===0?'<p class="eyebrow" style="color:var(--gold)">Fase 4 · Código guiado — 40%</p>':"")+
+      h+='<div class="card">'+(i===0&&!d.eval&&!d.project?'<p class="eyebrow" style="color:var(--gold)">Fase 4 · Código guiado — 40%</p>':"")+
         '<h2 style="font-size:.98rem">'+t[0]+"</h2><div class='small' style='color:var(--text)'>"+t[1]+"</div>";
       if(t[2]){const dc=esc(t[2]).replace(/"/g,"&quot;").replace(/\n/g,"&#10;");
         h+='<pre class="codebox">'+hl(t[2])+'</pre><div class="row">'+

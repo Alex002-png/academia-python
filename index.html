@@ -2296,6 +2296,72 @@ const LEVEL1=[
   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\nclass ProductoConDescuento(Producto):\n    def __init__(self, nombre, precio, descuento):\n        self.descuento = descuento\n\np = ProductoConDescuento("pan", 5, 0.1)\ntry:\n    print(p.nombre)\nexcept AttributeError as e:\n    print(e)',runs:[[]],
   hints:["ProductoConDescuento.__init__ nunca llama a super().__init__() — así que el __init__ de Producto nunca se ejecuta.","self.descuento SÍ se asigna (está en el propio __init__ de la subclase), pero self.nombre y self.precio nunca se crean — viven solo en el __init__ del padre, que nunca corrió."],
   check:(o,c)=>{const exp="'ProductoConDescuento' object has no attribute 'nombre'";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
+{id:"n1m2t4",n:"Día 21",t:"Métodos dunder · Parte 1: fundamentos",
+ intro:"Hasta ahora, print(), ==, len() y for solo funcionaban con tipos que Python ya conocía. Hoy conectas tus propias clases a esa misma maquinaria.",
+ intuit:{code:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\np1 = Producto("pan", 5)\np2 = Producto("pan", 5)\ns = str(p1)\nprint(s.startswith("<__main__.Producto object at 0x"))\nprint(p1 == p2)',py:true,
+  q:"Sin ejecutar: ¿print(p1) muestra algo legible? ¿p1 == p2 es True o False, si tienen los mismos datos?",
+  req:["false","identidad"],out:"True\nFalse",
+  e:"print(p1) muestra una dirección de memoria (no algo legible) — por eso s.startswith(...) da True. Y p1 == p2 es False: aunque tengan el mismo nombre y precio, Python compara por IDENTIDAD (son objetos distintos), no por valor."},
+ mcq:[
+  {q:"¿Qué dunder se activa cuando escribes print(mi_objeto)?",o:["__print__","__str__ (o __repr__ como respaldo)","__init__","__call__"],a:1,e:"print() busca __str__ primero; si no existe, usa __repr__ como respaldo. Sin ninguno de los dos, muestra la dirección de memoria por defecto."},
+  {q:"¿Por qué p1 == p2 es False por defecto, aunque tengan exactamente los mismos datos?",o:["Python siempre compara mal los objetos","Sin __eq__, == compara por identidad (¿son el mismo objeto en memoria?), no por valor","Es un bug de Python","Solo funciona con números"],a:1,e:"Sin __eq__, == usa la comparación por defecto: identidad. Dos objetos con los mismos datos pero construidos por separado son 'distintos' hasta que TÚ defines qué significa 'igual' para esa clase."}],
+ ing:"En N2/N4, librerías como FastAPI y pandas usan dunder constantemente por detrás, sin que casi nunca lo notes — hoy aprendes el mecanismo que las hace posibles.",
+ errores:["Implementar dunder por moda, sin necesidad real de conectar ese protocolo específico","__eq__ sin pensar qué significa 'igual' para ese dominio concreto","__eq__ incompleto: compara solo un atributo de varios, dando 'igual' cuando no debería"],
+ mental:{jr:"“print() y == son cosas que Python hace, no algo que yo pueda controlar en mis propias clases.”",sr:"“Los dunder son enchufes estándar: mi objeto se conecta a la maquinaria del lenguaje (print, ==, len, for) implementando la interfaz exacta que esa maquinaria espera — ni más ni menos.”",err:"Pensar que == siempre compara 'lo que parece razonable' por defecto, cuando en realidad compara identidad hasta que se define __eq__."},
+ theory:[
+  ["__str__ y __eq__: conectan print() y ==",T('__str__ conecta con print()/str(). __eq__ conecta con == — y TÚ decides qué significa "igual" para tu dominio: para un Producto, puede ser mismo nombre y precio.'),
+   'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n    def __str__(self):\n        return f"Producto: {self.nombre} (${self.precio})"\n    def __eq__(self, otro):\n        return self.nombre == otro.nombre and self.precio == otro.precio'],
+  ["__len__ y __iter__: conectan len() y for",T('__len__ conecta con len(). __iter__ conecta con for, generalizando el protocolo de Iteradores y generadores a una clase propia.'),
+   'class Inventario:\n    def __init__(self):\n        self.productos = []\n    def agregar(self, p):\n        self.productos.append(p)\n    def __len__(self):\n        return len(self.productos)\n    def __iter__(self):\n        return iter(self.productos)'],
+  ["Leer código: qué dunder activa cada expresión",T('Sin ejecutar: len(obj) activa __len__. ¿Qué dunder activa "for x in obj"? ¿Y "obj1 == obj2"?')],
+ ],
+ ex:[
+  {id:"n1m2t4e1",py:true,t:"Ejercicio 1 · Implementa __str__",
+   d:'Agrega <code>__str__</code> a <code>Producto</code> para que <code>print(p)</code> imprima exactamente <code>Producto: pan ($5)</code>.',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\np = Producto("pan", 5)\nprint(p)',runs:[[]],
+   check:(o,c)=>{if(!/def\s+__str__\s*\(\s*self\s*\)/.test(c))return"Define def __str__(self): dentro de la clase.";
+     return norm(o[0])==="Producto: pan ($5)"?true:"Esperaba: Producto: pan ($5)\nObtuve:\n"+norm(o[0])},
+   hints:["def __str__(self):\\n    return f'Producto: {self.nombre} (${self.precio})'","print(p) usa automáticamente lo que __str__ devuelve."]},
+  {id:"n1m2t4e2",py:true,t:"Ejercicio 2 · Implementa __eq__",
+   d:'Agrega <code>__eq__</code> a <code>Producto</code> para que dos productos con el mismo nombre Y precio sean iguales, e imprime <code>a == b</code> y <code>a == c</code> (que tiene datos distintos).',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\na = Producto("pan", 5)\nb = Producto("pan", 5)\nc = Producto("leche", 12)\nprint(a == b)\nprint(a == c)',runs:[[]],
+   check:(o,c)=>{if(!/def\s+__eq__\s*\(\s*self/.test(c))return"Define def __eq__(self, otro): dentro de la clase.";
+     const exp="True\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["def __eq__(self, otro):\\n    return self.nombre == otro.nombre and self.precio == otro.precio","Compara AMBOS atributos, no solo uno."]},
+  {id:"n1m2t4e3",py:true,t:"Ejercicio 3 · Implementa __len__",
+   d:'Agrega <code>__len__</code> a <code>Inventario</code> para que <code>len(inv)</code> devuelva la cantidad actual.',
+   starter:'class Inventario:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = 0\n    def agregar(self, n):\n        self._cantidad += n\n\ninv = Inventario(10)\ninv.agregar(7)\nprint(len(inv))',runs:[[]],
+   check:(o,c)=>{if(!/def\s+__len__\s*\(\s*self\s*\)/.test(c))return"Define def __len__(self): dentro de la clase.";
+     return norm(o[0])==="7"?true:"Esperaba: 7\nObtuve:\n"+norm(o[0])},
+   hints:["def __len__(self):\\n    return self._cantidad","len(inv) llama automáticamente a __len__()."]},
+  {id:"n1m2t4e4",py:true,t:"Ejercicio 4 · Implementa __iter__",
+   d:'Agrega <code>__iter__</code> para que <code>for item in inv</code> recorra directo los productos guardados adentro.',
+   starter:'class InventarioIterable:\n    def __init__(self):\n        self.productos = []\n    def agregar(self, p):\n        self.productos.append(p)\n\ninvi = InventarioIterable()\ninvi.agregar("pan")\ninvi.agregar("leche")\nfor item in invi:\n    print(item)',runs:[[]],
+   check:(o,c)=>{if(!/def\s+__iter__\s*\(\s*self\s*\)/.test(c))return"Define def __iter__(self): dentro de la clase.";
+     const exp="pan\nleche";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["def __iter__(self):\\n    return iter(self.productos)","iter(lista) te da un iterador real sobre la lista — el mismo protocolo de Iteradores y generadores."]},
+  {id:"n1m2t4e5",py:true,t:"Ejercicio 5 · Corrige un __eq__ incompleto",
+   d:'Este <code>__eq__</code> solo compara <code>nombre</code>, ignorando <code>precio</code> — por eso <code>x == y</code> da <code>True</code> aunque tengan precios distintos. Arréglalo para que compare AMBOS.',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n    def __eq__(self, otro):\n        return self.nombre == otro.nombre\n\nx = Producto("pan", 5)\ny = Producto("pan", 999)\nprint(x == y)',runs:[[]],
+   check:(o,c)=>{if(!/self\.precio\s*==\s*otro\.precio/.test(c))return"Compara también self.precio == otro.precio, con 'and'.";
+     return norm(o[0])==="False"?true:"Esperaba: False\nObtuve:\n"+norm(o[0])},
+   hints:["return self.nombre == otro.nombre and self.precio == otro.precio","Ahora x e y, con precios distintos, ya no son 'iguales'."]},
+ ]},
+{id:"n1m2t4b",n:"Día 22",t:"Métodos dunder · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que print, ==, len y for son protocolos que cualquier clase puede implementar. Hoy completas un Producto totalmente pythónico — y cierras con un __eq__ incompleto que te engaña con coordenadas.",
+ reto:{id:"n1m2t4r",py:true,t:"Laboratorio · Producto pythónico completo",
+  d:'<code>Producto</code> con <code>__str__</code>, <code>__eq__</code> (nombre y precio; si <code>otro</code> no es un Producto, devuelve <code>False</code> en vez de tronar) y <code>__len__</code> (devuelve el stock).',
+  starter:'class Producto:\n    def __init__(self, nombre, precio, stock):\n        self.nombre = nombre\n        self.precio = precio\n        self.stock = stock\n    def __str__(self):\n        pass\n    def __eq__(self, otro):\n        pass\n    def __len__(self):\n        pass\n\np1 = Producto("pan", 5, 10)\np2 = Producto("pan", 5, 3)\nprint(p1)\nprint(p1 == p2)\nprint(len(p1))\nprint(p1 == 5)',
+  runs:[[]],hints:["__eq__: usa isinstance(otro, Producto) — si no lo es, return False de inmediato, antes de acceder a otro.nombre.","__str__ y __len__ ya los practicaste en los ejercicios 1 y 3."],
+  check:(o,c)=>{if(!/isinstance\(/.test(c))return"__eq__ debe usar isinstance(otro, Producto) para manejar el caso de comparar contra algo que no es un Producto.";
+    const exp="Producto: pan ($5)\nTrue\n10\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1m2t4x",py:true,t:"Desafío final · inédito — el __eq__ que ignora una coordenada",
+  d:'Predice, ANTES de ejecutar, qué imprime esto. <code>__eq__</code> de <code>Punto</code> solo compara <code>x</code> — ¿deberían <code>a</code> y <code>b</code> considerarse iguales, con coordenadas <code>y</code> tan distintas?',
+  starter:'class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __eq__(self, otro):\n        return self.x == otro.x\n\na = Punto(1, 2)\nb = Punto(1, 999)\nprint(a == b)',runs:[[]],
+  hints:["__eq__ solo compara self.x == otro.x — nunca mira 'y'.","a.x y b.x son iguales (ambos 1), así que == da True, aunque los puntos representen posiciones completamente distintas en el plano."],
+  check:(o,c)=>norm(o[0])==="True"?true:"Esperaba: True\nObtuve:\n"+norm(o[0])}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -2766,6 +2832,21 @@ n1m2t3:{hist:"El principio \"favor object composition over class inheritance\" v
   "¿En qué ejercicio heredaste cuando la relación real era \"tiene-un\", y qué te hizo notar el error?",
   "¿Cómo se conecta la \"explosión de subclases\" de hoy con el criterio de simplicidad de Comprehensions?",
   "¿Qué relación de un proyecto propio (fuera de esta lección) modelarías con composición en vez de herencia?",
+ ]},
+n1m2t4:{hist:"El término \"dunder\" (double underscore) es jerga de la comunidad Python, popularizada como forma corta y pronunciable de decir \"double underscore method\" — pero el mecanismo mismo (special methods) es parte del diseño original del lenguaje, documentado formalmente desde siempre en el Data Model oficial. No es un truco: es la forma en que Python decide, para cualquier tipo (incluidos los tuyos), qué hacer con print, ==, len, for.",
+ recursos:[
+  {t:"Python docs — 3.3. Special method names",autor:"Python Software Foundation",idioma:"EN",dur:"~30 min",nivel:"Introductorio",motivo:"Fuente autoritativa y completa de todos los métodos dunder.",url:"https://docs.python.org/3/reference/datamodel.html#special-method-names",tag:"🟢"},
+  {t:"MIT 6.0001 — Lecture 9",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Continúa la discusión de POO donde Clases y objetos la dejó.",url:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/resources/lecture-9-python-classes-and-inheritance/",tag:"🔵"},
+ ],
+ defensa:[
+  "¿Por qué print(p1) sin __str__ muestra una dirección de memoria?",
+  "¿Por qué p1 == p2 es False por defecto, aunque tengan exactamente los mismos datos?",
+  "(inédita) ¿Cuánta \"magia\" es demasiada — cuándo un dunder hace tu objeto más claro y cuándo esconde lo que realmente ocurre a quien lee el código?",
+ ],
+ metacog:[
+  "¿En qué ejercicio te sorprendió que == no comparara \"lo que tú esperabas\" por defecto?",
+  "¿Cómo se conecta __iter__ de hoy con el protocolo de iteradores de Iteradores y generadores?",
+  "¿En qué clase de un proyecto propio (fuera de esta lección) implementarías __str__ o __eq__?",
  ]},
 };
 /* examen práctico */

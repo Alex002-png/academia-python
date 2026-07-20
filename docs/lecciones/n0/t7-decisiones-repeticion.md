@@ -99,7 +99,7 @@ correcto pero innecesariamente largo para lo que hace. El estudiante refactoriza
 
 ## Bloque 5 — Laboratorio: mini-proyecto integrador
 
-**Integración real (T1–T7):** reutiliza el formato de recibo de T1, tipos de T3, operadores de T4, strings de T5, entrada de T6, y ahora control de flujo de T7 — el laboratorio de mayor integración de todo N0 hasta ahora.
+**Integración real (T1–T7):** reutiliza el formato de recibo de T1, las variables de T2 (contador y acumuladores con nombre propio, no números sueltos), tipos de T3, operadores de T4, strings de T5, entrada de T6, y ahora control de flujo de T7 — el laboratorio de mayor integración de todo N0 hasta ahora.
 
 **El proyecto — FizzBuzz con entrada validada:** pedir al usuario, con el **bucle de validación completo** (por fin posible: repetir la pregunta hasta obtener un número entero positivo válido), hasta qué número quiere llegar; luego imprimir del 1 a ese número, con múltiplos de 3 mostrando `fizz`, múltiplos de 5 mostrando `buzz`, y múltiplos de ambos mostrando `fizzbuzz` — en el formato de recibo de T1 como resumen final ("Se procesaron N números").
 

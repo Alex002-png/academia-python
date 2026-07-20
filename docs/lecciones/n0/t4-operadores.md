@@ -94,7 +94,7 @@ con paréntesis redundantes que no cambian el resultado pero tampoco aportan cla
 
 ## Bloque 5 — Laboratorio: mini-proyecto integrador
 
-**Integración real (T1–T4):** el laboratorio reutiliza el formato de recibo de T1, la conversión de tipos de T3, y ahora exige el catálogo completo de operadores de T4.
+**Integración real (T1–T4):** el laboratorio reutiliza el formato de recibo de T1, las variables de T2 (el total y las personas se nombran y se reasignan, no se escriben a mano), la conversión de tipos de T3, y ahora exige el catálogo completo de operadores de T4.
 
 **El proyecto — Divisor de cuenta de restaurante:** dado el total de una cuenta (como texto, como llegaría de un sistema real) y el número de personas, calcular cuánto paga cada persona **si se divide exacto**, y cuánto sobra (en centavos) **si no se divide exacto** — usando `//` y `%` sobre el total en centavos (para evitar los problemas de precisión de floats ya vistos en T3), e imprimir el resultado en el formato de recibo de T1.
 

@@ -94,7 +94,7 @@ correcto pero con variables intermedias innecesarias. El estudiante refactoriza 
 
 ## Bloque 5 — Laboratorio: mini-proyecto integrador
 
-**Integración real (T1–T5):** el laboratorio reutiliza el formato de recibo de T1, la conversión de tipos de T3, los operadores de T4, y ahora el catálogo completo de strings de T5.
+**Integración real (T1–T5):** el laboratorio reutiliza el formato de recibo de T1, las variables de T2 (cada contacto vive en sus propias etiquetas, no en texto repetido), la conversión de tipos de T3, los operadores de T4, y ahora el catálogo completo de strings de T5.
 
 **El proyecto — Normalizador de contactos:** dada una lista simulada de tres entradas de texto sucias (nombre con mayúsculas/espacios inconsistentes, correo con espacios, número de teléfono con guiones), limpiar cada campo con los métodos de esta lección y presentar los tres contactos en el formato de recibo de T1, con las iniciales de cada nombre calculadas por slicing (no escritas a mano).
 

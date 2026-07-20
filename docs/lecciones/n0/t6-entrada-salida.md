@@ -96,7 +96,7 @@ correcto pero repetitivo. El estudiante refactoriza a `a = float(input("Primer n
 
 ## Bloque 5 — Laboratorio: mini-proyecto integrador
 
-**Integración real (T1–T6):** reutiliza el formato de recibo de T1, conversión de T3, operadores de T4, métodos de string de T5, y ahora entrada real del usuario.
+**Integración real (T1–T6):** reutiliza el formato de recibo de T1, las variables de T2 (cada dato leído se etiqueta antes de usarse), conversión de T3, operadores de T4, métodos de string de T5, y ahora entrada real del usuario.
 
 **El proyecto — Boleta de calificaciones interactiva:** pedir con `input()` el nombre y tres notas (0-20) de un estudiante, convertir y validar cada nota individualmente (sin bucle todavía — una sola oportunidad, con mensaje de error controlado si algo falla), calcular el promedio, y presentar el resultado en el formato de recibo de T1 con el nombre en mayúsculas (T5).
 

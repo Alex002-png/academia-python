@@ -21,3 +21,7 @@
 
 ## Estado
 ✅ Completa. Pendiente de validación.
+
+## Addendum v2.0.1 (2026-07-19) — UC Berkeley
+
+Verificado: CS61A (vía su libro *Composing Programs*, §1.5.5) confirma la misma regla ya central en esta lección — un `while` debe tener, dentro de su cuerpo, algo que eventualmente haga falsa la condición, o nunca se detiene. **Honestidad metodológica:** esta institución confirma el diseño ya adoptado, no aporta un ángulo distintivo nuevo — se declara así explícitamente en vez de forzar una diferencia donde no la hay. Ninguna decisión de diseño cambia.

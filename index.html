@@ -1585,6 +1585,82 @@ const LEVEL0=[
  theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen teórico en la pestaña <strong>Examen</strong> (15 preguntas, mínimo 85% (regla 8.5/10)); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
  ex:[]},
 ];
+/* ============================================================
+   CONTENIDO — NIVEL 1 (Computer Science)
+   Motor: Pyodide (Python real) — todos los ex llevan py:true.
+   ============================================================ */
+const LEVEL1=[
+{id:"n1d1",n:"Día 1",t:"Funciones a fondo · Parte 1: fundamentos",
+ intro:"Hasta hoy tu código era una receta larga escrita de una sola vez. Hoy aprendes a escribir la receta UNA vez y usarla las veces que quieras, con ingredientes distintos cada vez — el primer paso para que un programa siga siendo comprensible cuando crece.",
+ intuit:{code:'def area(radio):\n    print(3.1416 * radio ** 2)\n\nresultado = area(5)\nprint(resultado + 10)',py:true,
+  q:"Sin ejecutar: ¿la primera línea de salida muestra un número correcto? ¿Y qué pasa con la segunda?",
+  req:["TypeError","None"],out:"78.53999999999999\nTraceback (most recent call last):\n  File \"programa.py\", línea 4, in <module>\nTypeError: unsupported operand type(s) for +: 'NoneType' and 'int'",
+  e:"La primera línea SÍ muestra el número correcto — la función calculó bien. Pero 'resultado' no vale ese número: vale None, porque la función nunca uso return. Mostrar algo en pantalla y devolverlo son dos acciones completamente distintas."},
+ mcq:[
+  {q:"¿Qué crees que hace exactamente 'return' dentro de una función?",o:["Muestra el valor en pantalla","Entrega el valor a quien llamó la función, para que lo use","Detiene el programa completo","No hace nada especial, es decorativo"],a:1,e:"return entrega el valor al lugar exacto donde se llamó la función — print solo lo muestra, sin entregar nada."},
+  {q:"Si una función no tiene ningún return, ¿qué valor 'devuelve' automáticamente?",o:["0","\"\" (texto vacío)","None","Da un error siempre"],a:2,e:"Toda función sin return explícito devuelve None — el valor que representa 'nada'."}],
+ ing:"Cada función de una librería real (las que usarás toda tu carrera) es exactamente este contrato: nunca ves su interior, solo confías en lo que promete devolver. Diseñar buenas funciones es diseñar buenos contratos.",
+ errores:["Confundir print con return — mostrar algo en pantalla no es lo mismo que entregarlo al programa","Usar una variable creada DENTRO de una función, fuera de ella (scope)","Esperar que reasignar un parámetro dentro de la función cambie la variable de afuera"],
+ mental:{jr:"“Una función es un bloque de código con nombre.”",sr:"“Una función tiene su propio espacio de nombres, que nace cuando la llamas y muere cuando termina — lo único que sobrevive es lo que explícitamente devolviste con return.”",err:"Creer que print() dentro de una función es lo mismo que 'devolver' el resultado. Son dos acciones independientes: una muestra, otra entrega."},
+ theory:[
+  ["Funciones: contrato de entrada y salida",T('Una función tiene cero o más entradas (parámetros) y algo que devuelve. Solo se ejecuta cuando se <strong>llama</strong>, y toda la llamada se reemplaza por su valor de retorno — como si esa línea del programa se transformara, en el momento exacto de la llamada, en el valor que la función entregó.'),
+   'def area(radio):\n    return 3.1416 * radio ** 2\n\nresultado = area(5)\nprint(resultado + 10)'],
+  ["print vs. return — la distinción central",T('<code>print()</code> muestra algo en pantalla para que un humano lo lea, y no le da al resto del programa nada que usar. <code>return</code> entrega un valor al lugar exacto donde se llamó la función, para que el programa lo use, sin mostrar nada por sí mismo. Confundirlas es, según la investigación de este tema, uno de los errores más documentados en programadores que recién aprenden funciones (CMU 15-112 le dedica una sección propia: "Print versus Return").')],
+  ["Scope: el entorno que nace y muere",T('Cuando llamas una función, Python crea un <strong>entorno nuevo y separado</strong>. Las variables que creas DENTRO de la función viven solo ahí, y desaparecen cuando la función termina.'),
+   'def calcular():\n    numero_secreto = 42\n    return numero_secreto * 2\n\nprint(calcular())        # 84\nprint(numero_secreto)    # NameError — nunca existió fuera de calcular()'],
+  ["Leer código: composición de funciones",T('Sin ejecutar: ¿qué hace cada función por separado, y qué significa que el resultado de una se use directamente como entrada de la otra? Este patrón (composición) no fue enseñado explícitamente — se infiere leyendo.'),
+   'def procesar(precio, descuento):\n    precio_final = precio - (precio * descuento)\n    return precio_final\n\ndef aplicar_impuesto(monto):\n    return monto * 1.18\n\ntotal = aplicar_impuesto(procesar(100, 0.1))\nprint(total)'],
+ ],
+ ex:[
+  {id:"n1d1e1",py:true,t:"Ejercicio 1 · Convierte print a return",
+   d:'Esta función "funciona" a medias: muestra el número correcto en pantalla, pero no se lo entrega a quien la llama. Repárala con <code>return</code> para que el programa completo imprima exactamente <code>75</code>.',
+   starter:'def calcular_puntos(aciertos):\n    print(aciertos * 10 + 5)\n\nresultado = calcular_puntos(7)\nprint(resultado)',runs:[[]],
+   check:(o,c)=>{if(/print\s*\(\s*aciertos/.test(c))return"Todavía tienes un print() dentro de la función — cámbialo por return.";
+     return norm(o[0])==="75"?true:"Debe imprimir: 75"},
+   hints:["print() muestra; return entrega. Necesitas que 'resultado' reciba el valor real.","Cambia 'print(aciertos * 10 + 5)' por 'return aciertos * 10 + 5'."]},
+  {id:"n1d1e2",py:true,t:"Ejercicio 2 · Caza el NameError de scope",
+   d:'Este programa explota. La variable que necesitas nació y murió dentro de la función. Repáralo para que imprima <code>84</code>, sin sacar nada fuera de la función a la fuerza.',
+   starter:'def calcular():\n    numero_secreto = 42\n    resultado = numero_secreto * 2\n\nprint(calcular())\nprint(numero_secreto)',runs:[[]],
+   check:(o,c)=>{if(/print\s*\(\s*numero_secreto\s*\)/.test(c))return"No necesitas leer 'numero_secreto' desde afuera — la función debe DEVOLVER su resultado.";
+     return norm(o[0])==="84"?true:"Debe imprimir: 84"},
+   hints:["La función calcula 'resultado' pero nunca lo devuelve — agrega return.","Una vez que calcular() devuelve el valor, ya no necesitas la segunda línea (numero_secreto no existe fuera)."]},
+  {id:"n1d1e3",py:true,t:"Ejercicio 3 · Refactoriza el bloque repetido",
+   d:'Este código calcula el cuadrado de tres números repitiendo la misma fórmula tres veces. Refactorízalo definiendo UNA función <code>cuadrado(n)</code> y llamándola tres veces — mismo resultado: <code>9</code>, <code>49</code>, <code>100</code>.',
+   starter:'print(3 ** 2)\nprint(7 ** 2)\nprint(10 ** 2)',runs:[[]],
+   check:(o,c)=>{if(!/def\s+\w+\s*\(/.test(c))return"Define una función con 'def' — ese es el punto del ejercicio.";
+     return norm(o[0])==="9\n49\n100"?true:"Esperaba:\n9\n49\n100\nObtuve:\n"+norm(o[0])},
+   hints:["def cuadrado(n): return n ** 2 — y luego print(cuadrado(3)), etc.","Esto es literalmente la razón histórica por la que existen las funciones: no repetir el mismo bloque."]},
+  {id:"n1d1e4",py:true,t:"Ejercicio 4 · Empaqueta es_primo en una función",
+   d:'Ya construiste este algoritmo en N0.T7 como código suelto. Ahora empaquétalo como una función <code>es_primo(n)</code> que DEVUELVE (no imprime) <code>True</code> o <code>False</code>. Se probará con 7, 8, 1 y 2 — debe imprimir <code>True</code>, <code>False</code>, <code>False</code>, <code>True</code>.',
+   starter:'def es_primo(n):\n    pass  # tu código aquí\n\nprint(es_primo(7))\nprint(es_primo(8))\nprint(es_primo(1))\nprint(es_primo(2))',runs:[[]],
+   check:(o,c)=>{if(!/return/.test(c))return"La función debe usar return, no print, para entregar el resultado.";
+     return norm(o[0])==="True\nFalse\nFalse\nTrue"?true:"Esperaba:\nTrue\nFalse\nFalse\nTrue\nObtuve:\n"+norm(o[0])},
+   hints:["Recuerda el algoritmo de N0.T7: un número es primo si ningún número entre 2 y el anterior a él lo divide exacto.","1 NO es primo por definición — tu función debe manejar ese caso explícitamente."]},
+  {id:"n1d1e5",py:true,t:"Ejercicio 5 · Añade un parámetro con valor por defecto",
+   d:'Modifica esta función para que acepte un SEGUNDO parámetro <code>saludo</code> con valor por defecto <code>"Hola"</code> — de forma que <code>saluda("Alex")</code> siga funcionando igual que antes, pero <code>saluda("Ana", "Buen dia")</code> también sea posible.',
+   starter:'def saluda(nombre):\n    return "Hola" + ", " + nombre + "!"\n\nprint(saluda("Alex"))\nprint(saluda("Ana", "Buen dia"))',runs:[[]],
+   check:(o,c)=>{if(!/def\s+saluda\s*\([^)]*=/.test(c))return"El segundo parámetro necesita un valor por defecto: def saluda(nombre, saludo=\"Hola\"):";
+     return norm(o[0])==="Hola, Alex!\nBuen dia, Ana!"?true:"Esperaba:\nHola, Alex!\nBuen dia, Ana!\nObtuve:\n"+norm(o[0])},
+   hints:["def saluda(nombre, saludo=\"Hola\"): — el valor por defecto se usa solo si no se lo pasas explícitamente.","El cuerpo de la función debe usar 'saludo' en vez del texto fijo \"Hola\"."]},
+ ]},
+{id:"n1d1b",n:"Día 2",t:"Funciones a fondo · Parte 2: laboratorio y desafío",
+ intro:"Ayer aprendiste el contrato print/return y el modelo de scope. Hoy los integras en una caja de herramientas matemática real — reutilizando N0.T6 y N0.T7 empaquetados en funciones — y cierras con un desafío que parece un contador y no cuenta como uno.",
+ reto:{id:"n1d1r",py:true,t:"Laboratorio · Caja de herramientas matemática",
+  d:'Construye tres funciones — <code>es_primo(n)</code>, <code>es_par(n)</code>, <code>factorial(n)</code> — cada una con su propio contrato (recibe un número, DEVUELVE un resultado, nunca usa print() por dentro). Luego, en el programa principal, pide un número con <code>input()</code> e imprime EXACTAMENTE:<pre class="codebox">N es primo: True/False\nN es par: True/False\nN! = resultado</pre>Se probará con 5, 0 y 1 — incluidos los casos límite.',
+  starter:'def es_primo(n):\n    pass\n\ndef es_par(n):\n    pass\n\ndef factorial(n):\n    pass\n\nnumero = int(input("Numero: "))\n# construye las tres líneas del reporte aquí',
+  runs:[["5"],["0"],["1"]],hints:[],
+  check:(o,c)=>{if(norm(o[0])!=="Numero: 5\n5 es primo: True\n5 es par: False\n5! = 120")return"Con 5 esperaba:\nNumero: 5\n5 es primo: True\n5 es par: False\n5! = 120\nObtuve:\n"+norm(o[0]);
+    if(norm(o[1])!=="Numero: 0\n0 es primo: False\n0 es par: True\n0! = 1")return"Con 0 (caso límite) esperaba:\nNumero: 0\n0 es primo: False\n0 es par: True\n0! = 1\nObtuve:\n"+norm(o[1]);
+    if(norm(o[2])!=="Numero: 1\n1 es primo: False\n1 es par: False\n1! = 1")return"Con 1 (caso límite) esperaba:\nNumero: 1\n1 es primo: False\n1 es par: False\n1! = 1\nObtuve:\n"+norm(o[2]);
+    return true}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1d1x",py:true,t:"Desafío final · inédito — el contador que no cuenta",
+  d:'Predice, ANTES de ejecutar, qué imprimen estas tres llamadas seguidas a <code>contador()</code> — y por qué NO se comporta como un contador real que acumula. Luego ejecútalo para confirmar.',
+  starter:'def contador():\n    veces = 0\n    veces = veces + 1\n    return veces\n\nprint(contador())\nprint(contador())\nprint(contador())',runs:[[]],
+  hints:["Cada vez que llamas a contador(), Python crea un entorno NUEVO — 'veces' nace en 0 otra vez cada vez, no recuerda la llamada anterior.","Esto es exactamente la limitación que los objetos (N1.M2) van a resolver: darle a algo memoria propia entre llamadas."],
+  check:(o,c)=>norm(o[0])==="1\n1\n1"?true:"Esperaba tres líneas, cada una con 1 (cada llamada reinicia 'veces' desde cero)\nObtuve:\n"+norm(o[0])}},
+];
 /* Fase 3 · Visualización — diagramas por tema */
 const VIZ={
 d1:'programa.py ──lee──▶ [ INTÉRPRETE ] ──ejecuta──▶ pantalla\nprint("hola")    traduce línea a línea          hola',

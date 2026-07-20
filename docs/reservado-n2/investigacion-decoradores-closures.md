@@ -1,4 +1,6 @@
-# Investigación Pedagógica de N1.M1.T1 — Decoradores y closures
+# [RESERVADO PARA N2 — NO VIGENTE EN N1] Investigación Pedagógica — Decoradores y closures
+
+> **Aviso institucional (2026-07-20):** ver el aviso completo en [`leccion-decoradores-closures.md`](leccion-decoradores-closures.md) — este tema fue excluido deliberadamente de N1 por el propio SYL-N1 v1.0.0 (H-01) y pertenece a N2 (primer tema de FastAPI). La investigación real hecha aquí (fuentes citadas, hallazgo del peldaño de closure) sigue siendo válida y se reutilizará cuando se construya N2.
 
 *Investigación + revisión crítica integradas.*
 

@@ -1,8 +1,10 @@
-# N1.M1.T1 — Decoradores y closures: funciones que fabrican comportamiento
+# [RESERVADO PARA N2 — NO VIGENTE EN N1] Decoradores y closures: funciones que fabrican comportamiento
 
-> **Estado:** Desarrollo ✅ · Validación ⏳ Pendiente · Investigación ✅ [`n1-m1-t1-decoradores-closures.md`](../../investigacion/n1-m1-t1-decoradores-closures.md) — 1 ajuste real: peldaño de closure simple añadido antes del decorador completo.
+> **Aviso institucional (2026-07-20):** este documento se construyó originalmente como "N1.M1.T1", pero contradice el SYL-N1 v1.0.0 aprobado — su sección "Herencias declaradas a SYL-N2" (H-01) excluye decoradores y closures de N1 **deliberadamente**, reservándolos como el primer tema de FastAPI en N2 ("N1 los excluyó porque aquí fallaba el 'por qué ahora'; en N2 la necesidad es real e inmediata"). El M1.T1 real de N1 es **"Funciones a fondo"**. Este contenido no se descarta — es una semilla real y aprovechable para cuando se construya N2; se archiva aquí, fuera de `docs/lecciones/n1/`, hasta ese momento. Detectado y corregido por el Director tras auditar el SYL-N1 completo antes de reconstruir N1 bajo DOC-11 v2.0.1.
 
-*Primera lección de N1 bajo DOC-11. Conserva la ficha ya aprobada de SYL-N1 (modelo mental, errores, pregunta ingenieril, idea universal), enriquecida con el ajuste de la investigación.*
+> **Estado original:** Desarrollo ✅ · Validación ⏳ Pendiente · Investigación ✅ [`investigacion-decoradores-closures.md`](investigacion-decoradores-closures.md) — 1 ajuste real: peldaño de closure simple añadido antes del decorador completo.
+
+*Contenido original, conservado sin cambios como referencia para la futura construcción de N2.*
 
 ## Ficha de control
 

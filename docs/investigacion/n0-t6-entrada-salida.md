@@ -21,3 +21,13 @@ El hecho central de esta lección (`input()` siempre devuelve `str`) es **semán
 
 ## Estado
 ✅ Completa. Pendiente de validación, no bloquea T7.
+
+## Addendum v2.0.1 (2026-07-19)
+
+**Hallazgo real (CS50P):** la librería propia de CS50 (`get_int()`, `get_float()`, etc.) no solo convierte el tipo — **vuelve a preguntar automáticamente si el usuario escribe algo inválido**, en un bucle, hasta obtener un valor correcto. Es una práctica de referencia real, no solo una idea de diseño propia. *(Fuente: CS50P, funciones de la librería `cs50`.)*
+
+**Ajuste real:** T6 todavía no puede *implementar* este patrón (exige `while`, que T7 enseña) — pero se incorpora como puente explícito hacia T7 en el trade-off del Bloque 5 y en Beyond the Curriculum, con el nombre correcto ("bucle de validación"), en vez de dejar la idea de "validar la entrada" flotando sin destino concreto.
+
+| Decisión | Adopta/Modifica | Evidencia |
+|---|---|---|
+| Nombrar explícitamente el "bucle de validación" (sin poder implementarlo aún) como puente a T7 | Modifica (ajuste real) | CS50P, práctica de referencia (librería `cs50`) |

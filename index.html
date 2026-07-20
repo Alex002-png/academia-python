@@ -2164,6 +2164,72 @@ const LEVEL1=[
   starter:'class Carrito:\n    items = []\n    def __init__(self, dueno):\n        self.dueno = dueno\n    def agregar(self, item):\n        self.items.append(item)\n\nc1 = Carrito("Ana")\nc2 = Carrito("Luis")\nc1.agregar("pan")\nprint(c2.items)',runs:[[]],
   hints:["items = [] fuera de __init__ es un atributo de CLASE — UNA sola lista compartida por todas las instancias, no una por cada carrito.","c1.agregar('pan') hace self.items.append(...) — pero como 'items' es la lista compartida, c2 también la ve, aunque c2 nunca agregó nada."],
   check:(o,c)=>norm(o[0])==="['pan']"?true:"Esperaba: ['pan']\nObtuve:\n"+norm(o[0])}},
+{id:"n1m2t2",n:"Día 17",t:"Atributos, métodos y estado · Parte 1: fundamentos",
+ intro:"Hasta ahora, un objeto era solo un lugar donde guardar datos. Hoy decides quién tiene permiso para cambiarlos — y qué reglas debe cumplir ese cambio.",
+ intuit:{code:'class CuentaBancaria:\n    def __init__(self, titular, saldo):\n        self.titular = titular\n        self.saldo = saldo\n\n    def retirar(self, monto):\n        self.saldo -= monto\n\ncuenta = CuentaBancaria("Alex", 100)\ncuenta.retirar(500)\nprint(cuenta.saldo)',py:true,
+  q:"Sin ejecutar: ¿retirar(500) debería 'funcionar' si la cuenta solo tiene 100? ¿Qué imprime?",
+  req:["-400","negativ"],out:"-400",
+  e:"Sí 'funciona' — no hay ningún error, y se imprime -400. Un saldo negativo, algo que no debería ser posible en una cuenta real, y nada en el código lo impide."},
+ mcq:[
+  {q:"¿Qué es un 'invariante' de un objeto?",o:["Un atributo que nunca cambia de valor","Una propiedad que debe ser verdadera SIEMPRE, en todo momento observable del objeto","Un método que siempre devuelve lo mismo","Sinónimo de atributo de clase"],a:1,e:"Un invariante es una regla que el objeto debe cumplir siempre — 'el saldo nunca es negativo' es el ejemplo central de esta lección."},
+  {q:"¿El guion bajo inicial (_saldo) impide técnicamente que alguien acceda desde afuera de la clase?",o:["Sí, Python lanza un error si lo intentas","No — es solo una convención que señala 'no lo toques directo', Python no lo bloquea","Solo lo impide dentro de un with","Depende de si hay un @property"],a:1,e:"El guion bajo es disciplina de diseño, no del intérprete. cuenta._saldo funciona igual que cualquier otro atributo — la protección real está en que los métodos son la única vía RAZONABLE de cambio."}],
+ ing:"Enunciar y defender invariantes explícitamente es lo que separa el código que 'funciona en la demo' del que sobrevive en producción con datos reales y usuarios que cometen errores.",
+ errores:["Mutar el estado directo desde fuera de la clase, sin pasar por ningún método","Un método que recibe como parámetro algo que ya tiene en self (redundante)","Un método 'de mantenimiento' que olvida aplicar la misma validación que los demás métodos de la clase"],
+ mental:{jr:"“Un objeto guarda datos; los métodos son solo funciones convenientes.”",sr:"“Un objeto es una máquina con panel de mandos: el estado vive adentro, y solo los botones (métodos) definen qué transformaciones son legales — no existe ningún botón que deje la máquina en un estado imposible.”",err:"Pensar que un atributo con guion bajo está técnicamente protegido por el lenguaje, cuando en realidad es solo una señal para quien lee el código."},
+ theory:[
+  ["Métodos como única vía de cambio, con validación",T('Cuando un método detecta que se le pide romper el invariante, lanza una excepción propia con <code>raise</code> — la primera vez que se PRODUCE un error propio, no solo se captura uno ajeno (conecta con Excepciones).'),
+   'class CuentaBancaria:\n    def __init__(self, titular, saldo):\n        self.titular = titular\n        self._saldo = saldo\n\n    def get_saldo(self):\n        return self._saldo\n\n    def retirar(self, monto):\n        if monto > self._saldo:\n            raise ValueError("Fondos insuficientes")\n        self._saldo -= monto'],
+  ["El guion bajo: convención, no imposición",T('Python NO impide técnicamente <code>cuenta._saldo = -500</code> desde afuera. El guion bajo es una señal de diseño para quien lee el código — la protección real viene de que los métodos son la única forma razonable y documentada de cambiar el estado.')],
+  ["Leer código: parámetro redundante",T('Sin ejecutar: ¿por qué "precio_actual" como parámetro es redundante, si el método ya tiene acceso a self.precio?'),
+   'class Producto:\n    def __init__(self, precio):\n        self.precio = precio\n    def con_descuento(self, precio_actual, porcentaje):\n        return precio_actual * (1 - porcentaje)'],
+ ],
+ ex:[
+  {id:"n1m2t2e1",py:true,t:"Ejercicio 1 · Validar antes de mutar",
+   d:'Arregla <code>retirar()</code> para que valide fondos y lance <code>ValueError("Fondos insuficientes")</code> si no hay suficiente saldo. El programa principal ya captura ese error para el segundo retiro.',
+   starter:'class CuentaBancaria:\n    def __init__(self, titular, saldo):\n        self.titular = titular\n        self.saldo = saldo\n    def retirar(self, monto):\n        self.saldo -= monto\n\ncuenta = CuentaBancaria("Alex", 100)\ncuenta.retirar(30)\nprint(cuenta.saldo)\ntry:\n    cuenta.retirar(1000)\nexcept ValueError as e:\n    print(e)',runs:[[]],
+   check:(o,c)=>{if(!/raise\s+ValueError/.test(c))return"Usa 'raise ValueError(...)' dentro de retirar() cuando el monto supera el saldo.";
+     const exp="70\nFondos insuficientes";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["if monto > self.saldo:\\n    raise ValueError('Fondos insuficientes')","Esta línea va ANTES de self.saldo -= monto, no después."]},
+  {id:"n1m2t2e2",py:true,t:"Ejercicio 2 · El guion bajo no bloquea nada",
+   d:'Esta clase usa <code>self._saldo</code> (convención: "no lo toques directo"). Demuestra que Python NO impide el acceso directo: imprime <code>cuenta.get_saldo()</code> y luego <code>cuenta._saldo</code>.',
+   starter:'class CuentaBancaria:\n    def __init__(self, saldo):\n        self._saldo = saldo\n    def get_saldo(self):\n        return self._saldo\n\ncuenta = CuentaBancaria(70)\n# imprime cuenta.get_saldo() y luego cuenta._saldo\n',runs:[[]],
+   check:(o,c)=>{if(!/cuenta\._saldo/.test(c))return"Accede directo a cuenta._saldo (sin pasar por get_saldo) para confirmar que Python lo permite igual.";
+     const exp="70\n70";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["print(cuenta.get_saldo())","print(cuenta._saldo) — mismo valor, acceso directo, sin ningún error."]},
+  {id:"n1m2t2e3",py:true,t:"Ejercicio 3 · Elimina el parámetro redundante",
+   d:'<code>duplicar</code> recibe <code>valor_actual</code> aunque ya tiene <code>self.valor</code>. Elimina el parámetro redundante y usa <code>self.valor</code> directo, con el mismo resultado: <code>10</code>.',
+   starter:'class Numero:\n    def __init__(self, valor):\n        self.valor = valor\n    def duplicar(self, valor_actual):\n        return valor_actual * 2\n\nn = Numero(5)\nprint(n.duplicar(n.valor))',runs:[[]],
+   check:(o,c)=>{if(!/def\s+duplicar\s*\(\s*self\s*\)/.test(c))return"duplicar debe quedar con SOLO self como parámetro — sin valor_actual.";
+     return norm(o[0])==="10"?true:"Esperaba: 10\nObtuve:\n"+norm(o[0])},
+   hints:["def duplicar(self):\\n    return self.valor * 2","Llama a n.duplicar() sin argumentos — ya no hace falta pasarle nada."]},
+  {id:"n1m2t2e4",py:true,t:"Ejercicio 4 · Inventario.agregar con capacidad",
+   d:'Escribe <code>agregar(n)</code>: suma a la cantidad, pero lanza <code>ValueError("Excede la capacidad")</code> si se pasaría del límite.',
+   starter:'class Inventario:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = 0\n    def cantidad(self):\n        return self._cantidad\n    def agregar(self, n):\n        pass\n\ninv = Inventario(10)\ninv.agregar(10)\nprint(inv.cantidad())\ntry:\n    inv.agregar(1)\nexcept ValueError as e:\n    print(e)',runs:[[]],
+   check:(o,c)=>{if(!/raise\s+ValueError/.test(c))return"agregar() debe lanzar ValueError cuando se excede la capacidad.";
+     const exp="10\nExcede la capacidad";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["if self._cantidad + n > self.capacidad:\\n    raise ValueError('Excede la capacidad')","self._cantidad += n va DESPUÉS de la validación."]},
+  {id:"n1m2t2e5",py:true,t:"Ejercicio 5 · Inventario.quitar sin negativos",
+   d:'Escribe <code>quitar(n)</code>: resta de la cantidad, pero lanza <code>ValueError("No hay suficiente cantidad")</code> si se pediría más de lo que hay.',
+   starter:'class Inventario:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = capacidad\n    def cantidad(self):\n        return self._cantidad\n    def quitar(self, n):\n        pass\n\ninv = Inventario(10)\ninv.quitar(10)\nprint(inv.cantidad())\ntry:\n    inv.quitar(1)\nexcept ValueError as e:\n    print(e)',runs:[[]],
+   check:(o,c)=>{if(!/raise\s+ValueError/.test(c))return"quitar() debe lanzar ValueError cuando no hay suficiente cantidad.";
+     const exp="0\nNo hay suficiente cantidad";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["if n > self._cantidad:\\n    raise ValueError('No hay suficiente cantidad')","self._cantidad -= n va DESPUÉS de la validación."]},
+ ]},
+{id:"n1m2t2b",n:"Día 18",t:"Atributos, métodos y estado · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que un objeto bien diseñado hace imposible, no solo desalentado, romper su propio invariante — y que el guion bajo es disciplina, no imposición. Hoy integras las dos validaciones en un Inventario completo — y cierras con un bug que rompe el invariante desde DENTRO de la propia clase.",
+ reto:{id:"n1m2t2r",py:true,t:"Laboratorio · Inventario completo con transferencia",
+  d:'<code>Inventario(capacidad)</code> con <code>agregar(n)</code> y <code>quitar(n)</code> (como en los ejercicios 4-5), más <code>transferir(otro, n)</code> que mueve cantidad de un inventario a otro REUTILIZANDO quitar()/agregar() — nunca duplicando su lógica de validación.',
+  starter:'class Inventario:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = 0\n    def cantidad(self):\n        return self._cantidad\n    def agregar(self, n):\n        pass\n    def quitar(self, n):\n        pass\n    def transferir(self, otro, n):\n        pass\n\ninv1 = Inventario(5)\ninv2 = Inventario(5)\ninv1.agregar(3)\ninv1.transferir(inv2, 2)\nprint(inv1.cantidad(), inv2.cantidad())',
+  runs:[[]],hints:["agregar/quitar: igual que en los ejercicios 4 y 5.","transferir: self.quitar(n) seguido de otro.agregar(n) — reutiliza lo que ya funciona, no repitas la validación a mano."],
+  check:(o,c)=>{if(!/self\.quitar\(/.test(c)||!/\.agregar\(/.test(c))return"transferir debe reutilizar self.quitar(n) y otro.agregar(n), no reimplementar la lógica.";
+    return norm(o[0])==="1 2"?true:"Esperaba: 1 2\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1m2t2x",py:true,t:"Desafío final · inédito — el invariante roto desde adentro",
+  d:'Predice, ANTES de ejecutar, qué imprime esto. <code>ajustar()</code> es un método "de mantenimiento" de la MISMA clase que <code>agregar()</code> — ¿respeta la misma capacidad de 10?',
+  starter:'class InventarioRoto:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = 0\n    def agregar(self, n):\n        if self._cantidad + n > self.capacidad:\n            raise ValueError("Excede capacidad")\n        self._cantidad += n\n    def ajustar(self, n):\n        self._cantidad = n\n    def cantidad(self):\n        return self._cantidad\n\nir = InventarioRoto(10)\nir.agregar(5)\nir.ajustar(999)\nprint(ir.cantidad())',runs:[[]],
+  hints:["ajustar() nunca valida nada — asigna self._cantidad = n directo, sin pasar por la misma verificación que agregar().","El invariante no se rompió por un ataque externo: un método de la propia clase simplemente olvidó aplicar la misma regla que los demás."],
+  check:(o,c)=>norm(o[0])==="999"?true:"Esperaba: 999\nObtuve:\n"+norm(o[0])}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -2604,6 +2670,21 @@ n1m2t1:{hist:"La programación orientada a objetos surge en los años 60-70 (Sim
   "¿En qué ejercicio confundiste la clase con una instancia, y qué te hizo notar la diferencia?",
   "¿Cómo se conecta el atributo de clase compartido de hoy con el aliasing de Listas y tuplas?",
   "¿En qué parte de un proyecto propio (fuera de esta lección) convertirías un diccionario en una clase?",
+ ]},
+n1m2t2:{hist:"El término invariante en programación viene de la lógica formal, popularizado en el diseño de software por Tony Hoare en los años 60-70, a partir de su trabajo en verificación formal de programas. La idea de que un objeto debe mantener una propiedad verdadera siempre, en cada punto observable de su vida, es una de las ideas más antiguas y más citadas del diseño de software serio.",
+ recursos:[
+  {t:"MIT 6.0001 — Lecture 9, Getters and Setters",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Fuente directa del enfoque de getters/setters como métodos, sin decoradores.",url:"https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/in-class-questions-and-video-solutions/lecture-9/getters-and-setters/",tag:"🟢"},
+  {t:"Python docs — 9. Classes",autor:"Python Software Foundation",idioma:"EN",dur:"~30 min",nivel:"Introductorio",motivo:"Referencia oficial de atributos y métodos, ya usada en Clases y objetos.",url:"https://docs.python.org/3/tutorial/classes.html",tag:"🔵"},
+ ],
+ defensa:[
+  "¿Por qué retirar(500) del conflicto de esta lección no debería \"funcionar\" silenciosamente?",
+  "¿El guion bajo (_saldo) impide técnicamente el acceso directo, o es solo una convención?",
+  "(inédita) Si tuvieras que diseñar una clase donde romper el invariante fuera literalmente imposible (no solo desalentado), ¿qué harías distinto?",
+ ],
+ metacog:[
+  "¿En qué ejercicio mutaste el estado directo en vez de pasar por un método, y qué te hizo notar el riesgo?",
+  "¿Cómo se conecta el guion bajo de hoy con el modelo mental de \"convención, no imposición\" del lenguaje?",
+  "¿Qué invariante tendría una clase de un proyecto propio (fuera de esta lección)?",
  ]},
 };
 /* examen práctico */

@@ -1,6 +1,6 @@
 # N1.M1.T2 — Listas y tuplas
 
-> **Estado:** Desarrollo ✅ · Validación ⏳ Pendiente · Investigación ✅ [`n1-m1-t2-listas-tuplas.md`](../../investigacion/n1-m1-t2-listas-tuplas.md) — construida bajo DOC-11 v2.0.1 (Estándar de Excelencia Mundial). Reemplaza una versión anterior más ligera cuyo Bloque 0 aún citaba el T1 incorrecto ("Decoradores y closures", corregido por EVT-030) — reconstruida para citar el T1 real (Funciones a fondo) y para completar la escalera de 7 categorías, el §4bis de Recursos y el Bloque 6 completo que el estándar v2.0.1 exige.
+> **Estado:** Desarrollo ✅ · Validación ⏳ Pendiente · Investigación ✅ [`n1-m1-t2-listas-tuplas.md`](../../investigacion/n1-m1-t2-listas-tuplas.md) — construida bajo DOC-11 v2.0.1 (Estándar de Excelencia Mundial). Reemplaza una versión anterior más ligera cuyo Bloque 0 aún citaba el T1 incorrecto ("Decoradores y closures", corregido por EVT-030) — reconstruida para citar el T1 real (Funciones a fondo) y para completar la escalera de 7 categorías, el §4bis de Recursos y el Bloque 6 completo que el estándar v2.0.1 exige. **Autocorrección posterior:** el objetivo de T2 en SYL-N1 promete "recorrido" (traversal) pero la primera versión de esta reconstrucción usaba `for` en el Bloque 0 y en un ejercicio sin haberlo enseñado nunca como sintaxis nueva — detectado al preparar T3 y corregido aquí, añadiendo el bloque de teoría "Recorrido — el for sobre una lista" antes de que la deuda se propagara a T3-T8.
 >
 > Motor de ejecución: **Pyodide (Python real en el navegador)**.
 
@@ -62,6 +62,17 @@ print(letras[-1])     # 'f'
 print(letras[:3])     # ['a', 'b', 'c']
 print(letras[-2:])    # ['e', 'f']
 letras[0] = "z"        # asignar por índice — esto NO existía con strings (inmutables)
+```
+
+**Recorrido — el `for` sobre una lista (parte explícita del objetivo de esta lección):** para procesar cada elemento sin manejar índices a mano, Python ofrece `for elemento in lista:` — `elemento` toma, en cada vuelta, el valor de la siguiente posición, en orden, hasta que no quedan más. A diferencia del `while` (donde decides tú cuándo parar), un `for` sobre una lista se detiene solo, exactamente cuando la lista se agota — no hace falta ninguna condición explícita ni contador manual.
+
+```python
+frutas = ["manzana", "pera", "uva"]
+for fruta in frutas:
+    print(fruta)
+# manzana
+# pera
+# uva
 ```
 
 **Destructivo vs. no destructivo — el ajuste real de la investigación (respaldo directo de CMU 15-110):** algunas operaciones **modifican la lista en el sitio** (mismo objeto, mismo aliasing de siempre le afecta): `.append()`, `.remove()`, `.sort()`, `.clear()`, asignar por índice. Otras **crean una lista nueva** y dejan la original intacta: `+`, `sorted()`, el slicing completo `lista[:]`. Saber a cuál de las dos categorías pertenece un método es, literalmente, saber si tu código es seguro frente al aliasing del Bloque 2.

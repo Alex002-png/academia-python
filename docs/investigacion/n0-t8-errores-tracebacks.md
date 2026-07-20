@@ -19,3 +19,13 @@
 
 ## Estado
 ✅ Completa. Pendiente de validación.
+
+## Addendum v2.0.1 (2026-07-19) — UC Berkeley, hallazgo real aplicado
+
+**Hallazgo:** el material propio de depuración de CS61A recomienda una práctica concreta y accionable: cuando se usa `print()` temporalmente para diagnosticar un problema (depuración manual, la herramienta más básica y universal, ya sembrada desde T1), prefijar ese texto con `"DEBUG: "` — para distinguirlo a simple vista de la salida real del programa, y para poder encontrarlo y eliminarlo fácilmente antes de entregar el código. Es una convención real de ingeniería, no una idea de diseño propia. *(Fuente: [CS61A, Debugging](https://inst.eecs.berkeley.edu/~cs61a/fa21/articles/debugging/).)*
+
+**Ajuste real:** se incorpora esta convención en el Bloque 3, conectando explícitamente con el `print()` de T1 (la primera herramienta de depuración que la Academia enseñó, mucho antes de nombrar "depurar" como palabra) — cerrando el círculo del nivel completo.
+
+| Decisión | Adopta/Modifica | Evidencia |
+|---|---|---|
+| Convención `"DEBUG: "` para prints de diagnóstico temporal | Modifica (ajuste real, nuevo) | CS61A, práctica de referencia real |

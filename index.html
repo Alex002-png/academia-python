@@ -4132,7 +4132,7 @@ const LEVEL1=[
   capacidades:["Explicar: por qué .env y .gitignore trabajan juntos.","Predecir: qué pasa al leer una variable de entorno que nunca se configuró.","Detectar y corregir: diagnosticar una tabla SQLite inexistente o una credencial filtrada.","Usar en un proyecto: entregar un cambio completo por rama y PR, de principio a fin."],
   repetir:"Repite el flujo completo (rama→llamada real→persistencia→PR) contra un endpoint nuevo, de memoria.",
   metacog:"¿Qué se sintió distinto entre hacer esto en el simulador (M6/M7) y hacerlo en tu propia terminal, con una rama y un PR de por medio?"}},
-{id:"n1et1",n:"Capstone ET1",t:"La aplicación completa",modalidad:"proyecto",ex:[],
+{id:"n1et1",n:"Capstone ET1",t:"La aplicación completa",modalidad:"proyecto",ex:[],nivelLabel:"N1",modCount:7,
  ficha:{granPregunta:"¿Puedes construir, tú solo, un producto real que integre todo lo que aprendiste este nivel — no una serie de ejercicios sueltos, sino una sola cosa que funciona de principio a fin?",
   duracionTotal:"~3 semanas (varias sesiones)",dificultad:"Síntesis de todo N1",prerequisitos:"M1-M7 completos"},
  objetivo:"Diseñar, construir y documentar una aplicación con usuario imaginable que consuma una API real y persista lo consumido en una base de datos SQL propia — organizada en módulos con POO donde aporte, ejecutada desde terminal, viva en GitHub con README ejemplar, historia legible y batería de pruebas propia.",
@@ -5029,6 +5029,33 @@ const LEVEL2=[
   capacidades:["Explicar: por qué el despliegue es el principio de una responsabilidad, no su fin.","Predecir: qué información necesitarías tener lista antes de que ocurra un incidente real.","Detectar y corregir: un fallo real usando observación configurada de antemano, no por casualidad.","Usar en un proyecto: decidir con criterio entre revertir y corregir hacia adelante."],
   repetir:"Configura observabilidad básica y responde a un incidente simulado en un sistema nuevo, de memoria.",
   metacog:"De los cinco laboratorios de M5 (34 a 38), y de los cinco módulos de todo N2, ¿qué garantía te costó más sostener bajo presión real — contrato, confianza, consistencia, calidad, o continuidad?"}},
+{id:"n2et2",n:"Capstone ET2",t:"El backend que puede vivir sin ti",modalidad:"proyecto",ex:[],nivelLabel:"N2",modCount:5,
+ ficha:{granPregunta:"¿Tu sistema puede vivir sin ti — sosteniendo sus cinco garantías a la vez, bajo un cambio real, mientras Bitácora sigue dependiendo de él?",
+  duracionTotal:"~2 semanas (varias sesiones)",dificultad:"Síntesis de todo N2 — las cinco garantías a la vez, no una por una",prerequisitos:"M1-M5 completos"},
+ objetivo:"Demostrar, en un único episodio integrador, que las cinco garantías de N2 (contrato, confianza, consistencia, calidad, continuidad) se sostienen a la vez sobre el mismo sistema que Bitácora ha usado desde M1 — no como cinco entregas aisladas, sino como un sistema coherente bajo presión real.",
+ contexto:"M1-M5 te dieron, una a la vez, cada garantía de un sistema real: un contrato que otros consumen (M1), confianza para que solo quien debe pueda tocarlo (M2), consistencia cuando muchos lo usan a la vez (M3), calidad verificada automáticamente (M4), y continuidad incluso mientras cambia (M5). Este Capstone no es un proyecto nuevo — es el mismo servicio que Bitácora usa desde el Laboratorio 13, sometido a un único episodio donde las cinco garantías se ponen a prueba simultáneamente, bajo la misma presión con la que un cambio real llega a un sistema en producción: mientras alguien lo sigue usando.",
+ fueraDeAlcance:"No se espera infraestructura de nube real ni funcionalidad nueva más allá del cambio de requisito del hito 2 — el despliegue sigue en contenedores locales, la misma decisión deliberada de M5.T3 (consistente con AC-15, autonomía del funcionamiento esencial).",
+ flujoDeGit:"Como en el Capstone de N1: el hito 3 (el episodio integrador) y el hito 5 (cierre) son los dos momentos de código real de este capstone — cada uno se entrega en su propia rama, con su propio Pull Request, nunca directo en main.",
+ hitos:[
+  {id:"h1",titulo:"Auditoría honesta de las cinco garantías",pregunta:"¿tu servicio de M1-M5 realmente sostiene, hoy, las cinco garantías que se supone adquirió — o solo lo hizo la primera vez que lo probaste?",
+   descripcion:"Antes del episodio integrador, aplica a las CINCO garantías el mismo instinto del Laboratorio 29 (auditar la propia confianza), esta vez a escala de todo el sistema: ¿tu contrato (M1) sigue siendo el que documentaste? ¿tus permisos (M2) siguen bloqueando lo que deben? ¿tu pipeline (M4) sigue en verde? ¿tu último despliegue (M5) se hizo sin detener el servicio? Sin rama todavía — este hito es diagnóstico, no código.",
+   evidenciaLabel:"Tu inventario honesto de las 5 garantías; cuál está más débil hoy y por qué"},
+  {id:"h2",titulo:"Diseño del cambio de requisito real",pregunta:"¿ya sabes, en detalle, qué te va a pedir el Cliente y cómo vas a extender tu contrato sin romperlo?",
+   descripcion:"Recibe (o propónte, si trabajas esta sesión sin tutor) un cambio de requisito real sobre tu sistema — no cosmético. Diseña ANTES de tocar código: cómo extiendes el contrato (M1) sin romper a Bitácora, qué permiso nuevo (M2) necesita ese cambio, y qué recurso compartido va a recibir presión de tráfico concurrente (M3) cuando lo despliegues. Documenta aquí tu primer trade-off de este capstone (opciones→criterio→decisión→costo), decidido en la etapa de diseño, antes de implementarlo.",
+   evidenciaLabel:"Tu diseño del cambio: cómo extiendes el contrato, qué permiso nuevo requiere, qué recurso concurrente toca; tu trade-off en formato opciones→criterio→decisión→costo"},
+  {id:"h3",titulo:"El episodio integrador",pregunta:"¿tu sistema sostuvo las cinco garantías A LA VEZ, bajo presión real — no una por una en aislamiento?",
+   descripcion:"Ejecuta el cambio bajo las cinco presiones simultáneas, en una sola operación de ingeniería: extiende el contrato sin romperlo (M1) mientras exige el permiso nuevo que diseñaste (M2); hazlo con Bitácora generando tráfico concurrente real sobre el recurso que tu cambio toca (M3); no lo des por terminado hasta que tu pipeline de CI (M4) lo verifique automáticamente en verde, sin excepciones manuales; despliégalo con expandir-contraer, con Bitácora llamando sin pausa durante todo el proceso (M5). Si cualquier pieza anterior falla, el despliegue no debe proceder — esa dependencia tiene que estar en tu propio diseño, no en tu buena fe. Entrega este hito en su propia rama, con su propio Pull Request.",
+   evidenciaLabel:"Evidencia de que las 5 garantías se sostuvieron simultáneamente: contrato extendido + permiso nuevo + tráfico concurrente + pipeline verde + despliegue sin pausa"},
+  {id:"h4",titulo:"Arqueología completa y post-mortem",pregunta:"¿puedes narrar, con tu propia historia de commits como evidencia, cómo cada garantía se construyó sobre la anterior?",
+   descripcion:"Recorre la historia de commits de tu proyecto desde M1.T1 (Laboratorio 13) hasta hoy, narrando cómo el contrato (M1) hizo posible la confianza (M2), cómo la confianza hizo posible probar bajo concurrencia (M3), y cómo la calidad (M4) se volvió la puerta obligatoria antes de cualquier despliegue (M5). Escribe tu post-mortem: de las cinco garantías, ¿cuál te costó más sostener bajo la presión real del hito 3, y por qué exactamente esa y no otra?",
+   evidenciaLabel:"Tu arqueología (commits M1→M5 narrados) y tu post-mortem honesto sobre la garantía más difícil de sostener"},
+  {id:"h5",titulo:"Cierre y defensa",pregunta:"¿confiarías tú mismo este sistema a otra persona, sabiendo todo lo que sabes de él?",
+   descripcion:"Cierra con el README actualizado reflejando el cambio del hito 2, y prepara tu defensa oral (TD-02): predicción de las tres preguntas que un ingeniero senior haría sobre tu sistema completo; la mejor decisión de ingeniería de todo N2 y su evidencia; qué decisión, de las cinco garantías, cambiarías si empezaras hoy. Cierra con la pregunta de validación final, la misma para todo capstone de la Academia: ¿confiaría el examinador en ti para mantener un sistema real que utilizan otras personas? No te evalúes por criterios — respóndete con la misma honestidad que un responsable técnico real evaluando a alguien para su equipo. Entrega también en su propia rama, con su propio Pull Request.",
+   evidenciaLabel:"Tus tres momentos de defensa (predicción, mejor decisión, qué cambiarías) + tu respuesta honesta a la pregunta de validación final"},
+ ],
+ evalu:{cierre:"El Capstone ET2 no certifica cinco entregas separadas — certifica que las cinco garantías de N2 (contrato, confianza, consistencia, calidad, continuidad) se sostienen juntas, bajo la misma presión real que un sistema en producción enfrenta todos los días.",
+  checklist:["M1 (contrato): el cambio de requisito se extendió sin romper a Bitácora, con versionado o aviso donde correspondía","M2 (confianza): el cambio exige el permiso nuevo diseñado en el hito 2, verificable con una petición real rechazada sin él","M3 (consistencia): el episodio integrador incluyó tráfico concurrente real de Bitácora sobre el recurso que el cambio toca, sin condición de carrera sin resolver","M4 (calidad): el pipeline de CI bloqueó el despliegue hasta pasar en verde, automáticamente — no una verificación manual","M5 (continuidad): el despliegue se hizo con expandir-contraer, con Bitácora llamando sin pausa durante todo el proceso","Arqueología completa: la historia de commits desde M1.T1 narra cómo cada garantía se construyó sobre la anterior","Post-mortem honesto: una garantía identificada como la más difícil de sostener, con una razón concreta, no genérica"],
+  defensa:["¿Cuáles son las tres preguntas que un ingeniero senior haría sobre tu sistema completo? Respóndelas tú mismo, antes de que te las hagan.","¿Cuál fue la mejor decisión de ingeniería de todo N2, y qué evidencia tienes de que fue la correcta?","De las cinco garantías, ¿cuál cambiarías si empezaras este proyecto hoy, con lo que sabes ahora?","Muéstrame una rama y un Pull Request del episodio integrador — ¿qué pasaría si quitaras el pipeline de CI de la ecuación?","¿Confiarías tú mismo este sistema a otra persona, sabiendo todo lo que sabes de él?"]}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -6127,7 +6154,7 @@ function renderProyectoDay(d,box,meta){
     '<span class="chip gold">'+modOf(d).icon+" "+modOf(d).label+'</span>'+
     '<span class="small num" style="color:var(--gold);font-weight:700">'+hechos+"/"+hitos.length+" hitos · "+pct+"%</span></div>"+
     '<div class="bar" style="margin-top:8px;height:6px"><i style="width:'+pct+'%;background:var(--gold)"></i></div></div>';
-  h+='<div class="card" style="border-color:var(--gold)"><p class="eyebrow" style="color:var(--gold)">'+d.n+' · Síntesis de todo N1</p>'+
+  h+='<div class="card" style="border-color:var(--gold)"><p class="eyebrow" style="color:var(--gold)">'+d.n+' · Síntesis de todo '+(d.nivelLabel||"N1")+'</p>'+
     '<h2>'+(nombreProducto?esc(nombreProducto):d.t)+"</h2>"+
     (f.granPregunta?'<p class="small" style="margin:8px 0 0;color:var(--muted)"><strong>Gran pregunta:</strong> '+f.granPregunta+"</p>":"")+
     '<div class="row" style="gap:6px;flex-wrap:wrap;margin-top:10px">'+
@@ -6163,15 +6190,15 @@ function renderProyectoDay(d,box,meta){
     '<p class="small" style="margin:2px 0 8px">Documenta al menos 2 decisiones reales en formato <strong>opciones → criterio → decisión → costo</strong> — no hay respuesta correcta única, hay una decisión que puedas justificar.</p>'+
     ta(d.id,"tradeoff1","Trade-off 1: opciones → criterio → decisión → costo",tx.tradeoff1)+
     ta(d.id,"tradeoff2","Trade-off 2: opciones → criterio → decisión → costo",tx.tradeoff2)+"</div>";
-  if(d.evalu){const ev=d.evalu;h+='<div class="card" style="border-color:var(--good)"><p class="eyebrow" style="color:var(--good)">🎓 Evaluación — síntesis de los 7 módulos</p>'+
+  if(d.evalu){const ev=d.evalu;h+='<div class="card" style="border-color:var(--good)"><p class="eyebrow" style="color:var(--good)">🎓 Evaluación — síntesis de los '+(d.modCount||7)+' módulos</p>'+
     (ev.cierre?'<div class="okbox"><strong>Lo esencial:</strong> '+ev.cierre+"</div>":"")+
     (ev.checklist?'<ul class="tight small" style="margin-top:10px">'+ev.checklist.map(x=>"<li>"+x+"</li>").join("")+"</ul>":"")+
     (ev.defensa?'<p class="small" style="margin:10px 0 4px"><strong>Preguntas de defensa oral:</strong></p><ul class="tight small">'+ev.defensa.map(q=>"<li>"+q+"</li>").join("")+"</ul>":"")+
     '<p class="small" style="margin:10px 0 2px"><strong>Reflexión final:</strong> ¿qué de este producto te haría sentir orgulloso de mostrarlo en una entrevista real?</p>'+ta(d.id,"reflexion_final","Tu reflexión",tx.reflexion_final)+"</div>";}
   if(dayDone(d)){
     h+='<div class="card" style="border-color:var(--good)"><p class="eyebrow" style="color:var(--good)">Capstone completo</p>'+
-      '<h2 style="color:var(--good)">'+(nombreProducto||d.t)+" — los 5 hitos están marcados</h2>"+
-      '<p class="small muted" style="margin:8px 0 0">Esto es progreso autodeclarado. La certificación real de N1 ocurre en tu defensa oral con el tutor, usando la bitácora y los trade-offs que escribiste arriba.</p></div>';
+      '<h2 style="color:var(--good)">'+(nombreProducto||d.t)+" — los "+hitos.length+" hitos están marcados</h2>"+
+      '<p class="small muted" style="margin:8px 0 0">Esto es progreso autodeclarado. La certificación real de '+(d.nivelLabel||"N1")+' ocurre en tu defensa oral con el tutor, usando la bitácora y los trade-offs que escribiste arriba.</p></div>';
   }
   box.innerHTML=h;
 }

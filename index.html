@@ -1816,6 +1816,76 @@ const LEVEL1=[
   starter:'cache = {}\ncache[(1, 2)] = "primero"\ncache[(1, 2)] = "segundo"\nprint(cache)\nprint(len(cache))',runs:[[]],
   hints:["Dos tuplas construidas por separado, con los mismos valores, son objetos distintos en memoria — pero como CLAVE de diccionario, lo que importa es su VALOR, no si son literalmente el mismo objeto.","Esto es un matiz nuevo sobre la inmutabilidad: (1,2) == (1,2) por valor, así que la segunda asignación ACTUALIZA la primera clave — el mismo mecanismo del Bloque 2, ahora con tuplas."],
   check:(o,c)=>{const exp="{(1, 2): 'segundo'}\n1";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
+{id:"n1d4",n:"Día 7",t:"Comprehensions · Parte 1: fundamentos",
+ intro:"Cada vez que escribes 'recorre esto, transforma cada uno, y guárdalo allá', repites un patrón que ya escribiste muchas veces desde Listas y tuplas. Hoy aprendes a decirlo en una sola línea — si sabes cuándo parar.",
+ intuit:{code:'numeros = [1, 2, 3, 4, 5]\ncuadrados = [n**2 for n in numeros if n % 2 == 0]\nprint(cuadrados)',py:true,
+  q:"Sin ejecutar: ¿cuántos elementos tiene 'cuadrados', y cuáles son?",
+  req:["4","16"],out:"[4, 16]",
+  e:"El if FILTRA antes de transformar — solo entran los números pares (2 y 4), y el resultado es [4, 16]. No hay 5 elementos ni 'huecos' para los que no cumplen la condición."},
+ mcq:[
+  {q:"En '[n**2 for n in numeros if n % 2 == 0]', ¿en qué orden ocurren el filtro y la transformación?",o:["Primero se transforma todo, luego se filtra el resultado","Primero se filtra con el if, y solo lo que pasa se transforma","Ocurren al mismo tiempo, no hay orden","Depende del tamaño de la lista"],a:1,e:"El if filtra ANTES — solo los elementos que cumplen la condición llegan a evaluarse con la expresión de transformación."},
+  {q:"¿Cuándo conviene usar un for explícito en vez de una comprehension?",o:["Siempre, las comprehensions son solo para expertos","Nunca, una comprehension es siempre mejor","Cuando hace falta más de un for/if anidado o hay efectos colaterales dentro","Solo cuando la lista tiene más de 100 elementos"],a:2,e:"Una comprehension debe ser una transformación pura y simple de leer. Si necesita mucho anidamiento o efectos colaterales, un for explícito comunica mejor la intención."}],
+ ing:"Transformar y filtrar colecciones es el gesto más repetido del oficio — y pandas (N4, Machine Learning) empuja esta misma idea de 'qué quiero' en vez de 'cómo lo recorro' mucho más lejos, sobre tablas completas de datos.",
+ errores:["Anidar comprehensions hasta que se vuelven ilegibles en segundos","Meter efectos colaterales (print, .append() a otra variable) dentro de una comprehension, en vez de usarla como transformación pura","Usarlas como sustituto universal del for, incluso cuando un for explícito se entendería mejor"],
+ mental:{jr:"“Una comprehension es una forma más corta de escribir un for.”",sr:"“Una comprehension describe el RESULTADO que quiero, no los pasos para construirlo — y esa claridad se pierde en el momento en que necesita más de un for/if o un efecto colateral escondido.”",err:"Escribir comprehensions anidadas de 2-3 niveles porque 'caben' en una línea, sin preguntarse si alguien las va a entender en menos de un vistazo."},
+ theory:[
+  ["Sintaxis: equivalencia exacta con el for",T('<code>[expresión for elemento in iterable if condición]</code> se lee de derecha a izquierda: "para cada elemento en iterable, si condición, calcula expresión, y ponlo en la lista". Es exactamente el mismo patrón for + append() que ya conoces, dicho distinto.'),
+   '# con for explicito\ncuadrados = []\nfor n in numeros:\n    if n % 2 == 0:\n        cuadrados.append(n**2)\n\n# la misma idea, comprimida\ncuadrados = [n**2 for n in numeros if n % 2 == 0]'],
+  ["Dict y set comprehension — generalizan Diccionarios y sets",T('La misma sintaxis se generaliza a diccionarios (<code>{clave: valor for ...}</code>) y sets (<code>{expresión for ...}</code>).'),
+   'codigos = {"PE": "Peru", "MX": "Mexico"}\ninvertido = {nombre: codigo for codigo, nombre in codigos.items()}\nprint(invertido)   # {\'Peru\': \'PE\', \'Mexico\': \'MX\'}\n\npalabras = ["sol", "luna", "sol", "estrella"]\nlargas = {p for p in palabras if len(p) > 3}\nprint(sorted(largas))   # [\'estrella\', \'luna\']'],
+  ["Leer código: comprehension anidada",T('Sin ejecutar: ¿qué produce esta comprehension con dos for? Se lee en el MISMO orden en que se escribirían los for anidados explícitos.'),
+   'matriz = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\naplanada = [n for fila in matriz for n in fila]'],
+  ["Cuándo NO usarlas",T('Si hace falta más de un for/if anidado, o si el cuerpo tiene efectos colaterales (imprimir, modificar otra variable), un for explícito comunica mejor la intención. Una comprehension debe ser una <strong>transformación pura</strong>: entra una colección, sale una colección nueva, sin ensuciar nada más.')],
+ ],
+ ex:[
+  {id:"n1d4e1",py:true,t:"Ejercicio 1 · De for a comprehension",
+   d:'Convierte este <code>for</code> en una comprehension equivalente, con el mismo resultado exacto: <code>[4, 16, 36]</code>. No debe quedar ningún bloque for.',
+   starter:'numeros = [1, 2, 3, 4, 5, 6]\ncuadrados = []\nfor n in numeros:\n    if n % 2 == 0:\n        cuadrados.append(n ** 2)\nprint(cuadrados)',runs:[[]],
+   check:(o,c)=>{if(/for\s+\w+\s+in[^\n]*:/.test(c))return"Todavía queda un bloque for (termina en ':'). Usa una comprehension de una sola línea, sin ':'.";
+     return norm(o[0])==="[4, 16, 36]"?true:"Esperaba: [4, 16, 36]\nObtuve:\n"+norm(o[0])},
+   hints:["[n ** 2 for n in numeros if n % 2 == 0] — misma condición, misma expresión, una sola línea.","El if de la comprehension va DESPUÉS del for, no antes."]},
+  {id:"n1d4e2",py:true,t:"Ejercicio 2 · Dict comprehension: invertir un diccionario",
+   d:'Dado <code>codigos</code> (código→nombre), construye <code>invertido</code> (nombre→código) usando UNA dict comprehension, e imprímelo.',
+   starter:'codigos = {"PE": "Peru", "MX": "Mexico", "AR": "Argentina"}\n# tu dict comprehension aqui\n',runs:[[]],
+   check:(o,c)=>{if(!/\{[^\n]*:[^\n]*for[^\n]*\}/.test(c))return"Usa una dict comprehension: {nombre: codigo for codigo, nombre in codigos.items()}.";
+     const exp="{'Peru': 'PE', 'Mexico': 'MX', 'Argentina': 'AR'}";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["codigos.items() te da pares (clave, valor) para recorrer.","invertido = {nombre: codigo for codigo, nombre in codigos.items()}"]},
+  {id:"n1d4e3",py:true,t:"Ejercicio 3 · Set comprehension",
+   d:'Dada la lista de palabras (con duplicados), construye con una set comprehension el conjunto de las palabras con más de 3 letras. Imprime <code>sorted(...)</code> del resultado (para que el orden sea siempre el mismo) y su longitud.',
+   starter:'palabras = ["sol", "luna", "sol", "estrella", "luna", "sol"]\n# tu set comprehension aqui, guardada en "largas"\n\nprint(sorted(largas))\nprint(len(largas))',runs:[[]],
+   check:(o,c)=>{if(!/\{[^\n]*for[^\n]*\}/.test(c))return"Usa una set comprehension: {p for p in palabras if len(p) > 3}.";
+     const exp="['estrella', 'luna']\n2";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["largas = {p for p in palabras if len(p) > 3} — un set descarta los duplicados solo.","Imprime sorted(largas), no largas directo — un set no garantiza el mismo orden siempre."]},
+  {id:"n1d4e4",py:true,t:"Ejercicio 4 · Comprehension anidada a for explícito",
+   d:'Esta comprehension aplana una matriz (lista de listas), pero es difícil de leer a primera vista. Reescríbela como un <code>for</code> anidado explícito, con el MISMO resultado: <code>[1, 2, 3, 4, 5, 6, 7, 8, 9]</code>.',
+   starter:'matriz = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\naplanada = [n for fila in matriz for n in fila]\nprint(aplanada)',runs:[[]],
+   check:(o,c)=>{if(/\[[^\n]*for[^\n]*for[^\n]*\]/.test(c))return"Todavía usas la comprehension anidada — reescríbela como dos for explícitos, uno dentro del otro.";
+     if(!/for[^\n]*:[\s\S]*for[^\n]*:/.test(c))return"Hacen falta DOS bloques for, uno anidado dentro del otro.";
+     return norm(o[0])==="[1, 2, 3, 4, 5, 6, 7, 8, 9]"?true:"Esperaba: [1, 2, 3, 4, 5, 6, 7, 8, 9]\nObtuve:\n"+norm(o[0])},
+   hints:["aplanada = []\\nfor fila in matriz:\\n    for n in fila:\\n        aplanada.append(n)","El orden de los for anidados debe ser el mismo que el de la comprehension original: primero 'fila in matriz', luego 'n in fila'."]},
+  {id:"n1d4e5",py:true,t:"Ejercicio 5 · Antipatrón: efecto colateral en una comprehension",
+   d:'Esta comprehension se usa SOLO para llenar "registro" con los números positivos — su valor de retorno se descarta. Es un antipatrón real. Reescríbelo con un <code>for</code> explícito, sin ninguna comprehension, con el mismo resultado.',
+   starter:'datos = [3, -1, 4, -5, 9, -2]\nregistro = []\n[registro.append(x) for x in datos if x > 0]\nprint(registro)',runs:[[]],
+   check:(o,c)=>{if(/\[[^\n]*for[^\n]*\]/.test(c))return"Todavía queda una comprehension — usa un for explícito con .append(), sin corchetes de comprehension.";
+     return norm(o[0])==="[3, 4, 9]"?true:"Esperaba: [3, 4, 9]\nObtuve:\n"+norm(o[0])},
+   hints:["for x in datos:\\n    if x > 0:\\n        registro.append(x)","Sin la comprehension no hay ninguna lista 'inútil' de por medio — el for explícito dice exactamente lo que hace."]},
+ ]},
+{id:"n1d4b",n:"Día 8",t:"Comprehensions · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que una comprehension es el mismo for que ya dominabas, dicho distinto — y que forzarla donde no cabe la vuelve críptica. Hoy la usas en un reporte real, y cierras con un desafío sobre un antipatrón que 'funciona' pero traiciona su propio propósito.",
+ reto:{id:"n1d4r",py:true,t:"Laboratorio · Reporte de notas",
+  d:'Dada una lista de tuplas <code>(nombre, nota)</code>, con comprehensions: <code>aprobados(notas)</code> devuelve la lista de nombres con nota ≥ 11; <code>notas_aprobados(notas)</code> devuelve un diccionario nombre→nota SOLO de los aprobados; <code>promedio_aprobados(notas)</code> devuelve el promedio de esas notas (0 si nadie aprobó). Ninguna debe usar print(). El programa principal imprime exactamente:<pre class="codebox">Aprobados: [...]\nNotas: {...}\nPromedio: valor</pre>Se probará con 4, 2 y 1 estudiantes.',
+  starter:'def aprobados(notas):\n    pass\n\ndef notas_aprobados(notas):\n    pass\n\ndef promedio_aprobados(notas):\n    pass\n\nnotas = [("Ana", 15), ("Luis", 8), ("Eva", 12), ("Tom", 18)]\nprint("Aprobados:", aprobados(notas))\nprint("Notas:", notas_aprobados(notas))\nprint("Promedio:", promedio_aprobados(notas))',
+  runs:[[]],hints:["aprobados: [nombre for nombre, nota in notas if nota >= 11]","notas_aprobados: {nombre: nota for nombre, nota in notas if nota >= 11}","promedio_aprobados: usa una comprehension para sacar solo las notas aprobadas, y sum()/len() sobre esa lista — cuidado con la lista vacía (división entre cero)."],
+  check:(o,c)=>{
+    const exp="Aprobados: ['Ana', 'Eva', 'Tom']\nNotas: {'Ana': 15, 'Eva': 12, 'Tom': 18}\nPromedio: 15.0";
+    return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1d4x",py:true,t:"Desafío final · inédito — la comprehension que se usa mal",
+  d:'Predice, ANTES de ejecutar, qué contienen <code>registro</code> y <code>resultado</code> — y por qué <code>resultado</code> es una lista "inútil" aunque el código funcione sin errores. Luego ejecútalo para confirmar.',
+  starter:'datos = [3, -1, 4, -5, 9, -2]\nregistro = []\nresultado = [registro.append(x) for x in datos if x > 0]\nprint(registro)\nprint(resultado)',runs:[[]],
+  hints:[".append() siempre devuelve None — así que 'resultado' termina siendo una lista de puros None, uno por cada vez que la comprehension corrió.","'registro' sí se llena correctamente (por el efecto colateral), pero eso es exactamente el problema: la comprehension se usó por su efecto colateral, no por su valor — la razón por la que un for explícito sería más honesto aquí."],
+  check:(o,c)=>{const exp="[3, 4, 9]\n[None, None, None]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -2172,6 +2242,23 @@ n1d3:{hist:"Los diccionarios de Python están construidos, desde el origen del l
   "¿En qué ejercicio buscaste por valor cuando debiste buscar por clave, y qué te hizo darte cuenta?",
   "¿Cómo se conecta la regla \"las claves deben ser inmutables\" con lo que aprendiste sobre aliasing en Listas y tuplas?",
   "¿Qué escenario real (fuera de esta lección) modelarías con un diccionario en vez de con una lista?",
+ ]},
+n1d4:{hist:"Las comprehensions vienen de la notación de conjuntos de las matemáticas ({x² : x ∈ S}) y de lenguajes de programación funcional. Python las adoptó desde el año 2000 (Python 2.0) precisamente porque el patrón \"bucle que construye una lista nueva\" era tan común que mereció su propia sintaxis — no es una idea nueva: es la compresión de un patrón universal que ya se domina.",
+ recursos:[
+  {t:"CS50P — Week 2, Loops",autor:"Harvard (CS50)",idioma:"EN",dur:"~1h",nivel:"Introductorio",motivo:"Trata comprehensions junto a los bucles, y de nuevo más adelante como decisión de estilo — el mismo doble tratamiento de esta lección.",url:"https://cs50.harvard.edu/python/weeks/2/",tag:"🟢"},
+  {t:"Python docs — 5.1.3 List Comprehensions",autor:"Python Software Foundation",idioma:"EN",dur:"~10 min",nivel:"Introductorio",motivo:"Referencia oficial exacta de la sintaxis, presentada justo después del for.",url:"https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",tag:"🔵"},
+  {t:"PEP 20 — The Zen of Python",autor:"Python Software Foundation",idioma:"EN",dur:"~5 min",nivel:"Introductorio",motivo:"La filosofía oficial del lenguaje (\"Readability counts\") detrás del criterio de cuándo NO usar una comprehension.",url:"https://peps.python.org/pep-0020/",tag:"🔵"},
+  {t:"PEP 8 — Style Guide for Python Code",autor:"Python Software Foundation",idioma:"EN",dur:"~30 min",nivel:"Intermedio",motivo:"Verificado directamente: no da una regla numérica sobre comprehensions — útil para constatar que la legibilidad es un juicio, no una fórmula.",url:"https://peps.python.org/pep-0008/",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué el resultado de [n**2 for n in numeros if n % 2 == 0] no tiene el mismo tamaño que numeros?",
+  "¿Qué hace que una comprehension deje de ser \"legible\" y se vuelva \"críptica\"?",
+  "(inédita) Si tuvieras que darle a alguien UNA sola razón para preferir un for explícito sobre una comprehension, ¿cuál sería?",
+ ],
+ metacog:[
+  "¿En qué ejercicio una comprehension te resultó más confusa que el for equivalente, y por qué crees que pasó?",
+  "¿Cómo decidiste, en el laboratorio, cuándo una comprehension seguía siendo legible?",
+  "¿Qué le dirías a alguien que solo usa comprehensions \"porque se ven más profesionales\", sin pensar en quién lo va a leer después?",
  ]},
 };
 /* examen práctico */

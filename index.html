@@ -154,7 +154,7 @@
   .daycard.cur .dnum{color:var(--gold)}
   .dtitle{flex:1;font-weight:600;font-size:.94rem}
   .dtitle .small{display:block;font-weight:400;color:var(--dim);font-size:.76rem;font-family:var(--mono)}
-  .lesson-nav{display:flex;gap:10px;margin:14px 0}
+  .lesson-nav{display:flex;gap:10px;margin:0 0 14px;position:sticky;top:8px;z-index:46;background:#141C2Cf2;backdrop-filter:blur(8px);padding:8px 0}
 
   label.task{display:flex;gap:10px;align-items:flex-start;padding:7px 0;cursor:pointer;
     border-bottom:1px dashed #1e2a3e}
@@ -198,7 +198,7 @@
   .lvl.active .lvlnum{color:var(--gold)}
 
   /* barra de fases fija + botón flotante */
-  .dayrail{position:sticky;top:8px;z-index:45;background:#141C2Cf2;backdrop-filter:blur(8px)}
+  .dayrail{position:sticky;top:56px;z-index:45;background:#141C2Cf2;backdrop-filter:blur(8px)}
   .fab{position:fixed;right:14px;bottom:74px;z-index:70;background:var(--gold);color:#0B111D;
     border:none;border-radius:999px;padding:12px 18px;font-weight:800;font-size:.88rem;
     cursor:pointer;box-shadow:0 6px 22px #000a;display:flex;align-items:center;gap:6px}

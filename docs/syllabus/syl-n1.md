@@ -40,7 +40,9 @@ Por referencia a §14/DOC-10: **N1 · Computer Science** — la base de la disci
 
 ## 4. Estructura y grafo local
 
-Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1**; `M6, M7` tras M2 (pueden intercalarse con M3); capstone al final integra todo. Dentro de cada módulo los temas son secuenciales salvo indicación. Invariantes 13.7 verificados: sin ciclos, todo alcanzable, nada huérfano.
+Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño pedagógico — ver nota de implementación abajo)*; `M6, M7` tras M2 (pueden intercalarse con M3); capstone al final integra todo. Dentro de cada módulo los temas son secuenciales salvo indicación. Invariantes 13.7 verificados: sin ciclos, todo alcanzable, nada huérfano.
+
+**Nota de implementación (corrección de auditoría integral, 2026-07-20):** el Campus presenta un recorrido lineal único, sin bifurcaciones de navegación (decisión del Director, registrada en DOC-07 §Adenda y EVT-034 — la Academia sirve a un estudiante individual, no a cohortes que necesiten avanzar a ritmos distintos). En la práctica, esto significa que M4 y M5 no se viven "a la vez" semana a semana: se insertan de forma lineal en el punto donde se vuelven prerrequisito real (los Laboratorios de M5.T1-T2 y M1.T6 antes de M1.T7; M4 completo inmediatamente después; el resto de M5 a continuación), todos antes de que M1 termine. "En paralelo desde semana 1" describe correctamente la intención pedagógica (ambos módulos viven en el entorno real desde el principio, no se posponen) — pero no una alternancia real de navegación, que esta nota aclara para que ningún lector futuro del syllabus infiera una estructura que la implementación no tiene.
 
 ## 5. Fichas pedagógicas por tema
 
@@ -476,7 +478,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1**; `M6, M7` 
 **N1.M6.T2 · La conversación: APIs, contratos y confianza**
 - **Objetivo:** consume APIs HTTP reales desde Python (peticiones con sus métodos — GET para leer, POST para crear —, parámetros, cabeceras, códigos de estado) leyendo la documentación como contrato, y gestiona identidad y confianza: HTTPS conceptual y claves de API fuera del código.
 - **Prerrequisitos:** T1; M1.T8 (JSON).
-- **Competencias:** C-N1-05.
+- **Competencias:** C-N1-05; **C-N1-07** *(corrección de auditoría integral, 2026-07-20: esta ficha ya exigía "leer la documentación en inglés sin tutorial mascado" desde su versión original — la competencia se practicaba de hecho sin declararse; C-N1-07 no tenía cobertura en ninguna ficha de N1 hasta esta corrección)*.
 - **Errores habituales:** ignorar el código de estado; **claves de API dentro del código** (el pecado que N2 formalizará); asumir que la documentación y la realidad coinciden siempre.
 - **Modelo mental:** la API como **ventanilla con formulario y credencial**: pides con el formato exacto que el contrato define, te identificas, y la conversación viaja en **sobre lacrado** (HTTPS) — nadie la lee ni la altera por el camino.
 - **Por qué:** existe porque consumir servicios es el gesto profesional más común / ahora porque T1 dio el mapa del viaje / habilita programas conectados al mundo — y siembra la pregunta de la confianza, que N2 responderá desde el otro lado de la ventanilla (auth).
@@ -654,6 +656,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1**; `M6, M7` 
 | H-07 | "Invertir una vez para ahorrar muchas" (M3.T3) | **Redis y cachés** (N2.M2): la idea ya tiene nombre propio en la cabeza del estudiante |
 | H-08 | Commits que disparan cosas (M4 cierre) + scripts que automatizan (M5.T5) | **CI/CD** (N2.M4): automatización sobre la historia |
 | H-09 | Procesos aislados + entorno reproducible (M5, M1.T6) | **Docker** (N2.M4): "un contenedor es un proceso con su propio sistema de archivos" será una frase comprensible, no mágica |
+| H-10 *(añadida por corrección de auditoría integral, 2026-07-20 — vacío real detectado: N2.M1.T3 ya presuponía esto sin que N1 lo sembrara)* | Anotaciones de función (`def f(x: int) -> int`), cierre opcional de M1.T1 — sin tipado estático completo, sin `mypy`, solo la sintaxis y su propósito documental | **Pydantic y validación real** (N2.M1.T3): el estudiante ya reconoce la sintaxis de anotación antes de aprender que Pydantic la usa para validar de verdad — evita combinar tres conceptos nuevos (anotaciones + decoradores + validación) en una sola sesión |
 
 ## 10. Observaciones de ejecución
 

@@ -1661,6 +1661,17 @@ const LEVEL1=[
   hints:["Cada vez que llamas a contador(), Python crea un entorno NUEVO — 'veces' nace en 0 otra vez cada vez, no recuerda la llamada anterior.","Esto es exactamente la limitación que los objetos (N1.M2) van a resolver: darle a algo memoria propia entre llamadas."],
   check:(o,c)=>norm(o[0])==="1\n1\n1"?true:"Esperaba tres líneas, cada una con 1 (cada llamada reinicia 'veces' desde cero)\nObtuve:\n"+norm(o[0])}},
 ];
+/* ============================================================
+   NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
+   Generaliza la navegación de "Clases" para no depender de un solo
+   nivel hardcodeado. approved() decide si el SIGUIENTE nivel se
+   desbloquea en el selector.
+   ============================================================ */
+const LEVELS=[LEVEL0,LEVEL1];
+const LEVEL_META=[
+  {id:"n0",label:"Nivel 0 — Fundamentos",approved:()=>levelApproved()},
+  {id:"n1",label:"Nivel 1 — Computer Science",approved:()=>false},
+];
 /* Fase 3 · Visualización — diagramas por tema */
 const VIZ={
 d1:'programa.py ──lee──▶ [ INTÉRPRETE ] ──ejecuta──▶ pantalla\nprint("hola")    traduce línea a línea          hola',
@@ -1955,6 +1966,23 @@ d8:{hook:"La diferencia entre un junior y un senior NO es cometer menos errores:
   "¿Cómo cambió tu relación con los errores de Python entre T1 (donde un SyntaxError probablemente se sintió como un muro) y hoy?",
   "Si tuvieras que darle un consejo a alguien que empieza N0 mañana, basado en lo que a ti te costó más, ¿cuál sería?",
  ]},
+n1d1:{hist:"1957: FORTRAN, uno de los primeros lenguajes en tener subrutinas, resolvió un problema real y costoso — antes de eso, los programadores copiaban y pegaban el mismo bloque de instrucciones cada vez que lo necesitaban, y un error en ese bloque había que corregirlo copia por copia, una por una. La función no es una comodidad moderna: es la respuesta directa a ese costo histórico.",
+ recursos:[
+  {t:"MIT 6.0001 — Lecture 4",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Fuente directa del modelo de scope-como-entorno de esta lección.",url:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/6ba59859535f1566dd57a7279aeba5d1_MIT6_0001F16_Lec4.pdf",tag:"🟢"},
+  {t:"Python docs — Defining Functions",autor:"Python Software Foundation",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Referencia oficial exacta de def, parámetros y return.",url:"https://docs.python.org/3/tutorial/controlflow.html#defining-functions",tag:"🔵"},
+  {t:"CMU 15-112 — Writing Functions",autor:"Carnegie Mellon",idioma:"EN",dur:"~20 min",nivel:"Introductorio",motivo:"Origen de la sección \"Print versus Return\" que respalda el conflicto central de esta lección.",url:"https://www.cs.cmu.edu/~rdriley/112/notes/notes-writing-functions.html",tag:"🟣"},
+  {t:"CS61A — Environment Diagrams",autor:"UC Berkeley",idioma:"EN",dur:"~20 min",nivel:"Intermedio",motivo:"Para quien quiera ver la notación formal completa de frames, más allá de lo enseñado aquí.",url:"https://cs61a.org/study-guide/environments-hof/",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué print(area(5)) puede mostrar el número correcto en pantalla aunque la función esté mal escrita (sin return)?",
+  "¿Qué significa que una variable \"muera\" cuando termina una función?",
+  "(inédita) Si tuvieras que explicarle a alguien que nunca programó qué es una función, sin usar la palabra \"función\" ni \"código\", ¿qué dirías?",
+ ],
+ metacog:[
+  "¿En qué ejercicio confundiste \"se ve bien en pantalla\" con \"funciona correctamente\"?",
+  "¿Cómo cambiaría tu forma de escribir programas de N0 si tuvieras que reescribirlos hoy, con funciones?",
+  "¿Qué se sintió distinto entre razonar sobre una variable global y una variable local con el mismo nombre?",
+ ]},
 };
 /* examen práctico */
 const PRACTICA=[
@@ -2078,7 +2106,8 @@ function dayDone(d){
 }
 function dayUnlocked(i){
   if(i===0)return true;
-  for(let j=i-1;j>=0;j--){const d=LEVEL0[j];if(d.ex.length||d.reto||d.retoFinal)return dayDone(d)}
+  const lvl=LEVELS[curLevel];
+  for(let j=i-1;j>=0;j--){const d=lvl[j];if(d.ex.length||d.reto||d.retoFinal)return dayDone(d)}
   return true;
 }
 function projectDone(){return!!S.ex["d9p"]}
@@ -2107,17 +2136,34 @@ tabs.forEach(b=>b.addEventListener("click",()=>go(b.dataset.v)));
 
 /* ---- clases ---- */
 let curDay=null;
+let curLevel=0;
+function levelUnlocked(i){return i===0||LEVEL_META[i-1].approved()}
+function switchLevel(i){if(!levelUnlocked(i))return;curLevel=i;curDay=null;renderClases()}
+function levelChips(){
+  return LEVEL_META.map((m,i)=>{
+    const on=i===curLevel,unlocked=levelUnlocked(i);
+    return '<span class="chip '+(on?"gold":unlocked?"blue":"lock")+'" style="cursor:'+(unlocked?"pointer":"default")+';margin:0 5px 5px 0" '+
+      (unlocked?'onclick="switchLevel('+i+')" tabindex="0" onkeydown="if(event.key===\'Enter\')switchLevel('+i+')"':"")+
+      '>'+esc(m.label.replace(" — "," · "))+(unlocked?"":" 🔒")+"</span>";
+  }).join("");
+}
 function renderClases(){
   const box=document.getElementById("clasesBox");
+  const lvl=LEVELS[curLevel],meta=LEVEL_META[curLevel];
   if(curDay===null){
-    const ns0=nextStepInfo();
-    let h='<div class="card" style="border-color:var(--gold-dim)"><p class="eyebrow">Nivel 0 · Fundamentos</p><h2>Plan de clases</h2>'+
-      '<p class="small" style="margin:8px 0 0">📍 <strong>Siguiente:</strong> '+ns0.label+"</p>"+
-      '<button class="btn" style="margin-top:10px" onclick="rutaGo()">▶ Ir directo</button></div>';
-    LEVEL0.forEach((d,i)=>{
+    let h='<div style="margin-bottom:12px">'+levelChips()+"</div>";
+    if(curLevel===0){
+      const ns0=nextStepInfo();
+      h+='<div class="card" style="border-color:var(--gold-dim)"><p class="eyebrow">'+esc(meta.label)+'</p><h2>Plan de clases</h2>'+
+        '<p class="small" style="margin:8px 0 0">📍 <strong>Siguiente:</strong> '+ns0.label+"</p>"+
+        '<button class="btn" style="margin-top:10px" onclick="rutaGo()">▶ Ir directo</button></div>';
+    }else{
+      h+='<div class="card" style="border-color:var(--gold-dim)"><p class="eyebrow">'+esc(meta.label)+'</p><h2>Plan de clases</h2></div>';
+    }
+    lvl.forEach((d,i)=>{
       const unlocked=dayUnlocked(i),done=dayDone(d);
       const evalDay=d.eval;
-      const evalOk=evalDay&&levelApproved();
+      const evalOk=evalDay&&meta.approved();
       const tot=d.ex.length+(d.reto?1:0)+(d.retoFinal?1:0);
       const hecho=d.ex.filter(e=>S.ex[e.id]).length+((d.reto&&S.ex[d.reto.id])?1:0)+((d.retoFinal&&S.ex[d.retoFinal.id])?1:0);
       const st=evalDay?(evalOk?'<span class="chip good">Aprobado</span>':unlocked?'<span class="chip blue">Evaluación</span>':'<span class="chip lock">Bloqueado</span>')
@@ -2131,7 +2177,7 @@ function renderClases(){
     });
     box.innerHTML=h;return;
   }
-  const d=LEVEL0[curDay],p=phOf(d);
+  const d=lvl[curDay],p=phOf(d);
   let h='<div class="lesson-nav"><button class="btn ghost" onclick="closeDay()">← Todas las clases</button></div>';
   // riel de fases fijo: siempre sabes dónde estás y qué sigue
   if(!d.eval){
@@ -2151,7 +2197,7 @@ function renderClases(){
         :'<p class="small" style="margin:7px 0 0;color:var(--good)">Día al 100% — verifica tu dominio abajo y continúa.</p>')+"</div>";
   }
   const EXd=EXTRA[d.id]||{};
-  h+='<div class="card"><p class="eyebrow">'+d.n+" · nivel 0 · camino al dominio</p><h2>"+d.t+"</h2>"+
+  h+='<div class="card"><p class="eyebrow">'+d.n+" · "+esc(meta.label.split(" — ")[0].toLowerCase())+" · camino al dominio</p><h2>"+d.t+"</h2>"+
     (d.intro?'<p class="small" style="margin:8px 0 0;color:var(--muted)">'+d.intro+"</p>":"")+
     (EXd.hook?'<p class="small" style="margin:10px 0 0;padding:10px 12px;background:#1c2438;border-left:3px solid var(--gold);border-radius:6px"><strong style="color:var(--gold)">💰 Por qué importa:</strong> '+EXd.hook+"</p>":"")+"</div>";
   const okInt=!d.intuit||p.int,okMcq=okInt&&(!d.mcq||p.mcq);
@@ -2265,7 +2311,7 @@ function renderClases(){
       '<li>✅ ¿Puedes <strong>usarlo</strong> en un problema nuevo?</li>'+
       '<li>✅ ¿Podrías <strong>enseñárselo</strong> a alguien?</li></ul>'+
       '<p class="small muted" style="margin:6px 0 0">Si alguna respuesta es “no”: repite esa parte. Las Fases 7 (Examen) y 8 se sellan al final del nivel — examen + defensa oral con tu tutor, que es quien declara <strong>DOMINADO</strong>.</p>'+
-      (nx<LEVEL0.length?'<button class="btn" style="margin-top:12px" onclick="openDay('+nx+')">Continuar → '+LEVEL0[nx].n+": "+LEVEL0[nx].t+"</button>":"")+"</div>";
+      (nx<lvl.length?'<button class="btn" style="margin-top:12px" onclick="openDay('+nx+')">Continuar → '+lvl[nx].n+": "+lvl[nx].t+"</button>":"")+"</div>";
   }
   box.innerHTML=h;
   if(okMcq){d.ex.forEach(e=>{if(document.getElementById("ed-"+e.id))wireEx(e)});
@@ -2292,7 +2338,7 @@ function fasesChips(d){
 }
 let intTries=0;
 function checkIntuit(){
-  const d=LEVEL0[curDay];
+  const d=LEVELS[curLevel][curDay];
   const val=(document.getElementById("intIn").value||"").toLowerCase();
   const fb=document.getElementById("intFb");
   if(!val.trim()){fb.innerHTML='<div class="kobox">Escribe tu predicción — pensar es la fase 1.</div>';return}
@@ -2305,14 +2351,14 @@ function checkIntuit(){
   }
 }
 function revealIntuit(){
-  const d=LEVEL0[curDay];
+  const d=LEVELS[curLevel][curDay];
   S.weak.push("Predicción fallida en "+d.n+": "+d.t);
   S.dyn=S.dyn||[];
   S.dyn.push({f:"(Repaso de tu error) "+d.n+" — "+d.intuit.q,b:"Salida real: "+d.intuit.out+" — "+d.intuit.e});
   S.ph[d.id]=Object.assign({},phOf(d),{int:1});intTries=0;save();renderClases();renderWeak();
 }
 function corrMCQ(){
-  const d=LEVEL0[curDay];
+  const d=LEVELS[curLevel][curDay];
   let ok=0;
   d.mcq.forEach((m,i)=>{
     const el=document.getElementById("mq"+i),sel=el.querySelector("input:checked");
@@ -2335,7 +2381,7 @@ function toPlaygroundStep(btn){
   setTimeout(runStepMode,250);
 }
 function chkEval(){
-  const d=LEVEL0[curDay],c=EXTRA[d.id]&&EXTRA[d.id].chk;if(!c)return;
+  const d=LEVELS[curLevel][curDay],c=EXTRA[d.id]&&EXTRA[d.id].chk;if(!c)return;
   const sel=document.querySelector('input[name="chkq"]:checked'),fb=document.getElementById("chkFb");
   if(!sel){fb.innerHTML='<div class="kobox">Elige una opción — pensar es obligatorio aquí.</div>';return}
   if(+sel.value===c.a)fb.innerHTML='<div class="okbox"><strong>Correcto.</strong> '+c.e+"</div>";
@@ -2353,7 +2399,7 @@ function exCard(e){
     '<button class="btn ghost" onclick="resetEx(\''+e.id+'\')">Reiniciar</button></div>'+
     '<div id="fb-'+e.id+'"></div></div>';
 }
-function allEx(){const m={};LEVEL0.forEach(d=>{d.ex.forEach(e=>m[e.id]=e);if(d.reto)m[d.reto.id]=d.reto;if(d.retoFinal)m[d.retoFinal.id]=d.retoFinal});PRACTICA.forEach(e=>m[e.id]=e);return m}
+function allEx(){const m={};LEVELS.forEach(lvl=>lvl.forEach(d=>{d.ex.forEach(e=>m[e.id]=e);if(d.reto)m[d.reto.id]=d.reto;if(d.retoFinal)m[d.retoFinal.id]=d.retoFinal}));PRACTICA.forEach(e=>m[e.id]=e);return m}
 function wireEx(e){
   const ed=document.getElementById("ed-"+e.id);
   ed.value=localStorage.getItem(draftKey(e.id))??e.starter;
@@ -2381,8 +2427,9 @@ async function checkEx(id){
       '<div class="term" style="margin-top:8px"><div class="termout">'+esc(outs[0])+"</div></div>";
     renderHome();
     if(first){xpToast(xpDe(id));celebrar(document.getElementById("card-"+id),/r$|^p|9p|x$/.test(id)?36:20)}
+    const dCur=curDay!==null?LEVELS[curLevel][curDay]:null;
     const enClases=curDay!==null&&document.getElementById("v-clases").classList.contains("on")&&
-      (LEVEL0[curDay].ex.some(x=>x.id===id)||(LEVEL0[curDay].reto&&LEVEL0[curDay].reto.id===id)||(LEVEL0[curDay].retoFinal&&LEVEL0[curDay].retoFinal.id===id));
+      (dCur.ex.some(x=>x.id===id)||(dCur.reto&&dCur.reto.id===id)||(dCur.retoFinal&&dCur.retoFinal.id===id));
     if(enClases){
       // re-render SIEMPRE: la vista nunca queda desactualizada (desbloqueos, barra, chips)
       renderClases();

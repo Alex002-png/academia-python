@@ -908,6 +908,10 @@ const LEVEL0=[
   ["¿Qué pasa cuando 'ejecutas' código?",T('Un archivo <code>.py</code> es solo texto. El <strong>intérprete</strong> de Python lo lee de arriba hacia abajo, traduce cada instrucción a operaciones que el procesador entiende, y las ejecuta una por una. Por eso Python es un lenguaje <em>interpretado</em>: no se convierte en un .exe, se va leyendo y ejecutando en vivo. En esta academia el intérprete vive dentro de tu navegador: la pestaña <strong>Terminal</strong> es tu laboratorio libre.')],
   ["print(): tu voz en la pantalla",T('<code>print()</code> es una <strong>función</strong>: una orden con nombre que recibe datos entre paréntesis y hace algo con ellos — en este caso, mostrarlos. Las comillas delimitan un <strong>string</strong> (texto). Sin comillas, Python creería que <code>Hola</code> es una variable.'),
    'print("Hola, mundo")\nprint("Python lee esto")\nprint("línea por línea")'],
+  ["Vocabulario técnico: expresión vs. literal de texto",T('Lo que va entre comillas es un <strong>string</strong> — un literal de texto, se repite tal cual, jamás se evalúa. Lo que va sin comillas y contiene operadores (<code>2 + 3</code>) es una <strong>expresión</strong>: algo que el intérprete evalúa y reduce a un valor antes de usarlo. Esta distinción — literal de texto vs. expresión evaluada — es el vocabulario correcto desde el primer día, no jerga prematura (UC Berkeley, CS61A, la nombra en su primerísima lección).')],
+  ["Anatomía de un error de Python",T('Cuando algo sale mal, Python te dice tres cosas, siempre en este orden: <strong>1) dónde</strong> ocurrió (archivo y línea) · <strong>2) qué tipo de error es</strong> (su nombre técnico, como <code>SyntaxError</code> o <code>NameError</code>) · <strong>3) un mensaje</strong> con una pista sobre qué esperaba el intérprete y no encontró. Leer un error empieza siempre por identificar estas tres partes, en ese orden.')],
+  ["Leer código ajeno",T('Un desarrollador profesional pasa gran parte del tiempo leyendo código de otros, no solo escribiendo el propio. Antes de tocar el editor, lee este fragmento y predice qué imprime cada línea:'),
+   'print(\'Reporte diario\')\nprint("Ventas:" + \' \' + \'120\')\nprint(\'Ventas:\', 120)'],
  ],
  ex:[
   {id:"d1e1",t:"Ejercicio 1 · Saluda al intérprete",
@@ -925,7 +929,25 @@ const LEVEL0=[
    starter:'print("hola"',runs:[[]],
    check:(o)=>norm(o[0])==="hola"?true:"Aún no imprime exactamente: hola",
    hints:["Ejecuta y lee el mensaje: Python te dice qué esperaba.","Cuenta los paréntesis: ¿cuántos abren y cuántos cierran?"]},
- ]},
+  {id:"d1e4",t:"Ejercicio 4 · Caza el error de mayúscula",
+   d:'Este programa explota. Lee el error con calma — no es un typo de letras, es algo más sutil sobre cómo Python trata los nombres — y repáralo para que imprima <code>hola</code>.',
+   starter:'Print("hola")',runs:[[]],
+   check:(o,c)=>{if(/^\s*Print\s*\(/m.test(c))return"Todavía usas Print con mayúscula — Python distingue mayúsculas de minúsculas en los nombres.";
+     return norm(o[0])==="hola"?true:"Debe imprimir: hola"},
+   hints:["El error dice: name 'Print' is not defined. ¿Existe alguna función con ese nombre EXACTO?","Python es sensible a mayúsculas: la función se llama print, no Print."]},
+  {id:"d1e5",t:"Ejercicio 5 · Refactoriza el exceso de concatenación",
+   d:'Este código funciona, pero está mal escrito: demasiadas piezas pegadas con +. Reescríbelo simplificado para que produzca EXACTAMENTE <code>Total: 45 soles</code>.',
+   starter:'print("Total" + ":" + " " + "45" + " " + "soles")',runs:[[]],
+   check:(o,c)=>{const plus=(c.match(/\+/g)||[]).length;
+     if(plus>=4)return"Sigue habiendo demasiadas piezas concatenadas — simplifica a menos fragmentos (o uno solo).";
+     return norm(o[0])==="Total: 45 soles"?true:"Debe imprimir exactamente: Total: 45 soles"},
+   hints:["¿Realmente necesitas seis piezas separadas por +, o puedes escribir el texto casi entero de una vez?","print(\"Total: 45 soles\") ya es válido — simplificar no significa perder ningún carácter del resultado."]},
+ ],
+ retoFinal:{id:"d1x",t:"Desafío final · inédito — comillas dentro de comillas",
+  d:'Imprime EXACTAMENTE esta línea, incluidas las comillas dentro del texto: <pre class="codebox">Ella dijo "hola" y se fue</pre> Ningún ejercicio anterior mostró cómo incluir comillas dentro de un string delimitado por el mismo tipo de comillas — vas a descubrirlo usando la anatomía del error como herramienta de diagnóstico.',
+  starter:"",runs:[[]],
+  hints:["Si delimitas con comillas dobles y el texto también tiene comillas dobles, Python se confunde antes de tiempo — el error te lo dirá.","Dos caminos válidos: usa comillas simples para delimitar todo el string, o escapa las comillas internas con \\\"."],
+  check:(o,c)=>norm(o[0])==='Ella dijo "hola" y se fue'?true:'Esperaba exactamente: Ella dijo "hola" y se fue\nObtuve:\n'+norm(o[0])}},
 {id:"d2",n:"Día 2",t:"Variables: etiquetas, no cajas",
  intro:"Un programa sin variables es una calculadora de un solo uso. Hoy aprendes a darle MEMORIA: nombrar valores, guardarlos y transformarlos. Y construyes el modelo mental que separa a los que entienden Python de los que solo lo escriben.",
  intuit:{code:"x = 5\nx = x + 1\nprint(x)",
@@ -946,7 +968,10 @@ const LEVEL0=[
  theory:[
   ["El modelo mental correcto",T('Una variable NO es una caja que guarda un valor: es una <strong>etiqueta</strong> que apunta a un objeto en memoria. <code>precio = 100</code> significa: crea el objeto <code>100</code> y ponle la etiqueta <code>precio</code>. Si luego escribes <code>precio = 200</code>, la etiqueta se mueve a otro objeto — el 100 no se "modifica". Esta diferencia parece filosófica hoy; en el Nivel 3 será la razón por la que entiendas bugs que confunden a programadores intermedios.'),
    'precio = 100\nprecio_final = precio   # otra etiqueta al MISMO objeto\nprecio = 200            # solo se mueve la etiqueta precio\nprint(precio)\nprint(precio_final)'],
+  ["Honestidad sobre el modelo de \"caja\"",T('Un experimento real con 496 programadores novatos (Hermans &amp; Swidan, 2018) mostró algo matizado: pensar en una <strong>caja</strong> no perjudica cuando hay una sola asignación aislada — ahí hasta funciona un poco mejor. El problema aparece exactamente cuando hay una <strong>segunda</strong> asignación o una <strong>segunda</strong> etiqueta sobre el mismo valor — el caso de arriba. Por eso esta lección enseña "etiqueta" desde el principio: no por dogma, sino porque la evidencia real dice que "caja" falla justo donde más necesitas acertar.')],
   ["Nombres profesionales",T('Convención PEP 8: <strong>snake_case</strong> — minúsculas con guiones bajos, descriptivos. <code>precio_total</code> ✓ · <code>PrecioTotal</code> ✗ · <code>pt</code> ✗ · <code>x</code> ✗. Un programa se lee muchas más veces de las que se escribe: los nombres son para el lector.')],
+  ["Nombres prohibidos en la práctica",T('Nunca nombres una variable igual que algo que Python ya usa: <code>list</code>, <code>str</code>, <code>type</code>, <code>id</code>, <code>input</code>, <code>int</code>, <code>len</code>, <code>sum</code>, <code>dict</code>, <code>set</code>, entre otros. No produce ningún error — eso es justo lo peligroso: sombrea silenciosamente esa función para el resto del programa.'),
+   'list = "mi lista de compras"\n# a partir de aquí, list() ya no funciona como esperabas\n# print(list([1, 2, 3])) → explotaría'],
  ],
  ex:[
   {id:"d2e1",t:"Ejercicio 1 · Primera etiqueta",
@@ -969,7 +994,25 @@ const LEVEL0=[
    check:(o,c)=>{if(!/precio_final\s*=\s*precio\b/.test(c))return"precio_final debe crearse A PARTIR de la variable: precio_final = precio";
      return norm(o[0])==="100\n100"?true:"Esperaba:\n100\n100"},
    hints:["Una variable puede asignarse desde otra variable.","print(precio) y print(precio_final) en líneas separadas."]},
- ]},
+  {id:"d2e4",t:"Ejercicio 4 · Caza el nombre sombreado",
+   d:'Este código imprime <code>5</code> en vez de fallar — pero sombreó un nombre que Python ya usaba, y eso es un problema que aparecerá más adelante. Renombra la variable a algo que no choque con ninguna función incorporada, conservando el mismo resultado.',
+   starter:'list = 5\nprint(list)',runs:[[]],
+   check:(o,c)=>{if(/^\s*list\s*=/m.test(c))return"Sigues usando 'list' como nombre de variable — elige otro nombre que no sombree una función incorporada.";
+     return norm(o[0])==="5"?true:"Debe seguir imprimiendo: 5"},
+   hints:["'list' es el nombre de una función incorporada de Python (convierte cosas en listas) — usarlo como variable la sombrea.","Prueba con un nombre descriptivo, como cantidad o numero."]},
+  {id:"d2e5",t:"Ejercicio 5 · Refactoriza la reasignación inútil",
+   d:'La segunda línea de este código no cumple ninguna función real. Refactorízalo para que sea más simple, sin cambiar el resultado (<code>20</code>).',
+   starter:'temperatura = 20\ntemperatura = temperatura + 0\nprint(temperatura)',runs:[[]],
+   check:(o,c)=>{if(/\+\s*0\b/.test(c))return"Todavía tienes la reasignación que suma 0 — no cambia nada, elimínala.";
+     return norm(o[0])==="20"?true:"Debe imprimir: 20"},
+   hints:["Sumar 0 a algo nunca lo cambia — esa línea es ruido, no lógica.","Basta con temperatura = 20 y el print."]},
+ ],
+ retoFinal:{id:"d2x",t:"Desafío final · inédito — el intercambio que no intercambia",
+  d:'Dado <code>a = 10</code> y <code>b = 20</code>, alguien escribió <code>a = b</code> seguido de <code>b = a</code> pensando que así se intercambian los valores. Predice qué imprimirían <code>print(a)</code> y <code>print(b)</code> al final de ESE código (sin arreglarlo primero) y luego escribe la versión que si intercambia de verdad, usando una variable auxiliar, imprimiendo primero a y luego b.',
+  starter:"a = 10\nb = 20",runs:[[]],
+  hints:["Traza línea por línea con el modelo de etiquetas: a = b mueve la etiqueta a ANTES de que b cambie. Para cuando ejecutas b = a, a ya no vale 10.","El intercambio real necesita una tercera etiqueta temporal que guarde uno de los dos valores antes de sobrescribir nada."],
+  check:(o,c)=>{if(!/=\s*a\b/.test(c)&&!/=\s*b\b/.test(c))return"Tu solución debe usar una variable auxiliar que guarde a o b antes de reasignar.";
+    return norm(o[0])==="20\n10"?true:"El intercambio real de a=10, b=20 debe imprimir:\n20\n10\nObtuve:\n"+norm(o[0])}}},
 {id:"d3",n:"Día 3",t:"Tipos de datos",
  intro:"En Python todo valor tiene un TIPO, y el tipo decide qué puedes hacer con él. El 90% de los errores de principiante son errores de tipo. Hoy aprendes a verlos venir antes de que exploten.",
  intuit:{code:'print("3" + "4")\nprint(3 + 4)',
@@ -993,6 +1036,8 @@ const LEVEL0=[
    'print(type(42))\nprint(type(3.14))\nprint(type("hola"))\nprint(type(True))'],
   ["Conversiones y una verdad incómoda",T('<code>int("25")</code>, <code>float("3.5")</code>, <code>str(42)</code> convierten entre tipos. Y una verdad de los floats: <code>0.1 + 0.2 == 0.3</code> es <code>False</code>, porque los decimales se guardan en binario y 0.1 no tiene representación binaria exacta. No es un bug de Python: es la naturaleza del hardware. Pruébalo en el REPL de la Terminal.'),
    'print(0.1 + 0.2)\nprint(0.1 + 0.2 == 0.3)\nprint(int("25") + 5)'],
+  ["Leer código: dos conversiones, dos motivos distintos",T('Sin ejecutar: ¿por qué hay DOS conversiones distintas en este fragmento (<code>int()</code> y <code>str()</code>), y qué pasaría si se omitiera cualquiera de las dos?'),
+   'entrada = "20"\nedad = int(entrada)\nmensaje = "Tienes " + str(edad + 1) + " el próximo año"\nprint(mensaje)'],
  ],
  ex:[
   {id:"d3e1",t:"Ejercicio 1 · Inspector de tipos",
@@ -1012,7 +1057,23 @@ const LEVEL0=[
    starter:'print("Tengo " + 25 + " años")',runs:[[]],
    check:(o)=>norm(o[0])==="Tengo 25 años"?true:"Debe imprimir exactamente: Tengo 25 años",
    hints:["El error dice que no puede sumar str con int. Haz que TODO sea texto.","Camino 1: str(25). Camino 2: print(f\"Tengo {25} años\") — las f-strings se ven en detalle el Día 5."]},
- ]},
+  {id:"d3e4",t:"Ejercicio 4 · Caza el ValueError (distinto del TypeError)",
+   d:'Este error NO es una mezcla de tipos como el ejercicio anterior — es una <strong>conversión inválida</strong>: <code>int()</code> no interpreta el punto decimal. Repáralo para que imprima <code>18</code>.',
+   starter:'edad_texto = "17.5"\nprint(int(edad_texto) + 1)',runs:[[]],
+   check:(o,c)=>{if(!/int\s*\(\s*float\s*\(/.test(c))return"El camino correcto es int(float(edad_texto)) — primero a float, luego a entero.";
+     return norm(o[0])==="18"?true:"Debe imprimir: 18"},
+   hints:["int('17.5') falla porque int() sobre un string no acepta el punto.","Primero float('17.5') (da 17.5), después int(...) (da 17), luego suma 1."]},
+  {id:"d3e5",t:"Ejercicio 5 · Refactoriza la variable intermedia",
+   d:'Este código funciona, pero la variable intermedia no aporta claridad real. Decide: ¿la consolidas en menos líneas, o la conservas? Debe seguir imprimiendo <code>18</code>.',
+   starter:'edad_texto = "17"\nedad_numero = int(edad_texto)\nedad_numero_mas_uno = edad_numero + 1\nprint(edad_numero_mas_uno)',runs:[[]],
+   check:(o,c)=>norm(o[0])==="18"?true:"Debe seguir imprimiendo: 18",
+   hints:["Puedes consolidar todo en print(int(edad_texto) + 1) — o dejarlo como está, si crees que ayuda a leerlo.","No hay una única respuesta correcta aquí: lo que importa es que decidas con criterio, no al azar."]},
+ ],
+ retoFinal:{id:"d3x",t:"Desafío final · inédito — un tercer comportamiento de *",
+  d:'Predice, ANTES de ejecutar, qué imprime <code>"10" * 3</code> — sabiendo que <code>"10" + "10"</code> pega texto y <code>10 * 3</code> multiplica. Aquí un operando es string y el otro es int: ningún ejemplo de esta lección mostró esta combinación. Luego escribe el código que lo demuestre.',
+  starter:"",runs:[[]],
+  hints:["El tipo decide qué hace el operador — pero * entre string y número no es ni concatenación por pares ni multiplicación numérica.","Python define '\"10\" * 3' como repetición: el string se repite 3 veces seguidas, sin separador."],
+  check:(o,c)=>norm(o[0])==="101010"?true:"Esperaba: 101010\nObtuve:\n"+norm(o[0])}},
 {id:"d4",n:"Día 4",t:"Operadores",
  intro:"Los operadores son los verbos de Python. Hoy conoces a la familia completa — y en especial a dos subestimados que usarás toda tu carrera: // y %. Parecen matemática de colegio; son herramientas de ingeniería.",
  intuit:{code:"print(10 % 3)\nprint(10 // 3)",
@@ -1304,7 +1365,23 @@ d1:{hook:"Todo lo que una computadora hace visible — desde el 'Escribiendo…'
   jar:"Los mensajes de etapa de JARVIS son prints estructurados emitidos a un WebSocket.",
   rec:"docs.python.org → Tutorial cap. 3 · CS50P Lecture 0 (Harvard)",
   ent:"«¿Qué pasa exactamente cuando ejecutas python archivo.py?» — screening real de Google.",
-  reto:"En la Terminal libre: dibuja un cuadro con tu nombre adentro usando solo print y el carácter ═"}},
+  reto:"En la Terminal libre: dibuja un cuadro con tu nombre adentro usando solo print y el carácter ═"},
+ recursos:[
+  {t:"CS50P — Week 0",autor:"Harvard (CS50)",idioma:"EN",dur:"~1h",nivel:"Introductorio",motivo:"Confirma, desde una segunda fuente, que funciones, argumentos y bugs se tratan juntos desde el primer contacto — el mismo enfoque de esta lección.",url:"https://cs50.harvard.edu/python/weeks/0/",tag:"🟢"},
+  {t:"print() — Python 3 official docs",autor:"Python Software Foundation",idioma:"EN",dur:"~5 min",nivel:"Introductorio",motivo:"Referencia oficial exacta de la función que esta lección enseña.",url:"https://docs.python.org/3/library/functions.html#print",tag:"🔵"},
+  {t:"MIT 6.0001 — Lecture 1",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Refuerza el modelo del intérprete ya vivido en esta lección, con la fuente que lo originó.",url:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/",tag:"🟣"},
+  {t:"Sorva — Notional Machines and Introductory Programming Education",autor:"J. Sorva, ACM TOCE 2013",idioma:"EN",dur:"~40 min",nivel:"Avanzado",motivo:"La teoría detrás de por qué esta lección enseña el modelo del intérprete de forma explícita.",url:"https://dl.acm.org/doi/10.1145/2483710.2483713",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué print(\"2 + 3\") no suma, si print(2 + 3) sí?",
+  "¿Qué tres cosas te dice siempre un error de Python, en qué orden, y por qué importa ese orden?",
+  "(inédita) Si vieras print('5' + '5'), ¿qué crees que imprime, y en qué se parece esa pregunta a la que ya respondiste sobre \"2 + 3\" vs 2 + 3?",
+ ],
+ metacog:[
+  "¿Qué fue lo más difícil de esta primera lección, y por qué crees que lo fue?",
+  "Si tuvieras que explicarle a otra persona qué es un intérprete, sin usar la palabra 'computadora', ¿qué dirías?",
+  "¿Qué error cometiste hoy que, mirándolo ahora, te enseñó más que un ejercicio que resolviste a la primera?",
+ ]},
 d2:{hook:"Sin variables no hay memoria; sin memoria no hay programas: ni juegos que guarden tu puntaje, ni carritos de compra, ni IA que recuerde tu pregunta. Hoy colocas el primer ladrillo de TODO sistema que construirás en 53 meses.",
  hist:"En los años 50 las 'variables' eran direcciones crudas de memoria: MOV AX, [0x4F2A] — los humanos memorizaban números hexadecimales. FORTRAN y ALGOL introdujeron nombres simbólicos y liberaron al programador. Python heredó esa línea y añadió su modelo radical: TODO es un objeto, y los nombres son etiquetas hacia ellos.",
  ej:[["🧒 Infantil","<code>puntaje = 0</code> en tu videojuego: la máquina anota como tú en un papelito."],
@@ -1323,7 +1400,23 @@ d2:{hook:"Sin variables no hay memoria; sin memoria no hay programas: ni juegos 
   jar:"Cada turno de conversación con JARVIS vive en variables antes de llegar al modelo.",
   rec:"docs.python.org Tutorial 3.1 · PEP 8 (convenciones de nombres)",
   ent:"«a=[1]; b=a; a.append(2) — ¿qué contiene b?» — Meta. La trampa de la etiqueta; la dominarás en N1.",
-  reto:"Modela el estado de un semáforo con 3 variables y muéstralo cambiando de rojo a verde."}},
+  reto:"Modela el estado de un semáforo con 3 variables y muéstralo cambiando de rojo a verde."},
+ recursos:[
+  {t:"MIT 6.0001 — Lecture 2",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Fuente directa del vocabulario 'ligar un nombre a un valor' que respalda 'etiqueta'.",url:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/pages/lecture-slides-code/",tag:"🟢"},
+  {t:"CS61A — Environment Diagrams",autor:"UC Berkeley",idioma:"EN",dur:"~20 min",nivel:"Introductorio",motivo:"El mismo modelo con notación gráfica formal — otra forma de visualizar la traza etiqueta→objeto.",url:"https://cs61a.org/study-guide/environments-hof/",tag:"🔵"},
+  {t:"Hermans & Swidan — Thinking out of the Box",autor:"F. Hermans, A. Swidan (TU Delft)",idioma:"EN",dur:"~25 min",nivel:"Avanzado",motivo:"El estudio real detrás del matiz sobre 'caja' de esta lección.",url:"https://www.semanticscholar.org/paper/Thinking-out-of-the-box:-comparing-metaphors-for-in-Hermans-Swidan/871d4c052a06e2caab0f577aa1c0818c8a3fb50f",tag:"🟣"},
+  {t:"CMU 15-112 — Style Guide",autor:"Carnegie Mellon",idioma:"EN",dur:"~10 min",nivel:"Introductorio",motivo:"Respaldo del error de nombres que sombrean funciones incorporadas.",url:"https://www.cs.cmu.edu/~112-f22/notes/notes-style.html",tag:"⭐"},
+ ],
+ defensa:[
+  "Explica con tus palabras qué significa precio_final = precio. ¿Se copió el valor, o pasó otra cosa?",
+  "Si x = 5 y luego x = x + 1, ¿por qué eso no es una contradicción matemática?",
+  "(inédita) Si tuvieras que explicarle a alguien que nunca programó por qué contador = \"10\" es un error diferente a contador = 10, ¿qué le dirías sin usar la palabra 'tipo'?",
+ ],
+ metacog:[
+  "¿En qué momento de esta lección tu modelo de 'caja' dejó de alcanzar para predecir correctamente?",
+  "Si tuvieras que enseñarle 'etiqueta, no caja' a alguien en un minuto, ¿qué ejemplo usarías — el mismo de esta lección u otro tuyo?",
+  "¿Qué error te costó más aceptar como error, aunque ya sabías la regla?",
+ ]},
 d3:{hook:"Confundir tipos destruyó el cohete Ariane 5 (370 millones de dólares en 37 segundos) y corrompió miles de papers científicos cuando Excel convirtió genes en fechas. Las empresas pagan por ingenieros que NO cometen ese error. Hoy te vuelves uno.",
  hist:"Los bits no dicen qué son: 01000001 es el número 65 o la letra A según el manual de lectura. FORTRAN fijó tipos declarados (1957), Lisp probó tipos dinámicos (1958). Python eligió lo mejor de ambos: dinámico (no declaras) pero FUERTE (jamás mezcla a escondidas) — prefiere explotar a mentirte.",
  ej:[["🧒 Infantil","3 caramelos vs la palabra 'tres': los primeros se comen, la palabra no."],
@@ -1342,7 +1435,23 @@ d3:{hook:"Confundir tipos destruyó el cohete Ariane 5 (370 millones de dólares
   jar:"El pipeline str→tokens→floats→str de JARVIS es tu Día 3 a escala industrial.",
   rec:"docs Tutorial 3.1.1-3.1.2 · CS50P Lecture 1",
   ent:"«¿Por qué 0.1+0.2 != 0.3 y cómo comparas floats correctamente?» — Amazon.",
-  reto:"En la Terminal: 3 conversiones que funcionan y 2 que explotan — y predice cada resultado ANTES de ejecutar."}},
+  reto:"En la Terminal: 3 conversiones que funcionan y 2 que explotan — y predice cada resultado ANTES de ejecutar."},
+ recursos:[
+  {t:"CS50 — Data Types (PDF)",autor:"Harvard (CS50)",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Vocabulario técnico exacto (estático/dinámico vs. fuerte/débil) que esta lección adopta.",url:"https://cs50.harvard.edu/ap/2020/assets/pdfs/data_types.pdf",tag:"🟢"},
+  {t:"Python docs — Built-in Types",autor:"Python Software Foundation",idioma:"EN",dur:"referencia",nivel:"Introductorio-Intermedio",motivo:"Fuente oficial exacta de cada tipo y conversión usados en esta lección.",url:"https://docs.python.org/3/library/stdtypes.html",tag:"🔵"},
+  {t:"CS61A — Type Coercion (Lecture 18)",autor:"UC Berkeley",idioma:"EN",dur:"~50 min",nivel:"Intermedio",motivo:"Quinta institución que confirma la mezcla/conversión de tipos como tema con entidad propia.",url:"http://www.infocobuild.com/education/audio-video-courses/computer-science/CS61A-Spring2015-Berkeley/lecture-18.html",tag:"🟣"},
+  {t:"Sorva — Notional Machines",autor:"J. Sorva, ACM TOCE 2013",idioma:"EN",dur:"~40 min",nivel:"Avanzado",motivo:"Por qué esta lección hace explícito el chequeo de tipos del intérprete.",url:"https://dl.acm.org/doi/10.1145/2483710.2483713",tag:"⭐"},
+ ],
+ defensa:[
+  "Explica por qué \"3\" + \"4\" y 3 + 4 no son la misma operación, aunque usen el mismo símbolo.",
+  "¿Qué significa que Python sea 'fuerte' — y por qué eso es distinto de estar 'tipado estáticamente'?",
+  "(inédita) Si Python permitiera que \"3\" + 4 se convirtiera automáticamente en \"34\", ¿qué tipo de error dejaría de verse a tiempo, y por qué eso sería peor que el TypeError actual?",
+ ],
+ metacog:[
+  "¿En qué ejercicio confundiste 'no funciona' con 'no tiene sentido matemáticamente' — y en qué momento distinguiste una cosa de la otra?",
+  "Si el error de contador = \"10\" te hubiera pasado a ti, ¿lo habrías detectado antes o después de esta lección?",
+  "¿Qué parte de 'dinámico y fuerte' te costó más mantener separada en tu cabeza?",
+ ]},
 d4:{hook:"// y % paginan los resultados de Google, reparten lotes de datos en NVIDIA y calculan la hora en tu reloj. Aritmética de primaria convertida en infraestructura de gigantes — y en tu calculadora del Día 9.",
  hist:"El % como resto viene de ALGOL y se popularizó con C (1972). Python cometió un error histórico: en Python 2, 7/2 daba 3 (división entera silenciosa) y causó tantos bugs que en Python 3 ROMPIERON la compatibilidad para separar / (real) de // (entera). Cuando una corrección vale romper millones de programas, es que el bug era grave.",
  ej:[["🧒 Infantil","Repartir 7 galletas entre 2 niños: 3 para cada uno (//) y sobra 1 (%)."],
@@ -1557,7 +1666,7 @@ function dayDone(d){
   if(d.eval)return levelApproved();
   if(!d.ex.length&&!d.reto)return false;
   const p=phOf(d);
-  return(!d.intuit||p.int)&&(!d.mcq||p.mcq)&&d.ex.every(e=>S.ex[e.id])&&(!d.reto||S.ex[d.reto.id]);
+  return(!d.intuit||p.int)&&(!d.mcq||p.mcq)&&d.ex.every(e=>S.ex[e.id])&&(!d.reto||S.ex[d.reto.id])&&(!d.retoFinal||S.ex[d.retoFinal.id]);
 }
 function dayUnlocked(i){
   if(i===0)return true;
@@ -1601,8 +1710,8 @@ function renderClases(){
       const unlocked=dayUnlocked(i),done=dayDone(d);
       const evalDay=d.eval;
       const evalOk=evalDay&&levelApproved();
-      const tot=d.ex.length+(d.reto?1:0);
-      const hecho=d.ex.filter(e=>S.ex[e.id]).length+((d.reto&&S.ex[d.reto.id])?1:0);
+      const tot=d.ex.length+(d.reto?1:0)+(d.retoFinal?1:0);
+      const hecho=d.ex.filter(e=>S.ex[e.id]).length+((d.reto&&S.ex[d.reto.id])?1:0)+((d.retoFinal&&S.ex[d.retoFinal.id])?1:0);
       const st=evalDay?(evalOk?'<span class="chip good">Aprobado</span>':unlocked?'<span class="chip blue">Evaluación</span>':'<span class="chip lock">Bloqueado</span>')
         :done?'<span class="chip good">80% · a dominar</span>'
         :unlocked?'<span class="chip gold">Disponible</span>':'<span class="chip lock">Bloqueado</span>';
@@ -1624,6 +1733,7 @@ function renderClases(){
     if(d.mcq&&!p.mcq)pend.push("Fase 2 · Razonamiento");
     d.ex.forEach(e=>{if(!S.ex[e.id])pend.push(e.t.split("·")[0].trim())});
     if(d.reto&&!S.ex[d.reto.id])pend.push("Proyecto del tema");
+    if(d.retoFinal&&!S.ex[d.retoFinal.id])pend.push("Desafío final");
     h+='<div class="card dayrail" style="padding:10px 16px;margin-bottom:10px">'+
       '<div class="row" style="justify-content:space-between;align-items:center">'+
       '<span class="row" style="gap:5px;flex-wrap:wrap">'+fasesChips(d)+"</span>"+
@@ -1709,10 +1819,30 @@ function renderClases(){
       h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">📋 Síntesis profesional del tema</p><table class="mini">'+
       [["✅ Dominarás",s.dom],["⚠ Refuerza",s.ref],["🧠 Modelo mental",s.mm],["🏢 Industria",s.ind],["🚀 En JARVIS",s.jar],["📚 Recursos",s.rec],["🎯 Entrevista",s.ent],["💻 Reto pro",s.reto]]
       .map(x=>"<tr><td style='white-space:nowrap'>"+x[0]+"</td><td>"+x[1]+"</td></tr>").join("")+"</table></div>";}
-    // FASE 6 · proyecto del tema
+    // recursos recomendados
+    if(EXd.recursos)h+='<div class="card"><p class="eyebrow" style="color:var(--gold)">📚 Recursos recomendados</p>'+
+      '<table class="mini"><tr><th>Recurso</th><th>Cuándo</th></tr>'+
+      EXd.recursos.map(r=>"<tr><td><a href='"+r.url+"' target='_blank' rel='noopener' style='color:var(--blue)'>"+esc(r.t)+"</a>"+
+        "<div class='small muted' style='margin-top:2px'>"+esc(r.autor)+" · "+esc(r.idioma)+" · "+esc(r.dur)+" · "+esc(r.nivel)+"</div>"+
+        "<div class='small' style='margin-top:2px'>"+esc(r.motivo)+"</div></td><td style='white-space:nowrap'>"+r.tag+"</td></tr>").join("")+
+      "</table></div>";
+    // FASE 6 · proyecto del tema (mini-proyecto integrador)
     if(d.reto){
-      if(d.ex.every(e=>S.ex[e.id]))h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fase 6 · Proyecto del tema — 80% · sin pistas, sin ayuda</p></div>'+exCard(d.reto);
-      else h+='<div class="card"><p class="small muted" style="margin:0">🔒 <strong>Fase 6 · Proyecto del tema</strong>: se abre al dominar toda la práctica.</p></div>';
+      if(d.ex.every(e=>S.ex[e.id]))h+='<div class="card" style="padding:10px 18px"><p class="eyebrow" style="color:var(--gold);margin:0">Fase 6 · Laboratorio: mini-proyecto integrador — 80% · sin pistas, sin ayuda</p></div>'+exCard(d.reto);
+      else h+='<div class="card"><p class="small muted" style="margin:0">🔒 <strong>Fase 6 · Laboratorio</strong>: se abre al dominar toda la práctica.</p></div>';
+    }
+    // consolidación: defensa socrática + reflexión metacognitiva (para trabajar con el tutor en el chat)
+    const retoOk=!d.reto||S.ex[d.reto.id];
+    if(retoOk&&(EXd.defensa||EXd.metacog)){
+      h+='<div class="card" style="border-color:var(--cyan)"><p class="eyebrow" style="color:var(--cyan)">🗣️ Consolidación · para trabajar con tu tutor en el chat</p>';
+      if(EXd.defensa)h+='<p class="small" style="margin:8px 0 4px"><strong>Defensa socrática:</strong></p><ul class="tight small">'+EXd.defensa.map(q=>"<li>"+q+"</li>").join("")+"</ul>";
+      if(EXd.metacog)h+='<p class="small" style="margin:8px 0 4px"><strong>Reflexión metacognitiva:</strong></p><ul class="tight small">'+EXd.metacog.map(q=>"<li>"+q+"</li>").join("")+"</ul>";
+      h+="</div>";
+    }
+    // FASE 7 · desafío final inédito
+    if(d.retoFinal){
+      if(retoOk&&d.ex.every(e=>S.ex[e.id]))h+='<div class="card" style="padding:10px 18px;border-color:var(--cyan)"><p class="eyebrow" style="color:var(--cyan);margin:0">Fase 7 · Desafío final — inédito, irresoluble por imitación</p></div>'+exCard(d.retoFinal);
+      else h+='<div class="card"><p class="small muted" style="margin:0">🔒 <strong>Fase 7 · Desafío final</strong>: se abre al completar el laboratorio.</p></div>';
     }
     if(d.eval)h+='<div class="card"><button class="btn" onclick="go(\'examen\')">Ir a la pestaña Examen →</button></div>';
   }
@@ -1731,7 +1861,8 @@ function renderClases(){
   }
   box.innerHTML=h;
   if(okMcq){d.ex.forEach(e=>{if(document.getElementById("ed-"+e.id))wireEx(e)});
-    if(d.reto&&document.getElementById("ed-"+d.reto.id))wireEx(d.reto)}
+    if(d.reto&&document.getElementById("ed-"+d.reto.id))wireEx(d.reto);
+    if(d.retoFinal&&document.getElementById("ed-"+d.retoFinal.id))wireEx(d.retoFinal)}
 }
 function fasesChips(d){
   const p=phOf(d);
@@ -1741,7 +1872,8 @@ function fasesChips(d){
   const clase=(!d.intuit||p.int)&&(!d.mcq||p.mcq);
   items.push(["F3-4 Clase",clase]);
   items.push(["F5 Práctica",d.ex.length>0&&d.ex.every(e=>S.ex[e.id])]);
-  if(d.reto)items.push(["F6 Proyecto",!!S.ex[d.reto.id]]);
+  if(d.reto)items.push(["F6 Laboratorio",!!S.ex[d.reto.id]]);
+  if(d.retoFinal)items.push(["F7 Desafío",!!S.ex[d.retoFinal.id]]);
   let curMarked=false;
   return items.map(x=>{
     let cls="lock",txt=x[0];
@@ -1813,7 +1945,7 @@ function exCard(e){
     '<button class="btn ghost" onclick="resetEx(\''+e.id+'\')">Reiniciar</button></div>'+
     '<div id="fb-'+e.id+'"></div></div>';
 }
-function allEx(){const m={};LEVEL0.forEach(d=>{d.ex.forEach(e=>m[e.id]=e);if(d.reto)m[d.reto.id]=d.reto});PRACTICA.forEach(e=>m[e.id]=e);return m}
+function allEx(){const m={};LEVEL0.forEach(d=>{d.ex.forEach(e=>m[e.id]=e);if(d.reto)m[d.reto.id]=d.reto;if(d.retoFinal)m[d.retoFinal.id]=d.retoFinal});PRACTICA.forEach(e=>m[e.id]=e);return m}
 function wireEx(e){
   const ed=document.getElementById("ed-"+e.id);
   ed.value=localStorage.getItem(draftKey(e.id))??e.starter;
@@ -1839,9 +1971,9 @@ async function checkEx(id){
       (first?" Ejercicio registrado en tu expediente.":"")+"</div>"+
       '<div class="term" style="margin-top:8px"><div class="termout">'+esc(outs[0])+"</div></div>";
     renderHome();
-    if(first){xpToast(xpDe(id));celebrar(document.getElementById("card-"+id),/r$|^p|9p/.test(id)?36:20)}
+    if(first){xpToast(xpDe(id));celebrar(document.getElementById("card-"+id),/r$|^p|9p|x$/.test(id)?36:20)}
     const enClases=curDay!==null&&document.getElementById("v-clases").classList.contains("on")&&
-      (LEVEL0[curDay].ex.some(x=>x.id===id)||(LEVEL0[curDay].reto&&LEVEL0[curDay].reto.id===id));
+      (LEVEL0[curDay].ex.some(x=>x.id===id)||(LEVEL0[curDay].reto&&LEVEL0[curDay].reto.id===id)||(LEVEL0[curDay].retoFinal&&LEVEL0[curDay].retoFinal.id===id));
     if(enClases){
       // re-render SIEMPRE: la vista nunca queda desactualizada (desbloqueos, barra, chips)
       renderClases();
@@ -2129,7 +2261,7 @@ function renderRuta(){
 }
 const MESES=[1.5,5,4,3,3,4,4,4,5,4,4,6,6]; // duración nominal de cada nivel del roadmap
 function nivel0Pct(){
-  const ids=[];LEVEL0.forEach(d=>{d.ex.forEach(e=>ids.push(e.id));if(d.reto)ids.push(d.reto.id)});PRACTICA.forEach(p=>ids.push(p.id));
+  const ids=[];LEVEL0.forEach(d=>{d.ex.forEach(e=>ids.push(e.id));if(d.reto)ids.push(d.reto.id);if(d.retoFinal)ids.push(d.retoFinal.id)});PRACTICA.forEach(p=>ids.push(p.id));
   const done=ids.filter(i=>S.ex[i]).length;
   return{pct:Math.round((done+(quizPassed()?1:0))/(ids.length+1)*100),done,tot:ids.length};
 }
@@ -2142,7 +2274,8 @@ function nextStepInfo(){
     if(d.intuit&&!p.int)return{label:d.n+" · Fase 1: Comprensión e intuición",target:"clases",di:i};
     if(d.mcq&&!p.mcq)return{label:d.n+" · Fase 2: Teoría y razonamiento",target:"clases",di:i};
     for(const e of d.ex)if(!S.ex[e.id])return{label:d.n+" · "+e.t,target:"clases",di:i};
-    if(d.reto&&!S.ex[d.reto.id])return{label:d.n+" · Fase 6: Proyecto del tema",target:"clases",di:i};
+    if(d.reto&&!S.ex[d.reto.id])return{label:d.n+" · Fase 6: Laboratorio integrador",target:"clases",di:i};
+    if(d.retoFinal&&!S.ex[d.retoFinal.id])return{label:d.n+" · Fase 7: Desafío final",target:"clases",di:i};
   }
   if(levelApproved())return{label:"Defensa oral con tu tutor → sello + Nivel 1",target:"examen",di:-1};
   return{label:"—",target:"clases",di:-1};
@@ -2174,6 +2307,7 @@ function xpToast(n){
 function xpDe(id){
   if(id==="d9p")return 100;
   if(/^p\d$/.test(id))return 20;
+  if(/^d\d+x$/.test(id))return 30;
   if(/^d\d+r$/.test(id))return 25;
   return 10;
 }

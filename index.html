@@ -1660,6 +1660,83 @@ const LEVEL1=[
   starter:'def contador():\n    veces = 0\n    veces = veces + 1\n    return veces\n\nprint(contador())\nprint(contador())\nprint(contador())',runs:[[]],
   hints:["Cada vez que llamas a contador(), Python crea un entorno NUEVO — 'veces' nace en 0 otra vez cada vez, no recuerda la llamada anterior.","Esto es exactamente la limitación que los objetos (N1.M2) van a resolver: darle a algo memoria propia entre llamadas."],
   check:(o,c)=>norm(o[0])==="1\n1\n1"?true:"Esperaba tres líneas, cada una con 1 (cada llamada reinicia 'veces' desde cero)\nObtuve:\n"+norm(o[0])}},
+{id:"n1d2",n:"Día 3",t:"Listas y tuplas · Parte 1: fundamentos",
+ intro:"Hasta hoy cada dato vivía solo — un número, un texto, un resultado. Hoy agrupas muchos datos bajo un solo nombre por primera vez, y descubres que ese nombre puede tener 'compañeros de cuarto' que no esperabas.",
+ intuit:{code:'carrito_alex = ["manzana", "pan"]\ncarrito_compartido = carrito_alex\ncarrito_compartido.append("leche")\nprint(carrito_alex)',py:true,
+  q:"Sin ejecutar: ¿carrito_alex tiene 2 o 3 elementos después de esto?",
+  req:["3","leche"],out:"['manzana', 'pan', 'leche']",
+  e:"carrito_compartido nunca fue una copia — es otro nombre para exactamente la misma lista que carrito_alex. Modificarla desde cualquiera de los dos nombres modifica 'la' lista, porque solo hay una."},
+ mcq:[
+  {q:"¿Qué es 'carrito_compartido' después de 'carrito_compartido = carrito_alex'?",o:["Una copia independiente de la lista","Otro nombre para exactamente la misma lista","Una lista vacía que se llena después","Un error — no se puede hacer eso"],a:1,e:"Asignar una lista a otra variable no copia nada — crea un segundo nombre que apunta al mismo objeto."},
+  {q:"¿Cuál de estas SÍ crea una lista nueva, sin modificar la original?",o:[".append(x)","sorted(lista)",".sort()","asignar por índice: lista[0]=x"],a:1,e:"sorted() siempre devuelve una lista nueva. .append(), .sort() y la asignación por índice modifican el objeto existente (destructivas)."}],
+ ing:"Cada vez que procesas una lista de usuarios, de productos o de resultados de una API, decides constantemente si mutas en el sitio o creas una copia. Ese trade-off (rendimiento vs. seguridad) es una decisión de diseño real que tomarás cientos de veces en tu carrera.",
+ errores:["Creer que 'b = a' crea una copia independiente de la lista — crea otro nombre para la misma lista","Mutar una lista mientras se recorre con for (eliminar elementos in-place salta elementos)","Usar .sort() cuando se necesitaba conservar el orden original y solo mostrar una versión ordenada aparte"],
+ mental:{jr:"“Una lista es una caja con varios valores adentro.”",sr:"“Una lista es una etiqueta hacia una secuencia compartida — cualquier otra etiqueta que apunte al mismo lugar ve exactamente los mismos cambios, porque no hay dos cajas: hay una sola.”",err:"Asumir que asignar una lista a otra variable copia su contenido, igual que copiar un número."},
+ theory:[
+  ["Listas: secuencia de referencias",T('Una lista es una <strong>secuencia de referencias</strong>, no de valores — dos nombres pueden apuntar a la misma lista al mismo tiempo. El indexado y el slicing transfieren directo de los strings de N0, pero ahora también se puede asignar por índice, porque una lista SÍ se puede mutar.'),
+   'letras = ["a", "b", "c", "d", "e", "f"]\nprint(letras[0])      # a\nprint(letras[-1])     # f\nprint(letras[:3])     # [\'a\', \'b\', \'c\']\nprint(letras[-2:])    # [\'e\', \'f\']\nletras[0] = "z"        # esto no existía con strings (inmutables)'],
+  ["Destructivo vs. no destructivo",T('Algunas operaciones <strong>modifican la lista en el sitio</strong> (mismo objeto — el aliasing les afecta): <code>.append()</code>, <code>.remove()</code>, <code>.sort()</code>, asignar por índice. Otras <strong>crean una lista nueva</strong> y dejan la original intacta: <code>+</code>, <code>sorted()</code>, el slicing completo <code>lista[:]</code>. Saber a cuál categoría pertenece un método es saber si tu código es seguro frente al aliasing.'),
+   'numeros = [5, 2, 8, 1]\nordenados = sorted(numeros)   # no destructivo\nprint(numeros)                # [5, 2, 8, 1]\nprint(ordenados)              # [1, 2, 5, 8]'],
+  ["Tuplas: la misma lectura, sin mutación",T('Una tupla se lee exactamente igual que una lista (indexado, slicing) — lo único que no permite es cambiar su contenido después de creada. Por eso una tupla nunca sufre el bug del aliasing de la misma forma: aunque dos nombres apunten a la misma tupla, ninguno puede mutarla.'),
+   'coordenadas = (3, 7)\nx, y = coordenadas            # unpacking\nprint(x, y)                   # 3 7\ncoordenadas[0] = 9             # TypeError: no se puede asignar'],
+  ["Leer código: mutación dentro de una función",T('Sin ejecutar: ¿por qué el cambio hecho DENTRO de la función se ve afuera, a diferencia de lo que pasaba en Funciones a fondo cuando una función reasignaba un parámetro entero?'),
+   'def agregar_urgente(lista_tareas):\n    lista_tareas.append("URGENTE: revisar")\n\ntareas = ["comprar pan"]\nagregar_urgente(tareas)\nprint(tareas)'],
+ ],
+ ex:[
+  {id:"n1d2e1",py:true,t:"Ejercicio 1 · Copia real contra aliasing",
+   d:'Este código debería dejar <code>original</code> siempre con sus 2 elementos, pase lo que pase con <code>copia</code>. Ahora mismo no lo hace. Arréglalo usando una copia real de la lista, de forma que se imprima exactamente <code>[\'lapiz\', \'goma\']</code> y luego <code>[\'lapiz\', \'goma\', \'regla\']</code>.',
+   starter:'original = ["lapiz", "goma"]\ncopia = original\ncopia.append("regla")\nprint(original)\nprint(copia)',runs:[[]],
+   check:(o,c)=>{const exp="['lapiz', 'goma']\n['lapiz', 'goma', 'regla']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["'copia = original' solo crea otro nombre para la MISMA lista — necesitas una copia real.","Usa original[:] o list(original) para crear una lista nueva e independiente."]},
+  {id:"n1d2e2",py:true,t:"Ejercicio 2 · sorted() en vez de .sort()",
+   d:'Este programa debía mostrar <code>numeros</code> SIN ordenar y una lista nueva <code>ordenados</code> SÍ ordenada — pero ahora mismo ambas salen ordenadas, porque <code>.sort()</code> modifica en el sitio. Arréglalo usando la función que crea una lista nueva.',
+   starter:'numeros = [5, 2, 8, 1]\nordenados = numeros\nordenados.sort()\nprint(numeros)\nprint(ordenados)',runs:[[]],
+   check:(o,c)=>{if(/\.sort\(\)/.test(c))return"Todavía usas .sort() en algún lado — esa función SIEMPRE modifica en el sitio. Usa sorted() en su lugar.";
+     const exp="[5, 2, 8, 1]\n[1, 2, 5, 8]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["sorted(lista) devuelve una lista NUEVA ordenada, sin tocar la original.","ordenados = sorted(numeros) — y ya no necesitas la línea 'ordenados = numeros'."]},
+  {id:"n1d2e3",py:true,t:"Ejercicio 3 · Slicing",
+   d:'Dada la lista de 6 letras, imprime los primeros 3 elementos y luego los últimos 2, usando <strong>slicing</strong> — nada de escribir letras[0], letras[1]… a mano.',
+   starter:'letras = ["a", "b", "c", "d", "e", "f"]\n# tu código aquí\n',runs:[[]],
+   check:(o,c)=>{if(!/\[[^\]]*:[^\]]*\]/.test(c))return"Usa slicing (el operador : dentro de corchetes), no índices sueltos.";
+     const exp="['a', 'b', 'c']\n['e', 'f']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["letras[:3] son los primeros 3 elementos.","letras[-2:] son los últimos 2 — el índice negativo cuenta desde el final."]},
+  {id:"n1d2e4",py:true,t:"Ejercicio 4 · No mutar mientras se itera",
+   d:'Este código intenta quedarse solo con los números pares, eliminando los impares de la lista MIENTRAS la recorre — y falla silenciosamente: el <code>3</code> sobrevive. Arréglalo construyendo una lista NUEVA <code>pares</code>, sin mutar <code>numeros</code> mientras la recorres. <code>numeros</code> debe quedar intacta.',
+   starter:'numeros = [1, 3, 2, 4, 5, 6, 7, 8, 9, 10]\nfor n in numeros:\n    if n % 2 != 0:\n        numeros.remove(n)\nprint(numeros)',runs:[[]],
+   check:(o,c)=>{if(/\.remove\(/.test(c))return"Sigues eliminando elementos de la lista mientras la recorres — construye una lista NUEVA en su lugar.";
+     const exp="[1, 3, 2, 4, 5, 6, 7, 8, 9, 10]\n[2, 4, 6, 8, 10]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Construye 'pares' con una lista vacía + append(), o con una list comprehension: [n for n in numeros if n % 2 == 0].","Imprime primero 'numeros' (debe seguir teniendo sus 10 elementos originales) y luego 'pares'."]},
+  {id:"n1d2e5",py:true,t:"Ejercicio 5 · Desempaquetar una tupla",
+   d:'Dada la tupla <code>coordenadas = (3, 7)</code>, desempaquétala en dos variables <code>x</code> e <code>y</code>, e imprime exactamente <code>x=3 y=7</code>.',
+   starter:'coordenadas = (3, 7)\n# tu código aquí\n',runs:[[]],
+   check:(o,c)=>{if(!/=\s*coordenadas\b/.test(c))return"Debes DESEMPAQUETAR coordenadas (algo = coordenadas), no escribir los números a mano.";
+     return norm(o[0])==="x=3 y=7"?true:"Esperaba: x=3 y=7\nObtuve:\n"+norm(o[0])},
+   hints:["x, y = coordenadas asigna ambos valores en una sola línea.","Luego: print(f\"x={x} y={y}\")."]},
+ ]},
+{id:"n1d2b",n:"Día 4",t:"Listas y tuplas · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que dos nombres pueden compartir la misma lista, y aprendiste a distinguir operaciones destructivas de no destructivas. Hoy integras todo eso en un registro de datos real — y cierras con un desafío que desarma una 'protección' que nunca existió.",
+ reto:{id:"n1d2r",py:true,t:"Laboratorio · Registro de temperaturas",
+  d:'Lee temperaturas por teclado hasta que el usuario escriba <code>fin</code>, guárdalas en una lista, y construye el reporte. <code>promedio(temps)</code> y <code>sobre_promedio(temps)</code> deben devolver un resultado sin usar print() — el programa principal es el único que imprime, exactamente:<pre class="codebox">Registro: [lista completa]\nPromedio: valor\nMaxima: valor\nMinima: valor\nSobre el promedio: [lista nueva, sin mutar la original]</pre>Se probará con 3, 4 y 1 temperaturas.',
+  starter:'def promedio(temps):\n    pass\n\ndef sobre_promedio(temps):\n    pass\n\ntemperaturas = []\nwhile True:\n    entrada = input("Temperatura (o \'fin\'): ")\n    if entrada == "fin":\n        break\n    temperaturas.append(float(entrada))\n\n# construye e imprime el reporte aqui: Registro, Promedio, Maxima, Minima, Sobre el promedio',
+  runs:[["36","38","34","fin"],["20","30","40","50","fin"],["37","fin"]],hints:["promedio: sum(temps) / len(temps).","sobre_promedio: [t for t in temps if t > promedio(temps)] — una lista NUEVA, no destructiva."],
+  check:(o,c)=>{
+    const esp=["Registro: [36.0, 38.0, 34.0]\nPromedio: 36.0\nMaxima: 38.0\nMinima: 34.0\nSobre el promedio: [38.0]",
+      "Registro: [20.0, 30.0, 40.0, 50.0]\nPromedio: 35.0\nMaxima: 50.0\nMinima: 20.0\nSobre el promedio: [40.0, 50.0]",
+      "Registro: [37.0]\nPromedio: 37.0\nMaxima: 37.0\nMinima: 37.0\nSobre el promedio: []"];
+    for(let i=0;i<o.length;i++){
+      const n=norm(o[i]),idx=n.indexOf("Registro:");
+      if(idx===-1)return"No encuentro la línea 'Registro: ...' en la prueba "+(i+1)+" — revisa que imprimas el reporte completo.";
+      const rep=n.slice(idx);
+      if(rep!==esp[i])return"Con la prueba "+(i+1)+" esperaba:\n"+esp[i]+"\nObtuve:\n"+rep;
+    }
+    return true}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1d2x",py:true,t:"Desafío final · inédito — la protección que no existía",
+  d:'Predice, ANTES de ejecutar, qué imprime este programa que intenta "proteger" una configuración pasándola a una función. Luego ejecútalo para confirmar, y piensa qué cambiarías para que la protección fuera real.',
+  starter:'def crear_reporte(config):\n    config.append("procesado")\n    return len(config)\n\nconfiguracion = ["modo_debug", "version_2"]\ntotal = crear_reporte(configuracion)\nprint(configuracion)\nprint(total)',runs:[[]],
+  hints:["config es un PARÁMETRO, pero sigue siendo la MISMA lista que configuracion — mutarla dentro de la función también la muta afuera.","Para proteger de verdad 'configuracion' haría falta pasarle una copia (configuracion[:]) o usar una tupla si nunca debía cambiar — la pregunta ingenieril de esta lección."],
+  check:(o,c)=>{const exp="['modo_debug', 'version_2', 'procesado']\n3";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -1982,6 +2059,23 @@ n1d1:{hist:"1957: FORTRAN, uno de los primeros lenguajes en tener subrutinas, re
   "¿En qué ejercicio confundiste \"se ve bien en pantalla\" con \"funciona correctamente\"?",
   "¿Cómo cambiaría tu forma de escribir programas de N0 si tuvieras que reescribirlos hoy, con funciones?",
   "¿Qué se sintió distinto entre razonar sobre una variable global y una variable local con el mismo nombre?",
+ ]},
+n1d2:{hist:"En C, los arrays son de tamaño fijo, reservado de antemano — agregar un elemento de más exige pedir memoria nueva y copiar todo a mano. Las listas dinámicas de Python esconden ese manejo de memoria por ti, pero el precio exacto de esa comodidad es que los nombres pasan a ser referencias, no copias: el aliasing no es un defecto de diseño, es la contraparte directa de no tener que gestionar memoria a mano.",
+ recursos:[
+  {t:"MIT 6.0001 — Lecture 5",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Lección dedicada exactamente a este alcance: tuplas, listas, aliasing, mutabilidad y clonado.",url:"https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/lecture-videos/lecture-5-tuples-lists-aliasing-mutability-and-cloning/",tag:"🟢"},
+  {t:"Python docs — More on Lists",autor:"Python Software Foundation",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Referencia oficial exacta de los métodos de lista usados en esta lección.",url:"https://docs.python.org/3/tutorial/datastructures.html#more-on-lists",tag:"🔵"},
+  {t:"CMU 15-110 — Aliasing and Mutability",autor:"Carnegie Mellon",idioma:"EN",dur:"~20 min",nivel:"Introductorio",motivo:"Origen directo del contraste destructivo/no-destructivo de esta lección.",url:"https://www.cs.cmu.edu/~15110-s20/slides/week6-2-aliasing.pdf",tag:"🟣"},
+  {t:"Catalogs of C and Python Antipatterns by CS1 Students",autor:"Investigación CS-Ed (arXiv)",idioma:"EN",dur:"~30 min",nivel:"Avanzado",motivo:"Evidencia empírica real de que el aliasing es una fuente medida de bugs en estudiantes, no una preocupación teórica.",url:"https://arxiv.org/pdf/2104.12542",tag:"⭐"},
+ ],
+ defensa:[
+  "¿Por qué \"b = a\" seguido de \"a.append(x)\" también cambia lo que ves al imprimir b?",
+  "¿Qué diferencia exactamente a .append() de + cuando ambas \"agregan\" algo a una lista?",
+  "(inédita) Si tuvieras que explicarle el aliasing a alguien sin usar la palabra \"referencia\" ni la palabra \"memoria\", ¿qué dirías?",
+ ],
+ metacog:[
+  "¿En qué ejercicio asumiste que \"asignar\" era lo mismo que \"copiar\", y qué te hizo darte cuenta de que no lo era?",
+  "¿Cómo se conecta el aliasing de hoy con el modelo de scope que aprendiste en Funciones a fondo?",
+  "¿Qué harías distinto si tuvieras que revisar código ajeno buscando bugs de aliasing?",
  ]},
 };
 /* examen práctico */

@@ -888,7 +888,7 @@ const norm=s=>s.split("\n").map(l=>l.replace(/\s+$/,"")).join("\n").replace(/\n+
    ============================================================ */
 function T(html){return html}
 const LEVEL0=[
-{id:"d1",n:"Día 1",t:"Tu primer programa",
+{id:"d1",n:"Día 1",t:"Tu primer programa · Parte 1: fundamentos",
  intro:"Hoy cruzas una frontera: dejas de ser alguien que USA programas y te conviertes en alguien que los ESCRIBE. Una sola idea sostiene todo el día: tu código es texto que otro programa (el intérprete) lee y obedece, línea por línea.",
  intuit:{code:'print("2 + 3")\nprint(2 + 3)',
   q:"Sin ejecutar nada: ¿qué imprime EXACTAMENTE cada línea? Escribe las dos salidas.",
@@ -900,10 +900,6 @@ const LEVEL0=[
  ing:"En una empresa, los print se convierten en <em>logs</em>: mensajes que los sistemas escriben para contar qué hacen. Tu JARVIS hace exactamente eso al emitir el progreso de cada etapa de razonamiento — son prints con uniforme de trabajo. Depurar con print es la primera herramienta de todo ingeniero, y la última que se abandona.",
  errores:["Olvidar cerrar comillas o paréntesis → SyntaxError","Escribir Print con mayúscula: Python distingue mayúsculas","Poner texto sin comillas y esperar que se imprima"],
  mental:{jr:"“print muestra cosas en pantalla.”",sr:"“print es una función de salida que escribe en un flujo (stdout): hoy es tu pantalla, mañana será un archivo de logs, una tubería entre procesos o el monitor de JARVIS.”",err:"Creer que el código ES el programa. El código es texto; el programa es lo que el intérprete hace con él al ejecutarlo."},
- reto:{id:"d1r",t:"Desafío final · sin pistas",
-  d:'Imprime EXACTAMENTE estas tres líneas:<pre class="codebox">== RECIBO ==\nTotal: 25 soles\nGracias, Alex</pre>',
-  starter:"",runs:[[]],hints:[],
-  check:(o)=>norm(o[0])==="== RECIBO ==\nTotal: 25 soles\nGracias, Alex"?true:"La salida no coincide. Compara carácter por carácter. Obtuve:\n"+norm(o[0])},
  theory:[
   ["¿Qué pasa cuando 'ejecutas' código?",T('Un archivo <code>.py</code> es solo texto. El <strong>intérprete</strong> de Python lo lee de arriba hacia abajo, traduce cada instrucción a operaciones que el procesador entiende, y las ejecuta una por una. Por eso Python es un lenguaje <em>interpretado</em>: no se convierte en un .exe, se va leyendo y ejecutando en vivo. En esta academia el intérprete vive dentro de tu navegador: la pestaña <strong>Terminal</strong> es tu laboratorio libre.')],
   ["print(): tu voz en la pantalla",T('<code>print()</code> es una <strong>función</strong>: una orden con nombre que recibe datos entre paréntesis y hace algo con ellos — en este caso, mostrarlos. Las comillas delimitan un <strong>string</strong> (texto). Sin comillas, Python creería que <code>Hola</code> es una variable.'),
@@ -942,13 +938,22 @@ const LEVEL0=[
      if(plus>=4)return"Sigue habiendo demasiadas piezas concatenadas — simplifica a menos fragmentos (o uno solo).";
      return norm(o[0])==="Total: 45 soles"?true:"Debe imprimir exactamente: Total: 45 soles"},
    hints:["¿Realmente necesitas seis piezas separadas por +, o puedes escribir el texto casi entero de una vez?","print(\"Total: 45 soles\") ya es válido — simplificar no significa perder ningún carácter del resultado."]},
- ],
+ ]},
+{id:"d1b",n:"Día 2",t:"Tu primer programa · Parte 2: laboratorio y desafío",
+ intro:"Ayer construiste el modelo del intérprete y practicaste literales, expresiones y errores. Hoy lo pones a prueba en un proyecto real — el recibo — y cierras con un desafío que nadie te enseñó a resolver directamente.",
+ errores:["Olvidar cerrar comillas o paréntesis → SyntaxError","Escribir Print con mayúscula: Python distingue mayúsculas","Poner texto sin comillas y esperar que se imprima"],
+ reto:{id:"d1r",t:"Desafío final · sin pistas",
+  d:'Imprime EXACTAMENTE estas tres líneas:<pre class="codebox">== RECIBO ==\nTotal: 25 soles\nGracias, Alex</pre>',
+  starter:"",runs:[[]],hints:[],
+  check:(o)=>norm(o[0])==="== RECIBO ==\nTotal: 25 soles\nGracias, Alex"?true:"La salida no coincide. Compara carácter por carácter. Obtuve:\n"+norm(o[0])},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d1x",t:"Desafío final · inédito — comillas dentro de comillas",
   d:'Imprime EXACTAMENTE esta línea, incluidas las comillas dentro del texto: <pre class="codebox">Ella dijo "hola" y se fue</pre> Ningún ejercicio anterior mostró cómo incluir comillas dentro de un string delimitado por el mismo tipo de comillas — vas a descubrirlo usando la anatomía del error como herramienta de diagnóstico.',
   starter:"",runs:[[]],
   hints:["Si delimitas con comillas dobles y el texto también tiene comillas dobles, Python se confunde antes de tiempo — el error te lo dirá.","Dos caminos válidos: usa comillas simples para delimitar todo el string, o escapa las comillas internas con \\\"."],
   check:(o,c)=>norm(o[0])==='Ella dijo "hola" y se fue'?true:'Esperaba exactamente: Ella dijo "hola" y se fue\nObtuve:\n'+norm(o[0])}},
-{id:"d2",n:"Día 2",t:"Variables: etiquetas, no cajas",
+{id:"d2",n:"Día 3",t:"Variables: etiquetas, no cajas · Parte 1: fundamentos",
  intro:"Un programa sin variables es una calculadora de un solo uso. Hoy aprendes a darle MEMORIA: nombrar valores, guardarlos y transformarlos. Y construyes el modelo mental que separa a los que entienden Python de los que solo lo escriben.",
  intuit:{code:"x = 5\nx = x + 1\nprint(x)",
   q:"¿Qué imprime? Y piensa: ¿cómo puede x ser igual a x + 1?",
@@ -960,11 +965,6 @@ const LEVEL0=[
  ing:"Las variables son el ESTADO de un sistema: lo que recuerda entre un paso y el siguiente. Cuando tu JARVIS responde, guarda en variables la pregunta del usuario, el contexto recuperado y la respuesta parcial. Sin variables no hay memoria; sin memoria no hay inteligencia.",
  errores:["Usar = creyendo que compara (eso es ==)","Nombres crípticos: x, aux, cosa","Usar una variable antes de crearla → NameError"],
  mental:{jr:"“Una variable es una caja que guarda un valor.”",sr:"“Un nombre que referencia un objeto en memoria. La asignación liga nombres a objetos — no copia valores. Dos nombres pueden apuntar al mismo objeto.”",err:"El modelo de la caja. Parece inofensivo hoy; en el Nivel 1, con listas, producirá bugs que no entenderás si piensas en cajas."},
- reto:{id:"d2r",t:"Desafío final · sin pistas",
-  d:'Intercambia los valores de las dos variables usando una <strong>variable auxiliar</strong> (prohibido reasignar los textos directamente) e imprime ambas: primero la izquierda, luego la derecha. Salida esperada: <code>dolar</code> y luego <code>sol</code>.',
-  starter:'moneda_izquierda = "sol"\nmoneda_derecha = "dolar"',runs:[[]],hints:[],
-  check:(o,c)=>{if(/moneda_izquierda\s*=\s*"dolar"/.test(c)||/moneda_derecha\s*=\s*"sol"/.test(c))return"Tramposo: reasignaste los textos a mano. El intercambio debe usar una variable auxiliar.";
-    return norm(o[0])==="dolar\nsol"?true:"Esperaba:\ndolar\nsol\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["El modelo mental correcto",T('Una variable NO es una caja que guarda un valor: es una <strong>etiqueta</strong> que apunta a un objeto en memoria. <code>precio = 100</code> significa: crea el objeto <code>100</code> y ponle la etiqueta <code>precio</code>. Si luego escribes <code>precio = 200</code>, la etiqueta se mueve a otro objeto — el 100 no se "modifica". Esta diferencia parece filosófica hoy; en el Nivel 3 será la razón por la que entiendas bugs que confunden a programadores intermedios.'),
    'precio = 100\nprecio_final = precio   # otra etiqueta al MISMO objeto\nprecio = 200            # solo se mueve la etiqueta precio\nprint(precio)\nprint(precio_final)'],
@@ -1006,14 +1006,23 @@ const LEVEL0=[
    check:(o,c)=>{if(/\+\s*0\b/.test(c))return"Todavía tienes la reasignación que suma 0 — no cambia nada, elimínala.";
      return norm(o[0])==="20"?true:"Debe imprimir: 20"},
    hints:["Sumar 0 a algo nunca lo cambia — esa línea es ruido, no lógica.","Basta con temperatura = 20 y el print."]},
- ],
+ ]},
+{id:"d2b",n:"Día 4",t:"Variables: etiquetas, no cajas · Parte 2: laboratorio y desafío",
+ intro:"Ayer construiste el modelo de etiquetas y lo pusiste a prueba con nombres sombreados y reasignaciones inútiles. Hoy lo aplicas a un intercambio real de valores, y cierras con un desafío que parece un intercambio... pero no lo es.",
+ reto:{id:"d2r",t:"Desafío final · sin pistas",
+  d:'Intercambia los valores de las dos variables usando una <strong>variable auxiliar</strong> (prohibido reasignar los textos directamente) e imprime ambas: primero la izquierda, luego la derecha. Salida esperada: <code>dolar</code> y luego <code>sol</code>.',
+  starter:'moneda_izquierda = "sol"\nmoneda_derecha = "dolar"',runs:[[]],hints:[],
+  check:(o,c)=>{if(/moneda_izquierda\s*=\s*"dolar"/.test(c)||/moneda_derecha\s*=\s*"sol"/.test(c))return"Tramposo: reasignaste los textos a mano. El intercambio debe usar una variable auxiliar.";
+    return norm(o[0])==="dolar\nsol"?true:"Esperaba:\ndolar\nsol\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d2x",t:"Desafío final · inédito — el intercambio que no intercambia",
   d:'Dado <code>a = 10</code> y <code>b = 20</code>, alguien escribió <code>a = b</code> seguido de <code>b = a</code> pensando que así se intercambian los valores. Predice qué imprimirían <code>print(a)</code> y <code>print(b)</code> al final de ESE código (sin arreglarlo primero) y luego escribe la versión que si intercambia de verdad, usando una variable auxiliar, imprimiendo primero a y luego b.',
   starter:"a = 10\nb = 20",runs:[[]],
   hints:["Traza línea por línea con el modelo de etiquetas: a = b mueve la etiqueta a ANTES de que b cambie. Para cuando ejecutas b = a, a ya no vale 10.","El intercambio real necesita una tercera etiqueta temporal que guarde uno de los dos valores antes de sobrescribir nada."],
   check:(o,c)=>{if(!/=\s*a\b/.test(c)&&!/=\s*b\b/.test(c))return"Tu solución debe usar una variable auxiliar que guarde a o b antes de reasignar.";
     return norm(o[0])==="20\n10"?true:"El intercambio real de a=10, b=20 debe imprimir:\n20\n10\nObtuve:\n"+norm(o[0])}}},
-{id:"d3",n:"Día 3",t:"Tipos de datos",
+{id:"d3",n:"Día 5",t:"Tipos de datos · Parte 1: fundamentos",
  intro:"En Python todo valor tiene un TIPO, y el tipo decide qué puedes hacer con él. El 90% de los errores de principiante son errores de tipo. Hoy aprendes a verlos venir antes de que exploten.",
  intuit:{code:'print("3" + "4")\nprint(3 + 4)',
   q:"¿Qué imprime cada línea? Cuidado: no es la misma operación.",
@@ -1025,12 +1034,6 @@ const LEVEL0=[
  ing:"Los modelos de IA viven de conversiones de tipo: tu pregunta llega como str, se convierte en números (tokens y vectores de floats), y la respuesta vuelve a str. Tu sistema RAG hace ese viaje completo en cada consulta. Dominar los tipos es dominar la frontera donde los sistemas se rompen.",
  errores:['Sumar str + int → TypeError','Creer que int("3.5") funciona','Confundir "True" (string) con True (bool)'],
  mental:{jr:"“Los tipos son categorías de datos.”",sr:"“Un tipo es un contrato: define qué operaciones son válidas y qué significan. Un TypeError no es una molestia — es el sistema defendiendo el contrato.”",err:"Esperar que Python ‘adivine’ la conversión. Python es explícito a propósito: la magia implícita es donde nacen los bugs silenciosos."},
- reto:{id:"d3r",t:"Desafío final · sin pistas",
-  d:'El precio llega como texto y hay un descuento. Imprime EXACTAMENTE <code>Pagas: 120</code> — pero el 120 debe salir de un CÁLCULO (prohibido escribir 120 en tu código).',
-  starter:'precio_texto = "150"\ndescuento = 30',runs:[[]],hints:[],
-  check:(o,c)=>{if(/120/.test(c))return"Prohibido escribir 120: debe salir del cálculo precio - descuento.";
-    if(!/int\s*\(/.test(c))return"El precio llega como str: conviértelo con int().";
-    return norm(o[0])==="Pagas: 120"?true:"Esperaba exactamente: Pagas: 120\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["Los cuatro tipos primitivos",T('<code>int</code> (enteros), <code>float</code> (decimales), <code>str</code> (texto), <code>bool</code> (<code>True</code>/<code>False</code>). El tipo determina qué operaciones son válidas: <code>3 + 5</code> suma, <code>"3" + "5"</code> pega texto (<code>"35"</code>), y <code>"3" + 5</code> explota con <code>TypeError</code>. Pregunta el tipo de cualquier cosa con <code>type()</code>.'),
    'print(type(42))\nprint(type(3.14))\nprint(type("hola"))\nprint(type(True))'],
@@ -1056,7 +1059,7 @@ const LEVEL0=[
    d:'Este código explota. Ejecútalo, lee el traceback y repáralo para que imprima <code>Tengo 25 años</code>. Pista: hay dos caminos válidos (conversión o f-string).',
    starter:'print("Tengo " + 25 + " años")',runs:[[]],
    check:(o)=>norm(o[0])==="Tengo 25 años"?true:"Debe imprimir exactamente: Tengo 25 años",
-   hints:["El error dice que no puede sumar str con int. Haz que TODO sea texto.","Camino 1: str(25). Camino 2: print(f\"Tengo {25} años\") — las f-strings se ven en detalle el Día 5."]},
+   hints:["El error dice que no puede sumar str con int. Haz que TODO sea texto.","Camino 1: str(25). Camino 2: print(f\"Tengo {25} años\") — las f-strings se ven en detalle más adelante, en Strings a fondo."]},
   {id:"d3e4",t:"Ejercicio 4 · Caza el ValueError (distinto del TypeError)",
    d:'Este error NO es una mezcla de tipos como el ejercicio anterior — es una <strong>conversión inválida</strong>: <code>int()</code> no interpreta el punto decimal. Repáralo para que imprima <code>18</code>.',
    starter:'edad_texto = "17.5"\nprint(int(edad_texto) + 1)',runs:[[]],
@@ -1068,13 +1071,24 @@ const LEVEL0=[
    starter:'edad_texto = "17"\nedad_numero = int(edad_texto)\nedad_numero_mas_uno = edad_numero + 1\nprint(edad_numero_mas_uno)',runs:[[]],
    check:(o,c)=>norm(o[0])==="18"?true:"Debe seguir imprimiendo: 18",
    hints:["Puedes consolidar todo en print(int(edad_texto) + 1) — o dejarlo como está, si crees que ayuda a leerlo.","No hay una única respuesta correcta aquí: lo que importa es que decidas con criterio, no al azar."]},
- ],
+ ]},
+{id:"d3b",n:"Día 6",t:"Tipos de datos · Parte 2: laboratorio y desafío",
+ intro:"Ayer dominaste los cuatro tipos y sus conversiones. Hoy los integras con lo de T1 y T2 en la calculadora de vuelto, y cierras con un tercer comportamiento del operador * que ninguna teoría te mostró directamente.",
+ errores:['Sumar str + int → TypeError','Creer que int("3.5") funciona','Confundir "True" (string) con True (bool)'],
+ reto:{id:"d3r",t:"Desafío final · sin pistas",
+  d:'El precio llega como texto y hay un descuento. Imprime EXACTAMENTE <code>Pagas: 120</code> — pero el 120 debe salir de un CÁLCULO (prohibido escribir 120 en tu código).',
+  starter:'precio_texto = "150"\ndescuento = 30',runs:[[]],hints:[],
+  check:(o,c)=>{if(/120/.test(c))return"Prohibido escribir 120: debe salir del cálculo precio - descuento.";
+    if(!/int\s*\(/.test(c))return"El precio llega como str: conviértelo con int().";
+    return norm(o[0])==="Pagas: 120"?true:"Esperaba exactamente: Pagas: 120\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d3x",t:"Desafío final · inédito — un tercer comportamiento de *",
   d:'Predice, ANTES de ejecutar, qué imprime <code>"10" * 3</code> — sabiendo que <code>"10" + "10"</code> pega texto y <code>10 * 3</code> multiplica. Aquí un operando es string y el otro es int: ningún ejemplo de esta lección mostró esta combinación. Luego escribe el código que lo demuestre.',
   starter:"",runs:[[]],
   hints:["El tipo decide qué hace el operador — pero * entre string y número no es ni concatenación por pares ni multiplicación numérica.","Python define '\"10\" * 3' como repetición: el string se repite 3 veces seguidas, sin separador."],
   check:(o,c)=>norm(o[0])==="101010"?true:"Esperaba: 101010\nObtuve:\n"+norm(o[0])}},
-{id:"d4",n:"Día 4",t:"Operadores",
+{id:"d4",n:"Día 7",t:"Operadores · Parte 1: fundamentos",
  intro:"Los operadores son los verbos de Python. Hoy conoces a la familia completa — y en especial a dos subestimados que usarás toda tu carrera: // y %. Parecen matemática de colegio; son herramientas de ingeniería.",
  intuit:{code:"print(10 % 3)\nprint(10 // 3)",
   q:"¿Qué imprime cada línea? Piensa en dividir 10 entre 3 a mano, como en primaria.",
@@ -1086,12 +1100,6 @@ const LEVEL0=[
  ing:"// y % están por todas partes: paginar resultados (página = elemento // por_página), relojes (minutos % 60), y en IA: repartir 319 PDFs en lotes de 8 para procesarlos — como hace tu HERMES al indexar documentos. Lo que hoy es 10 % 3, mañana es distribuir carga en un sistema real.",
  errores:["Esperar que 10/2 dé 5 (da 5.0: / siempre float)","Confundir / con //","Olvidar paréntesis: 8 + 10 / 2 no es un promedio"],
  mental:{jr:"“Son símbolos para hacer cuentas.”",sr:"“Son funciones con sintaxis especial. // y % implementan aritmética modular: la base de relojes, hashing, buffers circulares y paginación en sistemas reales.”",err:"Asumir que la división se comporta como en tu calculadora física. En ingeniería, saber si tu resultado es int o float importa tanto como el número."},
- reto:{id:"d4r",t:"Desafío final · sin pistas",
-  d:'Convierte los minutos totales a horas y minutos usando <code>//</code> y <code>%</code>, e imprime EXACTAMENTE <code>3 horas y 20 minutos</code> — calculado, no escrito a mano.',
-  starter:"minutos_totales = 200",runs:[[]],hints:[],
-  check:(o,c)=>{if(!/\/\//.test(c)||!/%/.test(c))return"Obligatorio usar // (horas) y % (minutos sobrantes).";
-    if(/3\s*horas/.test(c))return'Prohibido escribir "3 horas" a mano: las cifras deben salir del cálculo.';
-    return norm(o[0])==="3 horas y 20 minutos"?true:"Esperaba: 3 horas y 20 minutos\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["La familia aritmética completa",T('<code>+ - *</code> son obvios. Los importantes: <code>/</code> divide y SIEMPRE devuelve float (<code>10 / 5</code> → <code>2.0</code>); <code>//</code> es división entera (descarta decimales); <code>%</code> es el <strong>resto</strong> de la división (7 = 2·3 + <strong>1</strong>); <code>**</code> es potencia. El <code>%</code> es más útil de lo que parece: <code>n % 2 == 0</code> te dice si n es par — piénsalo como repartir caramelos: % es lo que sobra.'),
    'print(7 / 2)    # 3.5\nprint(7 // 2)   # 3\nprint(7 % 2)    # 1\nprint(2 ** 10)  # 1024'],
@@ -1131,13 +1139,24 @@ const LEVEL0=[
      if(opens>=3)return"Todavía hay paréntesis de más — deja solo los que cambian el resultado.";
      return norm(o[0])==="9.0"?true:"Debe seguir imprimiendo: 9.0"},
    hints:["¿Los paréntesis exteriores hacen algo que no harían de todos modos?","print((8 + 10) / 2) ya es suficiente: un solo nivel de agrupación."]},
- ],
+ ]},
+{id:"d4b",n:"Día 8",t:"Operadores · Parte 2: laboratorio y desafío",
+ intro:"Ayer dominaste la familia aritmética y su precedencia. Hoy la integras en el divisor de cuenta de restaurante, y cierras combinando comparaciones con and/or de una forma que ninguna teoría anterior mostró.",
+ errores:["Esperar que 10/2 dé 5 (da 5.0: / siempre float)","Confundir / con //","Olvidar paréntesis: 8 + 10 / 2 no es un promedio"],
+ reto:{id:"d4r",t:"Desafío final · sin pistas",
+  d:'Convierte los minutos totales a horas y minutos usando <code>//</code> y <code>%</code>, e imprime EXACTAMENTE <code>3 horas y 20 minutos</code> — calculado, no escrito a mano.',
+  starter:"minutos_totales = 200",runs:[[]],hints:[],
+  check:(o,c)=>{if(!/\/\//.test(c)||!/%/.test(c))return"Obligatorio usar // (horas) y % (minutos sobrantes).";
+    if(/3\s*horas/.test(c))return'Prohibido escribir "3 horas" a mano: las cifras deben salir del cálculo.';
+    return norm(o[0])==="3 horas y 20 minutos"?true:"Esperaba: 3 horas y 20 minutos\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d4x",t:"Desafío final · inédito — and/or combinados",
   d:'Dado <code>x = 10</code>, predice el valor de <code>x &gt; 5 and x &lt; 20 or x == 100</code> ANTES de ejecutar — combinando comparación con dos operadores lógicos de distinta precedencia (<code>and</code> se evalúa antes que <code>or</code>, algo que ningún bloque anterior mencionó explícitamente). Luego escribe el código que lo demuestre.',
   starter:"x = 10",runs:[[]],
   hints:["and se evalúa antes que or, igual que * se evalúa antes que + — incluso sin paréntesis visibles.","(x > 5 and x < 20) es True, así que el resultado ya está decidido antes de mirar la parte del or."],
   check:(o,c)=>norm(o[0])==="True"?true:"Esperaba: True\nObtuve:\n"+norm(o[0])}},
-{id:"d5",n:"Día 5",t:"Strings a fondo",
+{id:"d5",n:"Día 9",t:"Strings a fondo · Parte 1: fundamentos",
  intro:"El 85% (regla 8.5/10) de los datos del mundo real son texto sucio: correos con espacios, nombres en mayúsculas, archivos mal formateados. Hoy aprendes cirugía de strings — la habilidad que usarás en TODOS tus proyectos, desde scrapers hasta IA.",
  intuit:{code:'palabra = "python"\nprint(palabra[1])\nprint(palabra[-2])',
   q:"¿Qué letra imprime cada línea? Recuerda desde dónde cuenta Python.",
@@ -1149,12 +1168,6 @@ const LEVEL0=[
  ing:"La limpieza de texto es el 85% (regla 8.5/10) del preprocesamiento en ciencia de datos e IA. Tu HERMES, antes de indexar un PDF, normaliza el texto igual que tu ejercicio del correo: strip, lower, replace. Un dato sucio que entra es una respuesta basura que sale — los ingenieros lo llaman garbage in, garbage out.",
  errores:["Creer que [0:3] incluye el índice 3","Esperar que .strip() borre espacios internos","Pedir un índice que no existe → IndexError"],
  mental:{jr:"“Un string es texto entre comillas.”",sr:"“Una secuencia INMUTABLE de caracteres: cada ‘modificación’ crea un objeto nuevo. Por eso los métodos se encadenan — cada uno devuelve un string fresco.”",err:"Creer que texto.upper() modifica la variable. No: devuelve otro string; si no lo guardas, se pierde."},
- reto:{id:"d5r",t:"Desafío final · sin pistas",
-  d:'Ese correo llegó sucio de un formulario. Imprímelo limpio y normalizado: EXACTAMENTE <code>alex@gmail.com</code> — usando métodos, no escribiéndolo a mano.',
-  starter:'correo = "  ALEX@GMAIL.COM  "',runs:[[]],hints:[],
-  check:(o,c)=>{if(/"alex@gmail\.com"/.test(c)||/'alex@gmail\.com'/.test(c))return"Prohibido escribir el resultado a mano: transforma la variable con métodos.";
-    if(!/\.strip\s*\(/.test(c)||!/\.lower\s*\(/.test(c))return"Necesitas .strip() para los bordes y .lower() para las mayúsculas.";
-    return norm(o[0])==="alex@gmail.com"?true:"Esperaba: alex@gmail.com\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["Índices y rebanadas",T('Un string es una secuencia: cada carácter tiene una posición <strong>empezando en 0</strong>. <code>palabra[0]</code> es el primero, <code>palabra[-1]</code> el último. El <strong>slicing</strong> <code>palabra[a:b]</code> corta desde <code>a</code> hasta ANTES de <code>b</code> — el límite derecho nunca entra. <code>len(palabra)</code> cuenta todos los caracteres, espacios incluidos.'),
    'palabra = "programando"\nprint(palabra[0])      # p\nprint(palabra[-1])     # o\nprint(palabra[0:3])    # pro\nprint(len(palabra))    # 11'],
@@ -1196,13 +1209,24 @@ const LEVEL0=[
    check:(o,c)=>{if(/texto2|texto3/.test(c))return"Todavía usas las variables intermedias — encadena strip() y lower() directamente.";
      return norm(o[0])==="hola"?true:"Debe imprimir: hola"},
    hints:["Los métodos se encadenan: texto.strip().lower() aplica uno tras otro sin variables intermedias.","print(texto.strip().lower()) en una sola línea."]},
- ],
+ ]},
+{id:"d5b",n:"Día 10",t:"Strings a fondo · Parte 2: laboratorio y desafío",
+ intro:"Ayer dominaste índices, slicing y métodos encadenados. Hoy los integras en el normalizador de contactos, y cierras encadenando .replace() más veces de las que cualquier ejemplo anterior mostró.",
+ errores:["Creer que [0:3] incluye el índice 3","Esperar que .strip() borre espacios internos","Pedir un índice que no existe → IndexError"],
+ reto:{id:"d5r",t:"Desafío final · sin pistas",
+  d:'Ese correo llegó sucio de un formulario. Imprímelo limpio y normalizado: EXACTAMENTE <code>alex@gmail.com</code> — usando métodos, no escribiéndolo a mano.',
+  starter:'correo = "  ALEX@GMAIL.COM  "',runs:[[]],hints:[],
+  check:(o,c)=>{if(/"alex@gmail\.com"/.test(c)||/'alex@gmail\.com'/.test(c))return"Prohibido escribir el resultado a mano: transforma la variable con métodos.";
+    if(!/\.strip\s*\(/.test(c)||!/\.lower\s*\(/.test(c))return"Necesitas .strip() para los bordes y .lower() para las mayúsculas.";
+    return norm(o[0])==="alex@gmail.com"?true:"Esperaba: alex@gmail.com\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d5x",t:"Desafío final · inédito — censura las vocales",
   d:'Dado <code>apodo = "alexito"</code>, produce <code>*l*x*t*</code> reemplazando cada vocal (a, e, i, o) por <code>*</code> — encadenando <code>.replace()</code> tantas veces como haga falta. Ningún ejercicio anterior encadenó más de dos métodos seguidos; aquí vas a necesitar varios, en el orden correcto, sin que ninguno deshaga el trabajo del anterior.',
   starter:'apodo = "alexito"',runs:[[]],
   hints:["Un .replace() reemplaza UNA letra por *. Nada te impide encadenar varios: texto.replace('a','*').replace('e','*')...","Cada vocal que aparece en 'alexito' necesita su propio .replace() — cuenta cuáles son antes de escribir la cadena completa."],
   check:(o,c)=>norm(o[0])==="*l*x*t*"?true:"Esperaba: *l*x*t*\nObtuve:\n"+norm(o[0])}},
-{id:"d6",n:"Día 6",t:"Entrada y salida",
+{id:"d6",n:"Día 11",t:"Entrada y salida · Parte 1: fundamentos",
  intro:"Hasta hoy tus programas hablaban solos. Hoy aprenden a ESCUCHAR. Con input() tus programas se vuelven conversaciones — y conocerás la trampa número 1 de todos los principiantes del planeta.",
  intuit:{code:'edad = input("Edad: ")\nprint(edad + edad)',
   q:"El usuario escribe 21. ¿Qué imprime la segunda línea?",
@@ -1214,17 +1238,11 @@ const LEVEL0=[
  ing:"input → procesar → print es la anatomía de TODO sistema interactivo. Un chatbot es exactamente eso con esteroides: lee tu mensaje (input), lo procesa un modelo, responde (print). Tu bot de Telegram del Nivel 5 y tu JARVIS son este patrón — hoy estás aprendiendo su esqueleto.",
  errores:["Operar el input sin convertir → el bug del 48","Convertir a int cuando puede traer decimales","Olvidar el mensaje del prompt: input() mudo confunde al usuario"],
  mental:{jr:"“input() pide datos al usuario.”",sr:"“input() es una FRONTERA DE CONFIANZA: todo lo que cruza es str no confiable que se valida y convierte antes de tocar la lógica. Igual que una API valida cada request.”",err:"Confiar en que el usuario escribirá lo que esperas. Un Senior diseña para el usuario que escribe ‘hola’ donde iba un número."},
- reto:{id:"d6r",t:"Desafío final · sin pistas",
-  d:'Pide un nombre y una nota (0–20). Imprime el nombre en MAYÚSCULAS con la nota, formato exacto: <code>ALEX: 15 puntos</code>. La prueba escribe <code>alex</code> y <code>15</code>.',
-  starter:"",runs:[["alex","15"]],hints:[],
-  check:(o,c)=>{if(!/\.upper\s*\(/.test(c))return"El nombre debe salir en MAYÚSCULAS con .upper().";
-    if(!/f["']/.test(c))return"El formato final debe construirse con una f-string.";
-    return norm(o[0]).includes("ALEX: 15 puntos")?true:"Con alex y 15 esperaba: ALEX: 15 puntos"}},
  theory:[
   ["input(): la trampa clásica número 1",T('<code>input("mensaje")</code> muestra el mensaje, espera a que el usuario escriba, y devuelve lo escrito. Grábatelo a fuego: <strong>input() SIEMPRE devuelve str</strong>. Si el usuario escribe 4, tú recibes <code>"4"</code>. Por eso <code>input() + input()</code> con 4 y 8 da <code>"48"</code>, no 12. Todo número que entre por input debe pasar por <code>int()</code> o <code>float()</code>.'),
    'numero_1 = float(input("Primer número: "))\nnumero_2 = float(input("Segundo número: "))\nprint(f"Suma: {numero_1 + numero_2}")'],
   ["print() con opciones",T('<code>print()</code> acepta varios valores separados por comas y dos parámetros útiles: <code>sep</code> (separador entre valores, por defecto un espacio) y <code>end</code> (qué poner al final, por defecto salto de línea). <code>print("a", "b", sep="-")</code> imprime <code>a-b</code>.')],
-  ["El bucle de validación — nombrado, no construible aún",T('La respuesta profesional completa a "¿y si el dato es inconvertible?" no es solo detectarlo una vez — es <strong>volver a preguntar hasta obtener un dato válido</strong>, en un bucle. Hoy no puedes construirlo todavía (eso exige <code>while</code>, que llega en el Día 7) — pero puedes al menos detectar el problema con <code>.isdigit()</code> y avisar en vez de explotar, en lugar de fingir que el dato siempre viene limpio.')],
+  ["El bucle de validación — nombrado, no construible aún",T('La respuesta profesional completa a "¿y si el dato es inconvertible?" no es solo detectarlo una vez — es <strong>volver a preguntar hasta obtener un dato válido</strong>, en un bucle. Hoy no puedes construirlo todavía (eso exige <code>while</code>, que llega en la próxima lección) — pero puedes al menos detectar el problema con <code>.isdigit()</code> y avisar en vez de explotar, en lugar de fingir que el dato siempre viene limpio.')],
  ],
  ex:[
   {id:"d6e1",t:"Ejercicio 1 · Saludo interactivo",
@@ -1262,14 +1280,25 @@ const LEVEL0=[
    check:(o,c)=>{if(/resultado\s*=\s*numero/.test(c))return"Todavía tienes la variable 'resultado' que solo copia 'numero' sin transformarlo — elimínala.";
      return norm(o[0])==="7.0"?true:"Debe imprimir: 7.0"},
    hints:["'resultado' solo copia 'numero' sin cambiar nada — esa línea no aporta.","print(float(input(\"Número: \"))) ya hace todo el trabajo en una línea, si prefieres esa ruta."]},
- ],
+ ]},
+{id:"d6b",n:"Día 12",t:"Entrada y salida · Parte 2: laboratorio y desafío",
+ intro:"Ayer aprendiste que input() siempre devuelve texto y a detectar datos inconvertibles. Hoy lo integras en la boleta de calificaciones, y cierras comprobando que float() ya tolera espacios de más sin que tú tengas que limpiarlos.",
+ errores:["Operar el input sin convertir → el bug del 48","Convertir a int cuando puede traer decimales","Olvidar el mensaje del prompt: input() mudo confunde al usuario"],
+ reto:{id:"d6r",t:"Desafío final · sin pistas",
+  d:'Pide un nombre y una nota (0–20). Imprime el nombre en MAYÚSCULAS con la nota, formato exacto: <code>ALEX: 15 puntos</code>. La prueba escribe <code>alex</code> y <code>15</code>.',
+  starter:"",runs:[["alex","15"]],hints:[],
+  check:(o,c)=>{if(!/\.upper\s*\(/.test(c))return"El nombre debe salir en MAYÚSCULAS con .upper().";
+    if(!/f["']/.test(c))return"El formato final debe construirse con una f-string.";
+    return norm(o[0]).includes("ALEX: 15 puntos")?true:"Con alex y 15 esperaba: ALEX: 15 puntos"}},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d6x",t:"Desafío final · inédito — robustez ante espacios",
   d:'Pide el precio de un producto y la cantidad comprada, en ese orden. El precio podría llegar con espacios de más (como <code>" 10.5 "</code>) — tu programa debe funcionar igual. Imprime EXACTAMENTE <code>Total: 31.50</code> con precio <code>" 10.5 "</code> y cantidad <code>3</code>.',
   starter:"",runs:[[" 10.5 ","3"]],
   hints:["float() ya ignora los espacios de sobra alrededor del número — no necesitas limpiarlo tú mismo con métodos de string.","Total = precio * cantidad, mostrado con f-string y formato :.2f."],
   check:(o,c)=>{if(!/:\.2f/.test(c))return"El formato de 2 decimales exige una f-string con :.2f";
     return norm(o[0])==="Total: 31.50"?true:"Esperaba: Total: 31.50\nObtuve:\n"+norm(o[0])}}},
-{id:"d7",n:"Día 7",t:"Decisiones y repetición",
+{id:"d7",n:"Día 13",t:"Decisiones y repetición · Parte 1: fundamentos",
  intro:"Éste es el día más importante del nivel. if y while convierten tus guiones lineales en programas que DECIDEN y PERSISTEN. Después de hoy, tu código deja de ser una lista de pasos y se vuelve lógica viva.",
  intuit:{code:"n = 4\nwhile n > 2:\n    print(n)\n    n = n - 1",
   q:"¿Qué números imprime? ¿Y por qué se detiene donde se detiene?",
@@ -1281,12 +1310,6 @@ const LEVEL0=[
  ing:"El corazón de un agente de IA es literalmente esto: <code>while</code> no haya respuesta final → pensar, actuar, evaluar (con ifs decidiendo cada paso). Tu JARVIS con LangGraph es un grafo de decisiones sobre un bucle. El if/while que aprendes hoy es el mismo patrón, a otra escala.",
  errores:["Olvidar los dos puntos al final del if/while","Indentación desigual dentro del mismo bloque","Bucle donde nada cambia la condición → infinito"],
  mental:{jr:"“if decide y while repite.”",sr:"“El programa es un GRAFO de caminos posibles: cada if bifurca, cada while cicla. Diseñar es razonar TODOS los caminos, no solo el feliz.”",err:"Pensar solo en el camino donde todo sale bien. Los bugs viven en los caminos que no imaginaste."},
- reto:{id:"d7r",t:"Desafío final · sin pistas",
-  d:'Lee un número n e imprime del 1 al n (uno por línea) con while, PERO: si el número es múltiplo de 3, imprime <code>fizz</code> en su lugar. La prueba escribe <code>7</code>: espera 1, 2, fizz, 4, 5, fizz, 7.',
-  starter:"",runs:[["7"]],hints:[],
-  check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while.";
-    if(!/%/.test(c))return"Detectar múltiplos de 3 exige el operador %.";
-    return norm(o[0]).includes("1\n2\nfizz\n4\n5\nfizz\n7")?true:"Con 7 esperaba:\n1\n2\nfizz\n4\n5\nfizz\n7\nObtuve:\n"+norm(o[0])}},
  theory:[
   ["if / elif / else: el programa decide",T('Hasta hoy tus programas eran una línea recta. <code>if</code> abre caminos: si la condición es <code>True</code> se ejecuta su bloque — y el bloque se marca con <strong>indentación</strong> (4 espacios), que en Python no es estética, es sintaxis. <code>elif</code> encadena más condiciones, <code>else</code> atrapa todo lo demás.'),
    'nota = 15\nif nota >= 18:\n    print("Excelente")\nelif nota >= 11:\n    print("Aprobado")\nelse:\n    print("Desaprobado")'],
@@ -1330,7 +1353,18 @@ const LEVEL0=[
    check:(o,c)=>{if(/if\s+edad/.test(c))return"Todavía usas el if/else de cuatro líneas — la comparación ya es un valor por sí misma.";
      return norm(o[0])==="True"?true:"Debe imprimir: True"},
    hints:["edad >= 18 ya es True o False — no necesita un if para 'traducirlo'.","es_mayor = edad >= 18 — una sola línea, mismo resultado."]},
- ],
+ ]},
+{id:"d7b",n:"Día 14",t:"Decisiones y repetición · Parte 2: laboratorio y desafío",
+ intro:"Ayer construiste if/while y descubriste que una condición ya es un valor. Hoy los integras en un FizzBuzz con entrada validada — el laboratorio de mayor integración de todo N0 hasta ahora — y cierras diseñando desde cero cómo verificar si un número es primo.",
+ errores:["Olvidar los dos puntos al final del if/while","Indentación desigual dentro del mismo bloque","Bucle donde nada cambia la condición → infinito"],
+ reto:{id:"d7r",t:"Desafío final · sin pistas",
+  d:'Lee un número n e imprime del 1 al n (uno por línea) con while, PERO: si el número es múltiplo de 3, imprime <code>fizz</code> en su lugar. La prueba escribe <code>7</code>: espera 1, 2, fizz, 4, 5, fizz, 7.',
+  starter:"",runs:[["7"]],hints:[],
+  check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while.";
+    if(!/%/.test(c))return"Detectar múltiplos de 3 exige el operador %.";
+    return norm(o[0]).includes("1\n2\nfizz\n4\n5\nfizz\n7")?true:"Con 7 esperaba:\n1\n2\nfizz\n4\n5\nfizz\n7\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d7x",t:"Desafío final · inédito — ¿es primo?",
   d:'Lee un número con <code>input()</code> y determina, con <code>while</code>, si es primo (divisible solo por 1 y por sí mismo). Imprime tu respuesta con la palabra "primo" incluida cuando lo sea, y "no primo" cuando no. Pruébalo con <code>7</code> (primo) y <code>8</code> (no primo). Ningún ejercicio anterior mostró este patrón — tienes que diseñarlo desde cero.',
   starter:"",runs:[["7"],["8"]],
@@ -1342,7 +1376,7 @@ const LEVEL0=[
     const t1=norm(o[1]);
     if(!t1.includes("no primo"))return"Con 8 (que no es primo) tu programa debe indicarlo como no primo.";
     return true}}},
-{id:"d8",n:"Día 8",t:"Errores y tracebacks",
+{id:"d8",n:"Día 15",t:"Errores y tracebacks · Parte 1: fundamentos",
  intro:"Los programadores mediocres temen a los errores; los ingenieros los leen como mapas. Hoy transformas tu relación con los tracebacks: de enemigo que asusta a informante que te dice exactamente dónde mirar. Ya depuraste un 404 real conmigo — esto te va a sonar familiar.",
  intuit:{code:'print(int("12.5"))',
   q:"¿Corre o explota? Si explota, ¿con qué TIPO de error exactamente?",
@@ -1354,13 +1388,6 @@ const LEVEL0=[
  ing:"Un ingeniero profesional lee tracebacks a diario: los logs de errores de producción de cualquier empresa (y de tu JARVIS) son tracebacks acumulados. La diferencia entre junior y senior no es cometer menos errores: es diagnosticarlos en segundos. Hoy entrenas ese músculo.",
  errores:["Leer el traceback de arriba hacia abajo","Ignorar el número de línea que te regala","Borrar código hasta que 'funcione' en vez de entender la causa"],
  mental:{jr:"“Los errores son fallos que hay que evitar.”",sr:"“Los errores son SEÑALES ESTRUCTURADAS del sistema. Manejarlos es parte del diseño, no un parche. Un sistema sin manejo de errores no está incompleto: está roto.”",err:"Tapar el error para que ‘no moleste’ en vez de entender la causa. El error silenciado siempre vuelve — más grande."},
- reto:{id:"d8r",t:"Desafío final · sin pistas",
-  d:'Un divisor robusto: lee dos números y muestra la división con 2 decimales (formato <code>Resultado: X.XX</code>), pero si el divisor es 0, imprime <code>no se puede dividir entre cero</code> sin explotar. Pruebas: (9, 4) y (5, 0).',
-  starter:"",runs:[["9","4"],["5","0"]],hints:[],
-  check:(o,c)=>{if(!/\bif\b/.test(c))return"La robustez se construye anticipando con if.";
-    if(!/:\.2f/.test(c))return"Los 2 decimales exigen f-string con :.2f";
-    if(!norm(o[0]).includes("Resultado: 2.25"))return"Con 9 y 4 esperaba: Resultado: 2.25";
-    return norm(o[1]).includes("no se puede dividir entre cero")?true:"Con 5 y 0 debe avisar: no se puede dividir entre cero"}},
  theory:[
   ["El traceback es tu amigo",T('Cuando un programa explota, Python deja un informe: el <strong>traceback</strong>. Se lee <strong>de abajo hacia arriba</strong>: la última línea dice el TIPO de error y el mensaje; encima, el archivo y la línea exacta. Tus cuatro sospechosos habituales: <code>NameError</code> (variable mal escrita o no creada), <code>TypeError</code> (mezclar tipos incompatibles), <code>ValueError</code> (conversión imposible, como <code>int("hola")</code>) y <code>ZeroDivisionError</code>.')],
   ["Dos familias de errores",T('<code>SyntaxError</code> se detecta ANTES de ejecutar: Python ni siquiera arranca (paréntesis sin cerrar, dos puntos faltantes). Los errores de ejecución solo aparecen cuando esa línea corre — el programa puede funcionar 100 veces y explotar en la 101, cuando alguien escribe "hola" donde iba un número. Programar profesionalmente es anticiparlos: hoy con if, en el Nivel 1 con try/except.')],
@@ -1400,13 +1427,25 @@ const LEVEL0=[
      if(lines.length>1&&!o[0].includes("DEBUG:"))return"Si conservas el print de diagnóstico, márcalo con el prefijo DEBUG: para distinguirlo de la salida real.";
      return true},
    hints:["O bien borras la línea de diagnóstico por completo, o la prefijas con \"DEBUG: \".","print(\"DEBUG: valor de x:\", x) dejaría claro que esa línea no es el resultado real."]},
- ],
+ ]},
+{id:"d8b",n:"Día 16",t:"Errores y tracebacks · Parte 2: cierre integral de N0",
+ intro:"Ayer sistematizaste la lectura de tracebacks y la convención DEBUG:. Hoy cierras todo el Nivel 0: el laboratorio integra las ocho lecciones completas (T1–T8) en un solo artefacto, y el desafío final combina dos clases de error distintas — el broche del nivel.",
+ errores:["Leer el traceback de arriba hacia abajo","Ignorar el número de línea que te regala","Borrar código hasta que 'funcione' en vez de entender la causa"],
+ reto:{id:"d8r",t:"Desafío final · sin pistas",
+  d:'Un divisor robusto: lee dos números y muestra la división con 2 decimales (formato <code>Resultado: X.XX</code>), pero si el divisor es 0, imprime <code>no se puede dividir entre cero</code> sin explotar. Pruebas: (9, 4) y (5, 0).',
+  starter:"",runs:[["9","4"],["5","0"]],hints:[],
+  check:(o,c)=>{if(!/\bif\b/.test(c))return"La robustez se construye anticipando con if.";
+    if(!/:\.2f/.test(c))return"Los 2 decimales exigen f-string con :.2f";
+    if(!norm(o[0]).includes("Resultado: 2.25"))return"Con 9 y 4 esperaba: Resultado: 2.25";
+    return norm(o[1]).includes("no se puede dividir entre cero")?true:"Con 5 y 0 debe avisar: no se puede dividir entre cero"}},
+ theory:[],
+ ex:[],
  retoFinal:{id:"d8x",t:"Desafío final · inédito — dos errores, dos clases distintas",
   d:'Este programa tiene DOS errores simultáneos, de clases distintas: uno que Python detecta antes de ejecutar, y otro que solo aparece al correr. Diagnostícalos y repáralos en el orden correcto (el que Python te obliga a seguir), sin que se te diga cuántos hay ni de qué tipo son. Al final debe imprimir <code>HOLA</code> y luego <code>10</code>.',
   starter:'mensaje = "hola"\nif len(mensaje) > 3\n    print(mensaje.upper())\ntotal = 10\nprint(total + valor_extra)',runs:[[]],
   hints:["El primer error impide que el programa arranque siquiera — revisa la anatomía de un error de T1: dónde, qué tipo, qué mensaje.","Cuando repares el primero, aparecerá un segundo error distinto: una referencia a algo que nunca se definió. Puedes quitar esa referencia, o definir la variable con un valor que no cambie el resultado esperado."],
   check:(o,c)=>norm(o[0])==="HOLA\n10"?true:"Esperaba:\nHOLA\n10\nObtuve:\n"+norm(o[0])}},
-{id:"d9",n:"Días 8–9",t:"PROYECTO · Calculadora profesional",project:true,
+{id:"d9",n:"Días 17–18",t:"PROYECTO · Calculadora profesional",project:true,
  intro:"Fases 7, 8 y 9 en una sola misión: CONSTRUYES (proyecto), lo escribes como profesional (nombres, estructura, robustez) y lo OPTIMIZAS tras el veredicto del corrector. Aquí se junta todo el nivel. Después del corrector viene mi code review en el chat — y ahí seré más duro que la máquina.",
  theory:[
   ["Especificación (contrato estricto)",T('Construye una calculadora de consola con menú en bucle. El corrector ejecutará tu programa con secuencias de entradas reales y verificará cada salida. Contrato:<ul class="tight small"><li>Menú con opciones <strong>1</strong> suma · <strong>2</strong> resta · <strong>3</strong> multiplicación · <strong>4</strong> división · <strong>5</strong> potencia · <strong>6</strong> resto · <strong>7</strong> salir.</li><li>Tras elegir operación, pide dos números (léelos con <code>float()</code>).</li><li>Muestra el resultado EXACTAMENTE como <code>Resultado: X</code> con 2 decimales (f-string con <code>:.2f</code>). Ej.: <code>Resultado: 12.00</code></li><li>División entre cero → imprime una línea que contenga <code>no se puede dividir entre cero</code> (sin explotar) y vuelve al menú.</li><li>Opción no válida → imprime una línea que contenga <code>Opción inválida</code> y vuelve al menú.</li><li>Opción 7 → imprime una línea que contenga <code>Hasta luego</code> y termina.</li><li>Nombres de variables profesionales: nada de <code>a</code>, <code>b</code>, <code>x</code>.</li></ul>Cuando lo apruebes aquí, llévalo al chat con tu tutor para el <strong>code review y la defensa oral</strong> — el corrector mide el contrato; el tutor mide tu comprensión.')],
@@ -1434,7 +1473,37 @@ const LEVEL0=[
      "Lee los dos números DESPUÉS de validar la opción (si la opción es inválida o es salir, no pidas números).",
      "División: if numero_2 == 0: aviso. else: f\"Resultado: {numero_1 / numero_2:.2f}\""]},
  ]},
-{id:"d10",n:"Día 10",t:"Evaluación final del nivel",eval:true,
+{id:"d_repaso",n:"Día 19",t:"Repaso general integrador",
+ intro:"Antes del examen, un repaso real: tres ejercicios que combinan deliberadamente conceptos de varias lecciones distintas — igual que exigirán los proyectos reales de aquí en adelante. Usa también la pestaña Repaso (flashcards) y revisa tus Puntos débiles en Inicio antes de continuar.",
+ ex:[
+  {id:"drp1",t:"Repaso 1 · Presentación completa",
+   d:'Pide un nombre y una edad. Imprime EXACTAMENTE <code>ALEX tiene 25 años y su nombre tiene 4 letras.</code> — combinando mayúsculas, conversión de tipo y <code>len()</code>. Prueba: <code>Alex</code> y <code>25</code>.',
+   starter:"",runs:[["Alex","25"]],
+   check:(o,c)=>{if(!/\.upper\s*\(/.test(c))return"Usa .upper() para el nombre en mayúsculas.";
+     if(!/int\s*\(/.test(c))return"Convierte la edad con int().";
+     if(!/len\s*\(/.test(c))return"Usa len() para contar las letras del nombre.";
+     return norm(o[0])==="ALEX tiene 25 años y su nombre tiene 4 letras."?true:"Con Alex y 25 esperaba: ALEX tiene 25 años y su nombre tiene 4 letras.\nObtuve:\n"+norm(o[0])},
+   hints:["Necesitas tres piezas: nombre.upper(), int(edad), y len(nombre) — todas dentro de una f-string.","len() cuenta el nombre tal como se leyó, antes o después de .upper() da lo mismo: la cantidad de letras no cambia."]},
+  {id:"drp2",t:"Repaso 2 · Múltiplos con validación",
+   d:'Pide un número. Si NO son puros dígitos, imprime <code>entrada inválida</code>. Si lo son, y es múltiplo de 5, imprime algo que incluya <code>múltiplo de 5</code>; si no, algo que incluya <code>no es múltiplo de 5</code>. Pruébalo con <code>abc</code>, <code>15</code> y <code>7</code>.',
+   starter:"",runs:[["abc"],["15"],["7"]],
+   check:(o,c)=>{if(!/\.isdigit\s*\(/.test(c))return"Valida con .isdigit() antes de convertir.";
+     if(!/%/.test(c))return"Detecta múltiplos de 5 con %.";
+     if(!norm(o[0]).includes("entrada inválida"))return"Con 'abc' debe avisar: entrada inválida";
+     const t1=norm(o[1]);
+     if(t1.includes("no es múltiplo de 5")||!t1.includes("múltiplo de 5"))return"Con 15 debe indicar que sí es múltiplo de 5.";
+     const t2=norm(o[2]);
+     if(!t2.includes("no es múltiplo de 5"))return"Con 7 debe indicar que no es múltiplo de 5.";
+     return true},
+   hints:["Primer filtro: if texto.isdigit(): ... else: entrada inválida.","Dentro de ese if, convierte y compara numero % 5 == 0."]},
+  {id:"drp3",t:"Repaso 3 · Repara el bug integrador",
+   d:'Este código explota. El error no está donde parece — revisa el nombre exacto del método. Repáralo para que imprima <code>HOLA MUNDO</code>.',
+   starter:'frase = "  Hola Mundo  "\nlimpio = frase.strip().Upper()\nprint(limpio)',runs:[[]],
+   check:(o,c)=>{if(/\.Upper\s*\(/.test(c))return"Los métodos de Python son sensibles a mayúsculas — revisa el nombre exacto del método.";
+     return norm(o[0])==="HOLA MUNDO"?true:"Debe imprimir: HOLA MUNDO"},
+   hints:["El error dice que 'str' no tiene un atributo 'Upper' — pero sí tiene uno parecido.","Los métodos se escriben en minúsculas: .upper(), no .Upper()."]},
+ ]},
+{id:"d10",n:"Día 20",t:"Evaluación final del nivel",eval:true,
  intro:"Fase 13: demostrar. Primero contra el corrector (teórico + práctico, sin pistas) y después la defensa oral conmigo en el chat — sin copiar, solo razonar. Si algo sale mal, no es fracaso: es el mapa de tu repaso.",
  theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen teórico en la pestaña <strong>Examen</strong> (15 preguntas, mínimo 85% (regla 8.5/10)); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
  ex:[]},
@@ -1463,9 +1532,9 @@ d1:{hook:"Todo lo que una computadora hace visible — desde el 'Escribiendo…'
   ["⭐ Optimizado","<code>print(f'[{etapa}] {mensaje}')</code> — un Senior imprime con contexto: quién habla y qué dice."]],
  chk:{q:"print('5') y print(5) muestran lo mismo en pantalla. ¿Son el mismo dato?",
   o:["Sí, idénticos","No: uno es texto y el otro un número — la pantalla engaña","Depende del sistema operativo"],a:1,
-  e:"La salida visible es igual; el TIPO en memoria no. La pantalla es mala testigo — recuérdalo en el Día 3."},
+  e:"La salida visible es igual; el TIPO en memoria no. La pantalla es mala testigo — recuérdalo cuando lleguemos a Tipos de datos."},
  sin:{dom:"Ejecutar programas · print · strings literales · leer un SyntaxError",
-  ref:"La diferencia texto vs expresión (se consolida en el Día 3)",
+  ref:"La diferencia texto vs expresión (se consolida en Tipos de datos)",
   mm:"El código es texto muerto; el intérprete lo convierte en proceso vivo.",
   ind:"Logs: la caja negra de todo sistema en producción (Sentry, Datadog viven de esto).",
   jar:"Los mensajes de etapa de JARVIS son prints estructurados emitidos a un WebSocket.",
@@ -1558,7 +1627,7 @@ d3:{hook:"Confundir tipos destruyó el cohete Ariane 5 (370 millones de dólares
   "Si el error de contador = \"10\" te hubiera pasado a ti, ¿lo habrías detectado antes o después de esta lección?",
   "¿Qué parte de 'dinámico y fuerte' te costó más mantener separada en tu cabeza?",
  ]},
-d4:{hook:"// y % paginan los resultados de Google, reparten lotes de datos en NVIDIA y calculan la hora en tu reloj. Aritmética de primaria convertida en infraestructura de gigantes — y en tu calculadora del Día 9.",
+d4:{hook:"// y % paginan los resultados de Google, reparten lotes de datos en NVIDIA y calculan la hora en tu reloj. Aritmética de primaria convertida en infraestructura de gigantes — y en tu proyecto de calculadora.",
  hist:"El % como resto viene de ALGOL y se popularizó con C (1972). Python cometió un error histórico: en Python 2, 7/2 daba 3 (división entera silenciosa) y causó tantos bugs que en Python 3 ROMPIERON la compatibilidad para separar / (real) de // (entera). Cuando una corrección vale romper millones de programas, es que el bug era grave.",
  ej:[["🧒 Infantil","Repartir 7 galletas entre 2 niños: 3 para cada uno (//) y sobra 1 (%)."],
   ["🏠 Cotidiano","Película de 145 min = 2h 25m → horas = 145//60, minutos = 145%60."],
@@ -1575,7 +1644,7 @@ d4:{hook:"// y % paginan los resultados de Google, reparten lotes de datos en NV
   ind:"hash % numero_de_buckets: así distribuyen datos Redis y toda base distribuida.",
   jar:"El batching de documentos y el round-robin de tareas de JARVIS usan % tal cual.",
   rec:"docs Tutorial 3.1.1 · CS50P Lecture 0",
-  ent:"FizzBuzz — Google lo usó AÑOS como filtro; su corazón es %. Lo harás en el Día 7.",
+  ent:"FizzBuzz — Google lo usó AÑOS como filtro; su corazón es %. Lo harás más adelante, en Decisiones y repetición.",
   reto:"Convierte 10000 segundos a formato h:m:s usando solo // y %."},
  recursos:[
   {t:"CMU 15-112 — Data Types and Operators",autor:"Carnegie Mellon",idioma:"EN",dur:"~15 min",nivel:"Introductorio",motivo:"Trata precedencia junto al tipo resultante — el enfoque que adopta esta lección.",url:"https://www.cs.cmu.edu/~112-f22/notes/notes-data-and-operations.html",tag:"🟢"},
@@ -1638,7 +1707,7 @@ d6:{hook:"input → procesar → print es el esqueleto de TODO sistema interacti
   ["⭐ Optimizado","Validar ANTES de convertir: <code>texto.isdigit()</code> hoy, try/except en el Nivel 1."]],
  chk:{q:"El usuario presiona Enter sin escribir nada. ¿Qué devuelve input()?",
   o:["None","Un string vacío ''","Error"],a:1,
-  e:"String vacío — que además es 'falso' en un if. Lo usarás en el Día 7."},
+  e:"String vacío — que además es 'falso' en un if. Lo usarás más adelante, en Decisiones y repetición."},
  sin:{dom:"input con prompt · conversión en la frontera · print con sep/end",
   ref:"Decidir int() vs float() según el dato esperado",
   mm:"input() es una FRONTERA DE CONFIANZA: todo lo que cruza es str no confiable hasta validarse.",
@@ -1856,7 +1925,7 @@ function dayDone(d){
 }
 function dayUnlocked(i){
   if(i===0)return true;
-  for(let j=i-1;j>=0;j--){const d=LEVEL0[j];if(d.ex.length)return dayDone(d)}
+  for(let j=i-1;j>=0;j--){const d=LEVEL0[j];if(d.ex.length||d.reto||d.retoFinal)return dayDone(d)}
   return true;
 }
 function projectDone(){return!!S.ex["d9p"]}
@@ -2057,7 +2126,7 @@ function fasesChips(d){
   if(d.mcq)items.push(["F2 Teoría",!!p.mcq]);
   const clase=(!d.intuit||p.int)&&(!d.mcq||p.mcq);
   items.push(["F3-4 Clase",clase]);
-  items.push(["F5 Práctica",d.ex.length>0&&d.ex.every(e=>S.ex[e.id])]);
+  if(d.ex.length)items.push(["F5 Práctica",d.ex.every(e=>S.ex[e.id])]);
   if(d.reto)items.push(["F6 Laboratorio",!!S.ex[d.reto.id]]);
   if(d.retoFinal)items.push(["F7 Desafío",!!S.ex[d.retoFinal.id]]);
   let curMarked=false;

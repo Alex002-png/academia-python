@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Academia Python — Campus de Alex</title>
+<!-- Pyodide: Python 3 real (CPython compilado a WebAssembly), corre 100% en el navegador del estudiante.
+     Motor de ejecución para N1 en adelante — N0 conserva su mini-intérprete propio, ya verificado. -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
 <style>
   :root{
     --bg:#0B111D; --surface:#141C2C; --surface2:#1B2536; --deep:#080D16;
@@ -882,6 +885,79 @@ async function runScripted(code,stdin){
   catch(err){return{ok:false,out,tb:traceback(err)}}
 }
 const norm=s=>s.split("\n").map(l=>l.replace(/\s+$/,"")).join("\n").replace(/\n+$/,"");
+
+/* ============================================================
+   MOTOR PYTHON REAL (Pyodide) — N1 en adelante
+   N0 conserva su mini-intérprete propio arriba, ya verificado;
+   este motor corre CPython real compilado a WebAssembly, sin
+   ninguna de sus limitaciones (funciones, listas, clases,
+   imports de la librería estándar, todo funciona de verdad).
+   ============================================================ */
+let _pyodidePromise=null;
+function getPyodide(){
+  if(!_pyodidePromise){
+    _pyodidePromise=loadPyodide().then(async py=>{
+      await py.runPythonAsync(`
+import sys, io, traceback as _traceback
+class _StepLimit(Exception): pass
+def __academia_run(code, stdin_list, max_steps=300000):
+    _out = io.StringIO()
+    _stdin_idx = [0]
+    _steps = [0]
+    def _input(prompt=""):
+        _out.write(str(prompt))
+        if _stdin_idx[0] >= len(stdin_list):
+            raise EOFError("input(): el programa pidió más datos de los que da la prueba — revisa cuántas veces llamas a input()")
+        v = stdin_list[_stdin_idx[0]]
+        _stdin_idx[0] += 1
+        _out.write(str(v) + "\\n")
+        return v
+    def _tracer(frame, event, arg):
+        if event == "line":
+            _steps[0] += 1
+            if _steps[0] > max_steps:
+                raise _StepLimit("el programa tardó demasiado — revisa si tienes un bucle infinito")
+        return _tracer
+    _g = {"__name__": "__main__", "input": _input}
+    _old_stdout = sys.stdout
+    sys.stdout = _out
+    sys.settrace(_tracer)
+    try:
+        _compiled = compile(code, "programa.py", "exec")
+        exec(_compiled, _g)
+        return (True, _out.getvalue(), "")
+    except _StepLimit as e:
+        return (False, _out.getvalue(), "RuntimeError: " + str(e))
+    except BaseException as e:
+        _tbo = e.__traceback__
+        while _tbo is not None and _tbo.tb_frame.f_code.co_filename != "programa.py":
+            _tbo = _tbo.tb_next
+        tb = "".join(_traceback.format_exception(type(e), e, _tbo))
+        return (False, _out.getvalue(), tb)
+    finally:
+        sys.settrace(None)
+        sys.stdout = _old_stdout
+`);
+      return py;
+    });
+  }
+  return _pyodidePromise;
+}
+async function runScriptedPy(code,stdin){
+  const py=await getPyodide();
+  const fn=py.globals.get("__academia_run");
+  const pyStdin=py.toPy(stdin);
+  let res;
+  try{
+    res=fn(code,pyStdin);
+    const [ok,out,tb]=res.toJs();
+    return ok?{ok:true,out}:{ok:false,out,tb};
+  }finally{
+    if(res&&res.destroy)res.destroy();
+    pyStdin.destroy();
+    fn.destroy();
+  }
+}
 
 /* ============================================================
    CONTENIDO — NIVEL 0
@@ -2213,9 +2289,10 @@ async function checkEx(id){
   const code=document.getElementById("ed-"+id).value;
   const fb=document.getElementById("fb-"+id);
   if(!code.trim()){fb.innerHTML='<div class="kobox">El editor está vacío. El corrector no acepta telepatía.</div>';return}
+  if(e.py&&!_pyodidePromise)fb.innerHTML='<div class="hintbox">Cargando Python real por primera vez (unos segundos, solo la primera vez)…</div>';
   const outs=[];
   for(const stdin of e.runs){
-    const r=await runScripted(code,stdin);
+    const r=await(e.py?runScriptedPy(code,stdin):runScripted(code,stdin));
     if(!r.ok){fb.innerHTML='<div class="kobox">'+esc((r.out?r.out+"\n":"")+r.tb)+"</div>"+
       '<p class="small muted" style="margin:6px 0 0">Lee el error de abajo hacia arriba: te dice tipo, mensaje y línea.</p>';return}
     outs.push(r.out);

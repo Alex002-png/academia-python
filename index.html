@@ -2230,6 +2230,72 @@ const LEVEL1=[
   starter:'class InventarioRoto:\n    def __init__(self, capacidad):\n        self.capacidad = capacidad\n        self._cantidad = 0\n    def agregar(self, n):\n        if self._cantidad + n > self.capacidad:\n            raise ValueError("Excede capacidad")\n        self._cantidad += n\n    def ajustar(self, n):\n        self._cantidad = n\n    def cantidad(self):\n        return self._cantidad\n\nir = InventarioRoto(10)\nir.agregar(5)\nir.ajustar(999)\nprint(ir.cantidad())',runs:[[]],
   hints:["ajustar() nunca valida nada — asigna self._cantidad = n directo, sin pasar por la misma verificación que agregar().","El invariante no se rompió por un ataque externo: un método de la propia clase simplemente olvidó aplicar la misma regla que los demás."],
   check:(o,c)=>norm(o[0])==="999"?true:"Esperaba: 999\nObtuve:\n"+norm(o[0])}},
+{id:"n1m2t3",n:"Día 19",t:"Composición vs. herencia · Parte 1: fundamentos",
+ intro:"Hasta ahora, cada clase vivía sola. Hoy decides cómo relacionar dos clases entre sí — y descubres que hay dos formas distintas, con consecuencias muy distintas a largo plazo.",
+ intuit:{code:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\nclass ProductoConDescuento(Producto):\n    def __init__(self, nombre, precio, descuento):\n        super().__init__(nombre, precio)\n        self.descuento = descuento\n\nclass ProductoConEnvioGratis(Producto):\n    def __init__(self, nombre, precio):\n        super().__init__(nombre, precio)\n        self.envio_gratis = True\n\n# ¿y un producto con AMBAS cosas a la vez?',py:true,
+  q:"Si agregaras 'con garantía extendida' como tercera opción combinable, ¿cuántas clases NUEVAS necesitarías con este enfoque?",
+  req:["7","explosi"],out:"",
+  e:"Este código no imprime nada — el punto es contar cuántas clases NUEVAS harían falta, no ejecutar nada. Con herencia simple, necesitas una clase para CADA combinación posible: con descuento, con envío, con garantía, con descuento+envío, con descuento+garantía, con envío+garantía, con las tres — hasta 7 clases para 3 capacidades. La 'explosión de subclases'."},
+ mcq:[
+  {q:"¿Qué relación describe la herencia (class Hija(Padre))?",o:['"tiene-un" — la hija tiene una parte del padre','"es-un" — la hija ES un tipo del padre, comparte su naturaleza','Ninguna relación real, solo sintaxis','Siempre significa que la hija es mejor que el padre'],a:1,e:"Herencia describe una relación 'es-un': un Perro ES UN Animal. Cuando esa relación no es real, heredar es un error de diseño."},
+  {q:"¿Por qué GoF (Design Patterns, 1994) recomienda 'favor composition over inheritance'?",o:["Porque la herencia es más lenta de ejecutar","Porque combinar capacidades independientes con herencia produce una explosión de subclases; composición las combina libremente","Porque Python no soporta bien la herencia","Es solo una preferencia de estilo sin razón técnica"],a:1,e:"El problema real es estructural: cuando un objeto necesita especializarse en varias dimensiones independientes a la vez, la herencia simple obliga a una clase por cada combinación."}],
+ ing:"El criterio 'es-un' vs. 'tiene-un' de hoy es exactamente el que vas a necesitar para leer y diseñar el capstone de este nivel — y para no heredar de estructuras del propio Python (list, dict) solo para 'ahorrar código', un error clásico de quien recién aprende POO.",
+ errores:["Heredar cuando la relación real es 'tiene-un', no 'es-un' (un Pedido heredando de Producto por error)","Jerarquías de herencia profundas y frágiles que crecen sin control","Ignorar la composición por desconocimiento, resolviendo todo con herencia aunque no encaje"],
+ mental:{jr:"“Heredar siempre ahorra código, así que hay que heredar cuando se pueda.”",sr:"“Herencia es especialización de identidad (es-un); composición es ensamblaje de capacidades (tiene-un). La segunda es la herramienta por defecto — la herencia se reserva para cuando la relación es genuinamente es-un, de una sola dimensión.”",err:"Crear una subclase nueva por cada combinación de comportamientos, sin notar que el número de clases crece exponencialmente."},
+ theory:[
+  ["Sintaxis de herencia y super()",T('<code>super().__init__(...)</code> llama al __init__ de la clase padre — olvidarlo deja a la instancia sin los atributos que el padre debía inicializar.'),
+   'class ProductoConDescuento(Producto):\n    def __init__(self, nombre, precio, descuento):\n        super().__init__(nombre, precio)\n        self.descuento = descuento'],
+  ["Composición: la herramienta por defecto",T('En vez de heredar el comportamiento, el objeto TIENE los datos que representan esas capacidades, como parámetros de la misma clase. Cualquier combinación es posible sin ninguna clase nueva.'),
+   'class Producto:\n    def __init__(self, nombre, precio, descuento=0, envio_gratis=False, garantia_meses=0):\n        self.nombre = nombre\n        self.precio = precio\n        self.descuento = descuento\n        self.envio_gratis = envio_gratis\n        self.garantia_meses = garantia_meses\n    def precio_final(self):\n        return self.precio * (1 - self.descuento)'],
+  ["Leer código: ¿herencia o composición?",T('Sin ejecutar: dado un Pedido que "tiene" una lista de Producto, ¿debería heredar de Producto? ¿Por qué no?')],
+ ],
+ ex:[
+  {id:"n1m2t3e1",py:true,t:"Ejercicio 1 · super().__init__() olvidado",
+   d:'<code>ProductoConDescuento</code> olvidó llamar a <code>super().__init__()</code>, así que <code>p.nombre</code> no existe. Arréglalo para que imprima <code>pan 5 0.1</code>.',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\nclass ProductoConDescuento(Producto):\n    def __init__(self, nombre, precio, descuento):\n        self.descuento = descuento\n\np = ProductoConDescuento("pan", 5, 0.1)\nprint(p.nombre, p.precio, p.descuento)',runs:[[]],
+   check:(o,c)=>{if(!/super\(\)\.__init__\(/.test(c))return"Agrega super().__init__(nombre, precio) al inicio de __init__ de ProductoConDescuento.";
+     return norm(o[0])==="pan 5 0.1"?true:"Esperaba: pan 5 0.1\nObtuve:\n"+norm(o[0])},
+   hints:["def __init__(self, nombre, precio, descuento):\\n    super().__init__(nombre, precio)\\n    self.descuento = descuento","super().__init__(...) va ANTES de asignar self.descuento."]},
+  {id:"n1m2t3e2",py:true,t:"Ejercicio 2 · De subclases a composición",
+   d:'Convierte estas dos subclases (con descuento, con envío gratis) en UNA sola clase <code>Producto</code> con parámetros <code>descuento=0</code> y <code>envio_gratis=False</code>. Imprime el precio final: <code>900.0</code>.',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\nclass ProductoConDescuento(Producto):\n    def __init__(self, nombre, precio, descuento):\n        super().__init__(nombre, precio)\n        self.descuento = descuento\n\n# convierte todo esto en UNA clase Producto con parametros\n\np = Producto("laptop", 1000, descuento=0.1)\nprint(p.precio * (1 - p.descuento))',runs:[[]],
+   check:(o,c)=>{if(/class\s+ProductoConDescuento/.test(c))return"Todavía queda la subclase — elimínala, todo debe vivir en una sola clase Producto.";
+     return norm(o[0])==="900.0"?true:"Esperaba: 900.0\nObtuve:\n"+norm(o[0])},
+   hints:["class Producto:\\n    def __init__(self, nombre, precio, descuento=0, envio_gratis=False):\\n        ...","Con parámetros por defecto, la misma clase representa CUALQUIER combinación."]},
+  {id:"n1m2t3e3",py:true,t:"Ejercicio 3 · Un Pedido no ES un Producto",
+   d:'<code>Pedido</code> hereda de <code>Producto</code> por error — un pedido no ES un producto, TIENE productos. Corrígelo quitando la herencia (Pedido no necesita heredar de nada).',
+   starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\nclass Pedido(Producto):\n    def __init__(self):\n        self.productos = []\n    def agregar(self, p):\n        self.productos.append(p)\n\npedido = Pedido()\npedido.agregar(Producto("pan", 5))\npedido.agregar(Producto("leche", 12))\nprint(len(pedido.productos))',runs:[[]],
+   check:(o,c)=>{if(/class\s+Pedido\s*\(\s*Producto\s*\)/.test(c))return"Pedido todavía hereda de Producto — quita el (Producto), un pedido TIENE productos, no ES un producto.";
+     if(!/class\s+Pedido\s*(\(\s*\))?\s*:/.test(c))return"Define 'class Pedido:' sin heredar de nada.";
+     return norm(o[0])==="2"?true:"Esperaba: 2\nObtuve:\n"+norm(o[0])},
+   hints:["Cambia 'class Pedido(Producto):' por 'class Pedido:' — sin paréntesis, sin herencia.","El resto del código (productos, agregar) ya está bien — el problema era solo la herencia innecesaria."]},
+  {id:"n1m2t3e4",py:true,t:"Ejercicio 4 · Auto TIENE un Motor",
+   d:'Escribe <code>Motor</code> con <code>__init__(self, caballos_fuerza)</code> y <code>Auto</code> con <code>__init__(self, marca, motor)</code> que TIENE un Motor como atributo (composición, no herencia).',
+   starter:'# escribe Motor y Auto aqui\n\nm = Motor(300)\nauto = Auto("Toyota", m)\nprint(auto.motor.caballos_fuerza)',runs:[[]],
+   check:(o,c)=>{if(/class\s+Auto\s*\(\s*Motor\s*\)/.test(c))return"Auto no debe heredar de Motor — debe TENER un Motor como atributo (self.motor = motor).";
+     return norm(o[0])==="300"?true:"Esperaba: 300\nObtuve:\n"+norm(o[0])},
+   hints:["class Motor:\\n    def __init__(self, caballos_fuerza):\\n        self.caballos_fuerza = caballos_fuerza","class Auto:\\n    def __init__(self, marca, motor):\\n        self.marca = marca\\n        self.motor = motor"]},
+  {id:"n1m2t3e5",py:true,t:"Ejercicio 5 · Herencia de tres niveles",
+   d:'Agrega un método <code>describir(self)</code> a <code>PerroGuardian</code> que use <code>self.hacer_sonido()</code> (heredado de Perro, que a su vez lo sobreescribe de Animal) — SIN redefinir <code>hacer_sonido</code> otra vez.',
+   starter:'class Animal:\n    def hacer_sonido(self):\n        return "..."\n\nclass Perro(Animal):\n    def hacer_sonido(self):\n        return "Guau"\n\nclass PerroGuardian(Perro):\n    pass  # agrega describir() aqui\n\npg = PerroGuardian()\nprint(pg.describir())',runs:[[]],
+   check:(o,c)=>{if(/class\s+PerroGuardian[\s\S]*?def\s+hacer_sonido/.test(c))return"No redefinas hacer_sonido() en PerroGuardian — debe REUTILIZAR el que ya heredó de Perro.";
+     return norm(o[0])==="Un perro guardian que hace: Guau"?true:"Esperaba: Un perro guardian que hace: Guau\nObtuve:\n"+norm(o[0])},
+   hints:["def describir(self):\\n    return 'Un perro guardian que hace: ' + self.hacer_sonido()","self.hacer_sonido() ya funciona sin que PerroGuardian lo redefina — lo heredó de Perro."]},
+ ]},
+{id:"n1m2t3b",n:"Día 20",t:"Composición vs. herencia · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste que combinar capacidades independientes con herencia produce una explosión de subclases, y que composición las combina sin límite. Hoy confrontas los dos diseños del mismo problema — y cierras con el error real que produce olvidar super().",
+ reto:{id:"n1m2t3r",py:true,t:"Laboratorio · Confrontación de diseños: catálogo combinable",
+  d:'Construye <code>Producto</code> con composición (descuento, envio_gratis, garantia_meses, todos con valor por defecto) y un método <code>precio_final()</code>. Prueba con un producto que tiene las TRES capacidades activas a la vez — algo que con herencia simple hubiera exigido una séptima subclase.',
+  starter:'class Producto:\n    def __init__(self, nombre, precio, descuento=0, envio_gratis=False, garantia_meses=0):\n        pass\n    def precio_final(self):\n        pass\n\np = Producto("laptop", 1000, descuento=0.1, envio_gratis=True, garantia_meses=12)\nprint(p.precio_final())\nprint(p.envio_gratis, p.garantia_meses)',
+  runs:[[]],hints:["__init__: guarda los 5 parámetros como self.nombre, self.precio, self.descuento, self.envio_gratis, self.garantia_meses.","precio_final: return self.precio * (1 - self.descuento)"],
+  check:(o,c)=>{const exp="900.0\nTrue 12";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1m2t3x",py:true,t:"Desafío final · inédito — el atributo que nunca se inicializó",
+  d:'Predice, ANTES de ejecutar, qué mensaje EXACTO de error captura el <code>except</code> — y por qué <code>descuento</code> sí existe en <code>p</code>, pero <code>nombre</code> no.',
+  starter:'class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\nclass ProductoConDescuento(Producto):\n    def __init__(self, nombre, precio, descuento):\n        self.descuento = descuento\n\np = ProductoConDescuento("pan", 5, 0.1)\ntry:\n    print(p.nombre)\nexcept AttributeError as e:\n    print(e)',runs:[[]],
+  hints:["ProductoConDescuento.__init__ nunca llama a super().__init__() — así que el __init__ de Producto nunca se ejecuta.","self.descuento SÍ se asigna (está en el propio __init__ de la subclase), pero self.nombre y self.precio nunca se crean — viven solo en el __init__ del padre, que nunca corrió."],
+  check:(o,c)=>{const exp="'ProductoConDescuento' object has no attribute 'nombre'";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -2685,6 +2751,21 @@ n1m2t2:{hist:"El término invariante en programación viene de la lógica formal
   "¿En qué ejercicio mutaste el estado directo en vez de pasar por un método, y qué te hizo notar el riesgo?",
   "¿Cómo se conecta el guion bajo de hoy con el modelo mental de \"convención, no imposición\" del lenguaje?",
   "¿Qué invariante tendría una clase de un proyecto propio (fuera de esta lección)?",
+ ]},
+n1m2t3:{hist:"El principio \"favor object composition over class inheritance\" viene literalmente del libro Design Patterns (1994) de Gamma, Helm, Johnson y Vlissides — la \"Gang of Four\" — el texto más influyente de diseño orientado a objetos de la historia de la industria. No es una preferencia de esta Academia: es la conclusión de cuatro ingenieros documentando patrones ya observados en software real.",
+ recursos:[
+  {t:"MIT 6.0001 — Lecture 9",autor:"MIT OpenCourseWare",idioma:"EN",dur:"~50 min",nivel:"Introductorio",motivo:"Da la base sintáctica de herencia (super()) que esta lección necesita.",url:"https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/resources/lecture-9-python-classes-and-inheritance/",tag:"🟢"},
+  {t:"python-patterns.guide — Composition Over Inheritance",autor:"Brandon Rhodes",idioma:"EN",dur:"~20 min",nivel:"Intermedio",motivo:"Explicación directa en Python del principio de la Gang of Four, con el mismo criterio \"es-un\"/\"tiene-un\".",url:"https://python-patterns.guide/gang-of-four/composition-over-inheritance/",tag:"🔵"},
+ ],
+ defensa:[
+  "¿Por qué la explosión de subclases del conflicto de esta lección crece tan rápido?",
+  "¿Cuál es la diferencia real entre \"es-un\" y \"tiene-un\"?",
+  "(inédita) Si heredar te ahorra veinte líneas hoy, ¿qué puede costarte dentro de seis meses cuando la clase padre cambie sin avisarte?",
+ ],
+ metacog:[
+  "¿En qué ejercicio heredaste cuando la relación real era \"tiene-un\", y qué te hizo notar el error?",
+  "¿Cómo se conecta la \"explosión de subclases\" de hoy con el criterio de simplicidad de Comprehensions?",
+  "¿Qué relación de un proyecto propio (fuera de esta lección) modelarías con composición en vez de herencia?",
  ]},
 };
 /* examen práctico */

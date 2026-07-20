@@ -2362,6 +2362,69 @@ const LEVEL1=[
   starter:'class Punto:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __eq__(self, otro):\n        return self.x == otro.x\n\na = Punto(1, 2)\nb = Punto(1, 999)\nprint(a == b)',runs:[[]],
   hints:["__eq__ solo compara self.x == otro.x — nunca mira 'y'.","a.x y b.x son iguales (ambos 1), así que == da True, aunque los puntos representen posiciones completamente distintas en el plano."],
   check:(o,c)=>norm(o[0])==="True"?true:"Esperaba: True\nObtuve:\n"+norm(o[0])}},
+{id:"n1m2t5",n:"Día 23",t:"Diseño OOP: cuándo sí y cuándo no · Parte 1: fundamentos",
+ intro:"Hasta ahora aprendiste CÓMO construir clases. Hoy decides CUÁNDO — el criterio que separa a quien programa de quien diseña.",
+ intuit:{code:'class ConversorTemperatura:\n    def __init__(self, celsius):\n        self.celsius = celsius\n    def a_fahrenheit(self):\n        return self.celsius * 9/5 + 32\n\ntemp = ConversorTemperatura(20)\nprint(temp.a_fahrenheit())',py:true,
+  q:"¿Esta clase tiene más de un método aparte de __init__? ¿Se usa más de una vez, o se crea, se usa una vez, y se descarta?",
+  req:["funci","un metodo"],out:"68.0",
+  e:"La clase tiene UN SOLO método aparte de __init__ — exactamente la señal de Jack Diederich (PyCon 2012, 'Stop Writing Classes') de que probablemente querías escribir una función: def celsius_a_fahrenheit(celsius): return celsius * 9/5 + 32. Mismo resultado, sin la ceremonia de instanciar un objeto para usarlo una vez."},
+ mcq:[
+  {q:"Según la heurística de Diederich, ¿cuándo 'probablemente querías escribir una función'?",o:["Cuando la clase tiene muchos atributos","Cuando la clase tiene dos métodos y uno de ellos es __init__","Cuando el nombre de la clase es muy largo","Nunca — siempre es mejor una clase"],a:1,e:"Dos métodos, uno __init__: la señal clásica de que la 'clase' es en realidad una función disfrazada con ceremonia extra."},
+  {q:"¿Cuál de estas es una señal real de que SÍ conviene una clase?",o:["El problema se resuelve en una sola línea","Hay estado que persiste y cambia, con múltiples métodos que lo transforman","El nombre del problema es un sustantivo","Siempre — toda entidad del mundo real debería ser una clase"],a:1,e:"Estado que persiste + múltiples métodos que operan sobre ese estado compartido es la señal real, no la naturaleza gramatical del nombre."}],
+ ing:"Este mismo criterio — juicio antes que mecanismo — es exactamente lo que necesitarás para el capstone de este nivel y para cualquier decisión de arquitectura real en tu carrera.",
+ errores:["Clase para todo: una clase con un solo método real, usada una vez y descartada (sobre-ingeniería)","Ninguna clase jamás: datos paralelos y funciones repetitivas manejando el mismo estado (subutilización)","Diseñar jerarquías de clases antes de entender bien el problema"],
+ mental:{jr:"“Toda entidad del mundo real (un producto, un usuario) debería ser una clase.”",sr:"“La POO es una herramienta del cinturón, no el cinturón entero: se elige por las señales reales del problema (estado, múltiples métodos, múltiples instancias, invariantes) — no por costumbre ni por doctrina.”",err:"Crear una clase reflejo automático de cada sustantivo del enunciado, sin preguntar si realmente hay estado o comportamiento que proteger."},
+ theory:[
+  ["La heurística de Diederich",T('Si tu clase tiene dos métodos y uno de ellos es __init__, probablemente querías escribir una función — con evidencia real: una API de 20 clases refactorizada a una función de 3 líneas, sin perder funcionalidad.')],
+  ["Señales reales: ¿clase o función?",T('SÍ clase: estado que persiste y cambia, múltiples métodos sobre ese estado, múltiples instancias posibles, un invariante que proteger. Función basta: transformación entrada→salida sin estado que recordar, se usa una vez, un dict/tupla ya alcanza.')],
+  ["Leer código: identificar las señales",T('Sin ejecutar: una clase con cinco métodos que operan sobre self.datos compartido — ¿qué señales confirman que SÍ merece ser una clase?')],
+ ],
+ ex:[
+  {id:"n1m2t5e1",py:true,t:"Ejercicio 1 · De clase a función",
+   d:'Esta clase tiene un solo método real — la señal de Diederich. Conviértela en una función <code>celsius_a_fahrenheit(celsius)</code>, con el mismo resultado: <code>68.0</code>.',
+   starter:'class ConversorTemperatura:\n    def __init__(self, celsius):\n        self.celsius = celsius\n    def a_fahrenheit(self):\n        return self.celsius * 9/5 + 32\n\n# convierte esto en una funcion\n\nprint(celsius_a_fahrenheit(20))',runs:[[]],
+   check:(o,c)=>{if(/class\s+ConversorTemperatura/.test(c))return"Todavía queda la clase — elimínala, esto debe ser una función simple.";
+     return norm(o[0])==="68.0"?true:"Esperaba: 68.0\nObtuve:\n"+norm(o[0])},
+   hints:["def celsius_a_fahrenheit(celsius):\\n    return celsius * 9/5 + 32","Nada de self ni __init__ — es una transformación pura, sin estado."]},
+  {id:"n1m2t5e2",py:true,t:"Ejercicio 2 · Datos paralelos a clase",
+   d:'Convierte estas listas paralelas (nombres, precios, stocks) en una clase <code>Producto</code>, e imprime los nombres de la lista de instancias.',
+   starter:'nombres = ["pan", "leche"]\nprecios = [5, 12]\nstocks = [10, 20]\n\n# define class Producto con __init__(self, nombre, precio, stock)\n\nproductos = [Producto(nombres[i], precios[i], stocks[i]) for i in range(2)]\nprint([p.nombre for p in productos])',runs:[[]],
+   check:(o,c)=>{if(!/class\s+Producto/.test(c))return"Define class Producto con __init__(self, nombre, precio, stock).";
+     const exp="['pan', 'leche']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["class Producto:\\n    def __init__(self, nombre, precio, stock):\\n        self.nombre = nombre\\n        self.precio = precio\\n        self.stock = stock","Con la clase definida, la lista de instancias ya construida al final debería funcionar sin cambios."]},
+  {id:"n1m2t5e3",py:true,t:"Ejercicio 3 · Función pura: normalizar email",
+   d:'Escribe <code>normalizar_email(email)</code> — quita espacios y convierte a minúsculas. Sin estado, sin clase: una transformación pura.',
+   starter:'# escribe normalizar_email aqui, SIN usar una clase\n\nprint(normalizar_email("  Alex@Correo.COM  "))',runs:[[]],
+   check:(o,c)=>{if(/class\s+\w+/.test(c))return"No uses una clase — esto es una transformación pura de entrada a salida, una función basta.";
+     return norm(o[0])==="alex@correo.com"?true:"Esperaba: alex@correo.com\nObtuve:\n"+norm(o[0])},
+   hints:["def normalizar_email(email):\\n    return email.strip().lower()","strip() quita espacios de los bordes; lower() convierte a minúsculas."]},
+  {id:"n1m2t5e4",py:true,t:"Ejercicio 4 · Función pura: parsear CSV",
+   d:'Escribe <code>parsear_linea(linea)</code> que separa una línea CSV en sus campos. Sin estado, sin clase.',
+   starter:'# escribe parsear_linea aqui, SIN usar una clase\n\nprint(parsear_linea("pan,5,10\\n"))',runs:[[]],
+   check:(o,c)=>{if(/class\s+\w+/.test(c))return"No uses una clase — es una transformación de entrada a salida, una función basta.";
+     const exp="['pan', '5', '10']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["def parsear_linea(linea):\\n    return linea.strip().split(',')","strip() quita el salto de línea antes de separar por comas."]},
+  {id:"n1m2t5e5",py:true,t:"Ejercicio 5 · Clase con estado real: Carrito",
+   d:'Escribe <code>Carrito</code> con <code>agregar(nombre, precio)</code>, <code>quitar(nombre)</code> y <code>total()</code> — estado que persiste, múltiples métodos: aquí SÍ conviene una clase.',
+   starter:'# escribe la clase Carrito aqui\n\nc = Carrito()\nc.agregar("pan", 5)\nc.agregar("leche", 12)\nprint(c.total())\nc.quitar("pan")\nprint(c.total())',runs:[[]],
+   check:(o,c)=>{if(!/class\s+Carrito/.test(c))return"Define class Carrito — este problema SÍ tiene las señales para merecer una clase.";
+     const exp="17\n12";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["__init__: self.items = []","agregar: self.items.append((nombre, precio)) — quitar: self.items = [i for i in self.items if i[0] != nombre] — total: sum(precio for _, precio in self.items)"]},
+ ]},
+{id:"n1m2t5b",n:"Día 24",t:"Diseño OOP: cuándo sí y cuándo no · Parte 2: laboratorio y desafío",
+ intro:"Ayer descubriste la heurística de Diederich y las señales reales de cuándo SÍ conviene una clase. Hoy resuelves tres problemas distintos, cada uno con su paradigma correcto — y cierras M2 con un problema nuevo que nunca viste antes.",
+ reto:{id:"n1m2t5r",py:true,t:"Laboratorio · Tres problemas, tres decisiones",
+  d:'1) <code>a_mayusculas(lista)</code> — función pura. 2) <code>Carrito</code> con <code>agregar(nombre, precio)</code> y <code>total()</code> — clase, estado real. 3) <code>parsear_csv(linea)</code> — función pura. Implementa los tres con el paradigma correcto.',
+  starter:'# 1. funcion pura\ndef a_mayusculas(lista):\n    pass\n\n# 2. clase con estado\nclass Carrito:\n    def __init__(self):\n        pass\n    def agregar(self, nombre, precio):\n        pass\n    def total(self):\n        pass\n\n# 3. funcion pura\ndef parsear_csv(linea):\n    pass\n\nprint(a_mayusculas(["hola", "mundo"]))\ncr = Carrito()\ncr.agregar("pan", 5)\ncr.agregar("leche", 12)\nprint(cr.total())\nprint(parsear_csv("a,b,c"))',
+  runs:[[]],hints:["a_mayusculas: [s.upper() for s in lista]","Carrito: self.items=[] en __init__; agregar hace append((nombre,precio)); total suma los precios.","parsear_csv: linea.strip().split(',')"],
+  check:(o,c)=>{const exp="['HOLA', 'MUNDO']\n17\n['a', 'b', 'c']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}},
+ theory:[],
+ ex:[],
+ retoFinal:{id:"n1m2t5x",py:true,t:"Desafío final · inédito — un problema nuevo, sin patrón previo",
+  d:'Un sistema recibe lecturas de un sensor y debe alertar si superan un umbral, recordando el historial de las últimas 5 lecturas. Antes de programar: ¿por qué este problema SÍ merece una clase? Luego implementa <code>MonitorSensor</code> y verifica.',
+  starter:'class MonitorSensor:\n    def __init__(self, umbral):\n        pass\n    def registrar(self, lectura):\n        pass\n\nm = MonitorSensor(30)\nprint(m.registrar(25))\nprint(m.registrar(35))\nprint(m.historial)\nfor x in [10, 20, 30, 40, 50, 60]:\n    m.registrar(x)\nprint(m.historial)',runs:[[]],
+  hints:["__init__: self.umbral = umbral; self.historial = []","registrar: self.historial.append(lectura); if len(self.historial) > 5: self.historial.pop(0); return lectura > self.umbral","Este problema tiene TODAS las señales de T5: estado que persiste (historial), múltiples métodos posibles, un invariante (nunca más de 5 lecturas guardadas)."],
+  check:(o,c)=>{const exp="False\nTrue\n[25, 35]\n[20, 30, 40, 50, 60]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
@@ -2847,6 +2910,21 @@ n1m2t4:{hist:"El término \"dunder\" (double underscore) es jerga de la comunida
   "¿En qué ejercicio te sorprendió que == no comparara \"lo que tú esperabas\" por defecto?",
   "¿Cómo se conecta __iter__ de hoy con el protocolo de iteradores de Iteradores y generadores?",
   "¿En qué clase de un proyecto propio (fuera de esta lección) implementarías __str__ o __eq__?",
+ ]},
+n1m2t5:{hist:"En la charla \"Stop Writing Classes\" (PyCon 2012), Jack Diederich mostró código de producción real donde una API de 20 clases repartidas en 22 módulos se refactorizó a una sola función de 3 líneas, sin perder ninguna funcionalidad. Citó también la biblioteca estándar de Python como evidencia: un espacio de nombres relativamente plano, con muy pocas clases de excepción — prueba de que ni el propio lenguaje recurre a clases por defecto para todo.",
+ recursos:[
+  {t:"PyCon US 2012 — Stop Writing Classes",autor:"Jack Diederich",idioma:"EN",dur:"~30 min",nivel:"Intermedio",motivo:"Fuente real y verificable del error habitual central de la ficha, con ejemplos de código de producción.",url:"https://us.pycon.org/2012/schedule/presentation/352/",tag:"🟢"},
+  {t:"Stop Writing Classes — grabación completa",autor:"Jack Diederich, PyCon",idioma:"EN",dur:"~30 min",nivel:"Intermedio",motivo:"La charla completa, con el ejemplo de la API refactorizada de 20 clases a una función.",url:"https://pyvideo.org/pycon-us-2012/stop-writing-classes.html",tag:"🔵"},
+ ],
+ defensa:[
+  "¿Por qué ConversorTemperatura del conflicto de esta lección \"debía\" ser una función?",
+  "¿Cuáles son las señales reales de que SÍ conviene una clase?",
+  "(inédita) ¿Qué señales de un problema te harían elegir objetos desde el día uno, cuáles te dirían que unas funciones bastan — y qué cuesta equivocarse en cada dirección?",
+ ],
+ metacog:[
+  "¿En qué de los tres problemas del laboratorio dudaste más entre clase y función, y qué te ayudó a decidir?",
+  "¿Cómo se conecta la regla de Diederich con el criterio \"es-un\"/\"tiene-un\" de Composición vs. herencia?",
+  "¿En qué parte de un proyecto propio (fuera de esta lección) tienes hoy una clase que probablemente debía ser una función, o al revés?",
  ]},
 };
 /* examen práctico */

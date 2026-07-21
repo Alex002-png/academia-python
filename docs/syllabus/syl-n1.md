@@ -21,7 +21,7 @@
 | M3 · Algoritmos y ED I | 8 | ~5 | C-N1-02, C-N1-06 | Depuración sistemática |
 | M4 · Git y GitHub | 4 | ~2,5 | C-N1-03 | Refactorización |
 | M5 · Linux, terminal y SO | 5 | ~2,5 | C-N1-04 | Pruebas |
-| M6 · Redes y APIs | 4 | ~2 | C-N1-05 | Decisiones de ingeniería |
+| M6 · Redes y APIs | 6 | ~3 | C-N1-05 | Decisiones de ingeniería |
 | M7 · SQL | 4 | ~2 | C-N1-05 | Documentación técnica |
 | Capstone ET1 | — | ~3 | Todas + C-N1-07 | Integración |
 
@@ -568,6 +568,30 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **¿Qué rompe esta abstracción?:** ¿y si el fallo no es del otro sino tuyo — cómo lo distinguirías? ¿Y si tus reintentos empeoran la avería del servicio caído? *(Las tormentas de reintentos y los circuit breakers esperan en N9.)*
 - **Idea universal:** los sistemas fiables no son los que nunca fallan — son los que fallan bien.
 
+**N1.M6.T5 · Autenticación básica: API keys y tokens**
+- **Objetivo:** distingue 401 (no autenticado) de 403 (autenticado, sin permiso), y usa credenciales fuera del código (T2) para autenticarse de verdad.
+- **Prerrequisitos:** T2 (credenciales fuera del código), T4 (clasificación de fallos).
+- **Competencias:** C-N1-05.
+- **Errores habituales:** confundir 401 con 403; poner una API key en la URL en vez de en un header; reintentar un 401/403 esperando que "la segunda vez funcione".
+- **Modelo mental:** el marco de tres preguntas — ¿quién eres? ¿cómo lo sé? ¿qué puedes? — con 401 fallando en la segunda pregunta y 403 fallando en la tercera.
+- **Por qué:** existe porque T2 dejó dicho "nunca una credencial en el código" sin usarla de verdad todavía / ahora porque el estudiante ya sabe clasificar fallos (T4) y necesita clasificar también fallos de acceso / habilita el marco cognitivo completo de H-06 antes de que N2.M1 (JWT/OAuth2) lo implemente con infraestructura real — **corrección de la auditoría integral (EVT-042/053): el marco explícito de H-06 no aparecía nombrado verbatim en el contenido, solo la mecánica; ahora sí.**
+- **Evidencia de dominio:** distingue con código (no solo de palabra) un caso 401 de un caso 403, y explica por qué ninguno de los dos se arregla reintentando.
+- **Práctica principal:** progresión de auth (key ausente/inválida/correcta → 401 vs 403 → credencial desde entorno → clasificación → flujo completo) + laboratorio de verificación multi-recurso.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** si tu API solo devolviera un "acceso denegado" genérico, ¿qué decisión no podrías tomar automáticamente que hoy sí puedes, gracias a la distinción 401/403?
+
+**N1.M6.T6 · Límites y buenas prácticas: rate limiting, paginación e idempotencia**
+- **Objetivo:** respeta el header Retry-After ante un 429, pagina resultados grandes, y usa idempotency keys para que reintentar una operación nunca duplique su efecto.
+- **Prerrequisitos:** T2, T4, T5.
+- **Competencias:** C-N1-05.
+- **Errores habituales:** ignorar Retry-After e inventar una espera propia; pedir "todo" sin paginar; reintentar un POST sin idempotency key, arriesgando duplicar un efecto real (cierra el hilo abierto por el propio `decidir_politica` de T4).
+- **Modelo mental:** GET es idempotente por naturaleza (repetirlo no cambia nada); POST no lo es — una idempotency key es lo que lo vuelve seguro de reintentar.
+- **Por qué:** existe porque T4 ya introdujo la idea de idempotencia en abstracto (`decidir_politica`) sin un mecanismo concreto que la implemente / ahora porque el estudiante ya construye clientes robustos (T4) y necesita las tres prácticas que distinguen un cliente junior de uno profesional / habilita cerrar M6 con el hilo completo, de protocolos en capas a un cliente que nunca duplica un cobro. Cierra M6.
+- **Evidencia de dominio:** mide (contando, no solo prometiendo) que una idempotency key limita a 1 el número de efectos reales sin importar cuántos reintentos ocurran.
+- **Práctica principal:** progresión (Retry-After → paginación → idempotencia → backoff combinado → paginación resiliente ante rate limit) + laboratorio de cliente de pagos idempotente — cierre del hilo M6.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** ¿por qué GET nunca necesita una idempotency key, pero un POST que crea un cobro casi siempre sí?
+
 **Así se usa esto en el mundo real (cierre de M6).** Todo el software que el estudiante construirá desde N2 es esta conversación en ambas direcciones: en N2 pasa al otro lado de la ventanilla (construir la API en vez de consumirla), en N7 los LLMs se consumen exactamente así (contratos, streaming, claves, reintentos), y en N9 la pregunta "¿qué hago cuando el otro falla?" se convierte en disciplina de arquitectura. Errores típicos del principiante profesional: la clave de API subida a GitHub (clásico que cuesta dinero real), el cliente que asume respuesta feliz y muere en producción con el primer 503, el reintento infinito que tumba al servicio que intentaba usar. Las empresas valoran esto porque casi ningún sistema moderno está solo: integrar servicios ajenos con robustez ES el trabajo. Reaparece: N2 (el otro lado del contrato), N7 (APIs de modelos), N8 (agentes que llaman herramientas remotas), N9 (resiliencia a escala).
 
 **Institución de la ingeniería:** HTTP/TLS es la institución que **garantiza acuerdos de comunicación** — desconocidos cooperan con reglas que ninguno puede romper unilateralmente.
@@ -700,7 +724,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 | H-03 | "¿Quién espera cuando cientos compiten?" (M5.T3) + "¿dos transacciones a la vez?" (M7.T3) | **Concurrencia y async** (N2.M1): la necesidad está sembrada dos veces; N2 la responde |
 | H-04 | Pruebas antes del código (B-M5, A5, baterías propias del capstone) + T7 de M2 (assert/invariantes de clases, añadido en la profundización de N1) | **Testing formal y TDD** (N2.M4): el hábito existe; N2 le da disciplina e infraestructura |
 | H-05 | "¿Cómo se cambia un esquema con datos vivos?" (M7.T4) | **Migraciones** (N2.M2) |
-| H-06 | La estructura de la confianza — ¿quién eres? ¿cómo lo sé? ¿qué puedes? (M6.T2) | **Auth real: JWT/OAuth2** (N2.M1): la estructura mental está instalada; N2 la implementa |
+| H-06 | La estructura de la confianza — ¿quién eres? ¿cómo lo sé? ¿qué puedes? (M6.T2, mecánica; **M6.T5, marco explícito nombrado verbatim con 401/403 — cierra el hallazgo de la auditoría integral, EVT-042/053**) | **Auth real: JWT/OAuth2** (N2.M1): la estructura mental está instalada y ahora también nombrada explícitamente; N2 la implementa con infraestructura real |
 | H-07 | "Invertir una vez para ahorrar muchas" (M3.T3) | **Redis y cachés** (N2.M2): la idea ya tiene nombre propio en la cabeza del estudiante |
 | H-08 | Commits que disparan cosas (M4 cierre) + scripts que automatizan (M5.T5) | **CI/CD** (N2.M4): automatización sobre la historia |
 | H-09 | Procesos aislados + entorno reproducible (M5, M1.T6) | **Docker** (N2.M4): "un contenedor es un proceso con su propio sistema de archivos" será una frase comprensible, no mágica |

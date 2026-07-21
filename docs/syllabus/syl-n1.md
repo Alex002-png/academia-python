@@ -18,7 +18,7 @@
 |---|---|---|---|---|
 | M1 · Python profesional | 8 | ~5 | C-N1-01 | Descomposición de problemas |
 | M2 · POO | 7 | ~4 | C-N1-01, C-N1-02 | Diseño incremental |
-| M3 · Algoritmos y ED I | 6 | ~4 | C-N1-02, C-N1-06 | Depuración sistemática |
+| M3 · Algoritmos y ED I | 8 | ~5 | C-N1-02, C-N1-06 | Depuración sistemática |
 | M4 · Git y GitHub | 4 | ~2 | C-N1-03 | Refactorización |
 | M5 · Linux, terminal y SO | 5 | ~2,5 | C-N1-04 | Pruebas |
 | M6 · Redes y APIs | 4 | ~2 | C-N1-05 | Decisiones de ingeniería |
@@ -325,6 +325,30 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **Evaluación:** estándar + revisión B-M3.
 - **Pregunta ingenieril:** ante un problema nuevo del que no sabes nada, ¿cuál es tu primer movimiento — y por qué "empezar a escribir código" casi nunca es la respuesta correcta?
 - **Idea universal:** el método sobrevive al repertorio — entender antes de resolver, planear antes de escribir, verificar antes de confiar.
+
+**N1.M3.T7 · Árboles y recorridos**
+- **Objetivo:** construye e inserta en un Árbol Binario de Búsqueda (BST), y recorre árboles con in-order, pre-order y post-order, reconociendo cada uno como una aplicación directa de la recursión de T5.
+- **Prerrequisitos:** T4 (pilas/colas), T5 (recursión).
+- **Competencias:** C-N1-02, C-N1-06.
+- **Errores habituales:** confundir un árbol binario cualquiera con un BST (la propiedad de orden no es automática); olvidar el caso base (`nodo is None`); no distinguir para qué sirve cada recorrido.
+- **Modelo mental:** un árbol como estructura recursiva por naturaleza — cada nodo ES la raíz de su propio subárbol más pequeño.
+- **Por qué:** existe porque T4 (lineal) y T5 (recursión sobre secuencias) dejan sin resolver cómo se procesa una estructura que se RAMIFICA / ahora porque el estudiante ya domina recursión y necesita una forma nueva donde aplicarla / habilita entender por qué los índices de SQL (M7, después) son variantes de árboles balanceados.
+- **Evidencia de dominio:** implementa `insertar` y los tres recorridos sobre un BST propio, y explica por qué un BST desbalanceado (insertado en orden ya ordenado) degenera a una lista enlazada.
+- **Práctica principal:** progresión de recorridos + inserción manteniendo orden + laboratorio de búsqueda dirigida (O(altura), no O(n)).
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** si insertas datos ya ordenados en un BST sin balancear, ¿qué le pasa a su ventaja de O(log n) — y qué estructura ya conocida termina pareciéndose?
+
+**N1.M3.T8 · Tablas hash y coste amortizado**
+- **Objetivo:** implementa una tabla hash propia (función hash, encadenamiento para colisiones, insertar/buscar/eliminar) y explica por qué su O(1) es un promedio, no una garantía puntual.
+- **Prerrequisitos:** T1 (Big-O), T2 (búsqueda), T7.
+- **Competencias:** C-N1-02, C-N1-06.
+- **Errores habituales:** asumir que una tabla hash nunca tiene colisiones; usar una tabla demasiado pequeña para sus datos (cada bucket se vuelve una lista larga, O(1) deja de cumplirse en la práctica); olvidar que buscar debe comparar la clave exacta dentro del bucket.
+- **Modelo mental:** una función hash traduce una clave en un índice; las colisiones se resuelven guardando varias claves en el mismo bucket (encadenamiento); el coste amortizado reparte el gasto ocasional de un redimensionamiento sobre muchas operaciones baratas.
+- **Por qué:** existe porque `dict` se usa desde M1 sin preguntar cómo logra O(1) por dentro / ahora porque el estudiante ya entiende Big-O (T1) y búsqueda (T2) lo suficiente para apreciar el mecanismo / habilita entender Redis (N2.M3) como la misma idea a escala de producción — cierra M3.
+- **Evidencia de dominio:** mide (contando comparaciones reales, no solo prometiendo) la diferencia entre búsqueda lineal y búsqueda en tabla hash, y entre una tabla demasiado pequeña y una adecuada para sus datos.
+- **Práctica principal:** construcción completa (hash → insertar → buscar → eliminar) + laboratorio de colisión real + medición de costo — cierre de B-M3.
+- **Evaluación:** estándar + revisión B-M3.
+- **Pregunta ingenieril:** si tu tabla hash es O(1) "en promedio", ¿qué tiene que ser verdad sobre el tamaño de la tabla en relación a tus datos para que esa promesa se sostenga en la práctica?
 
 **Así se usa esto en el mundo real (cierre de M3).** Este módulo es el idioma silencioso de todo el oficio: cada índice de base de datos es búsqueda binaria trabajando para ti (N2, N7 con vectores), cada cola de mensajes de una infraestructura real es la FIFO de T4 a escala industrial (N9, Kafka), y cada recorrido de un JSON, un árbol de archivos o una jerarquía de agentes es la recursión de T5. Errores típicos del principiante profesional: el O(n²) escondido en un bucle con `in` sobre lista que "funcionaba en pruebas" y tumbó producción; optimizar prematuramente lo que no era el cuello de botella; no reconocer que su problema *era* una pila. Las empresas evalúan esto en entrevista no por tradición, sino porque es el predictor más barato de si alguien razona sobre costes antes de escribir. Reaparece: N2 (índices y consultas), N3 (crecimiento de funciones, ahora con matemática), N7 (búsqueda vectorial), N9 (colas y escalabilidad), y la pista ⚔️ completa hasta las entrevistas de N12. **La idea que este módulo deja para siempre: la eficiencia es una forma de pensar antes de programar — no una optimización posterior.**
 
@@ -659,7 +683,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 |---|---|---|
 | M1 | docs.python.org Tutorial (caps. 4–7) | Automate the Boring Stuff · CS50P |
 | M2 | docs Tutorial cap. 9 | CS50P OOP |
-| M3 | CS50 semanas de algoritmos | visualizaciones de algoritmos |
+| M3 | CS50 Week 3 (Algorithms, Big-O — T1-T2) · CS50 Week 5 (Data Structures: trees/hash tables — T7-T8) | visualizaciones de algoritmos |
 | M4 | Pro Git (caps. 1–3, gratuito) | GitHub Docs |
 | M5 | Missing Semester (MIT) | The Linux Command Line (caps. iniciales) |
 | M6 | MDN "How the Web works" | requests docs |

@@ -26,7 +26,7 @@ El orden de entrega real coincide exactamente con lo prometido (verificado por g
 
 **🔴 Crítico (ya corregido) — M5 tenía un promedio de 1.40 entradas de `diagnostico` por tema, frente a 2.6-2.83 de M1-M3.** `n2m5t2` (Laboratorio 35) y `n2m5t3` (Laboratorio 36) tenían solo 1 entrada cada uno, pese a tener `pasos`/`checkpoints` comparables al resto del nivel. Llevados a 3 cada uno, con diagnósticos anclados en contenido ya presente en el propio tema (la reflexión de `errorVivo`, el `desafio` de diseñar reversión), no inventados.
 
-**🟡 Importante (pendiente, no corregido en esta pasada) — M4.T1-T4 tienen consistentemente menos `pasos` (4 cada uno) que el promedio de M1-M3 (5.4-6.2).** Cuatro temas seguidos con la mitad de pasos que el módulo de referencia es un patrón, no ruido — queda registrado como riesgo pendiente de validación, no bloqueante.
+**🟢 Corregido (2026-07-21, EVT-062) — M4.T1-T4 tenían consistentemente menos `pasos` (4 cada uno) que el promedio de M1-M3 (5.4-6.2).** Cada uno ganó un paso real adicional (extensión del mismo trabajo, no relleno) y su checkpoint correspondiente — ahora en 5 pasos/5 checkpoints, a la par de sus hermanos. T5 (Momento Fundacional, 8 pasos) no se tocó, por diseño.
 
 **🟢 No encontrado — laboratorios con solución pre-resuelta.** A diferencia de N1, N2 no reutiliza ese patrón (solo `n2m1t1r` tiene `reto`, con armazón genuino).
 
@@ -88,7 +88,7 @@ No existe `docs/syllabus/syl-n3.md` todavía. SYL-N2 sí hace el trabajo interno
 | 4 | Arqueología del Capstone apunta a M1.T1 en vez de M1.T2/Laboratorio 13 | 🟡 Importante | ✅ Corregido (3 ubicaciones) |
 | 5 | C-N2-05 subdescrita en §14 (omite M3) | 🟢 Menor | ✅ Corregido |
 | 6 | Docker mencionado antes de su tema formal (M5) sin calificar | 🟢 Menor | ✅ Corregido |
-| 7 | M4.T1-T4 con menos pasos que el promedio del nivel | 🟡 Importante | ⏳ Pendiente — registrado, no bloqueante |
+| 7 | M4.T1-T4 con menos pasos que el promedio del nivel | 🟡 Importante | 🟢 Corregido (2026-07-21, EVT-062) |
 | 8 | Hints de `n2m1t1`/`n2m1t1b` regalan la solución completa | 🟡 Importante | ⏳ Pendiente — bajo impacto (1 de 7 temas) |
 | 9 | Cero comparación institucional en la investigación de N2 | 🟡 Importante | ⏳ Pendiente — mejorar desde N3 en adelante |
 | 10 | Bitácora menos autónoma de lo que el syllabus narra | 🟡 Importante | ⏳ Pendiente — exigiría infraestructura real, no solo texto |

@@ -135,6 +135,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **Práctica principal:** experimento de memoria (lista vs. generador, medido) — pensamiento "estimar antes de medir".
 - **Evaluación:** estándar.
 - **Pregunta ingenieril:** ¿en qué situaciones aceptarías un código ligeramente más complejo a cambio de reducir drásticamente el consumo de memoria?
+- **Refuerzo puntual (2026-07-21, EVT-062):** +1 teoría con traza completa intercalada generador↔llamador, +1 MCQ y +1 ejercicio (predicción de orden de ejecución), dirigido al hallazgo real de Johnson, McQuistin & O'Donnell (2020, CEP) sobre evaluación perezosa como fuente documentada de conceptos erróneos específicos de Python.
 
 **N1.M1.T8 · Ficheros y formatos (txt, CSV, JSON)**
 - **Objetivo:** lee y escribe archivos con context managers y procesa CSV y JSON como fronteras de datos reales.
@@ -312,6 +313,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **Pregunta ingenieril:** ¿qué problemas se vuelven más claros con recursión y cuáles la pagan en pila y legibilidad — y cómo lo decides antes de escribir la primera línea?
 - **Evolución de la idea:** la recursión no es "otra forma de hacer bucles" — es **una manera distinta de modelar problemas**: expresarlos en términos de sí mismos. Esa diferencia cambia por completo la comprensión de árboles, grafos, compiladores y todo divide-y-vencerás.
 - **Idea universal:** algunos problemas dejan de ser difíciles cuando se expresan de otra manera.
+- **Refuerzo por evidencia (2026-07-21, EVT-062):** recursión es el único tema de todo N0-N2 con evidencia académica replicada y multi-institucional de dificultad real para novatos (Lister et al., 2004, *SIGCSE Bulletin* 36(4):119-150 — los estudiantes escriben recursión correctamente con más frecuencia de la que logran TRAZARLA). Se añadieron: +1 teoría (traza completa de `factorial(3)`, sangría por profundidad), +1 MCQ (predicción de orden de ejecución), +2 ejercicios (traza de entrada/salida; recursión múltiple con dos llamadas — caminos en cuadrícula), +1 teoría en Parte 2 (explosión combinatoria real de Fibonacci ingenuo: 15→177→21,891 llamadas) y +1 error habitual (confiar la hipótesis recursiva de una rama en recursión múltiple, donde el costo ya no es lineal).
 
 **N1.M3.T6 · Patrones de resolución**
 - **Objetivo:** ataca problemas nuevos con un repertorio consciente: fuerza bruta primero, dos punteros, conteo con dict, ventana — y el método "entender→plan→codificar→verificar".

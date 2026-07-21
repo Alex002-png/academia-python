@@ -688,6 +688,8 @@ El estudiante construye un recurso compartido simple (inventario, contador de re
 - **Pregunta ingenieril:** si te cuesta mucho escribir una prueba para una función, ¿qué es más probable: que el testing sea difícil, o que la función esté haciendo demasiado?
 - **Idea universal:** el código fácil de probar y el código bien diseñado casi siempre son el mismo código, visto desde dos preguntas distintas.
 
+**Nivelación de M4 (2026-07-21, EVT-062):** la auditoría integral de N2 (`n2-auditoria-integral.md`) había registrado M4 con menos pasos por tema que sus hermanos M1-M3/M5 (4 vs. 5.4-6.2 de promedio) — hallazgo 🟡, no crítico. T1-T4 ganan cada uno **un paso real adicional y su checkpoint correspondiente**, extendiendo el trabajo ya existente sin inflarlo artificialmente: T1 documenta el inventario como artefacto versionado (`AUDITORIA.md`); T2 aplica TDD a un caso de error, no solo al camino feliz; T3 fija un umbral mínimo de cobertura (`--cov-fail-under`) que anticipa el pipeline de T5; T4 confirma con la prueba original, sin modificarla, que el refactor no cambió comportamiento. Los 4 temas quedan en 5 pasos / 5 checkpoints, a la par de sus hermanos — T5 (Momento Fundacional, 8 pasos) no se toca, por diseño.
+
 **N2.M4.T5 · Integración continua: el sistema avisa sin que preguntes — el Momento Fundacional de M4**
 - **Objetivo:** configura un pipeline de integración continua que ejecuta la batería de pruebas automáticamente ante cada cambio, y experimenta el momento en que atrapa una regresión real sin intervención humana.
 - **Prerrequisitos:** T1-T4 (una batería de pruebas real y código más testeable, ya existentes).

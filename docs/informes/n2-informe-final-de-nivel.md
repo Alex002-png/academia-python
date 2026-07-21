@@ -32,7 +32,7 @@ Los heredados de N1 (DOC-11/DOC-12 ya estabilizados, modalidad `proyecto` reutil
 
 ## 7. Riesgos pedagógicos que permanecen abiertos
 
-- **M4 (Laboratorios 29-33) tiene menos pasos por tema que el resto del nivel** (4 vs. 5.4-6.2 de promedio) — hallazgo 🟡, no elevado a crítico porque no afecta la cobertura de checkpoints/diagnóstico (ya corregida en la ronda de densidad, EVT-051), solo el detalle de pasos guiados.
+- ~~M4 (Laboratorios 29-33) tiene menos pasos por tema que el resto del nivel (4 vs. 5.4-6.2 de promedio)~~ — **corregido (2026-07-21, EVT-062):** T1-T4 ganaron un paso real y su checkpoint correspondiente, quedando en 5/5, a la par de sus hermanos.
 - **Cero comparación institucional (MIT/CMU/Berkeley) en la investigación de N2** — más honesto que el defecto equivalente de N1 (2 de 6 documentos declaran la ausencia explícitamente), pero el vacío persiste. Recomendado para N3 en adelante: declarar la ausencia en el 100% de los documentos de investigación, no en una fracción.
 - **Bitácora es menos autónoma de lo que el syllabus narra** — el estudiante ejecuta el script manualmente, no un proceso en segundo plano real. Compromiso razonable para un curso autodidacta sin infraestructura de servidor propia, pero el lenguaje del syllabus debería ajustarse a lo que realmente ocurre, no al revés.
 - **El puente narrativo N1→N2 promete continuidad del proyecto de dominio libre de N1 que no se cumple** — N2 arranca con un dominio y consumidor predefinidos. Ninguno de los cuatro riesgos bloquea la certificación de N2 — todos quedan registrados como hipótesis o mejoras, igual que ocurrió con los riesgos abiertos de N1.

@@ -953,6 +953,10 @@ def __academia_run(code, stdin_list, max_steps=300000):
 }
 async function runScriptedPy(code,stdin){
   const py=await getPyodide();
+  if(/\bnumpy\b/.test(code)&&!py.__academiaNumpyLoaded){
+    await py.loadPackage("numpy");
+    py.__academiaNumpyLoaded=true;
+  }
   const fn=py.globals.get("__academia_run");
   const pyStdin=py.toPy(stdin);
   let res;
@@ -5830,16 +5834,144 @@ const LEVEL2=[
   defensa:["¿Cuáles son las tres preguntas que un ingeniero senior haría sobre tu sistema completo? Respóndelas tú mismo, antes de que te las hagan.","¿Cuál fue la mejor decisión de ingeniería de todo N2, y qué evidencia tienes de que fue la correcta?","De las cinco garantías, ¿cuál cambiarías si empezaras este proyecto hoy, con lo que sabes ahora?","Muéstrame una rama y un Pull Request del episodio integrador — ¿qué pasaría si quitaras el pipeline de CI de la ecuación?","¿Confiarías tú mismo este sistema a otra persona, sabiendo todo lo que sabes de él?"]}},
 ];
 /* ============================================================
+   CONTENIDO — NIVEL 3 · Matemáticas para IA (SYL-N3 v0.2.0-draft)
+   En construcción módulo por módulo, empezando por M1.
+   Motor: Pyodide (Python real) — todos los ex llevan py:true.
+   Densidad SYL-N3 §3.8: 3 días por tema en M1-M3 (vs. 2 en N1/N2),
+   12-15 ejercicios por tema — práctica distribuida/intercalada
+   (Rohrer & Taylor 2007; Rohrer, Dedrick & Stershic 2015).
+   ============================================================ */
+const LEVEL3=[
+{id:"n3m1t1",n:"Día 1",t:"Vectores: significado geométrico, suma y escalar · Parte 1: fundamentos",
+ intro:"Hasta ahora una lista era solo una colección de datos. Hoy la reinterpretas: cuando una lista de números representa una cantidad con dirección y magnitud, es un vector — la unidad básica sobre la que se construye toda IA, desde una imagen hasta un embedding de texto.",
+ intuit:{code:'v1 = [2, 1]\nv2 = [-1, 3]\nsuma = [v1[0]+v2[0], v1[1]+v2[1]]\nprint(suma)',py:true,
+  q:"Sin ejecutar: ¿qué vector imprime esto? Si dibujaras v1 y v2 como flechas desde el origen, ¿hacia dónde apunta la suma comparada con ambas?",
+  req:["1","4"],out:"[1, 4]",
+  e:"[1, 4]. Geométricamente, sumar vectores es 'encadenar flechas': pones la cola de v2 en la punta de v1, y la suma es la flecha desde el origen hasta donde termina esa cadena — nunca calcules componente por componente sin, al menos una vez, verlo así."},
+ mcq:[
+  {q:"¿Qué es, ante todo, un vector en este contexto?",o:["Una lista de números, sin más","Una flecha con dirección y magnitud, que TAMBIÉN puede escribirse como lista de números","Un punto fijo en el espacio","Un tipo de dato exclusivo de numpy"],a:1,e:"El vector es la flecha (dirección + magnitud). La lista de números es solo su representación — el origen de la flecha es libre, no importa dónde la dibujes, solo hacia dónde y qué tan lejos apunta."},
+  {q:"Si sumas dos vectores componente por componente, ¿qué operación geométrica estás haciendo?",o:["Rotar uno respecto al otro","Encadenar las flechas: poner la segunda a partir de donde termina la primera","Multiplicar sus magnitudes","No hay operación geométrica, es solo aritmética"],a:1,e:"Sumar vectores es encadenarlos: la suma es la flecha resultante de recorrer primero uno y luego el otro desde el mismo punto de partida."}],
+ ing:"Cada dato de un modelo de IA —una imagen de 784 píxeles, un usuario descrito por 50 características, una palabra representada por un embedding de 300 números— es, sin excepción, un vector. La operación que hoy implementas a mano (suma de listas) es literalmente lo que ocurre, a escala masiva, dentro de cualquier red neuronal.",
+ errores:["Tratar un vector como 'solo una lista de números', perdiendo el significado geométrico de dirección y magnitud","Sumar vectores de dimensiones distintas sin verificar antes (IndexError silencioso o resultado incorrecto)","Confundir un vector (dirección+magnitud, origen libre) con un punto (posición fija en el espacio)"],
+ mental:{jr:"“Un vector es una lista de números.”",sr:"“Un vector es una flecha —dirección y magnitud— que ELEGIMOS representar como lista de números para poder calcular con ella. La lista es la representación, no la cosa.”",err:"Perder de vista el significado geométrico y tratar toda operación vectorial como aritmética de listas sin más."},
+ theory:[
+  ["El vector como flecha, no como punto",T('Un vector tiene <strong>dirección</strong> y <strong>magnitud</strong> — no una posición fija. Dos flechas con la misma longitud y misma dirección son EL MISMO vector, sin importar dónde las dibujes. Esto es distinto de un punto, que sí tiene una posición fija en el espacio.')],
+  ["La misma flecha, dos representaciones",T('Geométricamente es una flecha; algebraicamente es una lista de números (sus componentes en cada eje). <code>[3, 4]</code> es la flecha que avanza 3 unidades en x y 4 en y. Ambas representaciones son el mismo objeto, vistas desde dos ángulos.'),
+   'v = [3, 4]  # 3 unidades en x, 4 unidades en y'],
+  ["Suma de vectores: encadenar flechas",T('Sumar dos vectores componente por componente equivale, geométricamente, a poner la segunda flecha a partir de donde termina la primera — la suma es la flecha directa desde el inicio hasta el final de esa cadena.'),
+   'def suma_vectores(a, b):\n    return [a[i] + b[i] for i in range(len(a))]\n\nprint(suma_vectores([1, 2], [3, -1]))  # [4, 1]'],
+  ["Escala: estirar o encoger la flecha",T('Multiplicar un vector por un escalar (un número) estira la flecha (si el escalar tiene magnitud mayor que 1), la encoge (si es menor), o la invierte (si es negativo) — pero SIEMPRE mantiene o invierte su dirección original, nunca la cambia a una dirección distinta.'),
+   'def escala_vector(v, k):\n    return [k * x for x in v]\n\nprint(escala_vector([2, -3], 3))   # [6, -9] — misma direccion, 3 veces mas larga\nprint(escala_vector([2, -3], -1))  # [-2, 3] — direccion invertida'],
+  ["La norma: qué tan larga es la flecha",T('La <strong>norma</strong> (o magnitud) de un vector es su longitud real, calculada con el teorema de Pitágoras generalizado a N dimensiones: la raíz cuadrada de la suma de sus componentes al cuadrado.'),
+   'import math\n\ndef norma(v):\n    return math.sqrt(sum(x**2 for x in v))\n\nprint(norma([3, 4]))  # 5.0 — el clasico triangulo 3-4-5'],
+ ],
+ ex:[
+  {id:"n3m1t1e1",py:true,t:"Ejercicio 1 · Suma de vectores desde cero",
+   d:'Implementa <code>suma_vectores(a, b)</code> que sume dos vectores componente por componente, sin usar ninguna librería.',
+   starter:'def suma_vectores(a, b):\n    pass\n\nprint(suma_vectores([1, 2, 3], [4, 5, 6]))',runs:[[]],
+   check:(o,c)=>{const exp="[5, 7, 9]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["return [a[i] + b[i] for i in range(len(a))]"]},
+  {id:"n3m1t1e2",py:true,t:"Ejercicio 2 · Escala de un vector",
+   d:'Implementa <code>escala_vector(v, k)</code> que multiplique cada componente de <code>v</code> por el escalar <code>k</code>.',
+   starter:'def escala_vector(v, k):\n    pass\n\nprint(escala_vector([2, -3, 4], 3))',runs:[[]],
+   check:(o,c)=>{const exp="[6, -9, 12]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["return [k * x for x in v]"]},
+  {id:"n3m1t1e3",py:true,t:"Ejercicio 3 · El bug de las dimensiones distintas",
+   d:'Esta función suma vectores sin verificar que tengan la misma dimensión — con vectores de tamaños distintos truena con <code>IndexError</code> (o peor, ignora datos en silencio). Arréglala para que lance un <code>ValueError</code> con un mensaje claro cuando las dimensiones no coincidan.',
+   starter:'def suma_vectores(a, b):\n    # tu codigo aqui: verifica dimensiones ANTES de sumar\n    return [a[i] + b[i] for i in range(len(a))]\n\ntry:\n    suma_vectores([1, 2, 3], [1, 2])\nexcept ValueError as e:\n    print("ValueError:", e)\nprint(suma_vectores([1, 2, 3], [4, 5, 6]))',runs:[[]],
+   check:(o,c)=>{if(!/raise\s+ValueError/.test(c))return"Agrega 'raise ValueError(...)' cuando len(a) != len(b), antes de intentar sumar.";
+     const exp="ValueError: Vectores de dimensiones distintas: 3 vs 2\n[5, 7, 9]";
+     return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:['if len(a) != len(b):\\n    raise ValueError(f"Vectores de dimensiones distintas: {len(a)} vs {len(b)}")','Este chequeo va ANTES del list comprehension que suma.']},
+  {id:"n3m1t1e4",py:true,t:"Ejercicio 4 · La norma: qué tan larga es la flecha",
+   d:'Implementa <code>norma(v)</code> usando el teorema de Pitágoras generalizado (raíz de la suma de cuadrados).',
+   starter:'import math\n\ndef norma(v):\n    pass\n\nprint(norma([3, 4]))\nprint(norma([2, 2, 2, 2]))',runs:[[]],
+   check:(o,c)=>{if(!/sqrt/.test(c))return"Usa math.sqrt() sobre la suma de cuadrados.";
+     const exp="5.0\n4.0";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["return math.sqrt(sum(x**2 for x in v))"]},
+  {id:"n3m1t1e5",py:true,t:"Ejercicio 5 · Combinación lineal: mezclar dos vectores con pesos",
+   d:'Implementa <code>combinacion_lineal(v1, v2, a, b)</code> que calcule <code>a*v1 + b*v2</code> — la operación detrás de "un poco de esta dirección, un poco de esa otra".',
+   starter:'def combinacion_lineal(v1, v2, a, b):\n    pass\n\nprint(combinacion_lineal([1, 0], [0, 1], 3, 5))\nprint(combinacion_lineal([2, 3], [1, 1], 2, -1))',runs:[[]],
+   check:(o,c)=>{const exp="[3, 5]\n[3, 5]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["return [a*v1[i] + b*v2[i] for i in range(len(v1))]"]},
+ ]},
+{id:"n3m1t1b",n:"Día 2",t:"Vectores · Parte 2: práctica extendida",
+ intro:"Ayer construiste las operaciones básicas. Hoy las llevas más lejos: normalizar un vector, medir distancias, comparar tu implementación contra numpy por primera vez en la Academia, y ver el primer uso real de vectores en IA — una imagen es, literalmente, un vector.",
+ theory:[
+  ["Vector unitario: la misma dirección, longitud 1",T('Dividir un vector por su propia norma produce un <strong>vector unitario</strong> — misma dirección exacta, longitud exactamente 1. Se usa constantemente para comparar SOLO direcciones, ignorando magnitud (por ejemplo, en similitud de embeddings).'),
+   'def vector_unitario(v):\n    n = norma(v)\n    return [x / n for x in v]\n\nprint(vector_unitario([3, 4]))  # [0.6, 0.8] — longitud 1, misma direccion'],
+  ["Distancia entre dos puntos, usando la norma",T('La distancia entre dos puntos es la norma del vector que va de uno al otro — restas las coordenadas y mides la longitud de esa diferencia.'),
+   'def distancia(p1, p2):\n    diferencia = [p1[i] - p2[i] for i in range(len(p1))]\n    return norma(diferencia)\n\nprint(distancia([0, 0], [3, 4]))  # 5.0'],
+  ["Primer uso real de numpy en la Academia: verificar, no reemplazar",T('Desde hoy tienes disponible <code>numpy</code> dentro del propio Pyodide de este Campus — la primera vez que cargas una librería binaria, no solo la librería estándar. La usamos exactamente como declara el proyecto de este nivel: <strong>para verificar tu propia implementación, nunca para saltártela</strong>. Escribes la operación a mano primero; numpy solo confirma que tu resultado es correcto.'),
+   'import numpy as np\n\nmio = suma_vectores([3, -1, 2], [4, 5, -6])\nreferencia = (np.array([3, -1, 2]) + np.array([4, 5, -6])).tolist()\nprint(mio == referencia)  # True, si tu implementacion es correcta'],
+  ["Una imagen es un vector",T('Una imagen pequeña en escala de grises (por ejemplo, 2×2 píxeles) es, literalmente, una lista de números — un vector de 4 componentes, uno por píxel. "Sumar dos imágenes" es la misma suma de vectores de siempre, con un tope práctico: un píxel no puede pasar de 255.')],
+ ],
+ ex:[
+  {id:"n3m1t1e6",py:true,t:"Ejercicio 6 · Vector unitario",
+   d:'Implementa <code>vector_unitario(v)</code>. Redondea cada componente a 4 decimales con <code>round(x, 4)</code>.',
+   starter:'import math\n\ndef norma(v):\n    return math.sqrt(sum(x**2 for x in v))\n\ndef vector_unitario(v):\n    pass\n\nprint(vector_unitario([3, 4]))',runs:[[]],
+   check:(o,c)=>{const exp="[0.6, 0.8]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["n = norma(v)","return [round(x / n, 4) for x in v]"]},
+  {id:"n3m1t1e7",py:true,t:"Ejercicio 7 · Distancia entre dos puntos",
+   d:'Implementa <code>distancia(p1, p2)</code> usando la norma de la diferencia.',
+   starter:'import math\n\ndef norma(v):\n    return math.sqrt(sum(x**2 for x in v))\n\ndef distancia(p1, p2):\n    pass\n\nprint(distancia([0, 0], [3, 4]))\nprint(distancia([1, 1], [4, 5]))',runs:[[]],
+   check:(o,c)=>{const exp="5.0\n5.0";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["diferencia = [p1[i] - p2[i] for i in range(len(p1))]","return norma(diferencia)"]},
+  {id:"n3m1t1e8",py:true,t:"Ejercicio 8 · Verifica tu suma contra numpy",
+   d:'Usa <code>numpy</code> para verificar tu propia implementación de <code>suma_vectores</code> — imprime <code>True</code> si coinciden. Esta es la primera vez que usas numpy en la Academia.',
+   starter:'import numpy as np\n\ndef suma_vectores(a, b):\n    return [a[i] + b[i] for i in range(len(a))]\n\nv1 = [3, -1, 2]\nv2 = [4, 5, -6]\nmio = suma_vectores(v1, v2)\n# tu codigo aqui: calcula "referencia" con numpy y compara\n',runs:[[]],
+   check:(o,c)=>{if(!/numpy|np\./.test(c))return"Usa numpy (np.array) para calcular la referencia.";
+     return norm(o[0])==="True"?true:"Esperaba: True\nObtuve:\n"+norm(o[0])},
+   hints:["referencia = (np.array(v1) + np.array(v2)).tolist()","print(mio == referencia)"]},
+  {id:"n3m1t1e9",py:true,t:"Ejercicio 9 · Una imagen es un vector: sumar dos imágenes",
+   d:'Dos imágenes de 2×2 píxeles en escala de grises, representadas como vectores de 4 valores (0-255). Implementa <code>suma_imagenes(img1, img2)</code> que sume píxel por píxel, con un tope de 255 (un píxel no puede "brillar" más que eso).',
+   starter:'def suma_imagenes(img1, img2):\n    pass\n\nimgA = [100, 150, 200, 250]\nimgB = [50, 50, 50, 50]\nprint(suma_imagenes(imgA, imgB))',runs:[[]],
+   check:(o,c)=>{if(!/min\s*\(/.test(c))return"Usa min(255, ...) para topar cada componente en 255.";
+     const exp="[150, 200, 250, 255]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["return [min(255, img1[i] + img2[i]) for i in range(len(img1))]"]},
+  {id:"n3m1t1e10",py:true,t:"Ejercicio 10 · Detectar el vector cero",
+   d:'Implementa <code>es_vector_cero(v)</code> que detecte si TODAS las componentes son exactamente 0 — el vector que no apunta a ningún lado.',
+   starter:'def es_vector_cero(v):\n    pass\n\nprint(es_vector_cero([0, 0, 0]))\nprint(es_vector_cero([0, 0, 1]))',runs:[[]],
+   check:(o,c)=>{const exp="True\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["return all(x == 0 for x in v)"]},
+ ]},
+{id:"n3m1t1c",n:"Día 3",t:"Vectores · Parte 3: laboratorio integrador y desafío — cierra T1",
+ intro:"Cierras el tema integrando todo: calculas el centroide de varios puntos (el mismo cálculo detrás de agrupar datos en N4), y cierras con un bug real que combina vectores con un problema que ya conoces de N1 — el aliasing de listas.",
+ reto:{id:"n3m1t1r",py:true,t:"Laboratorio · Centroide de varios vectores",
+  d:'El <strong>centroide</strong> es el "centro de masa" de un conjunto de puntos — el promedio de cada componente. Implementa <code>centroide(vectores)</code> que reciba una lista de vectores y devuelva su centroide. (Este es, literalmente, el primer paso del algoritmo de agrupamiento k-means que verás en N4.)',
+  starter:'def centroide(vectores):\n    pass\n\nprint(centroide([[0, 0], [2, 0], [1, 3]]))',runs:[[]],
+  check:(o,c)=>{const exp="[1.0, 1.0]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+  hints:["n = len(vectores); dim = len(vectores[0])","return [sum(v[i] for v in vectores) / n for i in range(dim)]"]},
+ ex:[
+  {id:"n3m1t1e11",py:true,t:"Ejercicio 11 · Centroide de 3 dimensiones",
+   d:'Aplica tu función <code>centroide</code> a vectores de 3 componentes.',
+   starter:'def centroide(vectores):\n    n = len(vectores)\n    dim = len(vectores[0])\n    return [sum(v[i] for v in vectores) / n for i in range(dim)]\n\nprint(centroide([[1, 2, 3], [4, 5, 6], [1, 2, 3]]))',runs:[[]],
+   check:(o,c)=>{const exp="[2.0, 3.0, 4.0]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Este código ya está completo — ejecútalo y confirma: (1+4+1)/3=2.0, (2+5+2)/3=3.0, (3+6+3)/3=4.0."]},
+  {id:"n3m1t1e12",py:true,t:"Ejercicio 12 · Combinando todo: el vector más lejano del centroide",
+   d:'Dado un conjunto de vectores, calcula su centroide y luego determina cuál de los vectores originales está MÁS LEJOS del centroide (usando tu función <code>distancia</code>).',
+   starter:'import math\n\ndef norma(v):\n    return math.sqrt(sum(x**2 for x in v))\ndef distancia(p1, p2):\n    return norma([p1[i] - p2[i] for i in range(len(p1))])\ndef centroide(vectores):\n    n = len(vectores)\n    dim = len(vectores[0])\n    return [sum(v[i] for v in vectores) / n for i in range(dim)]\n\npuntos = [[0, 0], [4, 0], [0, 3], [1, 1]]\n# tu codigo aqui: encuentra el punto mas lejano del centroide\n',runs:[[]],
+   check:(o,c)=>{const exp="[4, 0]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["c = centroide(puntos)","mas_lejano = max(puntos, key=lambda p: distancia(p, c))","print(mas_lejano)"]},
+ ],
+ retoFinal:{id:"n3m1t1x",py:true,t:"Desafío final · inédito — la matriz de vectores que comparten memoria",
+  d:'Predice, ANTES de ejecutar, qué imprime esto — ¿tres filas independientes, o algo más?',
+  starter:'matriz = [[0, 0]] * 3\nmatriz[1][0] = 9\nprint(matriz)',runs:[[]],
+  hints:["[[0,0]] * 3 no crea tres listas nuevas — crea una lista con TRES REFERENCIAS a la MISMA lista interior.","Modificar matriz[1] modifica la única lista interior que las tres filas comparten — el mismo aliasing de listas de N1, ahora con vectores."],
+  check:(o,c)=>{const exp="[[9, 0], [9, 0], [9, 0]]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])}}},
+];
+/* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)
    Generaliza la navegación de "Clases" para no depender de un solo
    nivel hardcodeado. approved() decide si el SIGUIENTE nivel se
    desbloquea en el selector.
    ============================================================ */
-const LEVELS=[LEVEL0,LEVEL1,LEVEL2];
+const LEVELS=[LEVEL0,LEVEL1,LEVEL2,LEVEL3];
 const LEVEL_META=[
   {id:"n0",label:"Nivel 0 — Fundamentos",approved:()=>levelApproved()},
   {id:"n1",label:"Nivel 1 — Computer Science",approved:()=>LEVEL1.every(d=>dayDone(d))},
   {id:"n2",label:"Nivel 2 — Software Engineering",approved:()=>LEVEL2.every(d=>dayDone(d))},
+  {id:"n3",label:"Nivel 3 — Matemáticas para IA",approved:()=>LEVEL3.every(d=>dayDone(d))},
 ];
 /* Fase 3 · Visualización — diagramas por tema */
 const VIZ={

@@ -5,24 +5,27 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | SYL-N3 · Tier T2 |
-| **Versión / Estado** | **0.1.0-draft** · Documento de Diseño — primer paso del flujo institucional de 9 pasos (DOC-03 §8bis / EVT-022), pendiente de revisión módulo por módulo con el Director antes de v1.0.0 |
+| **Versión / Estado** | **0.2.1-draft** · Documento de Diseño + primer contenido real (M1.T1) — primer paso del flujo institucional de 9 pasos (DOC-03 §8bis / EVT-022), pendiente de revisión módulo por módulo con el Director antes de v1.0.0 |
 | **Autoridad de origen** | DOC-10 §6 (interior de N3) · DOC-00 14.8.3 · DOC-01 (C-N3-01…04) |
 | **Depende de** | DOC-10 v1.0.2 (mapa, con la bibliografía de M3 ya ampliada con Seeing Theory) · DOC-00 (§13, §14, §16, 17.6) · DOC-01 · DOC-02 (instrumentos) · DOC-03 (método) · **SYL-N2 §15 (Herencias Declaradas H-N3-01…05 — el contrato de entrada que este documento resuelve)** |
 | **Produce / desarrolla** | La estructura docente completa de N3: fichas pedagógicas por tema, proyecto de nivel (mini-librería + lectura de paper), compuerta, y las Herencias Declaradas hacia SYL-N4 |
 | **Estándar de calidad** | El mismo de SYL-N1/SYL-N2: *"Si otro profesor excepcional impartiera este nivel utilizando únicamente el syllabus, ¿obtendría prácticamente la misma calidad formativa?"* |
-| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño — investigación real verificada por WebFetch (3Blue1Brown, Coursera "Mathematics for ML" de Imperial College/Deisenroth, Khan Academy, Seeing Theory), verificación empírica directa de `numpy` en la build real de Pyodide (v0.26.4) ya fijada en el Campus, y 3 decisiones de diseño confirmadas por el Director (M4 secuencial al final; bibliografía de M3 ampliada con Seeing Theory en vez de aceptar Khan Academy como único ancla real; los 5 estándares específicos de N2 adaptados sin narrativa interpersonal — "Momento Fundacional" pasa a ser "el quiebre de intuición", "la garantía que el sistema adquiere" se declara ausente). Pendiente: revisión módulo por módulo con el Director, capstone, compuertas, auditoría desde N4, Herencias Declaradas finales, auditoría adversarial, v1.0.0 |
+| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño — investigación real verificada por WebFetch (3Blue1Brown, Coursera "Mathematics for ML" de Imperial College/Deisenroth, Khan Academy, Seeing Theory), verificación empírica directa de `numpy` en la build real de Pyodide (v0.26.4) ya fijada en el Campus, y 3 decisiones de diseño confirmadas por el Director (M4 secuencial al final; bibliografía de M3 ampliada con Seeing Theory en vez de aceptar Khan Academy como único ancla real; los 5 estándares específicos de N2 adaptados sin narrativa interpersonal — "Momento Fundacional" pasa a ser "el quiebre de intuición", "la garantía que el sistema adquiere" se declara ausente) · 0.2.0-draft (2026-07-21): completados los 5 estándares en los 4 módulos (M1 ganó "lo que deja de sorprender"; M2 ganó "la limitación humana que compensa"; M3 ganó "lo que deja de sorprender"; M4 ganó "el quiebre de intuición" y "el supuesto que destruye", que la tabla resumen ya prometía sin haberlos escrito) — inconsistencia real encontrada por revisión propia antes de la revisión del Director, no señalada por él. **Densidad ampliada por instrucción directa del Director** ("más información, más ejercicios, más problemas, recordando el nivel"): §3.8 nueva, más días y ejercicios por tema que el estándar de N1/N2, justificado en la práctica distribuida que la literatura de educación matemática exige para fluidez procedimental (no en "más por más") · 0.2.1 (2026-07-21): **primer contenido real construido** — `LEVEL3` creado en `index.html`, M1.T1 (Vectores) completo bajo el nuevo estándar de densidad: 3 días, 12 ejercicios + laboratorio integrador (centroide, puente directo a k-means/N4) + desafío final inédito (aliasing de listas de vectores, mismo mecanismo de N1 aplicado a vectores). Primer uso real de `numpy` en todo el Campus (ejercicio 8, carga lazy agregada al runner de Pyodide). Todo verificado con ejecución real de Python antes de escribirse; `node --check` limpio; harness de Node con 20 aserciones (correcto + incorrecto), 0 fallos; 557 ids en todo el Campus, 0 duplicados. `LEVEL_META` ganó entrada `n3`. Pendiente: revisión módulo por módulo con el Director, capstone, compuertas, auditoría desde N4, Herencias Declaradas finales, auditoría adversarial, v1.0.0; construir M1.T2-T7 y M2-M4 completos |
 
 ---
 
 ## 1. Tabla resumen
 
-| Módulo | Temas | Semanas est.* | Competencias | Quiebre de intuición (análogo adaptado del Momento Fundacional de N2) |
-|---|---|---|---|---|
-| M1 · Álgebra lineal computacional | 7 | ~4 | C-N3-01 | T3: una matriz no es una tabla de números — es una transformación del espacio entero |
-| M2 · Cálculo y optimización | 6 | ~3,5 | C-N3-02 | T4: el descenso de gradiente encuentra un mínimo sin "ver" la función completa, solo su pendiente local |
-| M3 · Probabilidad y estadística | 6 | ~3 | C-N3-03 | T1: la intuición humana sobre el azar está sistemáticamente sesgada, y se puede demostrar con un solo ejemplo (la falacia del fiscal) |
-| M4 · Lectura matemática | 5 | ~2,5 | C-N3-04 | T5: un párrafo de notación que parecía ilegible es, letra por letra, exactamente el código que el estudiante ya sabe escribir |
-| Proyecto de nivel | — | ~2 | Todas | Integración: mini-librería propia + lectura comentada de un paper |
+| Módulo | Temas | Días/tema | Ejercicios/tema* | Semanas est.** | Competencias | Quiebre de intuición |
+|---|---|---|---|---|---|---|
+| M1 · Álgebra lineal computacional | 7 | 3 | 12-15 | ~6 | C-N3-01 | T3: una matriz no es una tabla de números — es una transformación del espacio entero |
+| M2 · Cálculo y optimización | 6 | 3 | 12-15 | ~5 | C-N3-02 | T4: el descenso de gradiente encuentra un mínimo sin "ver" la función completa, solo su pendiente local |
+| M3 · Probabilidad y estadística | 6 | 3 | 12-15 | ~4,5 | C-N3-03 | T1: la intuición humana sobre el azar está sistemáticamente sesgada, y se puede demostrar con un solo ejemplo (la falacia del fiscal) |
+| M4 · Lectura matemática | 5 | 2 | ~9 | ~2,5 | C-N3-04 | T5: un párrafo de notación que parecía ilegible es, letra por letra, exactamente el código que el estudiante ya sabe escribir |
+| Proyecto de nivel | — | — | — | ~2 | Todas | Integración: mini-librería propia + lectura comentada de un paper |
+
+*\*Densidad ampliada frente al estándar de N1/N2 (~9 ejercicios/tema, 2 días) — ver §3.8, justificada en práctica distribuida/intercalada (Rohrer & Taylor 2007; Rohrer, Dedrick & Stershic 2015), no en volumen por sí mismo.*
+*\*\*~20 semanas totales (~4,6 meses) bajo esta densidad — supera la estimación original de DOC-10 (~3 meses/~300h). Se declara honestamente, mismo principio de transparencia que EVT-062 ya aplicó a N0-N2: el calendario estima, la compuerta decide (DOC-10 §1, 14.2).*
 
 *\*~3 meses · ~300 h a dedicación pactada (25h/semana) — ver nota metodológica en §3.5 sobre qué cuenta como "hora construida" antes de comparar este número contra el patrón de gap ya documentado en EVT-062 para N0-N2.*
 
@@ -39,6 +42,7 @@ Por referencia a DOC-10 §6: **N3 · Matemáticas para IA** no es "aprender mate
 5. **Verificación numérica como disciplina heredada** (resuelve H-N3-01 de SYL-N2 §15): toda operación implementada a mano se contrasta contra `numpy` con tolerancias explícitas (`abs(a-b) < 1e-9`, nunca `==` sobre flotantes) antes de darse por correcta.
 6. **Triple justificación** y **Método DOC-03** — heredados sin cambio de N1/N2.
 7. **Nota metodológica sobre horas declaradas** *(transparencia proactiva, dado el patrón ya documentado en EVT-062 para N0-N2)*: las ~300h/~3 meses de este nivel incluyen, de forma explícita y a diferencia de cómo se contabilizó N1/N2, el consumo real de la bibliografía externa citada — las ~58h ya verificadas de la especialización de Coursera (Parte A.2 de la investigación) más los ≈26 videos de 3Blue1Brown. El contenido que la Academia construye en el Campus (fichas + ejercicios) no pretende sustituir esas horas, sino andamiarlas y verificarlas — mismo principio que ya rige la cita de CS50/Missing Semester en N1, ahora hecho explícito en el cálculo de horas para no repetir una comparación desigual.
+8. **Densidad de práctica ampliada frente al estándar de N1/N2** *(instrucción directa del Director — "más información, más ejercicios, más problemas, recordando el nivel")*, justificada con evidencia real, no por volumen en sí mismo: la investigación en educación matemática sobre práctica distribuida e intercalada (Rohrer & Taylor, 2007, "The shuffling of mathematics problems improves learning", *Instructional Science*; Rohrer, Dedrick & Stershic, 2015, "Interleaved practice improves mathematics learning", *Journal of Educational Psychology*) muestra consistentemente que la fluidez procedimental en matemáticas depende de práctica repartida en más sesiones y con problemas variados/intercalados, no concentrada en una sola sesión — a diferencia de la mayoría de temas de programación de N1/N2, donde 2 días (fundamentos + laboratorio) bastan porque la habilidad se ejercita una vez que el concepto se entiende. **Regla aplicada: M1/M2/M3 (los tres módulos de práctica procedimental pesada) usan 3 días por tema en vez de 2** (Día 1 · fundamentos e intuición; Día 2 · práctica extendida con problemas variados y graduados en dificultad; Día 3 · laboratorio integrador + desafío final inédito), con **12-15 ejercicios totales por tema** (frente a los ~9 del estándar de N1/N2). **M4 permanece en 2 días** (~9 ejercicios): es una habilidad de lectura/traducción, no de práctica procedimental repetida, y ya está correctamente escalada frente a su propio alcance (DOC-10 la declara el módulo más corto del nivel).
 
 ## 4. Estructura y grafo local
 
@@ -141,6 +145,7 @@ Troncal: `M1 → M2 → M3 → M4`. M2 depende realmente de M1 (el gradiente y e
 - **Pregunta ingenieril:** si una matriz de transformación tiene un autovalor de magnitud mayor que 1 y aplicas esa transformación cientos de veces seguidas (como capas apiladas), ¿qué le pasa a cualquier vector que no sea exactamente ese autovector?
 - **Idea universal (cierre de M1):** una matriz no son números — es una acción sobre el espacio, y esa acción tiene direcciones que respeta (autovectores) y una cantidad de estiramiento total (determinante). Todo lo demás de álgebra lineal es una consecuencia de esas dos ideas.
 - **La limitación humana que compensa M1:** la incapacidad de visualizar más de 3 dimensiones — el álgebra lineal computacional permite operar correctamente en 784 dimensiones (o millones) sin necesitar "verlas", confiando en que la misma intuición 2D/3D generaliza algebraicamente.
+- **Lo que deja de sorprender (M1):** que una red neuronal "entienda" imágenes o texto deja de sentirse como magia — cada capa es, mecánicamente, una transformación lineal (T3-T4) más una regla de invertibilidad (T5) y una dirección que respeta (T7), aplicada una y otra vez.
 
 ### M2 · Cálculo y optimización
 
@@ -221,6 +226,7 @@ Troncal: `M1 → M2 → M3 → M4`. M2 depende realmente de M1 (el gradiente y e
 - **Pregunta ingenieril:** si añades más y más ruido a tus datos sintéticos, ¿en qué punto el descenso de gradiente ya no puede distinguir la señal real del ruido? (siembra directa hacia overfitting, N4.M4).
 - **Idea universal (cierre de M2):** entrenar cualquier modelo, sin importar cuán complejo, es siempre la misma operación: definir un error y bajar su pendiente, un paso a la vez.
 - **Lo que deja de sorprender (M2):** que un modelo "aprenda" deja de sentirse como magia — es, mecánicamente, la misma actualización de parámetros de T4, repetida millones de veces.
+- **La limitación humana que compensa M2:** la incapacidad de sostener en la mente la superficie completa de una función de muchas variables — el descenso de gradiente no necesita "verla": solo necesita la pendiente en el punto donde ya está parado, un paso a la vez.
 
 ### M3 · Probabilidad y estadística
 
@@ -301,6 +307,7 @@ Troncal: `M1 → M2 → M3 → M4`. M2 depende realmente de M1 (el gradiente y e
 - **Pregunta ingenieril:** encontraste una correlación fuerte entre dos variables de tu dataset — ¿qué evidencia adicional necesitarías antes de afirmar que una causa la otra?
 - **Idea universal (cierre de M3):** casi ningún dato real es determinista — razonar bien sobre IA significa razonar bien sobre incertidumbre, con las mismas herramientas con las que se razona sobre certezas: definiciones precisas y verificación numérica.
 - **La limitación humana que compensa M3:** el sesgo cognitivo documentado y universal ante el azar (falacia del fiscal, descuido de tasas base, mala interpretación del p-valor) — la disciplina formal de este módulo compensa exactamente esos sesgos con procedimiento, no con "más cuidado".
+- **Lo que deja de sorprender (M3):** que un modelo "se equivoque a veces" deja de sentirse como un defecto — cualquier sistema entrenado sobre datos con incertidumbre real (T1-T5) tiene, por diseño, un margen de error irreducible; la pregunta correcta pasa de "¿por qué falla?" a "¿su tasa de error medida es la que dice ser?" (T4).
 
 ### M4 · Lectura matemática
 
@@ -365,6 +372,8 @@ Troncal: `M1 → M2 → M3 → M4`. M2 depende realmente de M1 (el gradiente y e
 - **Práctica principal:** el propio proyecto de nivel (mini-librería + lectura de paper) — este tema y el proyecto son, deliberadamente, la misma actividad.
 - **Evaluación:** escrito, lectura de paper (RM-02).
 - **Pregunta ingenieril:** después de leer tu primer paper completo con esta disciplina, ¿qué cambió entre tu primera reacción al verlo y tu comprensión real después de aplicar M1-M4?
+- **El quiebre de intuición de M4:** el instante preciso en que un párrafo de notación que a primera vista parecía ilegible (una mezcla de griego, subíndices y operadores) se traduce, símbolo por símbolo, en código que el estudiante ya sabe escribir desde M1-M3 — la barrera no era de dificultad, era de familiaridad. Se construye eligiendo, a propósito, la ecuación de aspecto más intimidante del paper para la primera pasada, no la más simple.
+- **El supuesto que destruye:** "la notación de un paper de IA requiere formación matemática que no tengo" — se destruye viendo que cada símbolo, sin excepción, ya fue construido en M1-M3; lo único nuevo es la abreviatura tipográfica.
 - **Idea universal (cierre de M4 y del nivel):** ningún símbolo matemático es magia — cada uno tiene una definición precisa, aprendible, y traducible a código. "No entender la notación" casi siempre significa "no haber visto todavía el significado detrás del símbolo", no una limitación permanente.
 - **Lo que deja de sorprender (M4):** que un paper "parezca imposible de leer" a primera vista deja de sentirse como una barrera infranqueable — es, mecánicamente, una acumulación de símbolos ya conocidos (M1-M3) más una convención tipográfica (M4.T1-T4).
 

@@ -6597,6 +6597,7 @@ let curDay=null;
 let curLevel=0;
 function levelUnlocked(i){return i===0||LEVEL_META[i-1].approved()}
 function switchLevel(i){if(!levelUnlocked(i))return;curLevel=i;curDay=null;renderClases()}
+function rutaAbrirNivel(n){if(n>=LEVELS.length||!levelUnlocked(n))return;curLevel=n;curDay=null;go("clases")}
 function levelChips(){
   return LEVEL_META.map((m,i)=>{
     const on=i===curLevel,unlocked=levelUnlocked(i);
@@ -7360,13 +7361,16 @@ function renderRuta(){
           d.n.replace("Días ","D").replace("Día ","D")+(done?" ✓":cur?" ◀":"")+"</span>"}).join("");
       inner='<div class="bar" style="margin:8px 0 6px"><i style="width:'+pct+'%"></i></div><div>'+mini+"</div>";
     }
-    box.insertAdjacentHTML("beforeend",'<div class="'+cls+'"><div class="lvlnum">N'+l.n+"</div>"+
+    const abrible=l.n<LEVELS.length&&levelUnlocked(l.n);
+    const attrs=abrible?' style="cursor:pointer" onclick="rutaAbrirNivel('+l.n+')" tabindex="0" onkeydown="if(event.key===\'Enter\')rutaAbrirNivel('+l.n+')" title="Ver Nivel '+l.n+' en Clases"':"";
+    box.insertAdjacentHTML("beforeend",'<div class="'+cls+'"'+attrs+'><div class="lvlnum">N'+l.n+"</div>"+
      '<div style="flex:1"><div class="row" style="justify-content:space-between"><strong>'+l.t+"</strong>"+chip+"</div>"+
      '<div class="lvlmeta">'+l.d+"</div>"+inner+
      '<div class="small" style="margin-top:5px">Proyecto: <span class="muted">'+l.p+"</span></div>"+
      '<div class="small">Temas: <span class="muted">'+l.b+"</span></div>"+
      (l.cur?'<div class="small">Cursos: <span class="muted">'+l.cur+"</span></div>":"")+
      (l.job?'<div class="small">Puesto alcanzable: <span class="muted">'+l.job+"</span></div>":"")+
+     (abrible?'<p class="small muted" style="margin-top:8px">▶ Click para ver en Clases</p>':"")+
      "</div></div>");
   });
 }

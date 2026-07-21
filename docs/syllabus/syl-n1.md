@@ -19,7 +19,7 @@
 | M1 · Python profesional | 8 | ~5 | C-N1-01 | Descomposición de problemas |
 | M2 · POO | 7 | ~4 | C-N1-01, C-N1-02 | Diseño incremental |
 | M3 · Algoritmos y ED I | 8 | ~5 | C-N1-02, C-N1-06 | Depuración sistemática |
-| M4 · Git y GitHub | 4 | ~2 | C-N1-03 | Refactorización |
+| M4 · Git y GitHub | 4 | ~2,5 | C-N1-03 | Refactorización |
 | M5 · Linux, terminal y SO | 5 | ~2,5 | C-N1-04 | Pruebas |
 | M6 · Redes y APIs | 4 | ~2 | C-N1-05 | Decisiones de ingeniería |
 | M7 · SQL | 4 | ~2 | C-N1-05 | Documentación técnica |
@@ -372,14 +372,14 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **¿Y si no existiera?:** imagina seis meses de trabajo sin historial — un borrado accidental es definitivo, nadie sabe qué cambió ni por qué, y colaborar es pisarse. El mundo pre-Git existió; sus cicatrices explican cada pieza de la herramienta.
 
 **N1.M4.T2 · Ramas y merge**
-- **Objetivo:** desarrolla en ramas, fusiona y resuelve su primer conflicto sin miedo.
+- **Objetivo:** desarrolla en ramas, fusiona, resuelve su primer conflicto sin miedo, y limpia su propia historia local con rebase interactivo y stash antes de compartirla.
 - **Prerrequisitos:** T1.
 - **Competencias:** C-N1-03.
-- **Errores habituales:** trabajar todo en main; pánico ante el conflicto (es texto, no catástrofe); ramas eternas sin fusionar.
-- **Modelo mental:** la rama como **universo paralelo barato**: experimentas sin tocar la línea principal, y el merge reconcilia historias.
-- **Por qué:** existe porque el desarrollo real es paralelo y experimental / ahora porque ya hay repos propios donde practicarlo sin riesgo / habilita atacar el largo aliento y el capstone con experimentos seguros.
-- **Evidencia de dominio:** provoca y resuelve un conflicto deliberado explicando qué decidió conservar y por qué.
-- **Práctica principal:** laboratorio de conflicto inducido.
+- **Errores habituales:** trabajar todo en main; pánico ante el conflicto (es texto, no catástrofe); ramas eternas sin fusionar; hacer rebase de commits que ya se compartieron con otros (regla de oro de Missing Semester: nunca reescribir historia ya publicada).
+- **Modelo mental:** la rama como **universo paralelo barato**: experimentas sin tocar la línea principal, y el merge reconcilia historias; rebase interactivo como **editor de esa historia local**, antes de que se vuelva pública.
+- **Por qué:** existe porque el desarrollo real es paralelo y experimental / ahora porque ya hay repos propios donde practicarlo sin riesgo / habilita atacar el largo aliento y el capstone con experimentos seguros. **Profundización (ronda de EVT-053):** Missing Semester (MIT) enseña Git básico y avanzado en una sola clase, no en labs separados — el mismo laboratorio se profundiza con rebase interactivo (squash) y stash, en vez de crear un laboratorio nuevo.
+- **Evidencia de dominio:** provoca y resuelve un conflicto deliberado explicando qué decidió conservar y por qué; combina dos commits propios con rebase interactivo, solo en historia local todavía no compartida.
+- **Práctica principal:** laboratorio de conflicto inducido + rebase interactivo (squash) + stash/stash pop.
 - **Evaluación:** estándar.
 - **Pregunta ingenieril:** ¿cuándo merece una idea su propia rama y cuándo la rama es pura burocracia — qué te dice el tamaño y el riesgo del experimento?
 - **Idea universal:** aislar los experimentos abarata el riesgo — en el código y en cualquier sistema que no puedas permitirte romper.
@@ -399,21 +399,21 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **Idea universal:** un cambio que no puedes explicar no puede ser revisado; comunicar el cambio es parte del cambio.
 
 **N1.M4.T4 · README profesional e historia legible**
-- **Objetivo:** escribe READMEs que un tercero sigue sin preguntar, y mantiene la historia del repo como documentación viva.
+- **Objetivo:** escribe READMEs que un tercero sigue sin preguntar, mantiene la historia del repo como documentación viva, y usa blame/bisect para investigarla activamente.
 - **Prerrequisitos:** T1–T3.
 - **Competencias:** C-N1-03; ejercita A7 (escritura).
-- **Errores habituales:** README para uno mismo ("ya sé cómo se instala"); capturas en vez de instrucciones verificables; historia de commits inservible como narración.
-- **Modelo mental:** el repo como **producto con manual**: el código es la mitad; que otro pueda usarlo y entenderlo es la otra mitad.
-- **Por qué:** existe porque el test del examinador externo (6.4.3) juzga repos, no archivos / ahora porque cierra el módulo convirtiendo técnica en oficio / habilita el largo aliento B-M4 (refactorizar con historia legible) y el estándar de todos los repos futuros (pista 📦).
-- **Evidencia de dominio:** una persona sin contexto (el tutor en rol Cliente) instala y usa su proyecto solo con el README.
-- **Práctica principal:** cierre del largo aliento B-M4 + auditoría de README.
+- **Errores habituales:** README para uno mismo ("ya sé cómo se instala"); capturas en vez de instrucciones verificables; historia de commits inservible como narración; marcar un commit "good" en bisect sin verificar que de verdad no tenía el bug.
+- **Modelo mental:** el repo como **producto con manual**: el código es la mitad; que otro pueda usarlo y entenderlo es la otra mitad. blame y bisect como las herramientas concretas de la "arqueología del software" — no solo LEER la historia, investigarla activamente para responder una pregunta específica.
+- **Por qué:** existe porque el test del examinador externo (6.4.3) juzga repos, no archivos / ahora porque cierra el módulo convirtiendo técnica en oficio / habilita el largo aliento B-M4 (refactorizar con historia legible) y el estándar de todos los repos futuros (pista 📦). **Profundización (ronda de EVT-053):** blame ("¿quién y cuándo escribió esta línea?") y bisect ("¿en qué commit se rompió esto?", con la misma lógica de búsqueda binaria de M3) son la instanciación concreta de la "arqueología del software" que este módulo ya prometía en su cierre — antes descrita solo en prosa, ahora practicada con las herramientas reales.
+- **Evidencia de dominio:** una persona sin contexto (el tutor en rol Cliente) instala y usa su proyecto solo con el README; encuentra con bisect el commit exacto que introdujo un cambio específico en su propio repositorio.
+- **Práctica principal:** cierre del largo aliento B-M4 + auditoría de README + blame/bisect sobre historia propia.
 - **Evaluación:** estándar + revisión B-M4.
 - **Pregunta ingenieril:** si alguien sin contexto abre tu repositorio dentro de un año, ¿qué necesita encontrar para confiar en él — y por qué esa persona, con altísima probabilidad, serás tú?
 - **Idea universal:** el trabajo que no está documentado, a efectos del mundo, no existe.
 
 **Así se usa esto en el mundo real (cierre de M4).** No hay software profesional fuera de Git: cada empresa, cada proyecto open source, cada paper con código vive en un repositorio, y **tu perfil de GitHub es el currículum que sí se lee**. Errores típicos del principiante profesional: commits "cambios finales v2 AHORA SÍ", trabajar todo en main hasta el desastre, PRs de cuarenta archivos imposibles de revisar, repos sin README que mueren solos. Las empresas valoran la historia legible porque es auditoría, arqueología y comunicación a la vez: quien escribe buenos commits piensa en quien viene después — y esa es la señal de seniority más barata de detectar. Reaparece: en cada nivel desde aquí (todo proyecto vive en repo, pista 📦), en N2 (el CI/CD se dispara sobre estos commits), y en N11 (contribuir a open source real es exactamente este flujo, con desconocidos exigentes al otro lado).
 
-**Leer la historia de un proyecto — la arqueología del software (apartado de cierre de M4).** Un repositorio no solo guarda cambios: **conserva el razonamiento de quienes trabajaron antes**. El estudiante aprende a usar Git como herramienta de investigación: reconstruir por qué se tomó una decisión, qué problema intentaba resolver un commit, qué hipótesis se descartaron (las ramas muertas también hablan), cuándo apareció un bug (leer la historia hacia atrás) y qué cambió realmente entre dos versiones. Práctica: excavación guiada en un repositorio ajeno pequeño — responder tres preguntas sobre su pasado usando solo la historia. Esta habilidad se vuelve central en N11–N12, donde comprender proyectos complejos empieza siempre por leer su arqueología. *Principio explícito del módulo, presente en cada tema: Git es una herramienta psicológica antes que técnica — reduce el miedo, y un ingeniero sin miedo a experimentar aprende más rápido.*
+**Leer la historia de un proyecto — la arqueología del software (apartado de cierre de M4).** Un repositorio no solo guarda cambios: **conserva el razonamiento de quienes trabajaron antes**. El estudiante aprende a usar Git como herramienta de investigación: reconstruir por qué se tomó una decisión, qué problema intentaba resolver un commit, qué hipótesis se descartaron (las ramas muertas también hablan), cuándo apareció un bug (con `git bisect`, búsqueda binaria sobre commits — la misma idea de M3) y qué cambió realmente entre dos versiones (con `git blame`, línea por línea). Práctica: excavación guiada en un repositorio ajeno pequeño — responder tres preguntas sobre su pasado usando solo la historia. Esta habilidad se vuelve central en N11–N12, donde comprender proyectos complejos empieza siempre por leer su arqueología. *Principio explícito del módulo, presente en cada tema: Git es una herramienta psicológica antes que técnica — reduce el miedo, y un ingeniero sin miedo a experimentar aprende más rápido.*
 
 **La ética del historial (reflexión de cierre de M4).** La historia de un repositorio es un documento técnico: **no se manipula para parecer mejor, no oculta errores relevantes, no se usa para engañar revisiones**. Un historial limpio no significa un historial falso — significa uno que comunica honestamente cómo evolucionó la solución, incluidos los intentos que fallaron. La honestidad intelectual (D5) también se expresa en el código y en su historia: quien maquilla su pasado técnico está entrenándose para engañarse a sí mismo.
 
@@ -684,7 +684,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 | M1 | docs.python.org Tutorial (caps. 4–7) | Automate the Boring Stuff · CS50P |
 | M2 | docs Tutorial cap. 9 | CS50P OOP |
 | M3 | CS50 Week 3 (Algorithms, Big-O — T1-T2) · CS50 Week 5 (Data Structures: trees/hash tables — T7-T8) | visualizaciones de algoritmos |
-| M4 | Pro Git (caps. 1–3, gratuito) | GitHub Docs |
+| M4 | Pro Git (caps. 1–3, gratuito) | GitHub Docs · Missing Semester (MIT), Version Control — rebase/stash/blame/bisect (T2, T4) |
 | M5 | Missing Semester (MIT) | The Linux Command Line (caps. iniciales) |
 | M6 | MDN "How the Web works" | requests docs |
 | M7 | SQLite Tutorial · SQLBolt | docs sqlite3 (Python) |

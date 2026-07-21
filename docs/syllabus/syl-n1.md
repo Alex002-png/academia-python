@@ -17,7 +17,7 @@
 | Módulo | Temas | Semanas est.* | Competencias | Largo aliento (habilidad) |
 |---|---|---|---|---|
 | M1 · Python profesional | 8 | ~5 | C-N1-01 | Descomposición de problemas |
-| M2 · POO | 5 | ~3 | C-N1-01, C-N1-02 | Diseño incremental |
+| M2 · POO | 7 | ~4 | C-N1-01, C-N1-02 | Diseño incremental |
 | M3 · Algoritmos y ED I | 6 | ~4 | C-N1-02, C-N1-06 | Depuración sistemática |
 | M4 · Git y GitHub | 4 | ~2 | C-N1-03 | Refactorización |
 | M5 · Linux, terminal y SO | 5 | ~2,5 | C-N1-04 | Pruebas |
@@ -213,6 +213,30 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **Práctica principal:** defensa de diseño (rol Arquitecto en pequeño) + cierre del largo aliento B-M2.
 - **Evaluación:** estándar + revisión B-M2.
 - **Pregunta ingenieril:** ¿qué señales de un problema te harían elegir objetos desde el día uno, cuáles te dirían que unas funciones bastan — y qué cuesta equivocarse en cada dirección?
+
+**N1.M2.T6 · Clases abstractas y protocolos**
+- **Objetivo:** declara contratos entre clases con `abc.ABC`/`@abstractmethod` (herencia nominal) y `typing.Protocol` (tipado estructural), y distingue cuándo usar cada uno.
+- **Prerrequisitos:** T1–T5.
+- **Competencias:** C-N1-01, C-N1-02.
+- **Errores habituales:** olvidar `@abstractmethod` y descubrir en producción que una subclase cumple el contrato a medias; asumir que `Protocol` con `@runtime_checkable` verifica la firma completa de un método (solo verifica que el nombre del atributo exista).
+- **Modelo mental:** ABC como un contrato que Python hace cumplir al instanciar; Protocol como el mismo contrato, verificado por la forma del objeto, sin exigir herencia.
+- **Por qué:** existe porque T5 enseñó CUÁNDO una clase merece existir, pero no cómo declarar formalmente qué debe poder hacer / ahora porque el estudiante ya diseña jerarquías propias (T3) y necesita hacerlas verificables / habilita leer el mismo instinto en Pydantic (N2.M1.T3) antes de llegar ahí.
+- **Evidencia de dominio:** implementa un contrato con ABC y el mismo contrato con Protocol sobre una clase que no controla, y explica con un ejemplo real por qué `runtime_checkable` no sustituye una prueba real de comportamiento.
+- **Práctica principal:** ejercicios progresivos (bloqueo de instanciación → implementación → polimorfismo garantizado → Protocol → combinación de ambos) + laboratorio de notificadores intercambiables.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** si `isinstance` contra un Protocol dice que sí, pero el objeto en realidad no se comporta como promete, ¿qué mecanismo (además del tipo) necesitas para confiar en un contrato de verdad?
+
+**N1.M2.T7 · Testing de clases con pytest**
+- **Objetivo:** escribe pruebas automáticas (`assert`, patrón Arrange-Act-Assert) sobre el estado e invariantes de sus propias clases, sembrando el hábito que N2.M4 (TDD) formalizará.
+- **Prerrequisitos:** T1–T6.
+- **Competencias:** C-N1-01, C-N1-02.
+- **Errores habituales:** probar solo el camino feliz y nunca el caso que debería fallar; un `assert` sin mensaje que no dice nada útil cuando falla; confiar en que una clase "funciona" porque se probó una vez a mano.
+- **Modelo mental:** una prueba como Arrange (preparar el estado) → Act (ejecutar la acción) → Assert (verificar el resultado exacto, con mensaje).
+- **Por qué:** existe porque T2/T5 dejaron invariantes de estado sin ningún mecanismo que los verifique automáticamente / ahora porque el estudiante ya tiene clases reales propias (`ValidadorLogin`, `MonitorSensor` de T5) sobre las que probar / habilita la disciplina exacta que N2.M4.T2 (TDD, rojo-verde-refactor) exige desde su primer laboratorio.
+- **Evidencia de dominio:** escribe un test que revela un bug real no cubierto por las pruebas "obvias" de una clase dada (el mismo ejercicio del desafío final).
+- **Práctica principal:** progresión de pruebas (valor simple → invariante bajo múltiples operaciones → mensaje de fallo útil → mini test-runner) + laboratorio de una clase con múltiples invariantes.
+- **Evaluación:** estándar. **Nota de plataforma declarada honestamente:** el motor Pyodide de este Campus no tiene `pytest` instalado (sin mecanismo de instalación de paquetes en el motor) — se simula el patrón central (`test_*` + `assert` con mensaje) con Python nativo; en N2.M4 (terminal real), el mismo patrón se ejecuta con pytest de verdad.
+- **Pregunta ingenieril:** si todos tus tests pasan, ¿qué es lo único que eso te garantiza — y qué NO te garantiza sobre los casos que nunca se te ocurrió probar?
 
 **Así se usa esto en el mundo real (cierre de M2).** Prácticamente todo framework profesional te habla en clases: los modelos de Pydantic y los endpoints de FastAPI (N2), los `nn.Module` de PyTorch que heredarás para definir redes (N5), los agentes con estado y herramientas (N8) — saber POO es saber *leer* el ecosistema, no solo escribirlo. Errores típicos del principiante profesional: jerarquías de herencia de cinco pisos que nadie se atreve a tocar, "god objects" que lo saben todo, getters/setters rituales sin invariante que proteger, y clases sin estado que debieron ser funciones. Las empresas valoran este criterio porque el coste real del mal diseño OO no se paga al escribirlo — se paga cada vez que alguien intenta cambiarlo. Reaparece: N2 (modelos y capas del backend), N5 (herencia real en PyTorch), N8 (sistemas agénticos como objetos colaborando), N12 (el vocabulario de componentes del system design). **La idea que este módulo deja para siempre: el diseño consiste en tomar decisiones y pagar sus costes — no en aplicar paradigmas.**
 
@@ -650,7 +674,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 | H-01 | Funciones como valores (`sorted(key=...)`, M3.T3, declarado en ficha) | **Decoradores y closures — PRIMER tema de FastAPI**: N1 los excluyó deliberadamente porque aquí fallaba el "por qué ahora"; en N2 la necesidad es real e inmediata (`@app.get`) |
 | H-02 | La BD como notaría + procesos que escuchan puertos (M5.T3) + contratos remotos (M6) | **PostgreSQL como servidor**: la notaría deja de vivir en un archivo y se convierte en un proceso remoto con contrato — síntesis de tres piezas ya sembradas (semilla explícita en M7.T3) |
 | H-03 | "¿Quién espera cuando cientos compiten?" (M5.T3) + "¿dos transacciones a la vez?" (M7.T3) | **Concurrencia y async** (N2.M1): la necesidad está sembrada dos veces; N2 la responde |
-| H-04 | Pruebas antes del código (B-M5, A5, baterías propias del capstone) | **Testing formal y TDD** (N2.M3): el hábito existe; N2 le da disciplina e infraestructura |
+| H-04 | Pruebas antes del código (B-M5, A5, baterías propias del capstone) + T7 de M2 (assert/invariantes de clases, añadido en la profundización de N1) | **Testing formal y TDD** (N2.M4): el hábito existe; N2 le da disciplina e infraestructura |
 | H-05 | "¿Cómo se cambia un esquema con datos vivos?" (M7.T4) | **Migraciones** (N2.M2) |
 | H-06 | La estructura de la confianza — ¿quién eres? ¿cómo lo sé? ¿qué puedes? (M6.T2) | **Auth real: JWT/OAuth2** (N2.M1): la estructura mental está instalada; N2 la implementa |
 | H-07 | "Invertir una vez para ahorrar muchas" (M3.T3) | **Redis y cachés** (N2.M2): la idea ya tiene nombre propio en la cabeza del estudiante |

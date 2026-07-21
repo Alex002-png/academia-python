@@ -1,0 +1,24 @@
+# Investigación Pedagógica de N1.M2.T6-T7 — Contratos (ABC/Protocol) y Testing de clases
+
+*Construida bajo DOC-11 v2.0.1. Temas nuevos, añadidos por instrucción directa del Director tras el hallazgo de que N1 resultaba corto para un estudiante que empieza de cero (ver EVT de profundización). M2 pasa de 5 a 7 temas.*
+
+## 1–2. Fuentes y evidencia
+
+**T6 — `abc` y `typing.Protocol`, ambos verificados por fetch directo a la documentación oficial de Python (docs.python.org).** La cita textual del módulo `abc` confirma que `@abstractmethod` **"prevent[s] instantiation of classes that have not implemented"** todos los métodos abstractos — no es una convención de estilo, es un `TypeError` real y verificado en tiempo de ejecución. La documentación de `typing.Protocol` confirma la distinción real con ABC: *"Protocol classes are primarily used with static type checkers that recognize structural subtyping (static duck-typing)"* — un contrato sin herencia, verificable con `isinstance()` solo si la clase usa `@runtime_checkable`.
+
+**Hallazgo real encontrado durante la construcción, no asumido:** al verificar los ejercicios con ejecución real de Python, se confirmó que `isinstance(obj, ProtocoloRuntimeCheckable)` solo comprueba la PRESENCIA de un atributo con el nombre correcto — no que sea invocable ni que tenga la firma correcta. Un objeto con `self.area = "texto"` (un string, no un método) pasa la verificación igual que uno con un método real. Este hallazgo se convirtió directamente en el desafío final de T6 (`n1m2t6e7`), en vez de quedar como una nota de investigación sin uso pedagógico.
+
+**T7 — pytest, verificado por fetch directo (`docs.pytest.org/en/stable/how-to/assert.html`).** Cita textual: *"you can use pytest.raises() as a context manager"* para verificar excepciones. **Limitación técnica real declarada con honestidad:** el motor Pyodide de este Campus no tiene pytest instalado (no hay mecanismo de `micropip`/`loadPackage` en el código del motor, confirmado por búsqueda directa) — exactamente el mismo tipo de límite de plataforma ya declarado en N1.M6 (cliente HTTP simulado) y en la arquitectura de N2 (EVT-045). La solución es la misma que en esos casos: simular el patrón central (funciones `test_*` + `assert`, con mensaje) con `assert` nativo de Python (disponible en cualquier entorno, sin instalación), declarando explícitamente al estudiante que en su propia terminal (N2, Laboratorio 29, donde pytest ya está instalado) el mismo patrón se ejecuta y reporta automáticamente.
+
+## 3. Síntesis crítica
+
+**Conexión con contenido ya construido, no aislada:** T6 y T7 reutilizan deliberadamente las clases de T5 (`ValidadorLogin`, `MonitorSensor`) como material de ejercicio — el contrato (T6) y la prueba (T7) se aplican sobre diseños OOP que el estudiante ya construyó, no sobre ejemplos nuevos desconectados. T7 además cierra explícitamente hacia adelante: la nota sobre "una prueba que falta es un bug que no encontraste" siembra el concepto de cobertura que N2.M4 (Laboratorio 31) formalizará con `pytest-cov`.
+
+**CS50 (Harvard) y Missing Semester (MIT): declaración honesta de ausencia, verificada por WebFetch directo del syllabus real de ambos cursos.** Ninguno de los dos cubre programación orientada a objetos ni testing de clases como contenido propio — CS50 Week 6 (Python) lista textualmente solo "Functions, Arguments, Return Values; Variables; Boolean Expressions, Conditionals; Loops. Modules, Packages", sin mención de clases/objetos; Missing Semester no tiene ninguna lección dedicada a testing de unidades más allá de una mención tangencial en su lección de "Metaprogramming" (2020). No se fuerza una conexión institucional que no existe — la bibliografía de M2 sigue anclada en fuentes específicas de Python (docs.python.org, PyCon) y no en los dos cursos de referencia del nivel.
+
+## 4. Clasificación y falsabilidad
+
+**Evidencia sólida:** las tres citas técnicas (abc, typing.Protocol, pytest) verificadas por fetch directo a documentación oficial, más un hallazgo empírico propio (límite real de `runtime_checkable`) confirmado con ejecución real de Python, no solo lectura de documentación. **Ausencia declarada:** CS50/Missing Semester no aplican a T6/T7 — declarado explícitamente, no omitido en silencio. **Falsabilidad:** si una versión futura de Pyodide incorpora `micropip`/pytest real en el motor de este Campus, T7 debería revisarse para usar pytest real en vez de la simulación con `assert` nativo — el propio tema declara esta limitación como de plataforma, no de contenido, exactamente el mismo principio ya usado en N1.M6 y N2 (EVT-045).
+
+## Estado
+✅ Completa. 2 temas nuevos (T6, T7), 7 ejercicios cada Parte 1 + 2 ejercicios cada Parte 2 + laboratorio + desafío final, todos verificados con ejecución real de Python antes de insertarse en `index.html`. M2 pasa de 5 a 7 temas (Días 15-28).

@@ -113,7 +113,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **Pregunta ingenieril:** ¿qué errores debería atrapar tu programa y cuáles debería dejar que lo detengan — y qué pasa si eliges mal en cada dirección?
 
 **N1.M1.T6 · Módulos, paquetes y entornos virtuales**
-- **Objetivo:** organiza código en módulos propios, importa con criterio y aísla dependencias en entornos virtuales.
+- **Objetivo:** organiza código en módulos propios, importa con criterio, convierte una carpeta en un paquete real (`__init__.py`, API pública curada) y aísla dependencias en entornos virtuales.
 - **Prerrequisitos:** T1; M5.T1 (entorno real instalado).
 - **Competencias:** C-N1-01, C-N1-04.
 - **Errores habituales:** imports circulares; confundir script con módulo (`__main__`); instalar todo global; copiar código en vez de importarlo.

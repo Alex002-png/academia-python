@@ -22,7 +22,7 @@
 | M4 · Git y GitHub | 4 | ~2,5 | C-N1-03 | Refactorización |
 | M5 · Linux, terminal y SO | 5 | ~2,5 | C-N1-04 | Pruebas |
 | M6 · Redes y APIs | 6 | ~3 | C-N1-05 | Decisiones de ingeniería |
-| M7 · SQL | 4 | ~2 | C-N1-05 | Documentación técnica |
+| M7 · SQL | 6 | ~3 | C-N1-05 | Documentación técnica |
 | Capstone ET1 | — | ~3 | Todas + C-N1-07 | Integración |
 
 *\*~5 meses · ~500 h a dedicación pactada. El calendario estima, la compuerta decide (14.2).*
@@ -666,6 +666,30 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 - **Persistencia como responsabilidad** *(reflexión permanente, mejora 15)*: guardar no es escribir en disco — **persistir es asumir responsabilidad sobre el futuro**. Cada dato que decides almacenar responde: ¿cuánto tiempo vivirá? ¿quién podrá modificarlo? ¿quién podrá confiar en él? ¿cuándo dejará de ser válido? ¿cómo se recupera si algo falla? La persistencia es una decisión de ingeniería, no una operación técnica.
 - **Idea universal:** diseña sabiendo que el modelo de datos sobrevivirá al código que lo rodea.
 
+**N1.M7.T5 · Índices y planes de consulta**
+- **Objetivo:** crea índices, lee EXPLAIN QUERY PLAN para confirmar si una consulta usa SCAN u SEARCH USING INDEX, y entiende el índice como un árbol (M3.T7) aplicado dentro del motor de SQL.
+- **Prerrequisitos:** T1–T2; M3.T1 (Big-O), M3.T7 (árboles).
+- **Competencias:** C-N1-05, C-N1-02.
+- **Errores habituales:** asumir que SQL "ya es rápido" sin verificar el plan real; indexar todo "por si acaso" sin medir si el índice se usa; no indexar columnas que sí se filtran constantemente.
+- **Modelo mental:** un índice como el mismo BST de M3.T7, ahora dentro del motor de la base de datos — convierte O(n) en O(log n).
+- **Por qué:** existe porque M7.T2 ya insinuó ("alguien calcula el Big-O de M3 por ti") sin darle tema propio / ahora porque el estudiante ya domina árboles y Big-O (M3) y puede apreciar el mecanismo real / habilita que el diseño de esquema (T4, T6) incluya criterio real de qué indexar, no solo qué tablas crear.
+- **Evidencia de dominio:** demuestra con EXPLAIN QUERY PLAN, no solo de palabra, el cambio de SCAN a SEARCH al crear un índice, y explica el trade-off de costo en escritura.
+- **Práctica principal:** progresión (SCAN sin índice → SEARCH con índice → índice multi-columna → covering index → verificación programática) + laboratorio de antes/después en la misma sesión.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** si una tabla es pequeña (50 filas) y se reescribe cada minuto, ¿sigue conviniendo indexarla? ¿Qué cambia si la tabla creciera a 10 millones de filas?
+
+**N1.M7.T6 · Normalización y claves foráneas avanzada**
+- **Objetivo:** activa `PRAGMA foreign_keys` correctamente, elige entre `ON DELETE CASCADE` y `SET NULL` según el dominio, y detecta violaciones de Primera Forma Normal (1NF).
+- **Prerrequisitos:** T1, T4.
+- **Competencias:** C-N1-05, C-N1-02.
+- **Errores habituales:** confiar en `ON DELETE CASCADE` sin haber activado `PRAGMA foreign_keys = ON` (SQLite las tiene desactivadas por defecto — el error más silencioso posible); guardar listas separadas por comas en una columna (viola 1NF); elegir CASCADE/SET NULL sin pensar en el dominio.
+- **Modelo mental:** CASCADE para datos que no tienen sentido sin su padre; SET NULL para datos que sí conservan valor propio aunque pierdan la referencia.
+- **Por qué:** existe porque T4 ya detecta un tipo de columna sin normalizar (`autor_nombre`) pero no otra forma real (listas en una columna) / ahora porque el estudiante ya diseña esquemas completos (T4) y necesita controlar qué pasa al borrar / habilita cerrar M7 (y todo N1) con el gotcha real de SQLite documentado explícitamente, en vez de descubrirlo por accidente en el Capstone. Cierra M7 y todo N1.
+- **Evidencia de dominio:** construye un esquema con AMBAS estrategias de borrado (CASCADE y SET NULL) en relaciones distintas del mismo dominio, con `PRAGMA foreign_keys` activo, y confirma el resultado real de cada una.
+- **Práctica principal:** progresión (CASCADE sin PRAGMA, huérfano sobrevive → CASCADE con PRAGMA, funciona → SET NULL → detectar 1NF → elegir estrategia) + laboratorio de esquema con dos estrategias mezcladas — cierre del hilo completo de N1.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** ¿por qué SQLite desactiva las claves foráneas por defecto, y qué tuvo que salir mal en algún proyecto real para que esto se convirtiera en una advertencia documentada de forma tan explícita?
+
 **Así se usa esto en el mundo real (cierre de M7).** La notaría de datos está debajo de todo lo que el estudiante construirá: el backend de N2 es exactamente este patrón con PostgreSQL en serio (más migraciones, índices y concurrencia), las consultas declarativas reaparecen como pandas en N4, las bases vectoriales de N7 son este mismo problema con embeddings en vez de filas, y N9 pregunta qué pasa cuando la notaría debe repartirse entre máquinas. Errores típicos del principiante profesional: la inyección SQL (décadas en el top de vulnerabilidades del mundo — y se previene con lo aprendido en T3), el problema N+1 (mil consultas donde bastaba un JOIN), usar JSON como base de datos "porque era más fácil", y el esquema diseñado para el ejemplo que muere con el primer requisito nuevo. Las empresas valoran esto porque los datos son el único componente del sistema que no se puede reescribir: el código malo se tira; los datos corruptos se lloran. Reaparece: N2 (persistencia de producción), N4 (datos para ML), N7 (vector DBs), N9 (datos distribuidos). **Institución de la ingeniería:** la base de datos es la institución que **garantiza consistencia** — la verdad de los datos se mantiene aunque los programas fallen y los humanos se equivoquen. *(El eje filosófico queda completo en N1: toda la ingeniería consiste en construir instituciones que mantienen propiedades importantes incluso cuando los humanos se equivocan — Git/historia, SO/aislamiento, HTTP/acuerdos, BD/consistencia.)*
 
 **La idea que este módulo deja para siempre: los datos valen lo que valen sus garantías — el código se reescribe; la verdad corrompida no se recupera.**
@@ -711,7 +735,7 @@ Troncal `M1 → M2 → M3`; **M4 y M5 en paralelo desde la semana 1** *(diseño 
 | M4 | Pro Git (caps. 1–3, gratuito) | GitHub Docs · Missing Semester (MIT), Version Control — rebase/stash/blame/bisect (T2, T4) |
 | M5 | Missing Semester (MIT) | The Linux Command Line (caps. iniciales) |
 | M6 | MDN "How the Web works" | requests docs |
-| M7 | SQLite Tutorial · SQLBolt | docs sqlite3 (Python) |
+| M7 | SQLite Tutorial · SQLBolt · CS50 Week 7 (SQL — T1-T4) | docs sqlite3 (Python) · SQLite Query Planner / EXPLAIN QUERY PLAN docs (T5) |
 
 ## Herencias declaradas a SYL-N2 *(resultado de la auditoría final, paso 9)*
 

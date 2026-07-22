@@ -48,8 +48,13 @@ Cada cifra —parámetros, precisión antes/después, mensaje de error— se gen
 
 ## 9. N5.M3.T3 · RNN/LSTM (mecanismo, Python puro) — cómo enseñan este concepto exacto las fuentes de referencia
 
+*(Actualizado tras la expansión de densidad de 3 días/13 items a 13 días/13 items: se corrigió un vacío real — el tema construía una celda LSTM completa sin citar jamás a sus autores.)*
+
 - **Karpathy, *Zero to Hero* / makemore** (Historial de SYL-N5): mismo principio de mecanismo-antes-que-framework aplicado ya en M1 y M3.T1 — este tema construye la celda recurrente y LSTM a mano, antes de que M3.T4 las entrene con `nn.RNN`/`nn.LSTM` reales.
 - **DL Specialization (Ng), Curso 5 "Sequence Models"** (bibliografía oficial DOC-10 §7): introduce la RNN con el mismo modelo mental de "estado que se pasa de un paso al siguiente" antes de la notación matemática completa — mismo orden pedagógico que este tema.
+- **Elman (1990, "Finding Structure in Time", *Cognitive Science* 14(2):179-211, verificado por WebSearch):** origen real de la red recurrente simple (SRN/"red de Elman"), construyendo sobre Jordan (1986) — usado en el Día 71 para anclar la celda recurrente en su fuente histórica real, con el hallazgo notable de que Elman entrenó su red para descubrir estructura gramatical sin reglas programadas a mano.
+- **Werbos (1988, "Generalization of Backpropagation with Application to a Recurrent Gas Market Model", *Neural Networks* 1(4):339-356, popularizado 1990, verificado por WebSearch):** origen de BPTT — "desenrollar" la RNN en el tiempo para aplicar backpropagation estándar. Usado en el Día 79 para anclar BPTT en su fuente real, en vez de presentarlo solo como "la regla de la cadena aplicada al tiempo" sin atribución.
+- **Hochreiter y Schmidhuber (1997, "Long Short-Term Memory", *Neural Computation* 9(8):1735-1780, verificado por WebSearch):** LA cita que faltaba por completo en la versión original del tema — el laboratorio integrador ya construía una celda LSTM entera sin nombrar jamás a sus autores. Corregido en el Día 81, conectado explícitamente con la tesis de 1991 de Hochreiter (ya citada en M1.T1/T3) sobre el problema exacto que LSTM fue diseñado a resolver.
 
 ## 10. Bug real encontrado y corregido por el propio harness — evidencia directa de la disciplina de la guía §9
 
@@ -66,7 +71,7 @@ El tema completo demuestra, con tres piezas de evidencia numérica real (Ejercic
 
 ## 13. Estrategia adoptada para este tema
 
-Cada valor —incluyendo el que se corrigió tras el hallazgo del harness— se generó (o regeneró) ejecutando Python real (`verify_n5m3t3_full.py`) antes de comitear; harness de Node: 13/13 pass tras la corrección. **Falsable por:** el diseño de LSTM de este tema es deliberadamente simplificado (una sola compuerta de olvido/entrada/salida por unidad, pesos compartidos entre compuertas por simplicidad pedagógica) — no es la arquitectura LSTM completa de Hochreiter & Schmidhuber (1997); esa versión completa se entrena con `nn.LSTM` real en M3.T4, donde la implementación exacta ya no depende de simplificaciones pedagógicas.
+Orden tras la expansión: celda recurrente con origen histórico real (Día 71) → desenrollar sobre una secuencia (Día 72) → observaciones empíricas del desvanecimiento y la sensibilidad al orden (Días 73-74) → parámetros compartidos en el tiempo (Día 75) → estado vectorial (Días 76-77) → BPTT con origen histórico real (Días 78-79) → cuantificación del desvanecimiento (Día 80) → LSTM con sus autores reales por fin citados (Día 81) → LSTM sobre una secuencia (Día 82) → desafío final (Día 83). Cada valor —incluyendo el que se corrigió tras el hallazgo del harness original— se generó (o regeneró) ejecutando Python real (`verify_n5m3t3_full.py`) antes de comitear; harness de Node (`harness-n5-m3t3-full.js`) confirmó 13/13 aciertos tras la expansión de 3 días/13 items a 13 días/13 items. **Falsable por:** el diseño de LSTM de este tema es deliberadamente simplificado (una sola compuerta de olvido/entrada/salida por unidad, pesos compartidos entre compuertas por simplicidad pedagógica) — no es la arquitectura LSTM completa de Hochreiter & Schmidhuber (1997), ahora correctamente citada como la fuente real de la que esta simplificación se deriva; esa versión completa se entrena con `nn.LSTM` real en M3.T4, donde la implementación exacta ya no depende de simplificaciones pedagógicas.
 
 ## 14. N5.M3.T4 · RNN/LSTM entrenada de verdad — cómo enseñan este concepto exacto las fuentes de referencia
 

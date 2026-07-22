@@ -104,6 +104,8 @@ Compara contra los ~46-184 calculados en el Paso 2.
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: ninguna de las 7 categorías aplica de forma directa — es aritmética en Python puro, independiente de versión de librería, SO o red. Las cifras de TFLOPS/ancho de banda usadas sí dependen de qué GPU tiene el estudiante (RTX 5070 de referencia), pero eso es una entrada declarada del cálculo, no un error de configuración del sistema.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | Ridge point con 988 TOPS da un número absurdo | Mezcla precisiones reducidas no comparables al FLOPS de precisión estándar. | Compara el orden de magnitud contra los 123.5 TFLOPS reales. | Busca si NVIDIA asume sparsity estructurada sin decirlo en el titular. | Usa siempre TFLOPS de precisión densa estándar. | Tratar cifras de marketing con el mismo escepticismo que cifras económicas de M1.T1b. |

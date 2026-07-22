@@ -96,6 +96,8 @@ Observa el código HTTP exacto que arXiv devuelve — no lo que crees que "deber
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: curl (error inducido en vivo) viene preinstalado en todo SO moderno, sin permisos ni configuración especiales, y el código HTTP 404 es independiente de su versión. Única categoría que sí aplica: interferencia de software externo — un proxy corporativo o firewall puede alterar el código HTTP observado, primera causa a descartar si el resultado no coincide con lo esperado.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | No encuentro la cita de la analogía | Los papers concentran la analogía central en abstract/introducción. | Revisa esas secciones primero. | Busca "virtual memory"/"paging" con Ctrl+F. | Localiza la cita exacta ahí. | Revisar siempre abstract+introducción antes de buscar en el cuerpo. |

@@ -134,6 +134,8 @@ Detén el servicio de Ollama a propósito y ejecuta tu cliente CON timeout del P
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: cuatro de las 7 categorías aplican de forma real en este laboratorio — diferencias de SO (el comando para detener Ollama difiere por plataforma), configuración ausente o incorrecta (timeout mal calibrado, causa raíz de la fila 1), estado previo inconsistente (servicio detenido a medias o reiniciándose, el escenario exacto del error en vivo) e interferencia de software externo (un firewall local bloqueando el puerto 11434 produce un síntoma similar, descartable con 'ollama ps'). PATH, permisos y versión no aplican — Python/requests ya están instalados y su comportamiento de timeout es estable.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | Mi timeout se siente demasiado largo o corto | Elegido sin datos reales de latencia normal. | Compara contra la distribución real medida en M2.T3. | Mide el percentil alto (p99), no el promedio. | Ajusta con margen sobre el percentil alto. | Nunca fijar un timeout sin medir antes. |

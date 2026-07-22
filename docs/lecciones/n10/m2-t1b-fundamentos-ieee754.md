@@ -113,6 +113,8 @@ Observa el resultado exacto antes de leer la explicación — no es lo que la ma
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: ninguna de las 7 categorías aplica de forma directa — Python/numpy ya están disponibles desde M2.T1, el comportamiento de np.float16 ante overflow es estable entre versiones, la representación numérica es igual en cualquier SO, no depende de GPU ni de ejecuciones anteriores, y no hay red ni proceso externo involucrado.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | struct.pack da un resultado inesperado para negativos/muy pequeños | Casos especiales de IEEE 754 (cero, infinito, NaN) tienen patrones específicos. | Compara el patrón de un número y su negativo — deben diferir solo en el primer bit. | Prueba 0.0 y -0.0. | Verifica contra la tabla de casos especiales de IEEE 754. | Probar siempre casos límite al explorar una representación nueva. |

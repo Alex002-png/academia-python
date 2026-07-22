@@ -95,6 +95,8 @@ Intenta convertir un modelo de una arquitectura poco común o reciente. Observa 
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: dos categorías son la causa raíz de este laboratorio — diferencias de versión (una versión desactualizada de transformers no reconoce la arquitectura nueva, causa directa del error en vivo) y configuración ausente o incorrecta (un config.json incompleto sin el campo "architectures" produce el KeyError). PATH, permisos, SO, estado previo e interferencia externa no aplican — el script es Python puro y cada intento de conversión es independiente.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | `KeyError: 'architectures'` | El config.json no declara ese campo. | Abre el config.json y confirma si falta. | Compara contra un config.json de un modelo que sí convierte bien. | Si falta genuinamente, es problema del modelo publicado, no tuyo. | Verificar config.json antes de convertir. |

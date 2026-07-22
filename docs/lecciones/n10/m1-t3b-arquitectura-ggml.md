@@ -88,6 +88,8 @@ Compara cuántas líneas/tamaño tiene la carpeta `ggml/` frente al resto del pr
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: dos categorías aplican — diferencias de SO (el comando de tamaño de carpeta difiere entre Windows y Unix, declarado en el error en vivo) y diferencias de versión (el número exacto de líneas de ggml/ puede variar levemente entre versiones de llama.cpp por refactors o nuevos backends, aunque la conclusión cualitativa se mantiene). PATH, permisos, configuración, estado previo e interferencia externa no aplican — es lectura de código ya clonado, sin compilación ni red.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | No encuentro ggml/ en mi clon | Versiones distintas reorganizan la estructura — puede vivir como submódulo git. | Revisa si existe .gitmodules en la raíz. | Si es submódulo, `git submodule update --init`. | Trae el contenido del submódulo. | Verificar la estructura real, no asumirla. |

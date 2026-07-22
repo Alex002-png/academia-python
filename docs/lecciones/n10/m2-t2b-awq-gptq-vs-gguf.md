@@ -86,6 +86,8 @@ Observa el código HTTP exacto que devuelve.
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: curl (error inducido en vivo) viene preinstalado en todo SO moderno, sin permisos ni configuración especiales, y el código HTTP 404 es independiente de su versión. Única categoría que sí aplica: interferencia de software externo — un proxy corporativo o firewall puede alterar el código HTTP observado, primera causa a descartar si el resultado no coincide con lo esperado.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | `curl` a `arxiv.org/abs/2306.009780` devuelve HTTP 404 (error inducido en vivo) | El dígito extra al final no corresponde a ningún paper real. | Compara el código HTTP del identificador con el dígito de más (404) contra el real (200). | Repite el comando con el identificador exacto y confirma que pasa de 404 a 200. | Copia siempre el identificador exacto desde una fuente confiable, nunca lo teclees de memoria. | Verificar el identificador exacto de una fuente académica ANTES de citarla — el mismo hábito que ya corrigió una cita errónea en M2.T1b. |

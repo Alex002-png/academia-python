@@ -104,7 +104,7 @@ Observa el código HTTP exacto que devuelve — no lo que crees que "debería" d
 
 ## 9. Diagnóstico de errores
 
-*Checklist de categorías revisada: laboratorio de investigación y cálculo — ninguna de las 7 categorías estándar (PATH, permisos, versión, SO, configuración, estado previo, interferencia externa) aplica; no hay instalación de software.*
+*Checklist de categorías revisada: curl (error inducido en vivo) viene preinstalado en todo SO moderno, sin permisos ni configuración especiales, y el código HTTP 404 es independiente de su versión. Única categoría que sí aplica: interferencia de software externo — un proxy corporativo o firewall puede alterar el código HTTP observado, primera causa a descartar si el resultado no coincide con lo esperado.*
 
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|

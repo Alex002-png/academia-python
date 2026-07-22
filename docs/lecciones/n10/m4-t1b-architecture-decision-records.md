@@ -84,6 +84,8 @@ Observa el resultado real.
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: curl (error inducido en vivo) viene preinstalado en todo SO moderno, sin permisos ni configuración especiales, y el código HTTP 404 es independiente de su versión. Única categoría que sí aplica: interferencia de software externo — un proxy corporativo, firewall o límite de tasa de GitHub por IP puede alterar el código HTTP observado, primera causa a descartar si el resultado no coincide con lo esperado.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | `curl` a `github.com/kubernetes/kubernetes/tree/master/adr` devuelve HTTP 404 (error inducido en vivo) | Kubernetes usa KEPs (Kubernetes Enhancement Proposals), no ADR, en un repositorio separado. | Compara contra el mismo tipo de búsqueda en Cosmos SDK (docs/architecture, que sí existe). | Busca "KEP" en vez de "ADR" en el repositorio de Kubernetes. | Usa Backstage o Cosmos SDK como ejemplos verificados de ADR real. | Verificar con un comando real que un proyecto usa el término y formato exactos antes de citarlo como precedente. |

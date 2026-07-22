@@ -93,6 +93,8 @@ Observa el resultado exacto — no es lo que la mayoría espera la primera vez.
 
 ## 9. Diagnóstico de errores
 
+*Checklist de categorías revisada: nvidia-smi (error inducido en vivo) viene con el driver de NVIDIA ya instalado desde M1.T3, sin permisos ni configuración especiales, y el comando es idéntico en Windows/Linux. Única categoría que sí aplica: diferencias de versión — la lista exacta de campos consultables de nvidia-smi puede variar entre versiones de driver; el hallazgo central (l2_cache_size no es un campo válido) se confirmó en la versión usada para verificar este laboratorio, vale la pena reconfirmar con 'nvidia-smi --help-query-gpu' en tu propia instalación.*
+
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | Mi cálculo no coincide con la VRAM medida en M3.T4 | La fórmula es una aproximación — no incluye overhead ni optimizaciones de atención. | Compara orden de magnitud, no valor exacto. | Revisa si el modelo usa GQA/MQA. | Ajusta la fórmula si confirmas la optimización. | Tratar fórmulas de estimación como modelos aproximados a verificar. |

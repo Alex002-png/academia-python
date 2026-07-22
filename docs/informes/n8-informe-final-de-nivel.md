@@ -1,6 +1,16 @@
 # Informe Final de Nivel — N8 · AI Systems
 
-**Estado declarado por esta ventana: candidato a v1.0.0, con 2 reservas nombradas y acotadas** (mismo patrón que N3 antes del veredicto del Director). El sello "v1.0.0" es exclusivo del Director (§12 de `docs/guia-construccion-niveles.md`) — este informe no lo autodeclara, lo solicita con la evidencia completa detrás.
+**Actualización de cierre (2026-07-22):** el Director revisó este informe y fijó los criterios de cierre directamente. Veredicto: **N8 candidato a v1.0.0, sin reservas bloqueantes.** Las 2 reservas originales quedaron resueltas en su disposición institucional (no en su sustancia técnica, que permanece declarada con honestidad):
+
+1. **Carga estimada** — corregida vía PATCH administrativo DOC-10 1.0.4 (de "~5 meses·~500h" a "~6-7 semanas·~170h", verificado por suma real de los 22 `duracionTotal` de `LEVEL8`). Instrucción explícita del Director: no inflar la cifra para sostener una expectativa histórica no auditada — si el contenido real justifica una duración distinta, la documentación se actualiza para reflejarla.
+2. **Verificación empírica real de 8/22 `errorVivo` dependientes de comportamiento de LLM** — permanece **explícitamente registrada como limitación conocida**, no resuelta de raíz ni bloqueante. Instrucción explícita del Director: preferir una limitación declarada con transparencia antes que una verificación ficticia; la comprobación real se realizará más adelante sobre el entorno definitivo.
+3. **Propagación de las decisiones institucionales** (plataforma-no-aplicación, agnosticismo de proveedor) — el Director confirmó explícitamente que no corresponde resolverse desde la ventana de N8, por afectar a varios niveles simultáneamente; queda para el documento maestro o la ventana coordinadora.
+
+El sello final de "v1.0.0" y la fusión a `main` siguen siendo actos exclusivos del Director desde la ventana coordinadora (§11, §12 de `docs/guia-construccion-niveles.md`) — este informe documenta el cierre institucional, no lo ejecuta.
+
+---
+
+**Estado histórico de este informe antes del cierre (referencia):** candidato a v1.0.0, con 2 reservas nombradas y acotadas — texto original de las secciones 1-10 sin modificar debajo, salvo las notas de cierre en §7 y en la solicitud final.
 
 ---
 
@@ -38,8 +48,8 @@ H-N9-01…06 completas en `syl-n8.md` §8.2. Las dos más importantes por ser br
 
 ## 7. Riesgos pedagógicos abiertos
 
-1. **Verificación empírica incompleta de 8 `errorVivo` (36% del total, concentrados en M4).** Construidos contra documentación oficial verificada, nunca ejecutados con costo real durante esta sesión (sin credenciales propias ni presupuesto disponible). Mitigado con honestidad explícita en el contenido; no resuelto de raíz. **Riesgo concreto:** un estudiante real podría no reproducir exactamente el desenlace descrito — el contenido ahora lo anticipa y reencuadra el valor pedagógico en la observación propia, pero la reserva sigue abierta hasta verificación real.
-2. **Carga estimada de DOC-10 §8 (~500h) no verificada contra el contenido construido** (~90-250h calculado por cálculo directo de las 22 `duracionTotal` reales). Mismo patrón de placeholder no auditado que afectó a N3 antes de su PATCH 1.0.3 — aquí en dirección de sobreestimación, no subestimación.
+1. **[CERRADO institucionalmente el 2026-07-22, sustancia técnica sin resolver por decisión explícita del Director] Verificación empírica incompleta de 8 `errorVivo` (36% del total, concentrados en M4).** Construidos contra documentación oficial verificada, nunca ejecutados con costo real durante esta sesión (sin credenciales propias ni presupuesto disponible). Mitigado con honestidad explícita en el contenido; no resuelto de raíz. El Director revisó este riesgo y decidió explícitamente **mantenerlo como limitación conocida y transparente** en vez de forzar una verificación ficticia — la comprobación real queda diferida al entorno definitivo, y esta decisión, no la verificación en sí, es lo que cierra el riesgo a nivel institucional. **Riesgo técnico igual de real que antes:** un estudiante real podría no reproducir exactamente el desenlace descrito — el contenido ya lo anticipa y reencuadra el valor pedagógico en la observación propia.
+2. **[RESUELTO el 2026-07-22, PATCH DOC-10 1.0.4] Carga estimada de DOC-10 §8 (~500h) no verificada contra el contenido construido** — corregida a ~170h (suma real de los 22 `duracionTotal` + estimación del proyecto a dedicación pactada de 25h/semana), por instrucción directa del Director, con el criterio explícito de no inflar la cifra para sostener una expectativa histórica. Mismo patrón de placeholder no auditado que afectó a N3 antes de su PATCH 1.0.3 — aquí en dirección de sobreestimación, no subestimación.
 
 ## 8. Hipótesis pendientes de validación
 
@@ -73,10 +83,12 @@ H-N9-01…06 completas en `syl-n8.md` §8.2. Las dos más importantes por ser br
 | `docs/informes/n8-informe-final-de-nivel.md` | Este documento |
 | `index.html` (`LEVEL8`) | 22 laboratorios DOC-12 + proyecto de nivel, verificado en cada commit |
 
-**Commits de la rama `nivel/n8`** (orden cronológico): syllabus → M1 → M2 → M3 → M4 → M5 → proyecto → compuertas → auditoría integral+correcciones → Herencias Declaradas → auditoría adversarial+correcciones → este informe.
+**Commits de la rama `nivel/n8`** (orden cronológico): syllabus → M1 → M2 → M3 → M4 → M5 → proyecto → compuertas → auditoría integral+correcciones → Herencias Declaradas → auditoría adversarial+correcciones → este informe → PATCH DOC-10 1.0.4 + cierre institucional.
 
-**Solicitud explícita a la ventana coordinadora / Director:**
-1. Veredicto sobre "candidato a v1.0.0" (este informe no lo autodeclara).
-2. PATCH administrativo de la carga estimada de N8 en DOC-10 §8 (reserva #2 de la auditoría adversarial), mismo mecanismo ya usado para N3.
-3. Propagación de las 2 decisiones institucionales (plataforma-no-aplicación, agnosticismo de proveedor) a `guia-construccion-niveles.md`/DOC-10 y comunicación a las ventanas N6, N7, N9-N12 — fuera de mi autoridad como ventana de N8 (§12 de la guía maestra).
-4. Decisión sobre si la reserva #1 (verificación empírica real de 8 `errorVivo`) se resuelve antes de v1.0.0 o se acepta como reserva documentada, igual que N3 llegó a v1.0.0 con 2 reservas resueltas después por instrucción directa del Director.
+**Resolución de la solicitud original (2026-07-22, instrucción directa del Director):**
+1. ~~Veredicto sobre "candidato a v1.0.0"~~ → **Resuelto: candidato a v1.0.0, sin reservas bloqueantes.**
+2. ~~PATCH administrativo de la carga estimada~~ → **Resuelto: DOC-10 1.0.4 aplicado, ~170h.**
+3. ~~Propagación de las 2 decisiones institucionales~~ → **Confirmado explícitamente por el Director: no corresponde a la ventana de N8** — queda para el documento maestro/ventana coordinadora, sin fecha comprometida por esta ventana.
+4. ~~Decisión sobre la reserva de verificación empírica~~ → **Resuelto: queda como limitación conocida, declarada con transparencia, diferida al entorno definitivo — decisión explícita del Director, no autoconcedida por esta ventana.**
+
+**Pendiente real, fuera de esta ventana:** fusión de `nivel/n8` a `main` y sello formal de v1.0.0 en el Blueprint (Apéndice E, EVT) — actos exclusivos de la ventana coordinadora.

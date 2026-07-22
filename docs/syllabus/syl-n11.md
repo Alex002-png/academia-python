@@ -82,10 +82,10 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** el método de las tres pasadas de Keshav — pasada 1 (5-10 min: título/resumen/introducción/encabezados/conclusiones, decide si vale la pena) → pasada 2 (~1 h: figuras, argumento completo, referencias no leídas anotadas) → pasada 3 (horas: re-derivar el trabajo, como si lo reimplementaras).
 - **Por qué:** existe porque ET4 completa ya presupone razonar sobre arquitecturas reales, pero nunca exigió leer la fuente primaria que las originó / ahora porque es el primer acto de un investigador junior real / habilita T2-T5 y, en última instancia, la elección informada del paper del capstone.
 - **Evidencia de dominio:** decide, en una pasada 1 cronometrada sobre un paper nunca visto, si lo reproduciría o no — y defiende esa decisión con evidencia concreta del propio paper, no con intuición.
-- **Práctica principal:** laboratorio real (`modalidad:"real"`) — pasada 1 sobre 3 papers de frontera reales de distintas subáreas (elegidos por el estudiante desde arXiv/Hugging Face Papers), con bitácora de la decisión de cada uno.
+- **Práctica principal:** laboratorio real (`modalidad:"real"`) — pasada 1 sobre 3 papers de frontera reales de distintas subáreas (elegidos por el estudiante desde arXiv/Hugging Face Papers), con bitácora de la decisión de cada uno. *(Profundización 2026-07-22: además, triangula la decisión con el método complementario de Andrew Ng — Stanford CS230 L8 — sobre el mismo paper, y documenta cuando ambos métodos divergen.)*
 - **Evaluación:** checkpoints DOC-12 (cronometraje real de la pasada 1, bitácora completa, justificación defendible).
 - **Pregunta ingenieril:** si dos papers afirman lo mismo pero uno tiene muchas más estrellas/upvotes en su repositorio o en Hugging Face Papers, ¿qué te dice eso sobre la calidad del trabajo — y qué NO te dice?
-- **Recursos [🟢 antes]:** S. Keshav, *"How to Read a Paper"*, ACM SIGCOMM CCR 2007 — https://ccr.sigcomm.org/online/files/p83-keshavA.pdf (el método completo, fuente primaria, no un resumen de terceros).
+- **Recursos [🟢 antes]:** S. Keshav, *"How to Read a Paper"*, ACM SIGCOMM CCR 2007 — https://web.stanford.edu/class/cs114/reading-keshav.pdf (mirror verificado por fetch directo; el método completo, fuente primaria, no un resumen de terceros) · Andrew Ng, Stanford CS230 L8 (segundo método, triangulación).
 
 **N11.M1.T2 · Notación y matemática de frontera**
 - **Objetivo:** lee la matemática de un paper actual (atención, optimización de frontera, teoría de la información aplicada, lo que el paper elegido use) sin bloquearse ante notación no vista antes en N3.M4/N6.M4, aplicando la misma disciplina de decodificación símbolo por símbolo.
@@ -95,7 +95,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** todo símbolo nuevo tiene una definición encontrable — en el propio paper (sección de notación, o la primera vez que aparece) o en un paper que cita. Nunca se adivina, se busca.
 - **Por qué:** existe porque el "supuesto que destruye" de N3.M4 ("no tengo la formación matemática para esto") reaparece con papers reales, de mayor densidad, y hay que destruirlo otra vez a esta escala / ahora porque T1 ya dio el método de selección, falta el de comprensión profunda / habilita T3 (verificar afirmaciones).
 - **Evidencia de dominio:** traduce, símbolo por símbolo, la ecuación de aspecto más intimidante de un paper elegido — con la definición exacta de cada símbolo citada por número de ecuación/sección.
-- **Práctica principal:** laboratorio real — glosario de notación construido en vivo sobre un paper real, verificado contra el propio texto del paper (no contra una fuente externa que simplifique).
+- **Práctica principal:** laboratorio real — glosario de notación construido en vivo sobre un paper real, verificado contra el propio texto del paper (no contra una fuente externa que simplifique). *(Profundización 2026-07-22: incluye decodificar la notación compuesta real de atención — Q/K/V/softmax, con la razón de dividir por √dₖ — como glosario base reutilizable entre papers.)*
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** cuando un paper reutiliza un símbolo con un significado distinto al de la convención que ya conoces (ocurre con frecuencia real, ej. `θ` como parámetros vs. como ángulo), ¿cómo lo detectas antes de que te confunda 10 páginas después?
 - **Recursos [🔵 durante]:** el propio paper elegido por el estudiante en T1, más su propia bibliografía citada como fuente de definiciones.
@@ -108,7 +108,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** extensión directa de N3.M4.T5 ("leer un paper es descifrar, no adivinar") a papers reales: cada afirmación verificable con los recursos del estudiante, se verifica; cada una que no, se marca explícitamente como no verificada, nunca como verificada por omisión.
 - **Por qué:** existe porque la competencia C-N11-01 (reproducir) presupone que ya se practicó verificar afirmaciones pequeñas antes de comprometerse a reproducir un experimento completo / ahora porque T2 ya dio la lectura de la matemática / habilita M2 completo.
 - **Evidencia de dominio:** produce al menos una verificación real (cálculo a mano o código corrido) de una afirmación matemática o numérica menor de un paper real, con el resultado propio contrastado explícitamente contra lo reportado.
-- **Práctica principal:** laboratorio real — 2-3 verificaciones reales sobre afirmaciones de complejidad creciente (una derivación algebraica corta, un cálculo numérico con datos del propio paper si están disponibles, una propiedad citada de otra fuente que el paper da por sentada).
+- **Práctica principal:** laboratorio real — 2-3 verificaciones reales sobre afirmaciones de complejidad creciente (una derivación algebraica corta, un cálculo numérico con datos del propio paper si están disponibles, una propiedad citada de otra fuente que el paper da por sentada). *(Profundización 2026-07-22: si la afirmación tiene componente aleatorio, se repite con 3-5 semillas — fundamentado en Henderson et al., "Deep RL that Matters" — para no confundir ruido de semilla con divergencia real.)*
 - **Evaluación:** checkpoints DOC-12; cada verificación debe declarar explícitamente su tolerancia y su fuente de datos.
 - **Pregunta ingenieril:** ¿qué diferencia hay entre "no logré reproducir esta cifra" y "el paper tiene un error" — y qué evidencia adicional necesitas antes de poder afirmar la segunda?
 - **Recursos [🔵 durante]:** arXiv API (`info.arxiv.org/help/api/user-manual.html`) para localizar versiones/erratas de un paper cuando una cifra no cuadra.
@@ -121,7 +121,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** un paper es un argumento con evidencia, no un veredicto — el lector crítico pregunta qué evidencia falta, qué comparación no se hizo y por qué, qué generalización se afirma sin sostén suficiente.
 - **Por qué:** existe porque C-N11-04 (reportar fielmente, incluso cuando contradice lo esperado) presupone que el estudiante ya practicó ejercer ese mismo criterio sobre el trabajo ajeno antes de aplicarlo al propio / ahora porque T1-T3 ya dieron con qué leer, falta con qué evaluar / habilita T5 y M3.
 - **Evidencia de dominio:** escribe una evaluación crítica real de un paper real (no un resumen) que identifique al menos una limitación no declarada explícitamente por los autores, con evidencia textual concreta.
-- **Práctica principal:** laboratorio real — revisión crítica estructurada sobre el checklist real de NeurIPS (adaptado como instrumento de lectura, no de escritura) aplicado retroactivamente a un paper ya publicado.
+- **Práctica principal:** laboratorio real — revisión crítica estructurada sobre el checklist real de NeurIPS (adaptado como instrumento de lectura, no de escritura) aplicado retroactivamente a un paper ya publicado. *(Profundización 2026-07-22: añade una mini-review real en los 4 criterios de un revisor — originalidad/calidad/claridad/significancia, ICLR Reviewer Guidelines — depurada explícitamente de preferencias personales disfrazadas de crítica técnica.)*
 - **Evaluación:** checkpoints DOC-12; rúbrica de revisión (no `check()`).
 - **Pregunta ingenieril:** si un paper no reporta barras de error ni desviación estándar, ¿qué puedes y qué no puedes concluir de una mejora del "2%"?
 - **Recursos [🔵 durante]:** NeurIPS Paper Checklist Guidelines — https://neurips.cc/public/guides/PaperChecklist (instrumento real usado en la industria/academia, reutilizado aquí como lente de lectura).
@@ -134,7 +134,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** las tres pasadas + verificación + evaluación crítica, como un solo hábito, no cuatro pasos separados que se ejecutan por obligación.
 - **Por qué:** existe porque es, literalmente, la puerta de entrada al capstone (elegir bien el paper a reproducir depende de esto) / ahora porque T1-T4 dieron cada pieza / habilita directamente M2.T1.
 - **Evidencia de dominio:** defiende oralmente (ante el tutor, formato TD breve) por qué eligió ese paper y no otro de su lista corta, qué esperaría poder reproducir de él y qué no.
-- **Práctica principal:** laboratorio real — lectura completa + notas + defensa breve.
+- **Práctica principal:** laboratorio real — lectura completa + notas + defensa breve, integrando ahora la mini-review de 4 criterios (T4) y la triangulación con Ng (T1) como una sola síntesis coherente, no piezas sueltas. *(Profundización 2026-07-22.)*
 - **Evaluación:** checkpoints DOC-12 + defensa breve (siembra directa del formato de defensa del capstone).
 - **Pregunta ingenieril:** de los papers que descartaste en tu lista corta, ¿cuál te costó más descartar y por qué — qué criterio inclinó la balanza?
 - **Recursos [🟣 después]:** Hugging Face Papers (huggingface.co/papers) para ver qué repositorio de código está asociado al paper elegido y su nivel de adopción real (estrellas de GitHub) — sucesor de Papers With Code, discontinuado por Meta en julio de 2025 (hallazgo verificado durante la construcción de este syllabus, no asumido de memoria); información relevante para M2.T1, no para esta lectura en sí.
@@ -153,7 +153,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** reproducibilidad como propiedad del *claim acotado*, no del paper entero — un paper puede tener un resultado principal inalcanzable con recursos de estudiante y, a la vez, un resultado secundario perfectamente reproducible en una laptop.
 - **Por qué:** existe porque el capstone completo depende de esta elección / ahora porque M1 ya dio la lectura crítica necesaria para evaluar candidatos / habilita T2-T5 y el capstone entero.
 - **Evidencia de dominio:** produce una comparación real de 2-3 candidatos con criterio de selección explícito (cómputo requerido, disponibilidad de código/datos, claim exacto a reproducir) y una decisión final defendible.
-- **Práctica principal:** laboratorio real — búsqueda real en Hugging Face Papers + arXiv de candidatos, con matriz de comparación explícita.
+- **Práctica principal:** laboratorio real — búsqueda real en Hugging Face Papers + arXiv de candidatos, con matriz de comparación explícita. *(Profundización 2026-07-22: añade auditar si el repositorio está contenerizado y declarar qué fija/no fija esa contenerización — límite real documentado en "Docker Does Not Guarantee Reproducibility", 2026.)*
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** ¿qué harías si, ya avanzado el capstone, descubres que el paper elegido no es reproducible con tus recursos — cuál es tu plan B antes de que haga falta?
 - **Recursos [🟢 antes]:** MLRC (ML Reproducibility Challenge) — https://reproml.org/challenge_resources/ (criterios reales usados por la comunidad de reproducibilidad para evaluar candidatos).
@@ -166,7 +166,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** extensión directa de la "arqueología del software" de N1.M4 — investigar un repo ajeno para responder una pregunta específica ("¿dónde se calcula la métrica X?"), no leerlo de corrido.
 - **Por qué:** existe porque reproducir sin entender el código de referencia (cuando existe) es copiar, no reproducir / ahora porque T1 ya dio el candidato elegido / habilita T3.
 - **Evidencia de dominio:** localiza, en un repositorio real ajeno, el fragmento exacto de código que implementa una afirmación específica del paper, y explica cómo lo encontró.
-- **Práctica principal:** laboratorio real — investigación guiada sobre el repositorio (si existe) del paper elegido en T1, o sobre un repositorio de referencia similar si el propio candidato no tiene código público.
+- **Práctica principal:** laboratorio real — investigación guiada sobre el repositorio (si existe) del paper elegido en T1, o sobre un repositorio de referencia similar si el propio candidato no tiene código público. *(Profundización 2026-07-22: añade usar `git blame`/`git log` para investigar el POR QUÉ del fragmento encontrado, no solo el qué — Pro Git, Git Tools: Debugging with Git.)*
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** si el código público diverge del método descrito en el paper (ocurre con frecuencia real), ¿cuál de los dos documentos tratas como la fuente de verdad, y por qué?
 - **Recursos [🔵 durante]:** el repositorio real asociado al paper elegido (si existe) vía Hugging Face Papers, o el propio GitHub/arXiv del paper cuando no aparezca ahí.
@@ -179,7 +179,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** el plan de reproducción como pre-registro informal — declarar antes de ejecutar qué contaría como éxito, para no mover la meta después de ver el resultado.
 - **Por qué:** existe porque reproducir sin plan es explorar, no reproducir (distinción real de la literatura de reproducibilidad) / ahora porque T2 ya dio el código de referencia / habilita T4 y el capstone.
 - **Evidencia de dominio:** produce un documento de plan (experimento, métrica, tolerancia, recursos, plazo estimado) revisable por el tutor antes de ejecutar una sola línea del experimento.
-- **Práctica principal:** laboratorio real — redacción del plan + revisión.
+- **Práctica principal:** laboratorio real — redacción del plan + revisión. *(Profundización 2026-07-22: añade un presupuesto de cómputo real —tiempo/costo/límites de servicio— y ancla el pre-registro en el replication crisis real, Open Science Collaboration 2015/Science, con la guía oficial de pre-registro de Carnegie Mellon.)*
 - **Evaluación:** checkpoints DOC-12; el plan se archiva y se contrasta después contra lo realmente ejecutado (honestidad, siembra M3).
 - **Pregunta ingenieril:** si tu métrica reproducida cae dentro de tu tolerancia declarada pero "se siente" distinta a la reportada, ¿qué pesa más — el número o la sensación, y por qué?
 - **Recursos [🔵 durante]:** MLRC — plantilla real de reporte de reproducibilidad (mismo recurso de T1, ahora para el formato del plan, no de la selección).
@@ -192,7 +192,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** cada reproducción, sin importar la escala, pasa por las mismas etapas: fijar el entorno exacto → obtener/generar los datos → ejecutar → comparar contra la tolerancia ya declarada en T3 — practicar esas etapas en pequeño reduce el riesgo de fallar por primera vez a gran escala en el capstone.
 - **Por qué:** existe porque el capstone no debe ser la primera vez que el estudiante ejecuta el flujo completo / ahora porque T3 ya dio el plan (a escala pequeña, análogo) / habilita T5 y directamente el capstone.
 - **Evidencia de dominio:** reproduce un resultado pequeño real (puede ser una pieza acotada del propio paper elegido, o de un paper más pequeño elegido específicamente para esta práctica) y compara su número contra el reportado, con la tolerancia ya declarada.
-- **Práctica principal:** laboratorio real — reproducción de punta a punta, acotada.
+- **Práctica principal:** laboratorio real — reproducción de punta a punta, acotada. *(Profundización 2026-07-22: monitorea recursos reales durante la ejecución —nvidia-smi/top, no solo el resultado final— y verifica el resultado contra fallo silencioso —fuga de datos, métrica trivial— antes de darlo por bueno.)*
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** de las horas que te tomó esta reproducción pequeña, ¿cuántas fueron el algoritmo en sí y cuántas fueron fijar el entorno? ¿Qué te dice esa proporción sobre cómo planear el capstone?
 - **Recursos [🔵 durante]:** documentación de reproducibilidad de entorno (contenedores/entornos virtuales fijados) — reutiliza N1.M1.T6b (entornos virtuales) y N2.M5 (empaquetado), herencia directa.
@@ -205,7 +205,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** una divergencia es información, no un fracaso del estudiante — el objetivo de M2 nunca fue "obtener el número exacto", fue "practicar el método de averiguar por qué el número es el que es".
 - **Por qué:** existe porque C-N11-04 exige reportar fielmente incluso cuando el resultado contradice lo esperado, y este es el primer lugar real donde eso puede ocurrir / ahora porque T4 ya produjo un resultado propio que comparar / habilita M3 completo.
 - **Evidencia de dominio:** documento breve que compara número propio vs. reportado, identifica al menos una causa plausible de cualquier divergencia (o confirma coincidencia dentro de tolerancia), sin exagerar en ninguna dirección.
-- **Práctica principal:** laboratorio real — comparación + documento de divergencia.
+- **Práctica principal:** laboratorio real — comparación + documento de divergencia. *(Profundización 2026-07-22: si diverge, aplica los 5 Whys —Toyota/Ohno— hasta una causa raíz verificable, nunca la primera explicación superficial; en el desafío, aplica el mismo método a un ÉXITO para verificar que no sea casualidad.)*
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** si tuvieras que apostar a qué causó la divergencia antes de investigarla, ¿qué apostarías primero — y por qué esa y no otra?
 - **Recursos [🟣 después]:** Semmelrock et al., *"Reproducibility in machine-learning-based research: Overview, barriers, and drivers"*, AI Magazine 2025 — https://onlinelibrary.wiley.com/doi/10.1002/aaai.70002 (barreras reales documentadas, útil para no inventar explicaciones ad hoc).

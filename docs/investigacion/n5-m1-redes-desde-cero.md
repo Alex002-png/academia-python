@@ -66,3 +66,25 @@ El tema resuelve una única tensión real: la regla de la cadena (N3.M2.T2) es f
 ## 4. Estrategia adoptada para este tema
 
 Cada valor de cada `check()` —incluyendo los de una clase con estado, no solo funciones puras— se verificó ejecutando la clase completa en Python real (`verify_n5m1t3_full.py`) antes de escribirse; el harness de Node confirmó 14/14 aciertos contra el `check()` real extraído de `index.html`, y ese mismo proceso detectó y corrigió el bug real del Ejercicio 10 descrito arriba. **Falsable por:** si una futura auditoría encuentra que construir la clase en 3 pasos (mecanismo a mano → clase con backward manual → backward automático) es más lento de lo pedagógicamente necesario frente a construir la clase completa de una vez, debería revisarse — la decisión actual prioriza deliberadamente "sentir la necesidad de cada pieza antes de recibirla" sobre velocidad de construcción, siguiendo la prioridad explícita del Director para N4-N12 (guía §8).
+
+---
+
+# Investigación Pedagógica — N5.M1.T4 · MLP entrenado desde cero (cierra M1)
+
+## 1. Cómo enseñan este concepto exacto las fuentes de referencia
+
+- **Karpathy, micrograd/makemore** (verificado por WebSearch en Historial de SYL-N5): el propio repositorio de referencia construye `Neuron`, `Layer`, `MLP` como clases que envuelven `Value`, con un ejemplo de entrenamiento con descenso de gradiente sobre un dataset de juguete — misma progresión que este tema (T3 construye el motor, T4 lo envuelve en clases entrenables y entrena de verdad), sin copiar variables ni ejercicios de la fuente.
+- **DL Specialization (Ng):** el Curso 1 dedica una semana completa a exactamente este ciclo (forward, coste, backward, actualización) antes de introducir cualquier framework — confirma que la secuencia pedagógica de este documento (mecanismo manual → motor de clases → entrenamiento real) no es idiosincrasia local, sino el patrón real de la bibliografía oficial de DOC-10 §7.
+
+## 2. Errores de novato documentados para este concepto exacto
+
+- Olvidar `zero_grad` entre pasos de entrenamiento — verificado empíricamente en este mismo tema (Ejercicio 5: gradiente pasa de -6.0 a -12.0 sin ningún error de Python) y llevado a escala completa en el desafío final (500 épocas, verificado con ejecución real: el entrenamiento se ESTANCA en pérdida ~0.17, nunca converge cerca de 0.0, sin lanzar ninguna excepción que lo delate).
+- Elegir hiperparámetros (pesos iniciales, tasa de aprendizaje, épocas) sin verificar que realmente convergen — la arquitectura, los pesos iniciales y la tasa de aprendizaje de este tema fueron elegidos y AJUSTADOS por prueba real en Python (no en la primera combinación intentada) hasta confirmar convergencia completa a pérdida 0.0 en 500 épocas — el archivo `verify_n5m1t4_full.py` documenta el resultado final, no el proceso de búsqueda, siguiendo el mismo principio de "nunca escribir un valor de memoria" (guía §9) aplicado ahora a un proceso iterativo completo, no solo a un cálculo cerrado.
+
+## 3. Síntesis crítica
+
+Este tema cierra el arco narrativo completo de M1: T1 demuestra que una neurona NO resuelve XOR (verificado, no solo afirmado); T2-T3 dan el mecanismo (capas, backpropagation); T4 demuestra, con la MISMA tabla de verdad de XOR y ejecución real, que un MLP entrenado SÍ la resuelve (Ejercicio 12 compara ambos resultados explícitamente). Ningún paso de este arco se afirma sin evidencia ejecutada — es la aplicación más completa, dentro de N5 hasta ahora, del principio de verificación numérica de la guía §9.
+
+## 4. Estrategia adoptada para este tema
+
+Cada valor — incluyendo el historial de pérdida de un entrenamiento de 500 épocas, con y sin el bug de reset — se generó ejecutando el código real en Python (`verify_n5m1t4_full.py`) antes de escribir cualquier `check()`; el harness de Node confirmó 14/14 aciertos en cada uno de los 4 temas de M1 (56/56 en total). **Falsable por:** los hiperparámetros elegidos (pesos iniciales, lr=0.1, 500 épocas) son una configuración que SÍ converge, verificada; no se afirma que sea la única ni la óptima — una auditoría futura que busque configuraciones alternativas más rápidas de converger no invalidaría el tema, solo lo enriquecería.

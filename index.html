@@ -951,11 +951,33 @@ def __academia_run(code, stdin_list, max_steps=300000):
   }
   return _pyodidePromise;
 }
+/* Paquetes binarios detectados por uso en el código del estudiante. Cada uno se
+   carga (loadPackage) Y se pre-calienta con un import SIN sys.settrace activo
+   antes de la primera ejecución real. Necesario porque el propio motor traza
+   línea a línea (max_steps=300000) para detectar bucles infinitos, y el grafo
+   de import de paquetes grandes (pandas/scikit-learn/matplotlib) es tan profundo
+   que trazarlo agota ese límite en su primera importación real — lo que además
+   deja el módulo a medio inicializar en sys.modules, rompiendo TODO import
+   posterior de ese paquete en la misma sesión del estudiante (confirmado por
+   verificación empírica directa antes de construir N4). numpy no necesita esto
+   (su grafo de import es lo bastante liviano para no agotar el límite), pero
+   pandas/scikit-learn/matplotlib sí — precalentarlos fuera del trace es la
+   única corrección real: no toca max_steps ni el mecanismo de detección de
+   bucles infinitos, que deben seguir intactos para el resto del contenido. */
+const PY_PKG_DETECT=[
+  {re:/\bnumpy\b/,pkg:"numpy",flag:"__academiaNumpyLoaded",warm:"import numpy"},
+  {re:/\bpandas\b/,pkg:"pandas",flag:"__academiaPandasLoaded",warm:"import pandas"},
+  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn"},
+  {re:/\bmatplotlib\b/,pkg:"matplotlib",flag:"__academiaMatplotlibLoaded",warm:'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot'},
+];
 async function runScriptedPy(code,stdin){
   const py=await getPyodide();
-  if(/\bnumpy\b/.test(code)&&!py.__academiaNumpyLoaded){
-    await py.loadPackage("numpy");
-    py.__academiaNumpyLoaded=true;
+  for(const p of PY_PKG_DETECT){
+    if(p.re.test(code)&&!py[p.flag]){
+      await py.loadPackage(p.pkg);
+      await py.runPythonAsync(p.warm);
+      py[p.flag]=true;
+    }
   }
   const fn=py.globals.get("__academia_run");
   const pyStdin=py.toPy(stdin);

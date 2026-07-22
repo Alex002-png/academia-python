@@ -58,3 +58,22 @@ Cada resultado —incluyendo los mensajes de error literales de PyTorch— se ge
 ## 11. Estrategia adoptada para este laboratorio
 
 Cada valor —incluyendo el conteo de parámetros, la pérdida inicial, el historial de 500 épocas con y sin `zero_grad`, y las predicciones finales— se generó ejecutando PyTorch real (`verify_n5m2t3_torch.py`) antes de escribirse. **Falsable por:** si una futura verificación en Colab real (no solo local) encuentra que el patrón de convergencia diverge sustancialmente de lo aquí descrito (no solo los decimales), este laboratorio necesitaría reajustar sus hiperparámetros — pendiente de validación en el entorno real del estudiante, no solo local, como registra el Paso 9 del flujo institucional (auditoría/mejora continua).
+
+## 12. N5.M2.T4 · GPU y reproducibilidad — cierra M2
+
+### Hallazgo real más importante del módulo, verificado empíricamente (no citado de memoria)
+
+Se intentó primero demostrar no-determinismo de GPU con operaciones "candidatas" obvias (suma de un tensor grande, backward de una convolución con `cudnn.benchmark=True`) — **ambas resultaron deterministas en la build local** (5 corridas idénticas byte a byte cada vez), contradiciendo la expectativa inicial del diseño del syllabus. En vez de forzar la narrativa original, se buscó una operación que la propia documentación oficial de PyTorch cita explícitamente como no determinista (`torch.Tensor.index_add_()`, confirmado por WebSearch contra `pytorch.org/docs/stable/notes/randomness.html`) y se verificó con ejecución real: **5 corridas con semilla fija dieron 5 valores ligeramente distintos** (`286.2433...` a `286.2434...`), y activar `torch.use_deterministic_algorithms(True)` los volvió idénticos en las 5 corridas siguientes. Este es el patrón exacto que la guía de construcción exige (§9: nunca escribir un comportamiento de memoria) aplicado por primera vez a un fenómeno no numérico sino de **comportamiento de una librería** — la disciplina se sostiene igual.
+
+### Segundo hallazgo real: el benchmarking sin warmup miente
+
+Verificado con ejecución real: medir una multiplicación de matrices 4000×4000 en la PRIMERA operación GPU de la sesión dio 4.9x de aceleración frente a CPU; la misma operación, tras un "warmup" (una llamada de descarte), dio 29.9x. La cifra de 4.9x no era un error de medición menor — estaba dominada por el costo de inicialización del contexto CUDA, un fenómeno real y documentado del cómputo en GPU, no anticipado en el diseño original del syllabus y descubierto durante la verificación empírica de este laboratorio.
+
+### Cómo enseñan este concepto exacto las fuentes de referencia
+
+- **PyTorch docs, "CUDA semantics" y "Reproducibility"** (verificadas: la segunda es la fuente directa del hallazgo de `index_add_`, citada con URL real en Recursos).
+- **DL Specialization (Ng):** no cubre GPU/reproducibilidad en detalle — es la primera vez en N5 que la bibliografía oficial de DOC-10 §7 no tiene una fuente estructurada equivalente para un subtema; se declara esta ausencia honestamente (mismo principio de DOC-11 §0bis punto 2) y se compensa apoyándose enteramente en documentación oficial de PyTorch, la fuente más autorizada posible para este tema exacto.
+
+### Estrategia adoptada para este laboratorio, y para el cierre de M2
+
+Cada cifra —incluyendo el nombre real de errores (`RuntimeError: Expected all tensors to be on the same device...`), los tiempos de aceleración, y los 5+5 valores de determinismo/no-determinismo— se generó con CUDA real disponible localmente (`verify_n5m2t4_torch.py`), no simulado ni asumido. **Con esto, M2 · PyTorch queda completo: 4 laboratorios DOC-12, primer módulo 100% entorno real de N5, cada uno con investigación pedagógica propia en este documento.** Falsable por: la GPU local (RTX 5070, PyTorch dev build cu128) es más nueva que la T4 que Colab gratuito ofrece — las cifras de aceleración relativa (29.9x) son ilustrativas del FENÓMENO (warmup importa, la aceleración real es sustancialmente mayor que la medición ingenua), no una promesa de que el estudiante verá exactamente 29.9x en su propia T4.

@@ -37,3 +37,25 @@ Cada valor de cada `check()` —incluyendo la imagen sintética del laboratorio 
 ## 8. Estrategia adoptada para este laboratorio
 
 Cada cifra —parámetros, precisión antes/después, mensaje de error— se generó ejecutando PyTorch+torchvision reales con descarga real de MNIST (`verify_n5m3t2_torch.py`) antes de escribirse. **Falsable por:** los tiempos de entrenamiento no se citan como cifra exacta (a diferencia de M2.T4) porque dependen fuertemente de si el estudiante activó GPU (M2.T4) — el laboratorio lo declara explícitamente en el Diagnóstico en vez de prometer una duración fija.
+
+## 9. N5.M3.T3 · RNN/LSTM (mecanismo, Python puro) — cómo enseñan este concepto exacto las fuentes de referencia
+
+- **Karpathy, *Zero to Hero* / makemore** (Historial de SYL-N5): mismo principio de mecanismo-antes-que-framework aplicado ya en M1 y M3.T1 — este tema construye la celda recurrente y LSTM a mano, antes de que M3.T4 las entrene con `nn.RNN`/`nn.LSTM` reales.
+- **DL Specialization (Ng), Curso 5 "Sequence Models"** (bibliografía oficial DOC-10 §7): introduce la RNN con el mismo modelo mental de "estado que se pasa de un paso al siguiente" antes de la notación matemática completa — mismo orden pedagógico que este tema.
+
+## 10. Bug real encontrado y corregido por el propio harness — evidencia directa de la disciplina de la guía §9
+
+El Ejercicio 10 (Día 2) originalmente declaraba `0.264432 0.0009957` como salida esperada del gradiente BPTT sobre una secuencia de 10 pasos — un valor que **no se generó ejecutando el código real**, sino estimado por extrapolación mental de que "el gradiente se encoge mucho". El harness de Node, comparando contra la ejecución real de Python, encontró el valor verdadero: `0.264432 0.0030253693`. Corregido antes de comitear. **Esta es la evidencia más directa posible de por qué la guía de construcción (§9) prohíbe escribir cualquier valor de memoria** — ni siquiera un valor "razonable a ojo" para un fenómeno ya bien entendido cualitativamente (el gradiente se encoge) es aceptable sin ejecución real, porque la cuantificación EXACTA puede divergir sustancialmente de la intuición.
+
+## 11. Errores de novato documentados para este concepto exacto
+
+- Tratar cada paso de la secuencia como independiente, perdiendo el estado — mitigado forzando al estudiante a implementar `forward_rnn` explícitamente pasando `h` de un paso al siguiente (Ejercicio 2).
+- Confundir BPTT con un algoritmo nuevo — el Ejercicio 9 lo desarma explícitamente como "multiplicar derivadas locales de tanh en cadena", mismo mecanismo de M1.T3 con otro nombre.
+
+## 12. Síntesis crítica y cierre del tema
+
+El tema completo demuestra, con tres piezas de evidencia numérica real (Ejercicio 3: decaimiento del recuerdo en una secuencia larga; Ejercicio 10: el gradiente BPTT se encoge con más pasos; retoFinal: el estado final de una secuencia de 21 pasos converge a 0.0, perdiendo TOTALMENTE el recuerdo del primer elemento) — la misma limitación estructural desde tres ángulos distintos, preparando el terreno para que T5 (atención) se sienta como una necesidad real, no una técnica arbitraria más.
+
+## 13. Estrategia adoptada para este tema
+
+Cada valor —incluyendo el que se corrigió tras el hallazgo del harness— se generó (o regeneró) ejecutando Python real (`verify_n5m3t3_full.py`) antes de comitear; harness de Node: 13/13 pass tras la corrección. **Falsable por:** el diseño de LSTM de este tema es deliberadamente simplificado (una sola compuerta de olvido/entrada/salida por unidad, pesos compartidos entre compuertas por simplicidad pedagógica) — no es la arquitectura LSTM completa de Hochreiter & Schmidhuber (1997); esa versión completa se entrena con `nn.LSTM` real en M3.T4, donde la implementación exacta ya no depende de simplificaciones pedagógicas.

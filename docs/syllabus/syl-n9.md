@@ -10,21 +10,21 @@
 | **Depende de** | DOC-10 v1.0.3 · DOC-00 · DOC-01 · DOC-02 · DOC-12 (íntegro — N9 es DOC-12 casi puro, ver §3.1) · `docs/investigacion/n9-propuesta-doc09-arquitectura-columna-vertebral.md` · `docs/investigacion/n9-decision-entornos-locales-vs-cloud.md` |
 | **Produce / desarrolla** | La estructura docente completa de N9: fichas de laboratorio por tema, proyecto de nivel (infraestructura operando la Columna Vertebral), compuerta, y las Herencias Declaradas hacia SYL-N10 |
 | **Estándar de calidad** | El mismo de SYL-N1/N2/N3: *"Si otro instructor excepcional impartiera este nivel utilizando únicamente el syllabus, ¿obtendría prácticamente la misma calidad formativa?"* |
-| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño. Precedido por dos documentos de investigación propios: la propuesta de arquitectura DOC-09 (capas L0-L4, puertos, ley de evolución por extensión — aprobada por el Director con 8 principios adicionales) y la decisión de entornos local/cloud por módulo (verificada por búsqueda dirigida: vLLM funciona en WSL2 con GPU passthrough automático sobre la RTX 5070; GPU dentro de `kind`/K8s es frágil y se declara fuera de alcance obligatorio con razón técnica citada — M1 y M2 se mantienen desacoplados a nivel de GPU, comunicados por red, arquitectónicamente correcto según DOC-09 L2). Bibliografía oficial de DOC-10 verificada por WebFetch/WebSearch real (Kleppmann DDIA 2nd ed., MLOps Zoomcamp de DataTalksClub, docs oficiales de Kubernetes y vLLM, incluido el `benchmarks/benchmark_serving.py` oficial del propio repo de vLLM para medición real de M2). Sigue: construcción módulo por módulo en `index.html` (`LEVEL9`). |
+| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño. Precedido por dos documentos de investigación propios: la propuesta de arquitectura DOC-09 (capas L0-L4, puertos, ley de evolución por extensión — aprobada por el Director con 8 principios adicionales) y la decisión de entornos local/cloud por módulo (verificada por búsqueda dirigida: vLLM funciona en WSL2 con GPU passthrough automático sobre la RTX 5070; GPU dentro de `kind`/K8s es frágil y se declara fuera de alcance obligatorio con razón técnica citada — M1 y M2 se mantienen desacoplados a nivel de GPU, comunicados por red, arquitectónicamente correcto según DOC-09 L2). Bibliografía oficial de DOC-10 verificada por WebFetch/WebSearch real (Kleppmann DDIA 2nd ed., MLOps Zoomcamp de DataTalksClub, docs oficiales de Kubernetes y vLLM, incluido el `benchmarks/benchmark_serving.py` oficial del propio repo de vLLM para medición real de M2). · **0.2.0 (2026-07-22): Instrucción directa del Director — densidad redefinida y estándar de calidad elevado.** (a) Cada **módulo** completo (no cada laboratorio) es ahora un solo "tema" de **15-20 días** con **~25-40 ejercicios reales**, manteniendo el esquema técnico DOC-12 (`modalidad:"real"`, 13 secciones) pero con la unidad de contenido renombrada de "Laboratorio N" a "Día N" para reflejar la densidad exigida. (b) Estándar de calidad elevado explícitamente a nivel MIT/Stanford/CMU/Berkeley: cada tema exige investigación real previa (no solo documentación oficial — papers académicos, artículos de las propias autoridades de cada tecnología), una sección explícita de "cuándo NO usar esta herramienta" con alternativas reales y trade-offs, y al menos un ejercicio de análisis/comparación/justificación de arquitectura por día (no solo ejecución de comandos). **M1 (Orquestación a escala) reconstruido íntegramente bajo este estándar: 18 días, 40 ejercicios, verificado en su totalidad contra un clúster kind real** — ver §5. M2-M4 se construirán con el mismo modelo de densidad (15-20 días/módulo) cuando les llegue el turno. Sigue: construcción de M2. |
 
 ---
 
 ## 1. Tabla resumen
 
-| Módulo | Laboratorios | Competencias | Gran pregunta del módulo |
-|---|---|---|---|
-| M1 · Orquestación a escala | 4 | C-N9-01 | ¿Cómo mantiene un sistema su forma deseada cuando las máquinas y los procesos fallan constantemente? |
-| M2 · Model serving | 3 | C-N9-03 | ¿Qué separa "un LLM que responde" de "un LLM que sirve tráfico real de producción"? |
-| M3 · Datos en movimiento | 4 | C-N9-02 (parcial) | ¿Qué pasa cuando quien produce datos y quien los consume no pueden — o no deben — hablar directamente? |
-| M4 · Observabilidad y escalabilidad | 3 | C-N9-02, C-N9-04 | ¿Cómo sabes que un sistema está sano sin tener que preguntarle a un usuario si algo falló? |
-| Proyecto de nivel | — | Todas | Integración: operar, con mediciones propias, la infraestructura completa de la Columna Vertebral |
+| Módulo | Días | Ejercicios | Competencias | Gran pregunta del módulo |
+|---|---|---|---|---|
+| M1 · Orquestación a escala | **18** ✅ construido | **40** | C-N9-01 | ¿Cómo mantiene un sistema su forma deseada cuando las máquinas y los procesos fallan constantemente? |
+| M2 · Model serving | 15-20 (pendiente) | ~25-40 | C-N9-03 | ¿Qué separa "un LLM que responde" de "un LLM que sirve tráfico real de producción"? |
+| M3 · Datos en movimiento | 15-20 (pendiente) | ~25-40 | C-N9-02 (parcial) | ¿Qué pasa cuando quien produce datos y quien los consume no pueden — o no deben — hablar directamente? |
+| M4 · Observabilidad y escalabilidad | 15-20 (pendiente) | ~25-40 | C-N9-02, C-N9-04 | ¿Cómo sabes que un sistema está sano sin tener que preguntarle a un usuario si algo falló? |
+| Proyecto de nivel | — | — | Todas | Integración: operar, con mediciones propias, la infraestructura completa de la Columna Vertebral |
 
-*14 laboratorios totales. A diferencia de N0-N3 (Pyodide, "días" por tema), N9 es DOC-12: cada laboratorio es una unidad autocontenida (objetivo→contexto→ejecución→mini-laboratorio→desafío→evaluación, ~90-150 min guiados), no un día de un patrón de 3. La densidad exigida para N4-N12 (guía maestra §8) se expresa aquí en profundidad por laboratorio y en la integración obligatoria de cada módulo con el anterior — no en inflar el conteo.*
+*Densidad redefinida 2026-07-22 (instrucción directa del Director, ver Historial): cada MÓDULO completo es un solo "tema", de 15-20 días, no cada laboratorio individual. Sigue siendo DOC-12 (cada "día" es un objeto `modalidad:"real"` autocontenido de 13 secciones, ~90-140 min), pero renombrado de "Laboratorio N" a "Día N" para reflejar la densidad. M1 ya construido y verificado con esta densidad: 4 bloques (A: fundamentos, Días 1-4 · B: Deployments/Services/Ingress, Días 5-9 · C: configuración/estado/rollouts, Días 10-14 · D: autoescalado y cierre, Días 15-18).*
 
 *Nota metodológica sobre las ~400h/~4 meses de DOC-10: incluyen, igual que N3 lo hizo explícito, el consumo real de la bibliografía externa citada (capítulos relevantes de Kleppmann Parte I-II, los módulos 3-5 de MLOps Zoomcamp) — el contenido que la Academia construye en el Campus andamia y verifica esas horas, no las sustituye.*
 
@@ -55,38 +55,21 @@ Troncal: `M1 → M2 → M3 → M4`, con M2 y M3 pudiendo construirse en paralelo
 
 *Plantilla adaptada de DOC-12 §1 (ficha de control) para nivel de planificación — el laboratorio completo (13 secciones) se escribe en el Paso 2, no aquí. Los 5 estándares narrativos de N1-N3 se adaptan a entorno real: **gran pregunta** (universal) · **el problema que se rompe sin esto** (equivalente DOC-12 de "el supuesto que destruye") · **la limitación humana que compensa** · **el error inducido en vivo** (reemplaza "quiebre de intuición" — en DOC-12 el quiebre no es conceptual sino operativo: el momento exacto en que algo falla de verdad frente al estudiante) · **el puerto DOC-09 que conecta o sustituye**.*
 
-### M1 · Orquestación a escala (Kubernetes)
+### M1 · Orquestación a escala (Kubernetes) — ✅ CONSTRUIDO Y VERIFICADO (18 días, 40 ejercicios)
 
 > **Gran pregunta del módulo: ¿cómo mantiene un sistema su forma deseada cuando las máquinas y los procesos fallan constantemente?**
 
-**N9.M1.Lab1 · Del proceso único al clúster**
-- Objetivo: explica por qué un proceso único con reinicio manual no basta en producción, instala `kind`, levanta un clúster multi-nodo real, y ejecuta tu primer Pod con `kubectl`.
-- Entorno objetivo: terminal local (WSL2) + Docker Desktop + `kind`.
-- Prerrequisitos: N1.M5 (Linux/terminal), N2.M5 (Docker, CI/CD).
-- Competencias: C-N9-01.
-- El problema que se rompe sin esto: un proceso que muere a las 3am no se reinicia solo — alguien tiene que notarlo y actuar.
-- Error inducido en vivo: matas el proceso de tu Pod desde dentro y observas qué hace (o no hace) un Pod sin controlador por encima.
-- Puerto DOC-09: ninguno todavía — este laboratorio es infraestructura pura (L3), previo a conectar cualquier adaptador.
+*Construido íntegramente en `index.html` (`LEVEL9`, ids `n9m1t1`…`n9m1t1r`), cada día verificado contra un clúster `kind` real antes de escribirse (guía maestra §9). Cada día incluye, sin excepción: cita académica/profesional real (no genérica), una sección "cuándo NO usar esta herramienta" con alternativas y trade-offs, y ≥1 ejercicio de comparar/justificar/decidir arquitectura, además del error inducido en vivo (DOC-12 §2.5bis).*
 
-**N9.M1.Lab2 · Declarar el estado deseado**
-- Objetivo: convierte Pods sueltos en Deployments/ReplicaSets, expón un servicio con networking interno, y demuestra self-healing real matando un Pod administrado.
-- Prerrequisitos: Lab1.
-- Competencias: C-N9-01.
-- El problema que se rompe sin esto: un Pod suelto que muere no vuelve — un Deployment sí, porque describe un estado, no una acción.
-- Error inducido en vivo: matas un Pod gestionado por un Deployment y cronometras cuánto tarda en reaparecer — el estudiante ve, no lee, la autocuración.
+**Bloque A — Fundamentos (Días 1-4):** D1 *Del proceso único al clúster* (Borg/Kubernetes — Verma et al. 2015, Burns et al. CACM 2016; cuándo NO usar K8s — Nomad/ECS/Cloud Run/un solo servidor, con trade-offs reales; primer clúster `kind` multi-nodo) · D2 *Pods a fondo: ciclo de vida y las tres pruebas de salud* (readiness/liveness/startupProbe, verificadas en vivo; el fenómeno real de "flapping" y su mitigación) · D3 *El límite de un proceso: PID 1, namespaces y por qué SIGKILL no siempre mata* (verificado dos veces con timestamp exacto; cita primaria `man 7 pid_namespaces`; zombies y `tini` como solución profesional real) · D4 práctica integradora.
 
-**N9.M1.Lab3 · Configuración y estado persistente**
-- Objetivo: separa configuración de código (ConfigMaps/Secrets), persiste datos reales con volúmenes, y ejecuta un rolling update con rollback deliberado.
-- Prerrequisitos: Lab2.
-- Competencias: C-N9-01.
-- El problema que se rompe sin esto: sin ConfigMaps, cambiar una configuración exige reconstruir la imagen; sin volúmenes persistentes, un Pod que se reinicia pierde todo.
-- Error inducido en vivo: despliegas una versión rota deliberadamente y ejecutas el rollback en vivo, cronometrado.
+**Bloque B — Deployments/Services/Ingress (Días 5-9):** D5 *Declarar el estado deseado* (Deployment→ReplicaSet, con Deployment/StatefulSet/DaemonSet/Job comparados) · D6 *Self-healing cronometrado* (metodología formal de chaos engineering — Basiri et al./Netflix 2017 — con hipótesis, fallo inyectado y resultado medido) · D7 *Services* (kube-proxy/CoreDNS, los 4 tipos de Service comparados, cuándo un service mesh es necesario) · D8 *Exponer tráfico HTTP real: de Ingress a Gateway API* (hallazgo de actualidad verificado: `ingress-nginx` retirado oficialmente en marzo 2026; Gateway API como sucesor real, con controlador nginx real desplegado y enrutamiento por path verificado con `curl`) · D9 práctica integradora.
 
-**N9.M1.Lab4 · La Columna Vertebral entra al clúster** *(cierre de módulo, integrador)*
-- Objetivo: despliega el/los servicio(s) reales heredados de N7/N8 (o el stub del contrato DOC-09 §7) en tu clúster `kind`, configura HPA, y mide throughput antes (proceso único) vs. después (orquestado, autoescalado) con carga generada por ti.
-- Prerrequisitos: Lab1-3, contrato DOC-09 §7.
-- Competencias: C-N9-01, C-N9-02 (parcial: primera medición antes/después).
-- Puerto DOC-09: ninguno nuevo — L3/L4 pura, exactamente la prueba de que M1 nunca tocó L0/L1.
+**Bloque C — Configuración y estado (Días 10-14):** D10 *ConfigMaps* (Twelve-Factor App Factor III, Wiggins/Heroku 2011) · D11 *Secrets: por qué "Secret" no significa "protegido"* (decodificación real verificada; CIS Benchmark; el matiz real de que External Secrets Operator NO resuelve el cifrado en reposo por sí solo) · D12 *Almacenamiento persistente* (PVC/StorageClass/WaitForFirstConsumer verificados; límite real de `local-path-provisioner` vs. CSI/Rook-Ceph en producción) · D13 *Rollouts y rollback* (rollout exitoso ~11s y roto+rollback ~1s, ambos cronometrados y verificados; RollingUpdate vs. Blue-Green vs. Canary, con Argo Rollouts como herramienta real) · D14 práctica integradora.
+
+**Bloque D — Autoescalado y cierre (Días 15-18):** D15 *Autoescalado real: el HPA y la pieza que lo hace posible* (fórmula exacta del HPA; `metrics-server` con su fallo real de TLS en `kind` diagnosticado y corregido; KEDA como extensión real para scaling por eventos) · D16 *Construye el servicio de referencia* (contrato DOC-09 §7 implementado en código real, verificado local y cargado a `kind`) · D17 *Mide de verdad* (experimento controlado real: 1 réplica → 4.35 req/s, 5 réplicas → 12.75 req/s — 2.93× no 5×, explicado con la Universal Scalability Law de Gunther, con cálculo real de α a partir de los propios datos) · D18 *Cierre de M1* — sistema completo integrado + defensa escrita completa.
+
+**Puerto DOC-09:** M1 no toca L0/L1 en ningún día — el Día 18 lo demuestra explícitamente desplegando el servicio de referencia (contrato L3) sin ninguna modificación a su lógica interna.
 
 ### M2 · Model serving (vLLM, Ray)
 
@@ -189,6 +172,8 @@ Examen + proyecto + defensa, **incluye diagnóstico de una arquitectura ajena** 
 | **vLLM `benchmarks/benchmark_serving.py`** ([GitHub oficial](https://github.com/vllm-project/vllm/blob/main/benchmarks/benchmark_serving.py)) | Confirmado como la herramienta oficial del propio proyecto para medir throughput/latencia bajo carga — no un script de terceros | M2.Lab2, ancla directa de la exigencia de "mediciones propias" de DOC-10 |
 
 **Fuentes adicionales verificadas para la decisión de entornos (no bibliografía oficial de DOC-10, sino respaldo técnico de §3 — mismo criterio de ampliación justificada que N3 usó con Seeing Theory):** InsiderLLM (guía WSL2 GPU 2026), Docker Docs (soporte GPU en Docker Desktop), Lune.dev (fallo de detección de GPU en K8s sobre WSL2), kind.sigs.k8s.io (clústeres multi-nodo).
+
+**Bibliografía ampliada de M1 (2026-07-22, verificada por WebSearch real, citada por decisión del Director de elevar el estándar a nivel académico/profesional):** Verma et al., *"Large-scale cluster management at Google with Borg"* (EuroSys 2015) · Burns, Grant, Oppenheimer, Brewer, Wilkes, *"Borg, Omega, and Kubernetes"* (CACM 2016) · Linux man-pages, `pid_namespaces(7)` (man7.org) · `tini` (krallin/tini, GitHub) · Basiri et al., *"Principles of Chaos Engineering"* (Netflix, 2017, arXiv:1702.05843) · Wiggins, *The Twelve-Factor App*, Factor III (12factor.net) · CIS Kubernetes Benchmark (Center for Internet Security) · Google Open Source Blog, *"The End of an Era: Transitioning Away from Ingress NGINX"* (2026) — confirma el retiro oficial de `ingress-nginx` en marzo 2026 · Gateway API (gateway-api.sigs.k8s.io, sucesor oficial de Ingress) · Amdahl (1967) y Gunther, *Universal Scalability Law* (perfdynamics.com) · KEDA (keda.sh, CNCF) · Argo Rollouts (argoproj.github.io/rollouts).
 
 ## 9. Pendiente
 

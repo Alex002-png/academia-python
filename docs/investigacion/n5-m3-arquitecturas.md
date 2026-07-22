@@ -59,3 +59,16 @@ El tema completo demuestra, con tres piezas de evidencia numérica real (Ejercic
 ## 13. Estrategia adoptada para este tema
 
 Cada valor —incluyendo el que se corrigió tras el hallazgo del harness— se generó (o regeneró) ejecutando Python real (`verify_n5m3t3_full.py`) antes de comitear; harness de Node: 13/13 pass tras la corrección. **Falsable por:** el diseño de LSTM de este tema es deliberadamente simplificado (una sola compuerta de olvido/entrada/salida por unidad, pesos compartidos entre compuertas por simplicidad pedagógica) — no es la arquitectura LSTM completa de Hochreiter & Schmidhuber (1997); esa versión completa se entrena con `nn.LSTM` real en M3.T4, donde la implementación exacta ya no depende de simplificaciones pedagógicas.
+
+## 14. N5.M3.T4 · RNN/LSTM entrenada de verdad — cómo enseñan este concepto exacto las fuentes de referencia
+
+- **Karpathy, "The Unreasonable Effectiveness of Recurrent Neural Networks"** (ensayo original citado en Recursos, verificado por WebSearch): la fuente primaria real que popularizó la generación de texto carácter por carácter — mismo autor que micrograd/makemore (M1), cerrando el círculo de referencias de Karpathy a través de todo N5.
+- **PyTorch docs, "Classifying Names with a Character-Level RNN"** (WebSearch): el tutorial oficial más cercano a este patrón exacto (RNN a nivel de carácter), citado como referencia "Antes" aunque este laboratorio genera texto en vez de clasificar, por ser la fuente oficial más próxima al vocabulario y las estructuras de datos usadas aquí.
+
+## 15. Verificación empírica real — entrenamiento completo, no simulado
+
+Vocabulario de 10 caracteres (8 palabras de ejemplo + marcador de inicio/fin), 40 pares (contexto, siguiente carácter), modelo `nn.Embedding+nn.LSTM+nn.Linear` con 1914 parámetros — todo generado con `verify_n5m3t4_torch.py`, ejecución real. Entrenamiento real de 200 épocas: pérdida 2.2876 → 0.2493. Generación real tras entrenar: el modelo reproduce `gato` (una palabra YA vista en entrenamiento) — resultado honesto, no idealizado: con 8 ejemplos, el laboratorio documenta explícitamente que es MÁS PROBABLE que el modelo memorice que generalice, y lo convierte en el eje pedagógico del Desafío (agregar datos nuevos y verificar honestamente si aparece algo no memorizado) en vez de ocultar la limitación.
+
+## 16. Estrategia adoptada para este laboratorio, y cierre de la porción "entrenada de verdad" de M3
+
+Cada cifra —vocabulario, pares de entrenamiento, parámetros, historial de pérdida, palabra generada, y el mensaje literal de `KeyError` para un carácter fuera de vocabulario— se generó ejecutando PyTorch real (`verify_n5m3t4_torch.py`). Con M3.T2 y M3.T4 completos, **la porción DOC-12 de M3 queda cerrada** — quedan T3 (ya completo, DOC-11) y T5 (atención, DOC-11, cierra el módulo completo). **Falsable por:** el dataset de 8 palabras es deliberadamente mínimo por restricciones de tiempo de laboratorio — cualquier conclusión sobre "memoriza vs. generaliza" en este tamaño exacto de dataset no se extrapola automáticamente a datasets reales de millones de ejemplos; el laboratorio lo declara explícitamente en checkpoints/comprensión, no lo deja implícito.

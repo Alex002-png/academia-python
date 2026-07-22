@@ -1,5 +1,7 @@
 # Auditoría Integral — Nivel 8 · AI Systems
 
+**Nota (2026-07-22, post-cierre):** esta auditoría precede la expansión de práctica del nivel (`practicaExtendida`, 550 ejercicios nuevos, PATCH DOC-10 1.0.5 — ver `docs/syllabus/syl-n8.md` §10 y `docs/informes/n8-informe-final-de-nivel.md`, addendum). Sus hallazgos sobre contenido teórico y arquitectura siguen vigentes — esa expansión no tocó fichas, `explicacion` ni bibliografía —, pero cualquier cifra de carga estimada citada abajo (ej. "~170h") está superada.
+
 **Método:** 4 auditores independientes, sin coordinación entre sí (mismo patrón institucional que N1/N2/N3), cada uno con un mandato de examinar 3 dimensiones específicas del contenido REAL de `LEVEL8` en `index.html` (22 laboratorios DOC-12 + proyecto de nivel), contrastado contra los documentos gobernantes (DOC-10 §8, DOC-01, DOC-12, `syl-n8.md`, la investigación pedagógica y de arquitectura ya producidas). Mandato explícito de cada auditor: intentar demostrar que el nivel NO debería aprobarse en su forma actual si hay motivo real, no validar automáticamente.
 
 **Resultado global: ningún hallazgo crítico.** 3 hallazgos moderados reales (todos corregidos), varios menores (todos corregidos salvo uno declarado explícitamente como fuera de control del diseño de N8).

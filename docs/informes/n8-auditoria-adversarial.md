@@ -1,5 +1,7 @@
 # Auditoría Adversarial (Paso 9b) — Nivel 8 · AI Systems
 
+**Nota (2026-07-22, post-cierre):** esta auditoría precede la expansión de práctica del nivel (`practicaExtendida`, 550 ejercicios nuevos, PATCH DOC-10 1.0.5 — ver `docs/syllabus/syl-n8.md` §10 y `docs/informes/n8-informe-final-de-nivel.md`, addendum). El Ataque 4 (carga estimada) y su hallazgo de "~170h" citado abajo quedaron superados por esa expansión; el resto de hallazgos (contenido teórico, arquitectura, reservas de verificación empírica) sigue vigente sin cambios.
+
 **Mandato:** 2 revisores independientes, sin coordinación entre sí, cada uno con instrucción explícita de intentar demostrar que N8 NO debería aprobarse en su forma actual — mismo patrón que el comité adversarial de N3 (6 ataques examinados). Aquí: 8 ataques en total (4 por revisor), sobre el contenido ya corregido por la auditoría integral (`n8-auditoria-integral.md`).
 
 **Resultado: 5 de 8 ataques con fundamento real, 3 sin fundamento (la arquitectura resiste).** Ningún ataque invalida el nivel. Se aplicaron correcciones a los 5 con fundamento; el más serio (Reservas #1 y #2 abajo) queda documentado con honestidad en vez de resuelto por completo, porque su resolución total excede mi autoridad o mi capacidad de verificación real.

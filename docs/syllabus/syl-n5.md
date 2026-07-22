@@ -272,10 +272,90 @@ Troncal: `M1 → M2 → M3 → M4`. M2 depende con fuerza de M1 (el "quiebre de 
 
 **Adaptación deliberada frente a N3 (100% Pyodide):** a diferencia de N3, N5 SÍ incluye el campo `flujoDeGit` (notebook + README en un repositorio propio) — consistente con que N5 es el primer nivel de ET3 con módulos DOC-12 reales (M2 completo, mitad de M3), no una excepción de diseño. **Fuera de alcance declarado explícitamente:** no se espera superar el estado del arte ni reimplementar el motor de autograd completo para la arquitectura final del capstone — se espera un proyecto modesto pero honesto, con la cadena metodológica completa (M1→M2→M3→M4) sostenida y defendible.
 
-## 7. Herencias Declaradas *(pendiente — Paso 9 del flujo de 9 pasos, tras construir el contenido real)*
+## 7. Herencias Declaradas
 
-Sección a completar cuando M1-M4 y el capstone existan como contenido real verificado, siguiendo el patrón de SYL-N3 §7/§9a: herencias entrantes confirmadas contra el N4 real (no el borrador de §2bis) y herencias salientes hacia SYL-N6, con especial atención a la continuidad directa M3.T5 (atención) → N6.M1 (self-attention y arquitectura completa del transformer), ya anticipada en el diseño de este documento.
+### 7.1 Resolución de la herencia entrante (borrador de §2bis, contra el contenido REAL de M1-M4 construido)
+
+El borrador de §2bis (basado en el alcance de DOC-10 §7 para N4, no confirmado contra el N4 real — N4 se construyó en paralelo) se confirma parcialmente resuelto: M1.T1 reinterpretó explícitamente la regresión logística de N4.M2 como "una neurona" (conexión declarada en la ficha de M1.T1), y M4 extendió la disciplina de splits/métricas/overfitting de N4.M4 con vocabulario propio de deep learning (variable aislada, ablation study, múltiples corridas). **Declarado explícitamente, igual que en §2bis: pendiente de confirmación formal cuando SYL-N4 congele con sus propias Herencias Declaradas finales** — este documento no bloqueó su avance esperando esa confirmación, conforme a la instrucción de `docs/guia-construccion-niveles.md` §13 paso 7.
+
+### 7.2 Borrador de Herencias hacia SYL-N6 (H-N6-xx — a consolidar formalmente en el Paso 9 de este mismo documento, no ahora; N6 se construye en paralelo, no congelado)
+
+| # | N5 siembra | N6 deberá recoger |
+|---|---|---|
+| H-N6-01 | M1.T3 completo: backpropagation y motor de autograd propio, dominado a fondo (no solo ejecutado) | N6.M1 (transformer desde cero) asume fluidez completa con backpropagation — no se reenseña, se aplica directamente a un grafo computacional mucho más grande |
+| H-N6-02 | M3.T5 completo: self-attention de una cabeza (producto punto→softmax→escalado √d_k→suma ponderada), verificado con ejecución real | N6.M1 reutiliza este mecanismo LITERALMENTE como el núcleo del transformer, extendiéndolo con proyecciones Q/K/V aprendidas por separado (en vez de Q=K=V=entrada) y atención multi-cabeza — la generalización directa de lo ya dominado, no un mecanismo nuevo |
+| H-N6-03 | M3.T5 retoFinal (verificado con ejecución real): la atención pura no distingue posición — dos apariciones idénticas de un vector en posiciones distintas dan salidas idénticas | N6.M1 introduce positional encoding como respuesta DIRECTA y ya motivada a esta limitación — el estudiante llega con la pregunta ya formulada por su propia evidencia, no con el concepto presentado sin motivación |
+| H-N6-04 | M2 completo: fluidez real con PyTorch (tensores, autograd, nn.Module, optimizadores, GPU) en Google Colab | N6 asume esta fluidez sin reenseñar la API básica de PyTorch — todo laboratorio DOC-12 de N6 puede empezar directamente en la arquitectura específica del transformer, no en "cómo se usa PyTorch" |
+| H-N6-05 | M4 completo: disciplina de rigor experimental (hipótesis, variable aislada, semillas en múltiples fuentes, reporte honesto con media/peor/mejor) | N6 asume que el estudiante reporta resultados de entrenar/evaluar un transformer con esta misma disciplina, sin necesidad de re-explicar por qué una sola corrida no basta |
+| H-N6-06 | M3.T1-T4: CNN y RNN/LSTM entrenadas de verdad en datos reales (MNIST, generación de texto), con el contraste explícito de qué estructura del dato explota cada arquitectura | N6.M3 (familias de modelos) puede comparar el transformer contra CNN/RNN ya conocidas de primera mano por el estudiante, no como arquitecturas descritas solo en prosa |
+
+**Prerrequisitos ocultos verificados (preliminar, a confirmar formalmente en el Paso 9 real):** N6.M2 (Tokenización y embeddings) y N6.M4 (Papers fundacionales) son contenido mayormente nuevo, con dependencia técnica de N5 limitada al vocabulario general (H-N6-01/04/05) — consistente con el grafo de DOC-10, sin huérfanos detectados desde N5.
+
+## 8. Paso 8 · Revisión global del Capstone ET3 y las compuertas
+
+### El capstone — verificación de síntesis (mismo criterio adversarial que N1/N2/N3 ya aplicaron)
+
+**¿Podría un estudiante completar el capstone entregando las 4 piezas (M1/M2/M3/M4) por separado, sin integrarlas de verdad?** No, por diseño: el hito 2 exige verificar el motor de autograd propio (M1.T3) contra `torch.autograd` sobre un cálculo RELEVANTE AL PROYECTO ELEGIDO, no el ejemplo genérico ya resuelto en M2.T2 — obliga a re-aplicar la comparación, no a copiarla. El hito 4 exige que el informe honesto (M4.T3) se calcule sobre las corridas REALES del hito 3 (M2-M3), no datos de ejemplo. El hito 5 exige narrar explícitamente "qué pieza de cada módulo usaste, y por qué era necesaria" — la integración está en el propio diseño del capstone, no confiada a la buena fe del estudiante.
+
+**Diferencia estructural real frente a N3 (declarada honestamente):** N3 es 100% DOC-11/Pyodide; su capstone no tiene `flujoDeGit`. N5 SÍ lo tiene, porque a diferencia de N3, el capstone de N5 se entrena de verdad en un entorno real (Colab) y necesita documentación reproducible por otra persona — mismo principio de honestidad estructural que ya exigió `docs/mision-n5.md` desde el diseño.
+
+### Cobertura de competencias — verificación explícita
+
+| Competencia | Verificada por |
+|---|---|
+| C-N5-01 (implementa redes neuronales y backpropagation desde cero, explicando cada paso del flujo de gradientes) | M1 completo (4 temas, 56 ejercicios) + ítems 1-2 del banco de examen + Capstone hito 2 |
+| C-N5-02 (entrena arquitecturas —convolucionales, recurrentes— en PyTorch con hardware de consumo y nube gratuita, con resultados reproducibles y documentados) | M2 completo (4 laboratorios) + M3.T2/T4 (CNN/LSTM entrenadas de verdad) + ítems 3-4 del banco de examen + Capstone hito 3 |
+| C-N5-03 (experimenta con rigor: hipótesis explícitas, variables aisladas, comparaciones reproducibles entre configuraciones) | M4 completo (3 temas) + ítems 5-6 del banco de examen + Capstone hitos 1 y 4 |
+| C-N5-04 (explica el funcionamiento de una red neuronal a una audiencia no técnica y a una técnica, ajustando el registro) | Practicada progresivamente desde M1.T4 (defensa breve) hasta M4.T3 (resumen no técnico); ítems 7-8 del banco de examen + Capstone hito 5 |
+
+**Hallazgo de la revisión:** las 4 competencias de N5 mapean 1:1 con los 4 módulos, igual que en N3 — cobertura completa, sin competencia huérfana. A diferencia de N3 (donde C-N3-04 se practicaba solo en M4), C-N3-04's análogo aquí (C-N5-04) se practica de forma DISTRIBUIDA desde M1.T4, no reservada al último módulo — decisión de diseño explícita de §3.principio 8, verificada aquí como efectivamente cumplida en el contenido real construido.
+
+### Banco de examen — ítems rotables (≥3 variantes por ítem, NNR-02)
+
+*Formato oral, con derivación en vivo cuando aplique — el examinador elige UNA variante por ítem al azar en cada aplicación.*
+
+**Ítem 1 (C-N5-01 · gradiente de una neurona).** "Dada esta neurona (x1, x2, w1, w2, b), calcula z y el gradiente respecto a cada peso y el sesgo."
+- Variante A: x=(2,3), w=(0.5,-1), b=1 → z=**-1.0**, ∂z/∂w1=**2.0**, ∂z/∂w2=**3.0**, ∂z/∂b=**1**.
+- Variante B: x=(1,-2), w=(2,3), b=0.5 → z=**-3.5**, ∂z/∂w1=**1.0**, ∂z/∂w2=**-2.0**, ∂z/∂b=**1**.
+- Variante C: x=(4,0), w=(-1,1), b=2 → z=**-2.0**, ∂z/∂w1=**4.0**, ∂z/∂w2=**0.0**, ∂z/∂b=**1**.
+
+**Ítem 2 (C-N5-01 · regla de la cadena, backpropagation manual).** "Calcula la salida y el gradiente de (ax+b)² respecto a x, propagando la regla de la cadena paso a paso."
+- Variante A: a=2, b=3, x=4 → salida=**121**, gradiente=**44**.
+- Variante B: a=3, b=-1, x=2 → salida=**25**, gradiente=**30**.
+- Variante C: a=-1, b=5, x=1 → salida=**16**, gradiente=**-8**.
+
+**Ítem 3 (C-N5-02 · contar parámetros de una arquitectura).** "¿Cuántos parámetros entrenables tiene esta arquitectura MLP (lista de tamaños de capa)?"
+- Variante A: [3, 4, 1] → **21**.
+- Variante B: [2, 5, 5, 2] → **57**.
+- Variante C: [10, 8, 3] → **115**.
+
+**Ítem 4 (C-N5-02 · forward pass de un MLP con pesos dados).** "Calcula la salida de este MLP (capa oculta ReLU, capa de salida sigmoide) para la entrada dada."
+- Variante A: x=[1,1], pesos_oc=[[1,1],[1,-1]], sesgos_oc=[0,0], pesos_sal=[[1,1]], sesgo_sal=[-1] → **[0.7311]**.
+- Variante B: x=[2,0], pesos_oc=[[0.5,0.5],[-1,1]], sesgos_oc=[0,-0.5], pesos_sal=[[0.5,0.5]], sesgo_sal=[0] → **[0.6225]**.
+- Variante C: x=[0,1], pesos_oc=[[1,0],[0,1]], sesgos_oc=[0.5,0.5], pesos_sal=[[1,-1]], sesgo_sal=[0] → **[0.2689]**.
+
+**Ítem 5 (C-N5-03 · ¿es un experimento válido?).** "¿Estas dos configuraciones aíslan exactamente una variable? Si no, ¿cuáles cambiaron?"
+- Variante A: {lr:0.1,opt:sgd,epocas:300} vs {lr:0.2,opt:sgd,epocas:300} → **Válido** (solo lr).
+- Variante B: {lr:0.1,opt:sgd,arq:"2-4-1"} vs {lr:0.2,opt:adam,arq:"2-8-1"} → **NO válido** (arq, lr, opt cambiaron los 3).
+- Variante C: {batch:32,lr:0.01} vs {batch:64,lr:0.01} → **Válido** (solo batch).
+
+**Ítem 6 (C-N5-03 · media/varianza y decisión honesta).** "Con estas corridas de dos configuraciones, ¿cuál reportarías como mejor, y con qué confianza?"
+- Variante A: A=[0.80,0.55,0.90], B=[0.75,0.74,0.76] → media A=**0.75**, media B=**0.75** (empate en media, pero var A=**0.021667** vs var B=**0.000067** — B es mucho más confiable pese a la misma media).
+- Variante B: A=[0.60,0.62,0.59], B=[0.60,0.40,0.80] → media A=**0.6033**, media B=**0.6** (casi iguales, pero var A=**0.000156** vs var B=**0.026667** — A es mucho más confiable).
+- Variante C: A=[0.91,0.89,0.90], B=[0.85,0.86,0.84] → media A=**0.90**, media B=**0.85**, varianzas casi iguales (**0.000067** ambas) — A es mejor de forma clara y confiable.
+
+**Ítem 7 (C-N5-04 · pesos de atención, explicar el resultado).** "Calcula los pesos de atención de esta query contra estas keys, y explica en una frase qué significa el resultado."
+- Variante A: q=(1,1), keys=[(1,1),(1,-1)] → pesos=**[0.8044, 0.1956]** (la query se parece mucho más a la primera key).
+- Variante B: q=(0.5,0.5), keys=[(1,0),(0,1),(0.5,0.5)] → pesos=**[0.3333, 0.3333, 0.3333]** (las tres keys reciben atención exactamente igual — caso de simetría perfecta).
+- Variante C: q=(2,0), keys=[(1,0),(-1,0)] → pesos=**[0.9442, 0.0558]** (la query apunta casi exactamente hacia la primera key, casi nada hacia la opuesta).
+
+**Ítem 8 (C-N5-04 · explicar a dos audiencias).** "Traduce esta precisión técnica a una frase honesta para una audiencia no técnica."
+- Variante A: 92% → **"El modelo acierta casi siempre"**.
+- Variante B: 78% → **"El modelo acierta la mayoría de las veces, pero se equivoca con cierta frecuencia"**.
+- Variante C: 45% → **"El modelo todavía comete errores frecuentes"**.
+
+**Nota de diseño:** los 8 ítems cubren las 4 competencias con 2 ítems cada una, 3 variantes cada ítem (24 variantes totales) — todos los valores verificados por ejecución real de Python (`verify_n5_banco_examen.py`) antes de fijarse aquí, misma disciplina que rigió cada ejercicio de M1-M4. El examinador puede generar variantes adicionales cambiando los valores numéricos sin cambiar la estructura del ítem, siempre que re-verifique el resultado por ejecución real antes de usarlo.
 
 ---
 
-*Fin del Documento de Diseño (Paso 1). Siguiente paso: revisión módulo por módulo mientras se construye el contenido real de M1 en `index.html`, conforme al Paso 2 del flujo institucional de 9 pasos.*
+*Paso 8 — pendiente de aprobación por el Director. Siguiente paso: `docs/informes/n5-auditoria-integral.md` (Paso 6), Herencias Declaradas finales y auditoría adversarial (Paso 9).*

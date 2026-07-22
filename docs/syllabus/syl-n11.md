@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | SYL-N11 · Tier T2 |
-| **Versión / Estado** | 0.9.0-draft · **candidato a v1.0.0** (Paso 9 completo: syllabus + 17 laboratorios + capstone construidos, compuertas verificadas, auditoría adversarial de 4 auditores independientes aplicada, Informe Final de Nivel en `docs/informes/n11-informe-final-de-nivel.md`) — rama `nivel/n11`, sin fusionar, a la espera exclusiva del veredicto del Director (guía maestra §12: "v1.0.0" es palabra reservada) |
+| **Versión / Estado** | 0.9.1-draft · **candidato a v1.0.0** (Paso 9 completo + pasada de profundización a estándar Top-20 + segunda ronda de auditoría adversarial, ver §11bis — 6 auditores independientes en total, 14 hallazgos reales, todos corregidos; Informe Final de Nivel actualizado en `docs/informes/n11-informe-final-de-nivel.md`) — rama `nivel/n11`, sin fusionar, a la espera exclusiva del veredicto del Director (guía maestra §12: "v1.0.0" es palabra reservada) |
 | **Autoridad de origen** | DOC-10 §9 (interior de N11) · DOC-01 (C-N11-01…05) |
 | **Depende de** | DOC-10 §9 (mapa) · DOC-01 · DOC-11 (para lo que aplique de su esquema) · DOC-12 (gobierna la mayoría de este nivel) · SYL-N1 §5 (plantilla de ficha) · SYL-N3 §5 (precedente de lectura crítica de notación) |
 | **Produce / desarrolla** | Fichas pedagógicas de M1–M4, diseño del capstone del nivel, Herencias Declaradas (entrantes y salientes) |
@@ -422,7 +422,28 @@ De N1.M4 (ya congelado, v1.0.0): el flujo Git/PR técnico ya está dominado en c
 
 Ningún auditor, atacando desde un ángulo distinto y sin coordinación, encontró evidencia que sostenga la tesis fuerte del mandato ("N11 no debería existir en su forma actual"). La decisión estructural más importante del nivel (§3.1) resiste verificada contra el contenido real, no solo contra la intención de diseño. De 8 hallazgos reales, 0 fueron críticos, 4 moderados y 4 menores — los 8 aplicados (Hallazgo 8 resuelto el 2026-07-22, ver arriba). **SYL-N11, con las 8 correcciones ya aplicadas, queda declarado por este comité candidato a v1.0.0 — a la espera exclusivamente del veredicto formal del Director.**
 
-**Nota post-auditoría (2026-07-22) — pasada de profundización.** Tras el veredicto de este comité, el Director instruyó explícitamente elevar la densidad pedagógica de todo el nivel a un estándar comparable a MIT/Stanford/CMU/Berkeley (sin inflar con días/ejercicios artificiales — M2/M4 siguen dependiendo de terceros reales). Los 17 laboratorios y el capstone se reescribieron con mayor profundidad real (más mecanismo interno, más fuentes primarias verificadas, más variantes legítimas de práctica y debugging), documentada íntegramente en `docs/investigacion/n11-m*.md` §4 de cada archivo. Esta pasada no fue sometida a una segunda auditoría adversarial independiente — es una recomendación abierta, no un defecto conocido.
+**Nota post-auditoría (2026-07-22) — pasada de profundización.** Tras el veredicto de este comité, el Director instruyó explícitamente elevar la densidad pedagógica de todo el nivel a un estándar comparable a MIT/Stanford/CMU/Berkeley (sin inflar con días/ejercicios artificiales — M2/M4 siguen dependiendo de terceros reales). Los 17 laboratorios y el capstone se reescribieron con mayor profundidad real (más mecanismo interno, más fuentes primarias verificadas, más variantes legítimas de práctica y debugging), documentada íntegramente en `docs/investigacion/n11-m*.md` §4 de cada archivo.
+
+## 11bis. Segunda auditoría adversarial — sobre el contenido de la pasada de profundización (2026-07-22)
+
+*A diferencia de la nota anterior (que declaraba esta pasada sin auditar), sí se ejecutó una segunda ronda: 2 auditores independientes, sin coordinación entre sí ni con la ronda anterior, atacando específicamente el contenido AÑADIDO durante la profundización — no el contenido ya auditado en §11.*
+
+**Auditor E (fact-check de citas):** verificó por WebSearch/WebFetch directo las ~15 fuentes nuevas citadas durante la profundización. Veredicto: ninguna es una fabricación total; 11/15 correctas sin reservas. 3 discrepancias reales de atribución/precisión, 1 dato de población de estudio impreciso.
+
+**Auditor F (profundidad real vs. relleno):** leyó el contenido añadido de 8 laboratorios completos y verificó aritméticamente la duración de los 17. Veredicto: sustancia pedagógica real en su mayoría (diagnósticos específicos y técnicamente correctos, transferencia genuina en los desafíos, capstone bien amarrado a los módulos — cada exigencia nueva del capstone rastrea a un laboratorio real donde se enseña). 2 inconsistencias aritméticas de duración encontradas.
+
+### Hallazgos y correcciones aplicadas
+
+1. **(Moderado, Auditor F)** `n11m2t2`: `duracionTotal` declaraba ~130 min, la suma real del array daba 135. **Aplicado:** corregido a ~135 min.
+2. **(Moderado, Auditor F)** `n11m2t4`: `duracionTotal` declaraba ~120 min, la suma real daba 145. **Aplicado:** corregido a ~145 min.
+3. **(Moderado, Auditores E y F, coincidente)** Cita de Henderson et al. con dos IDs de arXiv distintos para el mismo paper (`autor` decía 1709.06560, `url` apuntaba a 1708.04133 — un paper relacionado pero distinto). **Aplicado:** verificado por WebFetch directo de `arxiv.org/abs/1709.06560` que ese es el ID correcto; corregido en `index.html` y en `n11-m1-lectura-de-frontera.md`.
+4. **(Moderado→crítico en su forma original, Auditor E) La distinción ACM "Reproducido" vs. "Replicado" estaba mal explicada.** El eje que el laboratorio afirmaba resultó imposible de verificar con confianza — dos búsquedas propias dieron resultados CONTRADICTORIOS sobre cuál término corresponde a qué escenario (ACM invirtió el significado de ambos en su revisión de 2020 para alinearse con NISO), y el fetch directo a la fuente oficial fue bloqueado (403) dos veces. **Aplicado:** en vez de sostener una tercera afirmación posiblemente incorrecta, M3.T1 y el capstone (hitos 2 y 4) se reformularon para enseñar el eje que sí es cierto (verificación con artefactos originales o no) y la disciplina de verificar la fuente vigente cada vez, citando la fecha de verificación — nunca memorizar cuál nombre es cuál.
+5. **(Menor, Auditor E)** Los "4 criterios de revisión" (originalidad/calidad/claridad/significancia) estaban atribuidos a ICLR; verificado por WebFetch directo que esa página no los contiene — corresponden al formulario oficial de NeurIPS. **Aplicado:** re-atribuido correctamente; ICLR se cita ahora solo por lo que realmente dice (criterio de "fracción sustancial de asistentes interesada"), no por una frase inventada.
+6. **(Menor, Auditor E)** Población del estudio de anclaje descrita como "108 revisores con doctorado" — la población real (PMC) incluye estudiantes de doctorado con publicación reciente en CS, no solo graduados. **Aplicado:** corregido en `index.html` y en `n11-m3-informe-cientifico.md`.
+
+### Conclusión de la segunda ronda
+
+Ningún hallazgo fue una fabricación de contenido — los defectos encontrados fueron de atribución, enlace, aritmética, y (en el caso más serio) una afirmación que el propio autor no pudo sostener con evidencia suficiente al verificarla más a fondo, corregida honestamente en vez de forzada. Las 6 correcciones quedaron aplicadas el mismo día. **La pasada de profundización, con estas correcciones, se considera cerrada — sin hallazgos pendientes conocidos.**
 
 ## 12. Observaciones de ejecución
 

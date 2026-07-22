@@ -2,6 +2,8 @@
 
 *Cierra el flujo institucional de 9 pasos para N11 (`docs/guia-construccion-niveles.md` §13). Estructura de 10 secciones, mismo estándar exigido a N0-N3. Rama `nivel/n11`, no fusionada a `main` — la fusión y el veredicto de v1.0.0 son exclusivos del Director.*
 
+*Actualizado el 2026-07-22 tras una pasada de profundización (instrucción explícita del Director: elevar el nivel a estándar comparable a MIT/Stanford/CMU/Berkeley) y una segunda ronda de auditoría adversarial (2 auditores, específica sobre el contenido nuevo — ver `syl-n11.md` §11bis). La versión original de este informe (previa a ambas) describía un nivel más delgado; este documento refleja el estado real final.*
+
 ## 1. Objetivo global
 
 Que el estudiante deje de ser alguien que domina herramientas y sistemas ya dados (el registro de N0-N10) y se convierta en alguien capaz de producir conocimiento nuevo con honestidad verificable: elegir un paper real con criterio, reproducir una pieza de su resultado central, contribuir a un proyecto de terceros siguiendo sus reglas, reportar lo que encontró —coincida o no con lo esperado— y defender cada decisión ante repreguntas sin guion. N11 no enseña una herramienta ni un framework: enseña el oficio completo de investigador junior, con sus fricciones reales (entorno, calendario, terceros) incluidas a propósito, no eliminadas por diseño.
@@ -18,6 +20,9 @@ Las 5 de DOC-01 (C-N11-01…05), cada una con módulo propio y evidencia verific
 - **La arqueología del software se hace con una pregunta, no leyendo de corrido** (extensión de N1.M4.T4 a código de investigación real, M2.T2).
 - **Un proyecto open source real tiene su propia cultura escrita, y esa cultura manda** (M4.T1): la convención local del proyecto elegido siempre gana sobre la convención genérica que el estudiante ya conoce.
 - **El PR real es la misma "propuesta argumentada" de N1, pero ahora el lector no tiene ninguna obligación de paciencia** (M4.T3-T4).
+- **Una sola corrida nunca es una verificación cuando hay componente aleatorio** (M1.T3/M2.T4, Henderson et al. 2018): el ruido de semilla puede disfrazarse de mejora real; se practica con múltiples semillas, nunca con un solo número.
+- **La causa raíz está varios "por qué" más abajo que la primera explicación** (M2.T5, 5 Whys): detenerse en el primer "por qué" produce una explicación superficial, no accionable.
+- **Verificar la fuente vigente vale más que memorizar un término** (M3.T1): el propio nivel encontró, al construirse, que ACM invirtió el significado de "Reproducido"/"Replicado" en 2020 — la lección enseña a verificar, no a memorizar, precisamente por ese hallazgo real durante su construcción.
 
 ## 4. Errores que elimina
 
@@ -36,9 +41,10 @@ Herencias declaradas en `syl-n11.md` §9 (borrador, no bloqueante — N12 no exi
 
 ## 7. Riesgos pedagógicos abiertos
 
-1. **Riesgo de calendario del capstone** (§3.3 del syllabus): la reproducción y la contribución dependen de factores fuera del control del estudiante (viabilidad real del paper, tiempo de respuesta de mantenedores). No es un defecto de diseño — es una propiedad real de la investigación — pero puede extender el capstone más allá de la estimación de DOC-10 (~600h, ya marcada "no auditada").
-2. **Determinismo parcial de 2 laboratorios de M1** (hallazgo de la auditoría adversarial, ya mitigado pero no eliminado): el error inducido en vivo de M1.T1/T2 depende en parte del paper que el propio estudiante elige.
-3. **Fuente secundaria para Keshav** (M1.T1): recomendación registrada de reintentar el fetch directo del PDF original antes de v1.0.0; no bloqueante, ya verificado por convergencia de 4 fuentes independientes.
+1. **Riesgo de calendario del capstone** (§3.3 del syllabus): la reproducción y la contribución dependen de factores fuera del control del estudiante (viabilidad real del paper, tiempo de respuesta de mantenedores). No es un defecto de diseño — es una propiedad real de la investigación — pero puede extender el capstone más allá de la estimación de DOC-10 (~600h, ya marcada "no auditada"). La profundización aumentó las duraciones declaradas por laboratorio; el riesgo de calendario es, si acaso, mayor que en la versión original, no menor.
+2. **Determinismo parcial de 2 laboratorios de M1** (hallazgo de la primera auditoría adversarial): el error inducido en vivo de M1.T1/T2 depende en parte del paper que el propio estudiante elige. Mitigado parcialmente (M1.T2 ancla a un caso garantizado interno), no eliminado del todo.
+3. **Fuente de Keshav — resuelto.** El PDF original sí se pudo fetchear directamente (mirror de Stanford CS114) durante la profundización; ya no depende de una fuente secundaria.
+4. *(Nuevo, tras la segunda auditoría)* **La distinción ACM "Reproducido"/"Replicado" no se resolvió con una correspondencia específica citable de memoria** — se verificó que el propio término es ambiguo entre versiones históricas de la política de ACM (invertido en 2020), y las herramientas de esta sesión no lograron un fetch directo confirmatorio de la versión vigente (bloqueado dos veces). La lección se diseñó para enseñar a verificar la fuente en el momento de uso en vez de resolver la ambigüedad con una afirmación no sostenida por evidencia suficiente — es una limitación real de esta sesión de construcción, no del estudiante futuro, y queda abierta para quien pueda confirmar la definición vigente con acceso directo a `acm.org`.
 
 ## 8. Hipótesis pendientes de validación (falsables con la ejecución real)
 
@@ -56,8 +62,10 @@ Herencias declaradas en `syl-n11.md` §9 (borrador, no bloqueante — N12 no exi
 
 Que una fuente de bibliografía puede quedar obsoleta entre que se cita y que se construye el contenido (Papers With Code, discontinuado por Meta en julio de 2025, descubierto y corregido durante la propia construcción de este nivel) — refuerza que la verificación real (WebFetch/WebSearch, no memoria) no es un paso ceremonial. Que una auditoría adversarial con múltiples auditores independientes encuentra defectos reales incluso en contenido ya verificado con cuidado (la cita fabricada "N1.M1.T7" sobrevivió a la redacción del syllabus y del contenido real sin que el propio autor la notara, hasta que un auditor sin ese punto ciego la señaló). Que declarar honestamente una limitación (la brecha DOC-11 §4bis, el determinismo parcial de un error inducido, la dependencia de terceros en open source) es más valioso institucionalmente que forzar una solución artificial que oculte el problema real.
 
+**Añadido tras la pasada de profundización y su propia auditoría:** que elevar el estándar de un nivel ya construido introduce su propia superficie de error — cada fuente nueva citada es una nueva oportunidad de imprecisión, y en efecto la segunda ronda encontró 6 defectos reales (un enlace equivocado, dos duraciones mal sumadas, una atribución cruzada entre ICLR/NeurIPS, una población de estudio simplificada, y un eje conceptual — ACM Reproducido/Replicado — que el propio autor no pudo verificar con confianza suficiente incluso después de intentarlo dos veces). El hallazgo más valioso no fue ninguno de los defectos en sí, sino la decisión que produjeron: ante una afirmación que dos búsquedas independientes contradecían entre sí, la respuesta correcta no era elegir una y esperar tener razón — era rediseñar la lección para enseñar la verificación como disciplina, en vez de la respuesta como hecho. Es la misma honestidad metodológica que C-N11-04 exige del estudiante, aplicada por el propio proceso de construcción del nivel sobre sí mismo.
+
 ---
 
 ## Veredicto de este documento
 
-**N11 · Research Engineer queda declarado por su autor candidato a v1.0.0.** No es v1.0.0 — esa palabra es exclusiva del Director (guía maestra §12). El nivel está completo (syllabus + 17 laboratorios + capstone, todos verificados), pasó por una auditoría adversarial real con correcciones aplicadas, y sus riesgos conocidos están documentados explícitamente en vez de ocultos. Queda en la rama `nivel/n11`, sin fusionar a `main`, a la espera del veredicto del Director.
+**N11 · Research Engineer queda declarado por su autor candidato a v1.0.0.** No es v1.0.0 — esa palabra es exclusiva del Director (guía maestra §12). El nivel está completo (syllabus + 17 laboratorios + capstone, profundizados a estándar comparable a MIT/Stanford/CMU/Berkeley por instrucción explícita del Director, todos verificados en 4 capas técnicas — sintaxis, esquema, lógica de ejecución simulada, render real en navegador), pasó por **dos** rondas de auditoría adversarial real (4 auditores sobre el contenido original + 2 auditores sobre la profundización) con la totalidad de los hallazgos reales corregidos, y sus riesgos conocidos están documentados explícitamente en vez de ocultos. Queda en la rama `nivel/n11`, sin fusionar a `main`, a la espera del veredicto del Director.

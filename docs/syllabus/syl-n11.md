@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | SYL-N11 · Tier T2 |
-| **Versión / Estado** | 0.1.0-draft · en construcción, rama `nivel/n11` — candidato a v1.0.0 solo tras veredicto del Director |
+| **Versión / Estado** | 0.9.0-draft · **candidato a v1.0.0** (Paso 9 completo: syllabus + 17 laboratorios + capstone construidos, compuertas verificadas, auditoría adversarial de 4 auditores independientes aplicada, Informe Final de Nivel en `docs/informes/n11-informe-final-de-nivel.md`) — rama `nivel/n11`, sin fusionar, a la espera exclusiva del veredicto del Director (guía maestra §12: "v1.0.0" es palabra reservada) |
 | **Autoridad de origen** | DOC-10 §9 (interior de N11) · DOC-01 (C-N11-01…05) |
 | **Depende de** | DOC-10 §9 (mapa) · DOC-01 · DOC-11 (para lo que aplique de su esquema) · DOC-12 (gobierna la mayoría de este nivel) · SYL-N1 §5 (plantilla de ficha) · SYL-N3 §5 (precedente de lectura crítica de notación) |
 | **Produce / desarrolla** | Fichas pedagógicas de M1–M4, diseño del capstone del nivel, Herencias Declaradas (entrantes y salientes) |

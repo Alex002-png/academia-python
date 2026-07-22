@@ -269,7 +269,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** un proyecto open source real tiene su propia cultura escrita — leerla es el equivalente, en este contexto, a leer el paper antes de opinar sobre él (M1.T1): la fuente primaria manda, no la suposición.
 - **Por qué:** existe porque C-N11-03 exige seguir las convenciones del proyecto, no las propias / ahora porque el estudiante ya domina el flujo técnico de Git/PR desde N1 / habilita T2.
 - **Evidencia de dominio:** resume, de un proyecto real elegido, sus convenciones exactas de contribución citando la fuente (archivo/sección) de cada una.
-- **Práctica principal:** laboratorio real — auditoría de convenciones de 2-3 proyectos reales candidatos, del mismo ecosistema que el paper elegido en M1 cuando sea posible (mayor probabilidad de relevancia real para el capstone).
+- **Práctica principal:** laboratorio real — auditoría de convenciones de 2-3 proyectos reales candidatos, del mismo ecosistema que el paper elegido en M1 cuando sea posible (mayor probabilidad de relevancia real para el capstone). *(Profundización 2026-07-22: añade identificar el modelo real de gobernanza — BDFL/fundación/empresa — y auditar el Contributor Covenant, 40,000+ proyectos, 9 de los 10 OSS más grandes.)*
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** si dos proyectos que te interesan tienen convenciones contradictorias entre sí (uno exige commits atómicos pequeños, otro prefiere PRs consolidados), ¿qué te dice eso sobre cómo debes investigar antes de tu primer PR real?
 - **Recursos [🟢 antes]:** Open Source Guides — "How to Contribute" — https://opensource.guide/how-to-contribute/ (fuente oficial, no un resumen de terceros).
@@ -282,7 +282,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** el primer comentario en el issue ("¿puedo trabajar en esto? esta es mi idea de solución") es parte del trabajo, no un trámite — evita construir sobre un malentendido.
 - **Por qué:** existe porque C-N11-03 exige seguir el flujo real (issues, no solo PRs) / ahora porque T1 ya dio las convenciones del proyecto elegido / habilita T3.
 - **Evidencia de dominio:** obtiene una respuesta real de un mantenedor confirmando que puede trabajar en un issue concreto, con su propio plan de solución ya esbozado en el comentario.
-- **Práctica principal:** laboratorio real — búsqueda en `goodfirstissue.dev` / etiquetas nativas del proyecto + comunicación real con mantenedores.
+- **Práctica principal:** laboratorio real — búsqueda en `goodfirstissue.dev` / etiquetas nativas del proyecto + comunicación real con mantenedores. *(Profundización 2026-07-22: añade clasificar el impacto real del cambio con Semantic Versioning —patch/minor/breaking— en el propio comentario al mantenedor, demostrando criterio de ingeniero.)*
 - **Evaluación:** checkpoints DOC-12; evidencia = captura/enlace real de la interacción.
 - **Pregunta ingenieril:** si un mantenedor no responde en varios días, ¿qué opciones tienes que no sean simplemente esperar indefinidamente — y cuál elegirías primero?
 - **Recursos [🔵 durante]:** Good First Issue — https://goodfirstissue.dev/ · firstcontributions.github.io — https://firstcontributions.github.io/contribute-to-opensource/.
@@ -295,7 +295,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** el PR real es el mismo "propuesta argumentada" de N1.M4.T3, pero ahora el lector no conoce al estudiante ni tiene ninguna obligación de ser paciente — la calidad de la comunicación importa más, no menos.
 - **Por qué:** existe porque C-N11-03 exige la práctica real, no simulada / ahora porque T2 ya aseguró que el trabajo es bienvenido / habilita T4 y el capstone.
 - **Evidencia de dominio:** un PR real enviado a un proyecto de terceros, siguiendo todas las convenciones ya auditadas en T1.
-- **Práctica principal:** laboratorio real — preparación + envío del PR.
+- **Práctica principal:** laboratorio real — preparación + envío del PR. *(Profundización 2026-07-22: añade Conventional Commits cuando el proyecto lo exige, y correr tests localmente antes de empujar — nunca dejar que el CI remoto sea la primera verificación.)*
 - **Evaluación:** checkpoints DOC-12; evidencia = enlace real al PR.
 - **Pregunta ingenieril:** ¿qué parte de tu PR reescribirías si supieras que el mantenedor solo tiene dos minutos para decidir si vale la pena seguir revisándolo?
 - **Recursos [🔵 durante]:** "Writing Your First Pull Request" — https://dev.to/opensauced/writing-your-first-pull-request-tips-best-practices-and-ai-powered-tools-for-success-3bg9.
@@ -308,7 +308,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** igual que M3.T3 con informes, el code review es el filtro real que separa "funciona en mi máquina" de "un tercero exigente lo aprueba" — la iteración es parte esperada del proceso, no una señal de fracaso.
 - **Por qué:** existe porque C-N11-03 no termina en "enviar un PR", termina en sostener el intercambio hasta su resolución real / ahora porque T3 ya generó el PR real / habilita el capstone, donde esta misma dinámica ocurre a mayor escala y con mayor peso.
 - **Evidencia de dominio:** al menos una iteración real completada sobre el PR de T3 en respuesta a feedback real de un mantenedor, documentada con el razonamiento de cada cambio.
-- **Práctica principal:** laboratorio real — ciclo de iteración real hasta resolución (aceptado o cerrado con causa entendida — ver §3.3 sobre por qué "aceptado" no siempre depende del estudiante).
+- **Práctica principal:** laboratorio real — ciclo de iteración real hasta resolución (aceptado o cerrado con causa entendida — ver §3.3 sobre por qué "aceptado" no siempre depende del estudiante). *(Profundización 2026-07-22: añade distinguir explícitamente feedback técnico duro y legítimo de una eventual violación real de código de conducta —Contributor Covenant— sin normalizar la segunda ni sobre-reaccionar a la primera.)*
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** si el mantenedor rechaza tu PR por una razón que consideras injusta, ¿qué haces — y qué NO haces?
 - **Recursos [🟣 después]:** ninguno nuevo — este tema es, en su totalidad, la práctica real del flujo ya leído en T1-T3.
@@ -342,6 +342,10 @@ DOC-10 describe el proyecto de N11 como "reproducción publicada + contribucione
 ### 6.5 Modalidad de cómputo
 
 Igual que N5/N6 (guía maestra §6), si la reproducción elegida requiere cómputo no disponible localmente, el estudiante usa un entorno externo (Colab u equivalente) — esto es DOC-12 puro, con sus 13 secciones aplicadas al entorno de cómputo elegido, no una excepción del nivel.
+
+### 6.6 Nota de profundización (2026-07-22)
+
+Los 5 hitos del capstone en `index.html` (`n11et11`) fueron enriquecidos para exigir explícitamente la profundidad reforzada en M1-M4: presupuesto de cómputo real y auditoría de contenerización (h1); monitoreo de recursos, múltiples semillas, verificación contra fallo silencioso y 5 Whys (h2); gobernanza auditada, clasificación SemVer, Conventional Commits y distinción feedback técnico/código de conducta (h3); terminología ACM verificada en la fuente vigente (no memorizada — ver §10 sobre por qué) y atribución SPDX (h4); defensa ensayada en voz alta con repreguntas sobre toda la cadena (h5). El resumen de §6.1-6.5 arriba describe la intención de diseño original; `index.html` es la fuente de verdad del contenido real y más exigente.
 
 ## 7. Compuertas — cobertura de competencias y evaluación del nivel (Paso 5)
 

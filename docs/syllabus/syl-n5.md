@@ -260,9 +260,17 @@ Troncal: `M1 → M2 → M3 → M4`. M2 depende con fuerza de M1 (el "quiebre de 
 - **La limitación humana que compensa M4:** la tendencia natural a creer el primer resultado favorable sin cuestionarlo — el método de este módulo (hipótesis explícita, variable aislada, verificación de reproducibilidad) es, literalmente, la disciplina que compensa ese sesgo.
 - **Lo que deja de sorprender (M4, cierre del nivel):** que un paper o un modelo publicado "simplemente funcione" deja de leerse con fe ciega — el estudiante ahora sabe exactamente qué preguntas hacerle a cualquier resultado de deep learning (¿variable aislada? ¿reproducible? ¿cuántas corridas?) antes de creerlo.
 
-## 6. Proyecto de nivel *(pendiente de detallar como capstone completo — Paso 4 del flujo de 9 pasos)*
+## 6. Proyecto de nivel — Capstone ET3, completo (Paso 4)
 
-Por referencia a DOC-10 §7: **red entrenada end-to-end reproducible y documentada + explicación a audiencia técnica y no técnica.** Integra los 4 módulos: arquitectura elegida y justificada (M1-M3), entrenamiento real en Colab con reproducibilidad verificada (M2.T4/M4.T2), análisis honesto de resultados con al menos una comparación de variable aislada (M4.T1/T3), y defensa a dos audiencias (C-N5-04, ya practicada progresivamente desde M1.T4). Se detalla como objeto capstone completo (DOC-guía §4) al llegar al Paso 4.
+`n5et3` en `index.html`, modalidad `"proyecto"` (mismo esquema técnico que N1/N2/N3: `S.ph[id]`, `renderProyectoDay`, desbloqueo secuencial). Por referencia a DOC-10 §7 (**red entrenada end-to-end reproducible y documentada + explicación a audiencia técnica y no técnica**), integrado en 5 hitos que recorren M1→M4 en orden:
+
+1. **Propuesta** — arquitectura (MLP/CNN/RNN, M1-M3) + problema + hipótesis explícita (M4.T1) + variable aislada entre dos configuraciones a comparar, ANTES de entrenar.
+2. **El mecanismo desde cero, verificado (M1)** — el estudiante confirma, con un cálculo relevante a SU proyecto (no el ejemplo genérico ya resuelto en M2.T2), que su motor de autograd propio y `torch.autograd` coinciden número por número — la prueba de que entiende lo que el framework hace antes de confiarle el entrenamiento real.
+3. **Entrenamiento real en Colab (M2-M3) con reproducibilidad (M4.T2)** — ambas configuraciones, mínimo 3 corridas cada una, semillas documentadas en las fuentes relevantes.
+4. **Informe honesto (M4.T3)** — `reporte_honesto`/`informe_comparativo` aplicados a las 6+ corridas reales, conclusión calificada por la evidencia real disponible, nunca solo la mejor corrida.
+5. **Cierre y defensa a dos audiencias (C-N5-04)** — explicación técnica y no técnica del mismo proyecto, ambas honestas sobre limitaciones, más la narrativa de cómo M1-M4 se integraron.
+
+**Adaptación deliberada frente a N3 (100% Pyodide):** a diferencia de N3, N5 SÍ incluye el campo `flujoDeGit` (notebook + README en un repositorio propio) — consistente con que N5 es el primer nivel de ET3 con módulos DOC-12 reales (M2 completo, mitad de M3), no una excepción de diseño. **Fuera de alcance declarado explícitamente:** no se espera superar el estado del arte ni reimplementar el motor de autograd completo para la arquitectura final del capstone — se espera un proyecto modesto pero honesto, con la cadena metodológica completa (M1→M2→M3→M4) sostenida y defendible.
 
 ## 7. Herencias Declaradas *(pendiente — Paso 9 del flujo de 9 pasos, tras construir el contenido real)*
 

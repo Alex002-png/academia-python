@@ -69,6 +69,40 @@
 
 ---
 
+## 6. Elevación académica (2026-07-22) — investigación adicional por instrucción directa del Director
+
+**Contexto:** el Director exigió explícitamente un estándar comparable a MIT/Stanford/CMU/Berkeley/Harvard/Oxford/Cambridge/ETH Zürich/DeepLearning.AI/Fast.ai/Hugging Face/OpenAI/Anthropic — "por qué existe, cómo funciona internamente, cuándo falla, alternativas, trade-offs, uso profesional" en cada tema, no solo documentación de producto. Esta sección documenta la investigación real (WebSearch/WebFetch directo) que se integró en los 22 laboratorios para cumplir ese estándar, organizada por módulo.
+
+**M1 — Agentes y tool calling:**
+- **ReAct: Synergizing Reasoning and Acting in Language Models** (Yao, Zhao, Yu, Du, Shafran, Narasimhan, Cao — Princeton/Google, ICLR 2023, arxiv 2210.03629): genealogía académica real de la distinción workflow/agente — interleaving de razonamiento y acción, superando tanto al razonamiento puro como a la acción pura por separado.
+- **Toolformer: Language Models Can Teach Themselves to Use Tools** (Schick et al., Meta AI, 2023, arxiv 2302.04761): mecanismo de entrenamiento autosupervisado que explica CÓMO un modelo aprende a decidir cuándo usar una herramienta. Limitación declarada por los propios autores: no supera consistentemente a un modelo base en todas las tareas.
+- **Reflexion: Language Agents with Verbal Reinforcement Learning** (Shinn, Cassano, Gopinath, Narasimhan, Yao — NeurIPS 2023, arxiv 2303.11366): nombre formal del patrón LISTO/REINTENTAR — "refuerzo verbal" sin actualizar pesos, buffer de memoria episódica de auto-reflexiones. Límite real: depende de una señal de evaluación confiable.
+- **OWASP Top 10 for Large Language Model Applications** (owasp.org/www-project-top-10-for-large-language-model-applications/): LLM07 "Insecure Plugin Design" y LLM08 "Excessive Agency", citados textualmente — el estándar de seguridad real de la industria para exactamente el problema de M1.T4.
+- **Principios SOLID** (Robert C. Martin, Principio de Inversión de Dependencias): base formal de ingeniería de software del desacoplamiento de proveedor de M1.T3.
+
+**M2 — Orquestación:**
+- **Statecharts: A Visual Formalism for Complex Systems** (David Harel, Instituto Weizmann, 1987): teoría formal de Ciencias de la Computación detrás de StateGraph — la misma base de UML y sistemas de tiempo real crítico.
+- **AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation** (Wu et al., Microsoft Research, 2023, arxiv 2308.08155): fuente académica de coordinación multi-agente vía conversación — supervisor mapea a su GroupChatManager, swarm a su modo two-agent extendido.
+- **Distributed Snapshots: Determining Global States of Distributed Systems** (Chandy & Lamport, 1985): algoritmo fundacional de checkpoint/restart en sistemas distribuidos, base teórica de 40 años detrás del checkpointing de LangGraph.
+- **JSON-RPC 2.0 Specification** (jsonrpc.org/specification): por qué MCP eligió método-en-cuerpo sobre un único endpoint en vez de REST — simplicidad, batch requests, transporte agnóstico.
+
+**M3 — Memoria y planning (el módulo con el grounding más fuerte):**
+- **MemGPT: Towards LLMs as Operating Systems** (Packer, Fang, Patil, Lin, Wooders, Gonzalez — UC Berkeley, 2023, arxiv 2310.08560): analogía sistema-operativo completa — virtual context management, jerarquía de memoria rápida/lenta.
+- **Generative Agents: Interactive Simulacra of Human Behavior** (Park, O'Brien, Cai, Morris, Liang, Bernstein — Stanford, UIST 2023, arxiv 2304.03442): fórmula EXACTA de scoring de memoria — `score = α_recencia·recencia + α_relevancia·relevancia + α_importancia·importancia`, decaimiento exponencial γ=0,995/hora, relevancia por similitud coseno, importancia puntuada por el LLM. Mecanismo de "reflection" citado explícitamente.
+- **STRIPS** (Fikes & Nilsson, 1971) y **PDDL** (estándar desde 1998): contraste real con planificación clásica de IA — garantías formales de completitud/optimalidad que el planning basado en LLM no tiene.
+- **UC Berkeley CS188: Introduction to Artificial Intelligence** (contenido público del curso): referencia universitaria de planificación clásica.
+
+**M4 — Multimodalidad y voz:**
+- **Learning Transferable Visual Models From Natural Language Supervision (CLIP)** (Radford et al., OpenAI, 2021, arxiv 2103.00020): mecanismo real de tokenización de imagen en parches y embeddings compartidos imagen-texto — por qué el coste escala con resolución.
+- **Robust Speech Recognition via Large-Scale Weak Supervision (Whisper)** (Radford et al., OpenAI, 2022, arxiv 2212.04356): limitaciones declaradas por los propios autores — alucinación de texto no hablado, texto repetitivo, variación de desempeño entre idiomas.
+
+**M5 — Fiabilidad:**
+- **Release It! Design and Deploy Production-Ready Software** (Michael T. Nygard, 2007, 2ª ed. 2018): origen real del patrón circuit breaker — casi 20 años de genealogía (Nygard → Fowler → Netflix Hystrix) detrás de `recursion_limit` y la detección de no-progreso.
+- **AI Risk Management Framework (AI RMF 1.0), NIST AI 100-1** (nist.gov): estándar institucional real de una agencia gubernamental — 4 funciones GOVERN/MAP/MEASURE/MANAGE mapeadas explícitamente a los 4 pasos de auditoría de riesgos de M5.T4, más su extensión para sistemas agénticos.
+- **Telerobotics, Automation, and Human Supervisory Control** (Thomas B. Sheridan, MIT Press, 1992): marco HITL/HOTL con décadas de investigación de factores humanos previa a los LLMs, aplicado a M5.T3.
+
+**Honestidad metodológica:** 5 agentes de investigación en paralelo lanzados para esta fase fallaron por límite de sesión de la API (cuota agotada al spawnear 5 procesos pesados simultáneos) — la investigación se realizó secuencialmente en el hilo principal en su lugar, con el mismo rigor de WebFetch/WebSearch directo, solo con menor exhaustividad por fuente (2-3 búsquedas dirigidas por tema en vez de la exploración más amplia que se había encargado originalmente a los subagentes). Dos áreas quedaron con investigación más ligera que el resto por esta razón: no se profundizó en un curso universitario específico de multimodalidad más allá de CLIP/Whisper, y no se verificaron fuentes adicionales de multi-agent systems más allá de AutoGen (ej. MetaGPT, CAMEL, quedan como profundización futura si se desea ampliar M2).
+
 ## Bibliografía consolidada (para SYL-N8 y fichas por tema)
 
 | Título | Autor/Organización | URL | Módulo |
@@ -87,5 +121,21 @@
 | Design, Develop, and Deploy Multi-Agent Systems with CrewAI | DeepLearning.AI / CrewAI | https://www.deeplearning.ai/courses/design-develop-and-deploy-multi-agent-systems-with-crewai/ | M2/M5 (referencia) |
 | When Agents Do Not Stop (IAL) | arxiv 2607.01641 | https://arxiv.org/abs/2607.01641 | M5 |
 | Where LLM Agents Fail (AgentErrorTaxonomy) | arxiv 2509.25370 | https://arxiv.org/abs/2509.25370 | M5 |
+| ReAct: Synergizing Reasoning and Acting in Language Models | Yao et al. — Princeton/Google, ICLR 2023 | https://arxiv.org/abs/2210.03629 | M1 |
+| Toolformer: Language Models Can Teach Themselves to Use Tools | Schick et al. — Meta AI, 2023 | https://arxiv.org/abs/2302.04761 | M1 |
+| Reflexion: Language Agents with Verbal Reinforcement Learning | Shinn et al. — NeurIPS 2023 | https://arxiv.org/abs/2303.11366 | M1 |
+| OWASP Top 10 for LLM Applications (LLM07, LLM08) | OWASP Foundation | https://owasp.org/www-project-top-10-for-large-language-model-applications/ | M1 |
+| Statecharts: A Visual Formalism for Complex Systems | David Harel — Instituto Weizmann, 1987 | (libro/paper clásico, ver Science of Computer Programming 1987) | M2 |
+| AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation | Wu et al. — Microsoft Research, 2023 | https://arxiv.org/abs/2308.08155 | M2 |
+| Distributed Snapshots: Determining Global States of Distributed Systems | Chandy & Lamport, 1985 | (ACM TOCS, 1985) | M2 |
+| JSON-RPC 2.0 Specification | JSON-RPC Working Group | https://www.jsonrpc.org/specification | M2 |
+| MemGPT: Towards LLMs as Operating Systems | Packer et al. — UC Berkeley, 2023 | https://arxiv.org/abs/2310.08560 | M3 |
+| Generative Agents: Interactive Simulacra of Human Behavior | Park et al. — Stanford, UIST 2023 | https://arxiv.org/abs/2304.03442 | M3 |
+| STRIPS / PDDL (planificación clásica de IA) | Fikes & Nilsson 1971 / estándar PDDL 1998 | https://inst.eecs.berkeley.edu/~cs188/ (referencia de curso) | M3 |
+| Learning Transferable Visual Models From Natural Language Supervision (CLIP) | Radford et al. — OpenAI, 2021 | https://arxiv.org/abs/2103.00020 | M4 |
+| Robust Speech Recognition via Large-Scale Weak Supervision (Whisper) | Radford et al. — OpenAI, 2022 | https://arxiv.org/abs/2212.04356 | M4 |
+| Release It! Design and Deploy Production-Ready Software | Michael T. Nygard, 2007/2018 | https://www.oreilly.com/library/view/release-it-2nd/9781680504552/ | M5 |
+| AI Risk Management Framework (AI RMF 1.0) — NIST AI 100-1 | NIST, 2023 | https://www.nist.gov/itl/ai-risk-management-framework | M5 |
+| Telerobotics, Automation, and Human Supervisory Control | Thomas B. Sheridan — MIT Press, 1992 | https://archive.org/details/teleroboticsauto0000sher | M5 |
 
-*Pendiente si se desea ampliar: verificar arxiv 2601.22290 y 2606.08162 por fetch directo antes de citarlos.*
+*Pendiente si se desea ampliar: verificar arxiv 2601.22290 y 2606.08162 por fetch directo antes de citarlos; profundizar multi-agent systems más allá de AutoGen (MetaGPT, CAMEL) si se desea ampliar M2 más allá del estándar ya alcanzado.*

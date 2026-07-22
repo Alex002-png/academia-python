@@ -32,3 +32,16 @@ El Ejercicio 3 originalmente esperaba valores numéricos EXACTOS de `numpy.rando
 ## 7. Síntesis crítica y estrategia adoptada
 
 El tema completo demuestra la disciplina de reproducibilidad de forma recursiva: mientras enseña a fijar semillas correctamente, el propio proceso de construcción del tema tropezó con y corrigió un caso real de "aleatoriedad no controlada" en sus propios ejercicios — el mismo principio que enseña, aplicado a su propia construcción. Cada valor final se verificó ejecutando el harness múltiples veces en procesos frescos (no solo una vez) antes de darse por correcto, un nivel de verificación más estricto que en temas anteriores, justificado por el hallazgo de esta sección.
+
+## 8. N5.M4.T3 · Análisis honesto de resultados (cierra M4 y el nivel) — cómo enseñan este concepto exacto las fuentes de referencia
+
+- **N4.M5 "El proyecto gestionado"** (herencia entrante declarada en `syl-n5.md` §2bis): ya exigía honestidad en el reporte de resultados de ML clásico — este tema extiende esa disciplina con el vocabulario específico de deep learning (variabilidad entre corridas, GPU no determinista) y la formaliza con C-N5-04 (explicación a dos audiencias).
+- **DOC-03 A5** ("¿cómo sabes que funciona?" — ritual de verificación, ya citado en el modelo pedagógico de la Academia): el reporte honesto de este tema es la aplicación directa de ese ritual al cierre de un módulo de arquitecturas completo.
+
+## 9. Síntesis crítica y cierre de M4
+
+Los 3 temas de M4 forman un ciclo completo y verificable: T1 diseña el experimento (hipótesis, variable aislada, múltiples corridas); T2 garantiza que sea repetible (semillas, registro); T3 lo reporta con honestidad (sin cherry-picking, con las dos audiencias). El retoFinal de T3 —la conclusión que cambia con una tercera corrida— no es un truco aislado: es la MISMA lección de M4.T1 (n=1 miente), demostrada una vez más con datos distintos, cerrando el nivel con el principio que más se repite en todo M4: nunca hay evidencia "suficiente" hasta que se verifica que lo es.
+
+## 10. Estrategia adoptada para M4 completo, y cierre de todo el contenido de N5
+
+Cada valor de M4 (3 temas: T1 método científico, T2 reproducibilidad, T3 análisis honesto) se generó ejecutando Python real antes de escribirse en cualquier `check()`; 1 bug de valor no verificado (T2.Ejercicio 3, categoría nueva: valor inherentemente no-reproducible tratado como fijo) fue encontrado y corregido, verificado con 3 ejecuciones frescas del harness. **Con esto, M4 · Rigor experimental queda completo (156 ids `n5` totales en todo el nivel, 0 duplicados) y el contenido curricular completo de N5 (M1-M4, 27 días/laboratorios, 4 módulos) queda cerrado — sigue el proyecto de nivel (capstone), las compuertas, las Herencias Declaradas, y la auditoría adversarial, conforme al Paso 4 en adelante de `docs/guia-construccion-niveles.md` §13.**

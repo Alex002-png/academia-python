@@ -963,11 +963,23 @@ def __academia_run(code, stdin_list, max_steps=300000):
    (su grafo de import es lo bastante liviano para no agotar el límite), pero
    pandas/scikit-learn/matplotlib sí — precalentarlos fuera del trace es la
    única corrección real: no toca max_steps ni el mecanismo de detección de
-   bucles infinitos, que deben seguir intactos para el resto del contenido. */
+   bucles infinitos, que deben seguir intactos para el resto del contenido.
+
+   IMPORTANTE (hallazgo posterior, al construir N4.M3.T3): "import sklearn"
+   por sí solo NO precalienta sus submódulos — cada uno (tree/ensemble/svm/
+   cluster/model_selection/pipeline/preprocessing/metrics/impute) tiene su
+   PROPIO costo de primera importación bajo trace, independiente del paquete
+   raíz. Verificado empíricamente: sklearn.cluster y sklearn.impute agotan
+   por sí solos casi TODO el límite de 300000 pasos (dejando ~0 presupuesto
+   para el código real del ejercicio); sklearn.svm/model_selection/metrics
+   consumen 35-80% del límite. Por eso el warm de sklearn precalienta
+   explícitamente cada submódulo que algún nivel de la Academia usa, no solo
+   el paquete raíz — el mismo principio de "precalentar fuera del trace",
+   aplicado un nivel más profundo. */
 const PY_PKG_DETECT=[
   {re:/\bnumpy\b/,pkg:"numpy",flag:"__academiaNumpyLoaded",warm:"import numpy"},
   {re:/\bpandas\b/,pkg:"pandas",flag:"__academiaPandasLoaded",warm:"import pandas"},
-  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn"},
+  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn\nimport sklearn.tree\nimport sklearn.ensemble\nimport sklearn.linear_model\nimport sklearn.svm\nimport sklearn.cluster\nimport sklearn.model_selection\nimport sklearn.pipeline\nimport sklearn.preprocessing\nimport sklearn.metrics\nimport sklearn.impute"},
   {re:/\bmatplotlib\b/,pkg:"matplotlib",flag:"__academiaMatplotlibLoaded",warm:'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot'},
 ];
 async function runScriptedPy(code,stdin){
@@ -9291,6 +9303,50 @@ const LEVEL4=[
   starter:'import numpy as np\nfrom sklearn.tree import DecisionTreeClassifier\n\nX = np.array([[1,1],[1,1],[2,2]])\ny = np.array([0,1,1])\narbol = DecisionTreeClassifier(random_state=42)\narbol.fit(X,y)\nprint(round(arbol.score(X,y),4))',runs:[[]],
   hints:["Los dos primeros puntos tienen EXACTAMENTE los mismos valores de features pero etiquetas distintas — ninguna pregunta posible puede separarlos, porque preguntar sobre sus features siempre les da la MISMA respuesta.","El árbol, por más libre que sea, no puede inventar una pregunta que distinga dos entradas idénticas — su única opción es 'promediar' esas etiquetas contradictorias en una sola hoja, sacrificando accuracy perfecta incluso en su propio entrenamiento. Rompe la intuición de que 'un árbol libre siempre memoriza el 100% del entrenamiento'."],
   check:(o,c)=>{const exp="0.6667";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])}}},
+{id:"n4m3t3",n:"Día 47",t:"Ensembles: muchos árboles votando · Parte 1: fundamentos",
+ intro:"Un solo árbol, por más profundo que sea, tiene un techo real de qué tan bien puede aproximar patrones no lineales complejos. Hoy conoces la idea que domina las competencias reales de datos tabulares: entrenar MUCHOS árboles (ligeramente distintos entre sí) y combinar sus votos — casi siempre generaliza mejor que confiar en uno solo. Todos los ejemplos de este tema usan bosques deliberadamente pequeños (pocos árboles, pocos datos) — no por simplificar de más, sino porque entrenar un bosque real dentro del entorno de ejecución de este Campus tiene un costo verificado, y estas escalas ya demuestran el efecto real sin acercarse a ese límite.",
+ intuit:{code:'import numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\nbosque = RandomForestClassifier(n_estimators=3, max_depth=2, random_state=42)\nprint(type(bosque).__name__)',py:true,
+  q:"Sin ejecutar: n_estimators=3 significa 3 árboles individuales dentro del bosque. Antes de entrenar, ¿qué tipo de objeto es 'bosque'?",
+  req:["RandomForestClassifier"],out:"RandomForestClassifier",
+  e:"RandomForestClassifier — un Random Forest es, literalmente, una colección de árboles de decisión (aquí, 3), cada uno entrenado con una variación aleatoria de los datos, cuyos votos se combinan para la predicción final."},
+ mcq:[
+  {q:"¿Por qué un Random Forest suele generalizar mejor que un solo árbol de decisión?",o:["Porque tarda más en entrenar","Cada árbol individual ve una variación aleatoria distinta de los datos — sus errores tienden a ser diferentes entre sí, y promediar muchos votos distintos cancela buena parte del ruido que un solo árbol memorizaría","Porque usa menos memoria","No hay diferencia real, es solo tradición"],a:1,e:"La clave es la DIVERSIDAD entre árboles (cada uno ve datos ligeramente distintos) — sus errores individuales tienden a no coincidir, y el voto de la mayoría cancela gran parte del ruido que un árbol aislado memorizaría."},
+  {q:"¿Qué diferencia real hay entre Random Forest y Gradient Boosting?",o:["Ninguna, son el mismo algoritmo con nombres distintos","Random Forest entrena árboles INDEPENDIENTES en paralelo y promedia sus votos; Gradient Boosting entrena árboles SECUENCIALMENTE, cada uno corrigiendo los errores del anterior","Gradient Boosting no usa árboles de decisión","Random Forest solo funciona para clasificación, nunca para regresión"],a:1,e:"Random Forest combina árboles independientes (paralelo, por votación); Gradient Boosting construye árboles uno tras otro, donde cada nuevo árbol se enfoca específicamente en corregir los errores que dejaron los anteriores (secuencial)."}],
+ ing:"Random Forest y Gradient Boosting (y su variante industrial, XGBoost) son, hasta hoy, de los algoritmos más usados en competencias reales de datos tabulares en Kaggle — mucho antes de recurrir a redes neuronales, que suelen rendir peor en este tipo específico de datos. En producción real, estos bosques suelen tener cientos de árboles — mucho más allá de lo que este Campus puede ejecutar en el navegador; la idea que aprendes aquí a pequeña escala es exactamente la misma que opera a esa escala mayor.",
+ errores:["Asumir que más árboles en el bosque siempre mejora el resultado indefinidamente — el beneficio se estabiliza después de cierto número","Confundir Random Forest (paralelo, independiente) con Gradient Boosting (secuencial, corrige errores) — mecanismos genuinamente distintos","No fijar random_state al comparar configuraciones — sin semilla fija, la aleatoriedad interna del bosque hace que cada corrida dé un resultado ligeramente distinto"],
+ mental:{jr:"“Un bosque es solo un árbol grande.”",sr:"“Un bosque es MUCHOS árboles independientes, cada uno con una vista ligeramente distinta de los datos — su fuerza real viene de la diversidad entre ellos, no de la profundidad individual. Gradient Boosting, en cambio, encadena árboles secuenciales que corrigen errores previos.”",err:"Tratar 'ensemble' como sinónimo vago de 'modelo más complejo', sin distinguir el mecanismo real (votación paralela vs. corrección secuencial) que hace que cada tipo funcione."},
+ theory:[
+  ["Random Forest: muchos árboles, votación",T('<code>RandomForestClassifier(n_estimators=N, max_depth=D)</code> entrena N árboles, cada uno sobre una variación aleatoria de los datos — la predicción final es la clase que más árboles "votaron".'),
+   'from sklearn.ensemble import RandomForestClassifier\nbosque = RandomForestClassifier(n_estimators=3, max_depth=2, random_state=42, n_jobs=1)\nbosque.fit(X, y)'],
+  ["Gradient Boosting: árboles secuenciales, corrigiendo errores",T('<code>GradientBoostingClassifier(n_estimators=N, max_depth=D)</code> entrena árboles UNO TRAS OTRO — cada árbol nuevo se enfoca en los errores que los anteriores dejaron sin corregir.'),
+   'from sklearn.ensemble import GradientBoostingClassifier\ngb = GradientBoostingClassifier(n_estimators=20, max_depth=2, random_state=42)'],
+ ],
+ ex:[
+  {id:"n4m3t3e1",py:true,t:"Ejercicio 1 · Un árbol individual vs. un bosque, mismo problema",
+   d:'Entrena un árbol individual y un Random Forest pequeño (<code>n_estimators=3</code>) sobre el MISMO problema no lineal, evaluando sobre datos de prueba.',
+   starter:'import numpy as np\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.ensemble import RandomForestClassifier\n\nnp.random.seed(15)\nn=30\nX = np.random.rand(n,2)*10\ny = ((X[:,0]-5)**2 + (X[:,1]-5)**2 < 9).astype(int)\nX_train, y_train = X[:20], y[:20]\nX_test, y_test = X[20:], y[20:]\n# tu codigo aqui\n',runs:[[]],
+   check:(o,c)=>{if(!/RandomForestClassifier\s*\(/.test(c))return"Usa RandomForestClassifier para el bosque.";
+     const exp="0.8\n1.0";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Entrena DecisionTreeClassifier(max_depth=3, random_state=42) y RandomForestClassifier(n_estimators=3, max_depth=3, random_state=42, n_jobs=1) sobre X_train/y_train, evaluando ambos con .score(X_test,y_test).","arbol = DecisionTreeClassifier(max_depth=3, random_state=42).fit(X_train,y_train)","bosque = RandomForestClassifier(n_estimators=3, max_depth=3, random_state=42, n_jobs=1).fit(X_train,y_train)","print(round(arbol.score(X_test,y_test),4))\nprint(round(bosque.score(X_test,y_test),4))"]},
+  {id:"n4m3t3e2",py:true,t:"Ejercicio 2 · Más árboles, mejor generalización (hasta cierto punto)",
+   d:'Entrena bosques pequeños con <code>n_estimators</code> de 1, 2 y 3, e imprime la accuracy de prueba de cada uno.',
+   starter:'import numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\n\nnp.random.seed(15)\nn=30\nX = np.random.rand(n,2)*10\ny = ((X[:,0]-5)**2 + (X[:,1]-5)**2 < 9).astype(int)\nX_train, y_train = X[:20], y[:20]\nX_test, y_test = X[20:], y[20:]\n# tu codigo aqui\n',runs:[[]],
+   check:(o,c)=>{const exp="0.9\n0.9\n1.0";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Recorre [1,2,3] entrenando un bosque nuevo con cada n_estimators (mismo max_depth=3, random_state=42, n_jobs=1), imprimiendo su accuracy de prueba.","for n_arb in [1,2,3]:\n    b = RandomForestClassifier(n_estimators=n_arb, max_depth=3, random_state=42, n_jobs=1)\n    b.fit(X_train,y_train)\n    print(round(b.score(X_test,y_test),4))"]},
+ ]},
+{id:"n4m3t3b",n:"Día 48",t:"Ensembles · Parte 2: laboratorio integrador y desafío — cierra T3",
+ intro:"Cierras el tema comparando árbol, bosque y Gradient Boosting en una tabla real, y con un desafío que revela una consecuencia práctica real de la aleatoriedad interna de un Random Forest: sin fijar la semilla, dos corridas 'idénticas' pueden dar resultados distintos.",
+ reto:{id:"n4m3t3r",py:true,t:"Laboratorio · Comparar árbol, bosque y Gradient Boosting en una tabla",
+  d:'Entrena los 3 modelos (árbol, bosque pequeño, Gradient Boosting) sobre los mismos datos, e imprime cuál tiene la MEJOR accuracy de prueba.',
+  starter:'import numpy as np\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\n\nnp.random.seed(15)\nn=30\nX = np.random.rand(n,2)*10\ny = ((X[:,0]-5)**2 + (X[:,1]-5)**2 < 9).astype(int)\nX_train, y_train = X[:20], y[:20]\nX_test, y_test = X[20:], y[20:]\n\narbol_solo = DecisionTreeClassifier(max_depth=3, random_state=42).fit(X_train,y_train)\nbosque = RandomForestClassifier(n_estimators=3, max_depth=3, random_state=42, n_jobs=1).fit(X_train,y_train)\ngb = GradientBoostingClassifier(n_estimators=20, max_depth=2, random_state=42).fit(X_train,y_train)\npass',runs:[[]],
+  check:(o,c)=>{const exp="bosque";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+  hints:["Construye un diccionario {nombre: accuracy} para los 3 modelos, y usa max(diccionario, key=diccionario.get) para encontrar el nombre del mejor.","resultados = {'arbol': arbol_solo.score(X_test,y_test), 'bosque': bosque.score(X_test,y_test), 'boosting': gb.score(X_test,y_test)}","print(max(resultados, key=resultados.get))"]},
+ ex:[],
+ retoFinal:{id:"n4m3t3x",py:true,t:"Desafío final · inédito — la aleatoriedad interna del bosque cambia el resultado sin random_state fijo",
+  d:'Predice, ANTES de ejecutar: dos Random Forest pequeños con los MISMOS hiperparámetros (<code>n_estimators=3, max_depth=2</code>) pero <code>random_state</code> DISTINTO. ¿Dan exactamente la misma accuracy de prueba?',
+  starter:'import numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\n\nnp.random.seed(15)\nn=30\nX = np.random.rand(n,2)*10\ny = ((X[:,0]-5)**2 + (X[:,1]-5)**2 < 9).astype(int)\nX_train, y_train = X[:20], y[:20]\nX_test, y_test = X[20:], y[20:]\n\nb1 = RandomForestClassifier(n_estimators=3, max_depth=2, random_state=1, n_jobs=1).fit(X_train,y_train)\nb2 = RandomForestClassifier(n_estimators=3, max_depth=2, random_state=2, n_jobs=1).fit(X_train,y_train)\nprint(round(b1.score(X_test,y_test),4))\nprint(round(b2.score(X_test,y_test),4))\nprint(b1.score(X_test,y_test) == b2.score(X_test,y_test))',runs:[[]],
+  hints:["random_state controla la aleatoriedad interna de CADA árbol dentro del bosque (qué muestra de datos ve, qué features considera en cada división) — cambiar la semilla cambia esos árboles individuales, aunque los hiperparámetros sean idénticos.","Con solo 3 árboles (un bosque muy pequeño), la diferencia entre semillas es más notoria que con muchos más — otra razón práctica para usar suficientes árboles en producción real: promedia mejor esa variabilidad aleatoria."],
+  check:(o,c)=>{const exp="1.0\n0.9\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)

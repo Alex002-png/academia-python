@@ -5,24 +5,26 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | SYL-N10 · Tier T2 |
-| **Versión / Estado** | **0.5.0-draft** · Pasos 1-4 y 8 del flujo institucional de 9 pasos completos: syllabus, M1-M4 (16 laboratorios reales en `index.html`), capstone ET4 (`n10et4`), compuertas + banco de examen (18 variantes, §10) — pendiente de: Paso 9a (auditoría de coherencia desde N11 + Herencias Declaradas finales), Paso 9b (auditoría adversarial), Informe Final de Nivel, v1.0.0 |
+| **Versión / Estado** | **0.9.0-draft** · Pasos 1-4, 8, 9a y 9b del flujo institucional de 9 pasos completos: syllabus, M1-M4 (27 laboratorios reales en `index.html` tras expansión de calidad, §5bis), capstone ET4 (`n10et4`), compuertas + banco de examen (18 variantes, §10), auditoría adversarial (3 auditores independientes, hallazgos corregidos), Herencias Declaradas finales (§7) — pendiente de: Informe Final de Nivel, veredicto del Director para "candidato a v1.0.0" |
 | **Autoridad de origen** | DOC-10 §8 (interior de N10) · DOC-01 (C-N10-01…03) · `docs/mision-n10.md` |
 | **Depende de** | DOC-10 (mapa, alcance ya aprobado — este documento lo instancia, no lo rediseña) · DOC-12 v1.0.0 (estándar de laboratorios de entorno real — documento gobernante casi absoluto de este nivel) · DOC-01 · DOC-02 · DOC-03 · **Herencias entrantes de N7/N8/N9 (borrador — construidos en paralelo, no congelados; ver §2.1)** |
-| **Produce / desarrolla** | La estructura docente completa de N10: fichas pedagógicas por tema (16 laboratorios en 4 módulos), el diseño del capstone ET4 (columna vertebral local), la compuerta, y el borrador de Herencias Declaradas hacia SYL-N11 |
+| **Produce / desarrolla** | La estructura docente completa de N10: fichas pedagógicas por tema (27 laboratorios en 4 módulos, §5 + §5bis), el diseño del capstone ET4 (columna vertebral local), la compuerta, y las Herencias Declaradas hacia SYL-N11 |
 | **Estándar de calidad** | El mismo de SYL-N1/N2/N3: *"Si otro profesor excepcional impartiera este nivel utilizando únicamente el syllabus, ¿obtendría prácticamente la misma calidad formativa?"* |
-| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño. Decisión de hardware confirmada explícitamente por el Director: RTX 5070 (12GB VRAM) / Ryzen 5 9600X / 32GB RAM como referencia principal de todas las mediciones reales del nivel, con ruta CPU-only documentada en cada laboratorio como comparación, nunca como camino principal (ver §3.2). Supuestos de trabajo sobre la columna vertebral V1(N7)+V2(N8)+infra(N9) declarados explícitamente en §2.1, al no existir todavía contenido congelado en las ramas paralelas (`nivel/n7`, `nivel/n8`, `nivel/n9` verificadas vacías de syllabus/investigación a esta fecha). 16 laboratorios diseñados en 4 módulos (M1:4, M2:4, M3:5, M4:3) · 0.2.0-draft (2026-07-21): **Investigación pedagógica real completada** (§8) — fetch directo verificado a las 4 fuentes oficiales de DOC-10 §8 (docs de Ollama, repo de llama.cpp, spec de GGUF en el repo `ggml` —corrección aplicada: no vive en el repo de llama.cpp—, CUDA Programming Guide de NVIDIA, GPU Mode) más HuggingFace (tabla oficial de quant types GGUF) para llenar el vacío de cuantización que ninguna de las 4 cubre sola. Hallazgo metodológico aplicado a M3.T2: el roofline model/arithmetic intensity que explica por qué el *decode* autoregresivo es memory-bound NO viene de la CUDA Guide de NVIDIA (no lo cubre) sino de literatura de arquitectura de computadoras aplicada por la comunidad de inferencia LLM — declarado explícitamente en la ficha, nunca presentado como documentación oficial de NVIDIA. Errores de novato reales incorporados a las fichas de M1-M3 (WSL2/driver, `ollama ps` como diagnóstico, `--mlock` empeorando OOM, `-c`/`-ngl` como palancas de memoria). |
+| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño. Decisión de hardware confirmada explícitamente por el Director: RTX 5070 (12GB VRAM) / Ryzen 5 9600X / 32GB RAM como referencia principal de todas las mediciones reales del nivel, con ruta CPU-only documentada en cada laboratorio como comparación, nunca como camino principal (ver §3.2). Supuestos de trabajo sobre la columna vertebral V1(N7)+V2(N8)+infra(N9) declarados explícitamente en §2.1, al no existir todavía contenido congelado en las ramas paralelas (`nivel/n7`, `nivel/n8`, `nivel/n9` verificadas vacías de syllabus/investigación a esta fecha). 16 laboratorios diseñados en 4 módulos (M1:4, M2:4, M3:5, M4:3) · 0.2.0-draft (2026-07-21): **Investigación pedagógica real completada** (§8) — fetch directo verificado a las 4 fuentes oficiales de DOC-10 §8 (docs de Ollama, repo de llama.cpp, spec de GGUF en el repo `ggml` —corrección aplicada: no vive en el repo de llama.cpp—, CUDA Programming Guide de NVIDIA, GPU Mode) más HuggingFace (tabla oficial de quant types GGUF) para llenar el vacío de cuantización que ninguna de las 4 cubre sola. Hallazgo metodológico aplicado a M3.T2: el roofline model/arithmetic intensity que explica por qué el *decode* autoregresivo es memory-bound NO viene de la CUDA Guide de NVIDIA (no lo cubre) sino de literatura de arquitectura de computadoras aplicada por la comunidad de inferencia LLM — declarado explícitamente en la ficha, nunca presentado como documentación oficial de NVIDIA. Errores de novato reales incorporados a las fichas de M1-M3 (WSL2/driver, `ollama ps` como diagnóstico, `--mlock` empeorando OOM, `-c`/`-ngl` como palancas de memoria) · 0.5.0-draft: M1-M4 completos (16 laboratorios), capstone `n10et4`, compuertas + banco de examen de 18 variantes (§10, todas verificadas por ejecución real) · 0.6.0-draft (2026-07-22): **Paso 9a completo** — auditoría de coherencia desde `docs/mision-n11.md`, Herencias Declaradas finales (§7); corregida una herencia sobreclamada del borrador (H-N11-04 sobre "columna vertebral completa" hacia N11, cuando esa cadena en realidad salta a N12) · 0.7.0-draft: **Paso 9b completo** — auditoría adversarial con 3 auditores independientes sin coordinación entre sí (coherencia curricular, corrección técnica/factual, experiencia del estudiante/DOC-12). Hallazgos reales corregidos: contradicción interna de cobertura de C-N10-02 (ninguna ficha la tenía etiquetada pese a que §10 afirmaba que sí — corregido retagueando M1.T1/M3.T4/M3.T5/M4.T3 con justificación); tags de Ollama inexistentes en M2.T2-T3 (`llama3.2:q4_K_M` no existe, el real lleva prefijo de tamaño); ausencia de ruta sin GPU en M3.T3/T5 pese a exigencia explícita de `mision-n10.md`; `errorVivo` no genuinamente reproducible en 3 labs de M4 (tareas de lectura con `cmd:null` en vez de comandos reales); inconsistencia GB/GiB en M2.T1; checklist de categorías de error (DOC-12 §2.8) y las 7 capacidades de dominio completas (DOC-12 §2.13), ausentes o incompletas en la mayoría de los 16 laboratorios base — corregidas todas · 0.8.0-draft (2026-07-22): **directiva del Director de elevar el estándar a nivel MIT/Stanford/CMU/Berkeley** (nunca "correcto", "excelente"; 4 preguntas de aceptación obligatorias — guardada como memoria permanente del proyecto). Expansión de calidad completa (§5bis): 16 temas base → 27 laboratorios, cada uno nuevo con investigación real verificada por fetch directo (LLMflation, arXiv 2606.11690, OSI sobre licencia Llama, MMLU-CF, The Leaderboard Illusion, SRE Book de Google, Release It!, issues reales de Ollama, GGML README, convert_hf_to_gguf.py, IEEE 754/BF16, GPTQ/AWQ papers, roofline model de Williams et al. aplicado con specs reales de la RTX 5070, L2 cache real, Architecture Decision Records de Nygard con adopción verificada en Backstage/Cosmos SDK, PagedAttention/SOSP2023) · 0.9.0-draft: §1 y §5bis sincronizados contra el contenido real expandido. |
 
 ---
 
 ## 1. Tabla resumen
 
-| Módulo | Temas (laboratorios DOC-12) | Modalidad | Competencias | Ruta hardware |
-|---|---|---|---|---|
-| M1 · Runtimes locales | 4 | DOC-12 completo | C-N10-01 | Cualquier CPU + descarga; GPU opcional desde T3 |
-| M2 · Cuantización y optimización | 4 | DOC-12 completo, medición real obligatoria | C-N10-01 | RTX 5070 como referencia; ruta CPU-only documentada |
-| M3 · GPU, CUDA básico y jerarquía de memoria | 5 | DOC-12 completo, con introducción conceptual reforzada | C-N10-01 | RTX 5070 como referencia; ruta sin GPU explícita y obligatoria (§3.2) |
-| M4 · Juicio de ecosistema | 3 | DOC-12 completo, prototipo comparativo | C-N10-03 | RTX 5070 para el prototipo; herramientas evaluadas declaran su propio requisito |
-| Capstone ET4 | — | DOC-12 (proyecto) | C-N10-01…03 (síntesis) | RTX 5070 |
+| Módulo | Temas base | Laboratorios reales (tras expansión, §5bis) | Modalidad | Competencias | Ruta hardware |
+|---|---|---|---|---|---|
+| M1 · Runtimes locales | 4 | 9 (T1: 3, T2: 2, T3: 2, T4: 2) | DOC-12 completo | C-N10-01, C-N10-02 | Cualquier CPU + descarga; GPU opcional desde T1c |
+| M2 · Cuantización y optimización | 4 | 6 (T1: 2, T2: 2, T3: 1, T4: 1) | DOC-12 completo, medición real obligatoria | C-N10-01 | RTX 5070 como referencia; ruta CPU-only documentada |
+| M3 · GPU, CUDA básico y jerarquía de memoria | 5 | 7 (T1: 1, T2: 2, T3: 1, T4: 2, T5: 1) | DOC-12 completo, con introducción conceptual reforzada | C-N10-01, C-N10-02 | RTX 5070 como referencia; ruta sin GPU explícita y obligatoria (§3.2) |
+| M4 · Juicio de ecosistema | 3 | 5 (T1: 2, T2: 2, T3: 1) | DOC-12 completo, prototipo comparativo | C-N10-02, C-N10-03 | RTX 5070 para el prototipo; herramientas evaluadas declaran su propio requisito |
+| Capstone ET4 | — | 1 proyecto (5 hitos) | DOC-12 (proyecto) | C-N10-01…03 (síntesis) | RTX 5070 |
+
+**Total: 16 temas base → 27 laboratorios reales + capstone.** Expansión aplicada tras directiva explícita del Director (2026-07-22): profundidad real de nivel MIT/Stanford/CMU/Berkeley por tema, nunca relleno artificial — cada laboratorio nuevo aporta al menos un hallazgo verificado por fetch directo que el laboratorio base no cubría (ver §5bis para el registro completo con fuentes).
 
 *16 laboratorios totales (M1:4 + M2:4 + M3:5 + M4:3) — más que el estándar de N1 (9 laboratorios en M4+M5 combinados: 4+5) por la instrucción explícita de §8 de la guía maestra: más profundidad real en un nivel avanzado de ET4, nunca relleno. Cada laboratorio se dimensiona por lo que su propio contenido sostiene (§3.3), no por una cuota fija.*
 
@@ -303,6 +305,59 @@ Troncal: `M1 → M2 → M3 → M4`. M2 (cuantización) depende técnicamente de 
 - **Evaluación:** estándar DOC-12 + mini-laboratorio de cierre de módulo (integra M1-M4 completos).
 - **Pregunta ingenieril:** dentro de 12 meses, cuando el ecosistema haya cambiado (nuevas herramientas, versiones), ¿qué de lo que aprendiste en M4 sigue siendo válido y qué tendrás que volver a verificar desde cero?
 - **Idea universal (cierre de M4 y del nivel):** en un ecosistema que cambia constantemente, la competencia real no es "saber cuál herramienta es la mejor hoy" — es saber, con método propio, evaluar cualquier herramienta nueva que aparezca mañana.
+
+## 5bis. Registro de expansión — laboratorios adicionales (directiva de calidad del Director, 2026-07-22)
+
+*Cada tema del §5 se expandió de 1 laboratorio a una secuencia de 2-3, calibrada por profundidad real disponible en cada tema, no por una cuota fija (§8, principio anti-relleno ya vigente en el nivel). Cada laboratorio nuevo tiene su propia ficha completa en `index.html` (objeto JS) y su lección espejo en `docs/lecciones/n10/`, con investigación pedagógica verificada por fetch directo antes de escribirse — no se listan las 13 secciones completas aquí para no duplicar el contenido real; este registro es un índice con la fuente principal de cada laboratorio nuevo, para auditoría rápida de cobertura.*
+
+### M1 · Runtimes locales (4 → 9)
+
+| Lab | Título | Fuente principal verificada |
+|---|---|---|
+| `n10m1t1` (a) | Por qué correr un LLM en local — panorama y primer modelo vivo | Ollama docs (ya en §8) |
+| `n10m1t1b` | La economía real de correr un LLM en local | LLMflation (a16z), arXiv 2606.11690 (costo por concurrencia) |
+| `n10m1t1c` | El panorama de modelos abiertos — licencias, benchmarks y criterio | OSI (licencia Llama), arXiv 2412.15194 (MMLU-CF), arXiv 2504.20879 (Leaderboard Illusion), GitHub Engineering |
+| `n10m1t2` | Ollama a fondo — Modelfile, API REST | Ollama API docs (ya en §8) |
+| `n10m1t2b` | Construir un cliente robusto — timeouts/reintentos/circuit breaker | Google SRE Book cap. 21-22, Release It! (Nygard), issues reales de Ollama (#8274, #6380, #9209) |
+| `n10m1t3` (a) | Qué hay debajo de Ollama — llama.cpp | llama.cpp README (ya en §8) |
+| `n10m1t3b` | Arquitectura interna — GGML | GGML README, Ollama development.md, ggml-org discussion #141 |
+| `n10m1t4` (a) | El formato GGUF — cierra M1 | GGUF spec (ya en §8) |
+| `n10m1t4b` | Convertir un modelo de HuggingFace a GGUF | convert_hf_to_gguf.py (código fuente real) |
+
+### M2 · Cuantización y optimización (4 → 6)
+
+| Lab | Título | Fuente principal verificada |
+|---|---|---|
+| `n10m2t1` (a) | Qué es cuantizar | HF GGUF docs (ya en §8) |
+| `n10m2t1b` | Fundamentos numéricos — IEEE 754 | arXiv 1905.12322 (BF16), Denil et al. NeurIPS 2013, arXiv 2309.10975 |
+| `n10m2t2` (a) | Tipos de cuantización GGUF | HF GGUF docs (ya en §8) |
+| `n10m2t2b` | AWQ y GPTQ vs. GGUF | arXiv 2210.17323 (GPTQ), arXiv 2306.00978 (AWQ), oobabooga (perplejidad real medida) |
+| `n10m2t3` | Medición real en hardware | (sin cambio de fuente, ya sólido) |
+| `n10m2t4` | Laboratorio integrador | (sin cambio de fuente, ya sólido) |
+
+### M3 · GPU, CUDA básico y jerarquía de memoria (5 → 7)
+
+| Lab | Título | Fuente principal verificada |
+|---|---|---|
+| `n10m3t1` | Por qué la GPU es rápida | CUDA Programming Guide (ya en §8) |
+| `n10m3t2` (a) | Jerarquía de memoria | CUDA Programming Guide (ya en §8) |
+| `n10m3t2b` | Roofline model — ridge point real de la RTX 5070 | Williams et al. 2009 (ACM), arXiv 2402.16363, specs oficiales NVIDIA |
+| `n10m3t3` | CUDA básico | CUDA Programming Guide (ya en §8) |
+| `n10m3t4` (a) | Medir tu propia GPU | (sin cambio de fuente) |
+| `n10m3t4b` | L2 cache y por qué el KV cache no vive ahí | arXiv 2503.08311, Chips and Cheese (crecimiento real de L2 en Blackwell) |
+| `n10m3t5` | Laboratorio integrador | (sin cambio de fuente, ya sólido) |
+
+### M4 · Juicio de ecosistema (3 → 5)
+
+| Lab | Título | Fuente principal verificada |
+|---|---|---|
+| `n10m4t1` (a) | Criterios de evaluación | (ya sólido) |
+| `n10m4t1b` | Architecture Decision Records | Nygard 2011 (Cognitect), Backstage/Cosmos SDK (adopción real verificada) |
+| `n10m4t2` (a) | Prototipo comparativo (vLLM) | vLLM docs, issue Blackwell #35432 (ya en investigación de M4) |
+| `n10m4t2b` | PagedAttention en profundidad | Kwon et al. SOSP 2023, arXiv 2309.06180 |
+| `n10m4t3` | Decisión fundamentada | (sin cambio de fuente, ya sólido) |
+
+**Corrección de competencias aplicada durante la expansión:** M1.T1 y M4.T3 ganaron C-N10-02 como competencia secundaria (ya reflejado en sus fichas de §5) — la profundización económica de M1.T1b y la síntesis de M4.T3 refuerzan, no diluyen, esa cobertura ya corregida en el Paso 9b.
 
 ## 6. Proyecto de nivel (capstone ET4) — diseño completo (Paso 4, construido en `index.html` como `n10et4`)
 

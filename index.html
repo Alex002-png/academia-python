@@ -8283,10 +8283,16 @@ const LEVEL12=[
    starter:'# Fuente 1 (Discord): <URL exacta que consultaste>\n# Decision 1 de Discord: \n# Fuente 2 (Slack): <URL exacta que consultaste>\n# Decision 1 de Slack: \n# Tu comparacion (minimo 2 decisiones arquitectonicas distintas, con tus propias palabras):\n# \n# Tu justificacion para un sistema 1-a-1 de bajo volumen (por que esa arquitectura y no la otra):\n# \n\nprint("analisis completo")',runs:[[]],
    check:(o,c)=>{
      const lineas=c.split("\n").filter(l=>l.trim().startsWith("#"));
+     const textoCompleto=lineas.join(" ").toLowerCase();
      const tieneURL=lineas.some(l=>/https?:\/\//.test(l));
      const tieneComparacion=lineas.filter(l=>l.replace("#","").trim().length>=25).length>=3;
+     const mencionaDiscordYSlack=textoCompleto.includes("discord")&&textoCompleto.includes("slack");
+     const terminosTecnicos=["cassandra","scylladb","sharding","particionado","consistencia","vitess","sql","nosql","replica"];
+     const tieneTerminoTecnico=terminosTecnicos.some(t=>textoCompleto.includes(t));
      if(!tieneURL)return"Falta al menos una URL real de las fuentes que consultaste (Discord/Slack engineering blog) — sin fuente citada, no hay investigación verificable.";
      if(!tieneComparacion)return"Necesitas al menos 3 líneas de comentario con contenido real (≥25 caracteres cada una) — decisiones concretas y tu justificación, no los placeholders sin completar.";
+     if(!mencionaDiscordYSlack)return"Tu comparación debe mencionar explícitamente a Discord Y a Slack por nombre — un texto genérico que no distingue los dos sistemas reales no es una comparación real.";
+     if(!tieneTerminoTecnico)return"Tu comparación necesita nombrar al menos un término técnico real de arquitectura (ej. Cassandra, ScyllaDB, sharding, particionado, consistencia, Vitess) — una comparación sin ningún detalle técnico específico no demuestra investigación real.";
      return norm(o[0])==="analisis completo"?true:"Falta el print(\\\"analisis completo\\\") final, sin modificar.";
    },
    hints:["Este ejercicio no es de código — es de investigación real. Busca primero en discord.com/blog y slack.engineering artículos técnicos reales sobre cómo almacenan y distribuyen mensajes, y anota la URL exacta.","No generalices ('Discord es más escalable') — nombra la decisión técnica específica (ej. 'Discord particiona por canal usando X', 'Slack usa Y para Z') que encontraste en la fuente real.","Tu justificación final debe conectar una decisión concreta de una de las dos arquitecturas con una característica específica del escenario dado (bajo volumen, 1-a-1) — no una preferencia general."]},
@@ -8529,11 +8535,11 @@ const LEVEL12=[
    starter:'def memoria_working_set_gb(usuarios_activos_diarios, bytes_por_perfil_activo, fraccion_en_memoria):\n    pass\n\nprint(memoria_working_set_gb(10_000_000, 2048, 0.2))',runs:[[]],
    check:(o,c)=>{const exp="3.81";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["El total de bytes es usuarios × bytes por perfil × la fracción que realmente vive en memoria — convierte ese total a GB dividiendo entre 1024 al cubo, igual que en el almacenamiento anual.","total_bytes = usuarios_activos_diarios * bytes_por_perfil_activo * fraccion_en_memoria","return round(total_bytes / (1024**3), 2)"]},
-  {id:"n12m1t2e9",py:true,t:"Ejercicio 9 · Transferencia — working set de un escenario nuevo",
-   d:'Usa <code>memoria_working_set_gb</code> (ya implementada) para un sistema con 2,000,000 de usuarios activos, perfiles de 4096 bytes, y solo 15% en memoria.',
-   starter:'def memoria_working_set_gb(usuarios_activos_diarios, bytes_por_perfil_activo, fraccion_en_memoria):\n    total_bytes = usuarios_activos_diarios * bytes_por_perfil_activo * fraccion_en_memoria\n    return round(total_bytes / (1024**3), 2)\n\n# Llama memoria_working_set_gb con los tres valores del enunciado (2,000,000 usuarios, 4096 bytes, 0.15)\n',runs:[[]],
-   check:(o,c)=>{const exp="1.14";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
-   hints:["Aplica la función tal como está a estos tres valores nuevos, sin modificarla.","print(memoria_working_set_gb(2_000_000, 4096, 0.15))"]},
+  {id:"n12m1t2e9",py:true,t:"Ejercicio 9 · Cuánta memoria ADICIONAL exige duplicar tus usuarios",
+   d:'Implementa <code>memoria_adicional_por_crecimiento(usuarios_antes, usuarios_despues, bytes_por_perfil, fraccion)</code>, que reutilice <code>memoria_working_set_gb</code> (dada) para calcular la DIFERENCIA de memoria entre dos tamaños de sistema — no el total de ninguno de los dos, sino cuánto más necesitas al crecer de uno al otro.',
+   starter:'def memoria_working_set_gb(usuarios_activos_diarios, bytes_por_perfil_activo, fraccion_en_memoria):\n    total_bytes = usuarios_activos_diarios * bytes_por_perfil_activo * fraccion_en_memoria\n    return round(total_bytes / (1024**3), 2)\n\ndef memoria_adicional_por_crecimiento(usuarios_antes, usuarios_despues, bytes_por_perfil, fraccion):\n    pass\n\nprint(memoria_adicional_por_crecimiento(2_000_000, 4_000_000, 4096, 0.15))',runs:[[]],
+   check:(o,c)=>{const exp="1.15";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["No repitas la fórmula de memoria_working_set_gb — llámala DOS veces (una con usuarios_despues, otra con usuarios_antes) y resta los resultados.","return round(memoria_working_set_gb(usuarios_despues, bytes_por_perfil, fraccion) - memoria_working_set_gb(usuarios_antes, bytes_por_perfil, fraccion), 2)"]},
  ]},
 {id:"n12m1t2g",n:"Día 24",t:"Fan-out — cuando una sola acción genera millones de escrituras",
  intro:"En sistemas sociales (feeds, notificaciones), UNA acción de un usuario puede generar escrituras para TODOS sus seguidores — un multiplicador que ninguna de las fórmulas anteriores capturó todavía.",
@@ -8547,11 +8553,11 @@ const LEVEL12=[
    starter:'def escrituras_por_fanout(seguidores_promedio, posts_por_dia_por_usuario, usuarios_activos):\n    pass\n\nprint(escrituras_por_fanout(200, 2, 1_000_000))',runs:[[]],
    check:(o,c)=>{const exp="400000000";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["Es una simple multiplicación de los tres factores — cada usuario activo publica varias veces al día, y cada publicación se copia a todos sus seguidores promedio.","return seguidores_promedio * posts_por_dia_por_usuario * usuarios_activos"]},
-  {id:"n12m1t2e11",py:true,t:"Ejercicio 11 · Transferencia — fan-out de un escenario más pequeño",
-   d:'Usa <code>escrituras_por_fanout</code> (ya implementada) para un sistema con 500 seguidores promedio, 1 post diario, 200,000 usuarios activos.',
-   starter:'def escrituras_por_fanout(seguidores_promedio, posts_por_dia_por_usuario, usuarios_activos):\n    return seguidores_promedio * posts_por_dia_por_usuario * usuarios_activos\n\n# Llama escrituras_por_fanout con los tres valores del enunciado (500, 1, 200_000)\n',runs:[[]],
-   check:(o,c)=>{const exp="100000000";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
-   hints:["Aplica la función tal como está a estos tres valores nuevos.","print(escrituras_por_fanout(500, 1, 200_000))"]},
+  {id:"n12m1t2e11",py:true,t:"Ejercicio 11 · Cuántas veces más escrituras causan tus usuarios con más seguidores",
+   d:'Implementa <code>factor_incremento_por_influencers(seguidores_normal, seguidores_influencer, posts_por_dia, usuarios_activos)</code>, que reutilice <code>escrituras_por_fanout</code> (dada) para calcular CUÁNTAS VECES más escrituras genera un usuario con muchos seguidores (ej. un influencer) frente a uno normal — no el total de ninguno de los dos casos, sino la razón entre ambos.',
+   starter:'def escrituras_por_fanout(seguidores_promedio, posts_por_dia_por_usuario, usuarios_activos):\n    return seguidores_promedio * posts_por_dia_por_usuario * usuarios_activos\n\ndef factor_incremento_por_influencers(seguidores_normal, seguidores_influencer, posts_por_dia, usuarios_activos):\n    pass\n\nprint(factor_incremento_por_influencers(500, 5000, 1, 200_000))',runs:[[]],
+   check:(o,c)=>{const exp="10.0";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Llama escrituras_por_fanout DOS veces (una con seguidores_influencer, otra con seguidores_normal) y divide el resultado del influencer entre el normal, redondeando a 1 decimal.","normal = escrituras_por_fanout(seguidores_normal, posts_por_dia, usuarios_activos)","influencer = escrituras_por_fanout(seguidores_influencer, posts_por_dia, usuarios_activos)","return round(influencer / normal, 1)"]},
  ]},
 {id:"n12m1t2h",n:"Día 25",t:"Sharding — cuántas particiones necesita tu base de datos",
  intro:"Un solo nodo de base de datos tiene un límite real de QPS que puede sostener — cuando el QPS pico lo supera, la pregunta ya no es 'qué servidor' sino 'cuántos shards'.",
@@ -8565,11 +8571,11 @@ const LEVEL12=[
    starter:'import math\ndef num_shards_necesarios(qps_pico, qps_max_por_shard):\n    pass\n\nprint(num_shards_necesarios(1736, 300))',runs:[[]],
    check:(o,c)=>{const exp="6";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["Divide el QPS pico entre la capacidad de un shard, y redondea SIEMPRE hacia arriba — un shard de más es seguro, uno de menos deja al sistema sin capacidad real.","return math.ceil(qps_pico / qps_max_por_shard)"]},
-  {id:"n12m1t2e13",py:true,t:"Ejercicio 13 · Transferencia — shards de un sistema más pequeño",
-   d:'Usa <code>num_shards_necesarios</code> (ya implementada) para un sistema con QPS pico de 579 y capacidad de 150 QPS por shard.',
-   starter:'import math\ndef num_shards_necesarios(qps_pico, qps_max_por_shard):\n    return math.ceil(qps_pico / qps_max_por_shard)\n\n# Llama num_shards_necesarios con el QPS pico y la capacidad por shard del enunciado (579, 150)\n',runs:[[]],
-   check:(o,c)=>{const exp="4";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
-   hints:["Aplica la función tal como está.","print(num_shards_necesarios(579, 150))"]},
+  {id:"n12m1t2e13",py:true,t:"Ejercicio 13 · La frontera exacta — qué pasa a un QPS de distancia",
+   d:'Sin ejecutar primero: predice si <code>num_shards_necesarios(450, 150)</code> y <code>num_shards_necesarios(451, 150)</code> (un solo QPS de diferencia) dan el MISMO número de shards o uno distinto — luego llama a ambas y confirma. 450/150 es un número exacto; 451/150 no lo es.',
+   starter:'import math\ndef num_shards_necesarios(qps_pico, qps_max_por_shard):\n    return math.ceil(qps_pico / qps_max_por_shard)\n\nprint(num_shards_necesarios(450, 150))\nprint(num_shards_necesarios(451, 150))',runs:[[]],
+   check:(o,c)=>{const exp="3\n4";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["No necesitas modificar la función — solo ejecutarla con los dos valores dados y observar el resultado.","450/150 = 3.0 exacto, así que math.ceil no agrega nada. 451/150 = 3.006..., y math.ceil SIEMPRE redondea hacia arriba ante cualquier fracción, sin importar qué tan pequeña — un solo QPS de más obliga a aprovisionar un shard completo adicional."]},
  ]},
 {id:"n12m1t2i",n:"Día 26",t:"El costo real de egress — precios reales, no inventados",
  intro:"Todo el ancho de banda que calculaste (Día 3) tiene un precio real cuando sale de tu proveedor cloud hacia internet — hoy calculas ese costo con precios oficiales verificados, no una cifra de memoria.",
@@ -8596,11 +8602,11 @@ const LEVEL12=[
    starter:'def capacidad_pico_estacional(qps_pico_normal, factor_evento):\n    pass\n\nprint(capacidad_pico_estacional(1736, 5))',runs:[[]],
    check:(o,c)=>{const exp="8680";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["Es una multiplicación directa del pico normal por el factor adicional del evento.","return round(qps_pico_normal * factor_evento)"]},
-  {id:"n12m1t2e16",py:true,t:"Ejercicio 16 · Transferencia — un evento más moderado",
-   d:'Usa <code>capacidad_pico_estacional</code> (ya implementada) para un pico normal de 579 QPS con un factor de evento de 8x.',
-   starter:'def capacidad_pico_estacional(qps_pico_normal, factor_evento):\n    return round(qps_pico_normal * factor_evento)\n\n# Llama capacidad_pico_estacional con el pico normal y el factor de evento del enunciado (579, 8)\n',runs:[[]],
-   check:(o,c)=>{const exp="4632";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
-   hints:["Aplica la función tal como está.","print(capacidad_pico_estacional(579, 8))"]},
+  {id:"n12m1t2e16",py:true,t:"Ejercicio 16 · ¿Un evento viral realmente tumba tu capacidad instalada?",
+   d:'Implementa <code>evento_supera_capacidad(qps_pico_normal, factor_evento, capacidad_maxima_servidor)</code>, que reutilice <code>capacidad_pico_estacional</code> (dada) y devuelva <code>True</code> si el pico proyectado del evento SUPERA la capacidad máxima real de tu servidor, <code>False</code> si no — la pregunta real de negocio, no solo el número calculado.',
+   starter:'def capacidad_pico_estacional(qps_pico_normal, factor_evento):\n    return round(qps_pico_normal * factor_evento)\n\ndef evento_supera_capacidad(qps_pico_normal, factor_evento, capacidad_maxima_servidor):\n    pass\n\nprint(evento_supera_capacidad(579, 20, 10000))\nprint(evento_supera_capacidad(579, 3, 10000))',runs:[[]],
+   check:(o,c)=>{const exp="True\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Calcula el pico proyectado con capacidad_pico_estacional, y compáralo contra el límite real de tu servidor — el número solo no responde la pregunta de negocio, la comparación sí.","return capacidad_pico_estacional(qps_pico_normal, factor_evento) > capacidad_maxima_servidor"]},
  ]},
 {id:"n12m1t2k",n:"Día 28",t:"Proyección de crecimiento — dimensionar para dentro de 3 años, no solo hoy",
  intro:"Toda estimación hasta ahora fue para HOY. Un arquitecto real también proyecta el crecimiento — dimensionar solo para el presente garantiza tener que rediseñar pronto.",
@@ -8614,11 +8620,11 @@ const LEVEL12=[
    starter:'def proyeccion_usuarios(usuarios_actuales, tasa_crecimiento_anual_pct, anios):\n    pass\n\nprint(proyeccion_usuarios(10_000_000, 40, 3))',runs:[[]],
    check:(o,c)=>{const exp="27440000";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["El crecimiento compuesto eleva (1 + tasa) a la potencia del número de años, nunca multiplica la tasa por el número de años de forma lineal.","return round(usuarios_actuales * (1 + tasa_crecimiento_anual_pct/100) ** anios)"]},
-  {id:"n12m1t2e18",py:true,t:"Ejercicio 18 · Transferencia — proyección de un startup de crecimiento rápido",
-   d:'Usa <code>proyeccion_usuarios</code> (ya implementada) para 2,000,000 de usuarios con 60% de crecimiento anual durante 2 años.',
-   starter:'def proyeccion_usuarios(usuarios_actuales, tasa_crecimiento_anual_pct, anios):\n    return round(usuarios_actuales * (1 + tasa_crecimiento_anual_pct/100) ** anios)\n\n# Llama proyeccion_usuarios con los valores del enunciado (2_000_000, 60, 2)\n',runs:[[]],
-   check:(o,c)=>{const exp="5120000";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
-   hints:["Aplica la función tal como está.","print(proyeccion_usuarios(2_000_000, 60, 2))"]},
+  {id:"n12m1t2e18",py:true,t:"Ejercicio 18 · Por qué el último año de crecimiento compuesto pesa más que el primero",
+   d:'Implementa <code>usuarios_ganados_en_el_ultimo_anio(usuarios_actuales, tasa_crecimiento_anual_pct, anios_totales)</code>, que reutilice <code>proyeccion_usuarios</code> (dada) para calcular CUÁNTOS usuarios nuevos se ganan específicamente durante el último año — no el total acumulado, la diferencia entre el año final y el año anterior.',
+   starter:'def proyeccion_usuarios(usuarios_actuales, tasa_crecimiento_anual_pct, anios):\n    return round(usuarios_actuales * (1 + tasa_crecimiento_anual_pct/100) ** anios)\n\ndef usuarios_ganados_en_el_ultimo_anio(usuarios_actuales, tasa_crecimiento_anual_pct, anios_totales):\n    pass\n\nprint(usuarios_ganados_en_el_ultimo_anio(2_000_000, 60, 3))',runs:[[]],
+   check:(o,c)=>{const exp="3072000";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Llama proyeccion_usuarios DOS veces (con anios_totales y con anios_totales-1) y resta — el crecimiento compuesto hace que cada año gane MÁS usuarios que el anterior, nunca la misma cantidad fija.","return proyeccion_usuarios(usuarios_actuales, tasa_crecimiento_anual_pct, anios_totales) - proyeccion_usuarios(usuarios_actuales, tasa_crecimiento_anual_pct, anios_totales - 1)"]},
  ]},
 {id:"n12m1t2l",n:"Día 29",t:"Investigar y defender — el orden de magnitud importa más que el número exacto",
  intro:"Hoy investigas un caso real documentado de estimación de capacidad, y defiendes por qué el ORDEN DE MAGNITUD correcto vale más que la precisión decimal — la lección que separa a quien calcula de quien realmente entiende para qué sirve calcular.",
@@ -8631,8 +8637,13 @@ const LEVEL12=[
    starter:'# Fuente consultada (nombre + URL o referencia exacta del libro/capitulo):\n# \n# Supuesto de entrada que la fuente usa (ej. usuarios diarios, peticiones por usuario):\n# \n# Tu propio supuesto, ANTES de investigar (tu estimacion a ojo, honesta):\n# \n# Comparacion: tu supuesto y el de la fuente, en el mismo orden de magnitud?\n# \n\nprint("analisis completo")',runs:[[]],
    check:(o,c)=>{
      const lineas=c.split("\n").filter(l=>l.trim().startsWith("#"));
+     const textoCompleto=lineas.join(" ");
      const tieneContenido=lineas.filter(l=>l.replace("#","").trim().length>=15).length>=3;
+     const tieneFuenteVerificable=/https?:\/\//.test(textoCompleto)||/xu|system design interview|news feed/i.test(textoCompleto);
+     const tieneNumeroReal=/\d/.test(textoCompleto);
      if(!tieneContenido)return"Necesitas al menos 3 líneas de comentario con contenido real (≥15 caracteres cada una) — fuente, supuesto de la fuente, tu propio supuesto y la comparación, no los placeholders vacíos.";
+     if(!tieneFuenteVerificable)return"Falta una fuente verificable: una URL real, o el nombre del libro/capítulo (ej. 'System Design Interview', Xu) — un texto sin ninguna fuente identificable no es investigación real.";
+     if(!tieneNumeroReal)return"Tu comparación de supuestos de estimación de capacidad necesita al menos un número real (usuarios, peticiones, QPS) — sin ningún número, no hay comparación de órdenes de magnitud posible.";
      return norm(o[0])==="analisis completo"?true:"Falta el print(\\\"analisis completo\\\") final, sin modificar.";
    },
    hints:["Este ejercicio es de investigación real, no de código — el libro de Xu (ya citado en toda la Academia) tiene ejemplos reales de estimación en varios capítulos; también puedes buscar un post técnico real de ingeniería que declare sus números de escala.","Sé honesto sobre tu supuesto ANTES de investigar — el punto del ejercicio es comparar tu propia intuición contra un dato real, no fingir que ya sabías el número exacto."]},
@@ -8838,8 +8849,14 @@ const LEVEL12=[
    starter:'# Fuente (nombre de la empresa + URL o titulo exacto del post-mortem):\n# \n# Trade-off de este tema que estaba en juego (consistencia/disponibilidad, idempotencia, circuit breaker, locking, u otro):\n# \n# Que decision distinta lo habria evitado, y que NUEVO costo habria introducido esa decision:\n# \n\nprint("analisis completo")',runs:[[]],
    check:(o,c)=>{
      const lineas=c.split("\n").filter(l=>l.trim().startsWith("#"));
+     const textoCompleto=lineas.join(" ").toLowerCase();
      const tieneContenido=lineas.filter(l=>l.replace("#","").trim().length>=15).length>=3;
+     const tieneFuenteVerificable=/https?:\/\//.test(textoCompleto)||["cloudflare","github","aws","google","postmortem","incident"].some(t=>textoCompleto.includes(t));
+     const terminosDelTema=["consistencia","disponibilidad","idempotencia","circuit breaker","locking","particion","timeout","reintento","cascada"];
+     const tieneTerminoDelTema=terminosDelTema.some(t=>textoCompleto.includes(t));
      if(!tieneContenido)return"Necesitas al menos 3 líneas de comentario con contenido real (≥15 caracteres cada una) — fuente, trade-off identificado, y tu propia alternativa con su costo, no los placeholders vacíos.";
+     if(!tieneFuenteVerificable)return"Falta una fuente identificable: una URL real, o el nombre de la empresa (Cloudflare, GitHub, AWS, Google) o del tipo de documento (postmortem/incident report) — un texto sin ninguna fuente reconocible no es investigación real.";
+     if(!tieneTerminoDelTema)return"Tu análisis debe nombrar explícitamente el trade-off real de este tema que estaba en juego (consistencia/disponibilidad, idempotencia, circuit breaker, locking, particionado, timeout, reintentos, fallo en cascada) — sin ese término, no se puede verificar que conectaste el incidente al tema.";
      return norm(o[0])==="analisis completo"?true:"Falta el print(\\\"analisis completo\\\") final, sin modificar.";
    },
    hints:["Busca términos como 'postmortem', 'incident review', o 'outage report' en blogs de ingeniería reales — Cloudflare y GitHub publican los suyos con detalle técnico real.","La parte más importante es la última: cualquier alternativa que menciones DEBE tener su propio costo declarado — 'usar consistencia fuerte en todas partes' no es una respuesta válida sin decir qué se sacrifica al hacerlo."]},
@@ -9079,10 +9096,16 @@ const LEVEL12=[
    starter:'# Fuente 1 (nombre + URL):\n# Patron principal identificado:\n# Fuente 2 (nombre + URL):\n# Patron principal identificado:\n# Tu eleccion para una empresa pequena con repo privado, y por que:\n# \n\nprint("analisis completo")',runs:[[]],
    check:(o,c)=>{
      const lineas=c.split("\n").filter(l=>l.trim().startsWith("#"));
+     const textoCompleto=lineas.join(" ").toLowerCase();
      const tieneURL=lineas.some(l=>/https?:\/\//.test(l));
      const tieneContenido=lineas.filter(l=>l.replace("#","").trim().length>=15).length>=3;
+     const mencionaCopilot=textoCompleto.includes("copilot")||textoCompleto.includes("github");
+     const terminosPatron=["rag","fine-tuning","fine tuning","agente","embedding","contexto"];
+     const tienePatron=terminosPatron.some(t=>textoCompleto.includes(t));
      if(!tieneURL)return"Falta al menos una URL real de las fuentes que consultaste.";
      if(!tieneContenido)return"Necesitas al menos 3 líneas de comentario con contenido real (≥15 caracteres cada una).";
+     if(!mencionaCopilot)return"Tu comparación debe mencionar explícitamente a GitHub Copilot por nombre — sin eso no se puede verificar que investigaste el caso pedido.";
+     if(!tienePatron)return"Tu comparación necesita nombrar al menos uno de los patrones reales en juego (RAG, fine-tuning, agente, embeddings, contexto) — sin ningún término técnico específico no demuestra que identificaste el patrón real de cada asistente.";
      return norm(o[0])==="analisis completo"?true:"Falta el print(\\\"analisis completo\\\") final, sin modificar.";
    },
    hints:["github.blog tiene artículos técnicos reales sobre cómo funciona Copilot internamente — busca específicamente sobre 'retrieval' o 'context' para identificar si usa RAG sobre el código.","Tu justificación final debe conectar una restricción real (repo privado, empresa pequeña — presupuesto y necesidad de confidencialidad) con la elección de patrón, no ser una preferencia general."]},
@@ -9281,7 +9304,7 @@ const LEVEL12=[
    hints:["Sin caché, cada llamada paga el precio completo por el prompt completo (sistema + usuario). Con caché, el prompt de sistema paga solo la fracción no descontada (1 - descuento/100), mientras el prompt de usuario sigue pagando precio completo — multiplica cada caso por el número de llamadas.","costo_sin_cache = round(((tokens_prompt_sistema + tokens_prompt_usuario)/1000) * precio_por_1k * num_llamadas, 4)","costo_sistema_cacheado = (tokens_prompt_sistema/1000) * precio_por_1k * (1 - descuento_cache_pct/100)","costo_con = round((costo_sistema_cacheado + (tokens_prompt_usuario/1000)*precio_por_1k) * num_llamadas, 4)","return {\\\"sin_cache\\\": costo_sin_cache, \\\"con_cache\\\": costo_con}"]},
  ]},
 {id:"n12m2t3d",n:"Día 65",t:"Punto de equilibrio — cuándo migrar de API a self-hosted",
- intro:"Pagar por llamada a una API es barato al principio, pero a partir de cierto volumen, el costo fijo de operar tu propio modelo (M3.T3 lo detalla) se vuelve más barato — hoy calculas ese punto de cruce.",
+ intro:"Pagar por llamada a una API es barato al principio, pero a partir de cierto volumen, el costo fijo de operar tu propio modelo (M3.T3 lo detallará más adelante) se vuelve más barato — hoy calculas ese punto de cruce.",
  theory:[
   ["El punto de equilibrio entre costo variable y costo fijo",T('Una API cobra por llamada (costo variable, crece con el uso); operar tu propio modelo tiene un costo fijo mensual (servidor, mantenimiento) casi independiente del volumen. El punto de equilibrio es el número de llamadas donde ambos costos se igualan — por debajo de ese número, la API es más barata; por encima, self-hosted lo es.'),
    'import math\ndef punto_equilibrio_llamadas(costo_fijo_mensual_selfhosted, costo_por_llamada_api):\n    return math.ceil(costo_fijo_mensual_selfhosted / costo_por_llamada_api)'],
@@ -10620,8 +10643,12 @@ const LEVEL12=[
    starter:'def evaluar_candidato(es_reciente, es_relevante_al_sistema, tiene_evidencia_suficiente):\n    if not es_reciente: return "descartado: no es reciente"\n    if not es_relevante_al_sistema: return "descartado: no es relevante al sistema propio"\n    if not tiene_evidencia_suficiente: return "candidato valido, con riesgo: reciente y relevante pero sin evidencia suficiente todavia"\n    return "candidato solido: reciente, relevante, con evidencia suficiente"\n\n# TU JUSTIFICACIÓN AQUÍ: ¿qué avance real elegiste, y por qué es (o no) reciente/relevante/con evidencia?\nprint(evaluar_candidato(True, True, False))  # reemplaza estos tres booleanos por tu propio juicio',runs:[[]],
    check:(o,c)=>{
      const comentarios=c.split("\n").filter(l=>l.trim().startsWith("#")&&!l.includes("TU JUSTIFICACIÓN AQUÍ")&&!l.includes("reemplaza estos"));
-     const tieneJustificacion=comentarios.some(l=>l.replace("#","").trim().length>=20);
-     if(!tieneJustificacion)return"Falta tu justificación real: agrega un comentario propio (mínimo ~20 caracteres) explicando tu candidato — el placeholder sin reemplazar no cuenta.";
+     const tieneJustificacion=comentarios.some(l=>{
+       const texto=l.replace("#","").trim();
+       const palabrasDistintas=new Set(texto.toLowerCase().split(/\s+/).filter(w=>w.length>=3));
+       return texto.length>=25&&palabrasDistintas.size>=5;
+     });
+     if(!tieneJustificacion)return"Falta tu justificación real: agrega un comentario propio (mínimo ~25 caracteres y al menos 5 palabras distintas) explicando tu candidato — el placeholder sin reemplazar no cuenta, y una línea de relleno repetitivo tampoco.";
      const validas=["descartado: no es reciente","descartado: no es relevante al sistema propio","candidato valido, con riesgo: reciente y relevante pero sin evidencia suficiente todavia","candidato solido: reciente, relevante, con evidencia suficiente"];
      const salida=norm(o[0]);
      if(!validas.includes(salida))return"La salida debe ser uno de los 4 veredictos posibles de evaluar_candidato — revisa que estés llamando la función (sin modificarla) con tus propios argumentos booleanos.";
@@ -10645,8 +10672,12 @@ const LEVEL12=[
    starter:'def es_fuente_sistematica(es_revisada_con_regularidad, es_fuente_primaria):\n    return es_revisada_con_regularidad and es_fuente_primaria\n\n# TUS DOS FUENTES REALES AQUI: nombra cada una y por que es relevante a tu propio sistema\nprint(es_fuente_sistematica(True, True))',runs:[[]],
    check:(o,c)=>{
      const comentarios=c.split("\n").filter(l=>l.trim().startsWith("#")&&!l.includes("TUS DOS FUENTES"));
-     const tieneJustificacion=comentarios.some(l=>l.replace("#","").trim().length>=30);
-     if(!tieneJustificacion)return"Falta nombrar al menos dos fuentes reales con su justificación (mínimo ~30 caracteres en el comentario) — el placeholder sin reemplazar no cuenta.";
+     const lineasSustanciales=comentarios.filter(l=>{
+       const texto=l.replace("#","").trim();
+       const palabrasDistintas=new Set(texto.toLowerCase().split(/\s+/).filter(w=>w.length>=3));
+       return texto.length>=25&&palabrasDistintas.size>=4;
+     });
+     if(lineasSustanciales.length<2)return"Necesitas al menos DOS líneas de comentario distintas, cada una con contenido real (≥25 caracteres y al menos 4 palabras distintas) — una fuente por línea, no un párrafo repetido ni relleno.";
      return norm(o[0])==="True"?true:"Esperaba: True\nObtuve:\n"+norm(o[0]);
    },
    hints:["Nombra fuentes reales y específicas (ej. el blog de ingeniería de una empresa real, la documentación oficial de una tecnología que ya usas) — no una categoría genérica como 'blogs de tecnología'."]},
@@ -10704,8 +10735,12 @@ const LEVEL12=[
    starter:'def clasificar_integracion_controlada(antes, despues, variables_controladas, todas_las_variables):\n    no_controladas = [v for v in todas_las_variables if v not in variables_controladas]\n    if no_controladas: return "medicion no concluyente: variables no controladas: " + str(no_controladas)\n    return "real" if antes != despues else "cosmetica"\n\n# TUS DOS VARIABLES REALES AQUI (ademas del avance): que tendrias que controlar en tu propio sistema\ntodas_mi_sistema = ["avance_integrado", "carga_de_trabajo", "tamano_del_lote"]\nprint(clasificar_integracion_controlada("valor_antes", "valor_despues", todas_mi_sistema, todas_mi_sistema))',runs:[[]],
    check:(o,c)=>{
      const comentarios=c.split("\n").filter(l=>l.trim().startsWith("#")&&!l.includes("TUS DOS VARIABLES"));
-     const tieneJustificacion=comentarios.some(l=>l.replace("#","").trim().length>=30);
-     if(!tieneJustificacion)return"Falta nombrar al menos dos variables reales de tu propio sistema con su justificación (mínimo ~30 caracteres) — el placeholder sin reemplazar no cuenta.";
+     const lineasSustanciales=comentarios.filter(l=>{
+       const texto=l.replace("#","").trim();
+       const palabrasDistintas=new Set(texto.toLowerCase().split(/\s+/).filter(w=>w.length>=3));
+       return texto.length>=25&&palabrasDistintas.size>=4;
+     });
+     if(lineasSustanciales.length<2)return"Necesitas al menos DOS líneas de comentario distintas, cada una con contenido real (≥25 caracteres y al menos 4 palabras distintas) — una variable por línea, no un párrafo repetido ni relleno.";
      return norm(o[0])==="real"?true:"Esperaba: real\nObtuve:\n"+norm(o[0]);
    },
    hints:["Piensa en qué condiciones de tu propio sistema (carga, hora, tamaño de entrada, versión del modelo base) podrían cambiar al mismo tiempo que el avance que integraste, y nómbralas específicamente en el comentario."]},

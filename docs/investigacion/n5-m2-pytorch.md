@@ -45,3 +45,16 @@ Este laboratorio no enseña autograd como concepto nuevo — lo usa para VALIDAR
 ## 8. Estrategia adoptada para este laboratorio
 
 Cada resultado —incluyendo los mensajes de error literales de PyTorch— se generó ejecutando `torch` real (`verify_n5m2t2_torch.py`) antes de escribirse; los valores de la neurona (Paso 1) y de `(2x+3)²` (Paso 2) se compararon dígito por dígito contra la salida ya verificada y comiteada de M1.T3, confirmando coincidencia exacta. **Falsable por:** el mensaje de RuntimeError capturado es de una build de desarrollo de PyTorch (más reciente que la probable versión estable de Colab); el texto exacto podría diferir en detalles menores entre versiones — el laboratorio no pide al estudiante que memorice el mensaje literal, solo que lo lea y lo diagnostique, mitigando ese riesgo.
+
+## 9. N5.M2.T3 · nn.Module y optimizador — cómo enseñan este concepto exacto las fuentes de referencia
+
+- **PyTorch docs, "Build the Neural Network" / "Optimization Loop"** (WebSearch, Historial de SYL-N5): confirma el patrón oficial `nn.Module` + `forward()` + `optimizer.zero_grad()/backward()/step()` — este laboratorio lo instancia sobre el MISMO problema (XOR) que M1.T4, en vez de un ejemplo genérico, para que la comparación sea directa.
+- **DL Specialization (Ng), Curso 2** (bibliografía oficial DOC-10 §7): dedica contenido completo a la elección de optimizador (SGD vs. Adam vs. otros) — citado como recurso "🟣 Después" porque el desafío de este laboratorio (comparar SGD vs. Adam) es, literalmente, la pregunta que ese curso responde con profundidad que este laboratorio no intenta replicar.
+
+## 10. Riesgo técnico verificado antes de escribir
+
+**Reproducibilidad de semillas entre versiones de PyTorch — verificado, no asumido:** los valores exactos de este laboratorio (pérdida inicial 0.4819, historial de convergencia, predicciones finales) se generaron con `torch.manual_seed(42)` en la build local (dev, cu128). PyTorch NO garantiza reproducibilidad bit-exacta entre versiones distintas para inicialización de pesos — por eso el laboratorio, a diferencia de los `check()` exactos de Pyodide, describe los resultados como "algo parecido a" en vez de exigir coincidencia literal, y el criterio de éxito real (checkpoints, diagnóstico) se apoya en el PATRÓN (converge vs. no converge), no en el número exacto. Esta es una diferencia deliberada de DOC-12 frente a DOC-11: un laboratorio de entorno real no puede prometer el mismo determinismo que un sandbox Pyodide compartido por todos los estudiantes.
+
+## 11. Estrategia adoptada para este laboratorio
+
+Cada valor —incluyendo el conteo de parámetros, la pérdida inicial, el historial de 500 épocas con y sin `zero_grad`, y las predicciones finales— se generó ejecutando PyTorch real (`verify_n5m2t3_torch.py`) antes de escribirse. **Falsable por:** si una futura verificación en Colab real (no solo local) encuentra que el patrón de convergencia diverge sustancialmente de lo aquí descrito (no solo los decimales), este laboratorio necesitaría reajustar sus hiperparámetros — pendiente de validación en el entorno real del estudiante, no solo local, como registra el Paso 9 del flujo institucional (auditoría/mejora continua).

@@ -1,0 +1,175 @@
+# SYL-N4 — Syllabus del Nivel 4 · Machine Learning
+
+## Control del documento (conforme a DOC-00 §15.4)
+
+| Campo | Valor |
+|---|---|
+| **Document Key** | SYL-N4 · Tier T2 |
+| **Versión / Estado** | **0.1.0-draft** · Documento de Diseño — investigación real verificada (Kaggle Learn vía repositorio espejo `drakearch/kaggle-courses`, ML Specialization de Andrew Ng/DeepLearning.AI vía Coursera, User Guide real de scikit-learn), verificación empírica directa de `pandas`, `scikit-learn` y `matplotlib` en la build real de Pyodide (`v0.26.4`) ya fijada en el Campus, y Herencias Declaradas de entrada (H-N4-01…06) recogidas formalmente desde SYL-N3 §9 (ya congelado, v1.0.0-candidato). Fichas pedagógicas completas de **M1** (el módulo que se construye primero); M2-M5 en esbozo estructural, a detallarse módulo por módulo durante la construcción real — mismo patrón de crecimiento incremental que ya siguió SYL-N3 (0.1.0-draft → 0.2.0-draft → ... → contenido real módulo por módulo) |
+| **Autoridad de origen** | DOC-10 §7 (interior de N4) · DOC-00 14.8.3 · DOC-01 (C-N4-01…06) |
+| **Depende de** | DOC-10 (mapa de N4) · DOC-00 (§13, §14, §16, 17.6) · DOC-01 · DOC-02 (instrumentos) · DOC-03 (método) · **SYL-N3 §9 (Herencias Declaradas H-N4-01…06 — el contrato de entrada que este documento resuelve, ya congelado)** |
+| **Produce / desarrolla** | La estructura docente completa de N4: fichas pedagógicas por tema, proyecto de nivel (ML de varias semanas sobre datos reales), compuerta, y las Herencias Declaradas hacia SYL-N5 |
+| **Estándar de calidad** | El mismo de SYL-N1/N2/N3: *"Si otro profesor excepcional impartiera este nivel utilizando únicamente el syllabus, ¿obtendría prácticamente la misma calidad formativa?"* — reforzado por instrucción explícita del Director (2026-07-21) de priorizar nivel, dificultad real y profundidad de enseñanza sobre la velocidad de construcción (ver `docs/guia-construccion-niveles.md` §8) |
+| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño. Investigación real: (a) Kaggle Learn — confirmados 20 cursos reales vía repositorio espejo, con anclaje directo para N4 en **Pandas** (6 lecciones: creación/indexación/funciones resumen/agrupación/tipos de datos/renombrado), **Data Visualization** (7 lecciones), **Data Cleaning** (5 lecciones: valores faltantes/escalado/fechas/codificación de caracteres/inconsistencias), **Intro to Machine Learning** (7 lecciones: cómo funcionan los modelos/exploración/validación/overfitting/bosques aleatorios), **Intermediate Machine Learning** (7 lecciones: valores faltantes/variables categóricas/pipelines/validación cruzada/XGBoost/fugas de datos), y **Machine Learning Explainability** (5 lecciones: importancia de permutación/gráficos de dependencia parcial/valores SHAP); (b) ML Specialization (Ng/DeepLearning.AI) confirmada como 3 cursos reales vía Coursera — Curso 1 *Supervised Machine Learning: Regression and Classification* (~33h: regresión lineal, regresión logística, ambos con su matemática), Curso 2 *Advanced Learning Algorithms* (~34h: redes neuronales, árboles de decisión, ensembles), Curso 3 *Unsupervised Learning, Recommenders, Reinforcement Learning* (~28h) — N4.M2 ancla específicamente en el Curso 1 (regresión/clasificación "desde cero", antes de cualquier framework); (c) User Guide real de scikit-learn confirmado vía fetch directo — estructura de 15 secciones (Supervised Learning con sus 17 subsecciones incluyendo 1.10 Decision Trees/1.11 Ensembles/1.4 SVM; Unsupervised Learning con 2.3 Clustering; Model Selection and Evaluation con cross-validation/métricas/curvas de validación — ancla directa de N4.M3 y N4.M4). **Verificación empírica directa (Node.js + paquete real `pyodide@0.26.4`, no supuesta):** `pandas` (2.2.0) y `scikit-learn` (1.4.2) cargan sin fricción (`pyodide.loadPackage`, <1s cada uno) y ejecutan operaciones reales (DataFrame con valores faltantes, regresión lineal, árbol de decisión con train/test split) con resultados correctos; `matplotlib` (3.5.2) carga y genera una figura real sin error. **Hallazgo real que condiciona el diseño de M1.T6:** `seaborn` **NO** está empaquetado en esta build de Pyodide (confirmado contra la lista real de 272 paquetes del tag `0.26.4` del repositorio oficial) — la visualización de N4 se diseña íntegramente sobre `matplotlib` directo, sin asumir seaborn disponible. **Herencias Declaradas de entrada recogidas formalmente** (H-N4-01…06, ya congeladas por SYL-N3 §9 — no se renegocian, se instancian): H-N4-01 (M1 de N3: vectores/matrices a mano, reutilizados directo en N4.M2) · H-N4-02 (descenso de gradiente de N3.M2.T4, reutilizado como algoritmo de entrenamiento) · H-N4-03 (disciplina de verificar contra numpy — **nota abierta de N3 que este syllabus se propone CERRAR, no heredar sin más**: N4.M1.T1 mide con `time.time()` real la diferencia de rendimiento entre un bucle Python puro y su equivalente vectorizado en numpy sobre un array de tamaño real (10⁵-10⁶ elementos) — la brecha C-vs-Python-interpretado es medible incluso dentro de la sandbox WASM de Pyodide, cerrando la limitación que N3 declaró honestamente sin resolver) · H-N4-04 (M3 de N3: distribuciones/esperanza/varianza/covarianza/inferencia, presupuesto por N4.M3-M4, NO como "clasificadores probabilísticos") · H-N4-05 (M4 de N3: lectura sistemática de notación matemática, presupuesta por N4.M2) · H-N4-06 (la convención de notación no es universal ni entre fuentes oficiales — PyTorch vs. scikit-learn vs. pizarra — el estudiante ya trae la disciplina de verificar la convención de cada fuente antes de asumir familiaridad). **Prerrequisitos ocultos:** ninguno — SYL-N3 §9 ya verificó que N4 no presupone nada de N3 que N3 no construyera realmente. |
+
+---
+
+## 1. Tabla resumen
+
+| Módulo | Temas (preliminar) | Ancla externa principal | Competencias |
+|---|---|---|---|
+| M1 · Datos: del dato crudo al dataset | 7 | Kaggle Learn: Pandas + Data Visualization + Data Cleaning | C-N4-04 (principal), base para todo el nivel |
+| M2 · Modelos desde cero | 7 (preliminar) | Ng ML Specialization, Curso 1 (matemática de regresión/clasificación) | C-N4-01 |
+| M3 · ML clásico aplicado | 6-7 (preliminar) | scikit-learn User Guide (Supervised/Unsupervised Learning) + Kaggle Intro/Intermediate ML | C-N4-01, C-N4-06 |
+| M4 · Metodología | 6 (preliminar) | scikit-learn User Guide §3 (Model Selection) + Kaggle ML Explainability | C-N4-02, C-N4-03 |
+| M5 · El proyecto gestionado | 3-4 (preliminar) | Sin anclaje externo único — síntesis propia de práctica profesional de ML, declarada honestamente (ver §3.6) | C-N4-05 |
+| Proyecto de nivel | — | Datos reales, plan + experimentos + reporte honesto de limitaciones | Todas |
+
+*Cifras de temas de M2-M5 son preliminares — se confirman al construir cada módulo, nunca se infla la cifra en el syllabus antes de tener contenido real (mismo principio anti-relleno que rige `docs/guia-construccion-niveles.md` §8).*
+
+## 2. Identidad del nivel
+
+Por referencia a DOC-10 §7: **N4 · Machine Learning** es el primer nivel de **ET3 (N4-N6), "aprender la disciplina"** — el punto donde el estudiante deja de construir sistemas que ejecutan lógica que él mismo especifica por completo (N0-N3) y empieza a construir sistemas que **aprenden un patrón a partir de datos**. DOC-10 declara M1 (Datos) como *"el 80% del trabajo real de ML"* — una afirmación honesta y verificada en la industria, no retórica: N4 no empieza por el algoritmo, empieza por el dato crudo, exactamente en el orden en que un practicante real de ML pasa su tiempo. Entrada: N3 Superado (NNR-01). Salida: examen + proyecto + defensa → habilita N5 (Deep Learning), que reutiliza directamente el vocabulario de splits/métricas/overfitting que N4.M4 instala.
+
+## 3. Principios de ejecución
+
+1. **Principio "100% Campus", heredado de N3, verificado independientemente para N4** *(no asumido — verificado hoy mismo)*: aplicando el criterio de frontera de DOC-12 §5, N4 responde "no" a las tres preguntas — numpy/pandas/scikit-learn/matplotlib corren dentro de Pyodide sin salir del navegador, sin depender del SO del estudiante, sin cuentas externas. **Verificado empíricamente** (2026-07-21, Node.js + `pyodide@0.26.4` real, no supuesto): los 3 paquetes cargan y ejecutan operaciones reales sin fricción. N4 vive íntegramente en Pyodide (DOC-11), sin ningún laboratorio de entorno real — el primer nivel de ET3, la parte "clásica" de ML, no lo necesita; la frontera hacia DOC-12 se espera recién en N5.M2 (PyTorch, no empaquetado en Pyodide).
+2. **Segundo y tercer paquete binario relevante del Campus**: N3 cargó numpy por primera vez; N4 es la primera vez que se cargan `pandas` (2.2.0), `scikit-learn` (1.4.2) y `matplotlib` (3.5.2). Los tres verificados sin fricción real en la build fijada.
+3. **Hallazgo técnico real que condiciona M1.T6:** `seaborn` no está disponible en esta build de Pyodide (confirmado contra la lista real de paquetes, no supuesto). Ninguna lección de N4 puede asumir `import seaborn` — la visualización se construye íntegramente sobre `matplotlib`.
+4. **Cierre deliberado de la nota abierta H-N4-03 (heredada de N3):** N3 declaró honestamente que Pyodide no puede demostrar limpiamente por qué vectorizar importa a escala. Este syllabus no hereda esa limitación sin más — la resuelve en M1.T1 midiendo con `time.time()` real la diferencia de rendimiento entre un bucle Python puro y su equivalente vectorizado sobre un array de 10⁵-10⁶ elementos: la brecha entre el bucle interpretado de Python y el bucle compilado de numpy es real y medible incluso dentro de la sandbox WASM, sin necesitar salir de Pyodide.
+5. **Verificación numérica como disciplina heredada** (H-N4-03/H-N4-01): toda operación se contrasta contra la implementación de referencia de la librería correspondiente (numpy/pandas/scikit-learn) con tolerancia explícita antes de darse por correcta — mismo principio que rigió los 895 ejercicios de N3.
+6. **Densidad y profundidad — prioridad explícita del Director** (`docs/guia-construccion-niveles.md`, callout inicial y §8): más teoría por día, ejercicios más complejos e integradores, días más sustanciosos que el estándar de N0-N3 — N4 es la entrada a una etapa más avanzada, y su exigencia debe reflejarlo desde el primer tema, no acumularse gradualmente.
+7. **M5 sin anclaje curricular externo único, declarado honestamente** *(mismo principio que ya aplicó N3.M4 con su síntesis propia)*: a diferencia de M1-M4 (cada uno con una fuente curricular externa verificada y citable), "el proyecto gestionado" — plan, experimentos registrados, sesgos reportados, entrega — es práctica profesional real de la industria de ML/MLOps, no un curso estructurado único y comparable a Kaggle Learn o Ng. Se construye como síntesis propia, con referencias puntuales a buenas prácticas documentadas (más que un curso íntegro), declarado así explícitamente en vez de forzar una cita que no sería honesta.
+8. **Triple justificación y Método DOC-03** — heredados sin cambio de N1-N3.
+
+## 4. Estructura y grafo local
+
+Troncal: `M1 → M2 → M3 → M4 → M5`. M2 depende de M1 solo débilmente (necesita *algún* dataset simple para practicar, no el aparato completo de EDA/limpieza) — el orden se mantiene porque DOC-10 lo declara así y porque M1 instala el hábito de trabajar con datos reales antes de tocar un algoritmo, aunque M2 pueda empezar con datos sintéticos si el diseño real lo pide. M3 depende con fuerza de M1 (datasets reales limpios) y de M2 (ya entiende la matemática antes de usar la librería que la automatiza — mismo principio de "construir antes de abstraer" que M1.T1 de N3 aplicó a numpy). M4 depende de M2+M3 (necesita modelos ya entrenados para evaluarlos). M5 cierra integrando los cuatro módulos en el proyecto de nivel.
+
+**Nota de implementación (obligatoria, mismo texto institucional que rige todo SYL-Nx desde EVT-034):** el Campus presenta un recorrido lineal único, sin bifurcaciones de navegación. La implementación siempre resuelve a M1→M2→M3→M4→M5.
+
+## 5. Fichas pedagógicas — M1 completo (los demás módulos se detallan al construirse)
+
+> **La gran pregunta de M1: ¿qué significa realmente que un dato esté "listo" para alimentar un modelo, y por qué el trabajo real de Machine Learning ocurre, en su mayoría, antes de tocar un algoritmo?**
+
+**N4.M1.T1 · NumPy a escala real: arrays 2D, indexado avanzado, y por qué vectorizar importa**
+- **Objetivo:** opera arrays 2D con indexado/broadcasting avanzado (continuación directa de N3.M1) y mide, con ejecución real, por qué una operación vectorizada es más rápida que su equivalente en bucle Python puro.
+- **Prerrequisitos:** N3.M1 completo (H-N4-01); N1 (bucles, listas).
+- **Competencias:** C-N4-04 (calidad de razonamiento sobre datos), base para C-N4-01.
+- **Errores habituales:** tratar un array 2D como una lista de listas sin aprovechar el indexado vectorizado; asumir que un bucle `for` sobre un array de numpy es igual de rápido que una operación vectorizada; broadcasting aplicado sin verificar que las formas sean compatibles.
+- **Modelo mental:** numpy vectorizado no es "una forma más corta de escribir un bucle" — es delegar el bucle a código compilado en C, evitando el overhead de interpretar cada iteración en Python.
+- **Por qué:** existe porque cada dataset real de N4 se maneja como arrays 2D antes de llegar a pandas / ahora porque N3.M1 ya dio vectores y matrices / habilita M1.T2-T7 y cierra la nota abierta H-N4-03 heredada de N3.
+- **Evidencia de dominio:** mide con `time.time()` el tiempo real de una operación sobre 10⁵+ elementos en bucle puro vs. vectorizada, y explica la diferencia sin apelar a "numpy es más rápido porque sí".
+- **Práctica principal:** indexado 2D avanzado (slicing, fancy indexing, boolean indexing) + medición real de rendimiento vectorizado vs. bucle.
+- **Evaluación:** estándar (RM-03).
+- **Pregunta ingenieril:** si un dataset real tiene 1 millón de filas, ¿qué le pasa a tu programa si escribes un `for` fila por fila en vez de una operación vectorizada — y a partir de qué tamaño empieza a importar de verdad?
+
+**N4.M1.T2 · pandas: Series y DataFrame, carga e inspección de datos reales**
+- **Objetivo:** carga un dataset real en un `DataFrame`, e inspecciona su forma, tipos y contenido antes de asumir nada sobre él.
+- **Prerrequisitos:** T1.
+- **Competencias:** C-N4-04.
+- **Errores habituales:** asumir el tipo de una columna sin verificarlo (`dtype`); no revisar la forma (`shape`) antes de operar; tratar un `DataFrame` como una tabla de Excel con esteroides, sin notar que pandas **alinea automáticamente por índice** en operaciones entre Series — una fuente real de `NaN` silenciosos cuando los índices no coinciden.
+- **Modelo mental:** un `DataFrame` es una colección de `Series` alineadas por índice — no una matriz con nombres de columna encima. La alineación automática es una característica, no un bug, pero produce sorpresas reales si no se espera.
+- **Por qué:** existe porque casi todo dataset real que el estudiante tocará en su carrera llega como tabla / ahora porque T1 ya dio arrays 2D / habilita T3-T7 completos.
+- **Evidencia de dominio:** dado un CSV real, reporta forma, tipos de columna, y detecta al menos un caso donde el tipo inferido por pandas no es el esperado (ej. una columna numérica leída como texto por un símbolo de moneda).
+- **Práctica principal:** `pd.read_csv`, `.head()`/`.info()`/`.describe()`/`.dtypes`, y un ejercicio deliberado de alineación por índice que produce `NaN` inesperado.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** si sumas dos columnas de dos DataFrames distintos y el resultado tiene más filas con `NaN` de las que esperabas, ¿qué es lo primero que revisarías?
+- **El supuesto que destruye:** "un DataFrame es solo una tabla de Excel con esteroides" — se destruye mostrando la alineación automática por índice, un comportamiento que ninguna hoja de cálculo tiene.
+
+**N4.M1.T3 · pandas: selección y filtrado avanzado**
+- **Objetivo:** selecciona y filtra datos con `loc`/`iloc`/máscaras booleanas/`query`, eligiendo la herramienta correcta para cada caso.
+- **Prerrequisitos:** T2.
+- **Competencias:** C-N4-04.
+- **Errores habituales:** confundir `loc` (por etiqueta) con `iloc` (por posición); encadenar indexado de formas que generan el warning real `SettingWithCopyWarning` sin entender por qué; construir máscaras booleanas con `and`/`or` en vez de `&`/`|` (un error de precedencia real y frecuente).
+- **Modelo mental:** filtrar con una máscara booleana es aplicar la misma lógica condicional de un `if`, pero evaluada elemento por elemento sobre todo el array a la vez — no una sintaxis nueva que memorizar, sino la vectorización de algo que el estudiante ya sabe hacer.
+- **Por qué:** existe porque ningún EDA real evita filtrar/seleccionar subconjuntos de datos / ahora porque T2 ya dio la estructura del DataFrame / habilita T4-T7.
+- **Evidencia de dominio:** dado un dataset real, extrae un subconjunto usando al menos 3 técnicas distintas (loc, boolean masking, query) y explica cuándo preferiría cada una.
+- **Práctica principal:** filtrado con máscaras booleanas compuestas, `loc`/`iloc`, y depuración de un `SettingWithCopyWarning` real.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** ¿por qué `df[df['edad'] > 18 and df['pais'] == 'PE']` lanza un error real, mientras que `df[(df['edad'] > 18) & (df['pais'] == 'PE')]` funciona?
+- **Lo que deja de sorprender:** filtrar con una máscara booleana deja de sentirse como "sintaxis rara de pandas" y se reconoce como la misma composición lógica de condiciones que el estudiante ya domina desde N1, aplicada a todo un array a la vez.
+
+**N4.M1.T4 · pandas: agregación y agrupación**
+- **Objetivo:** agrupa datos por categoría y calcula agregaciones (`groupby`), y construye tablas dinámicas para resumir un dataset real.
+- **Prerrequisitos:** T3.
+- **Competencias:** C-N4-04.
+- **Errores habituales:** agrupar por una columna sin verificar antes cuántas categorías únicas tiene; aplicar una agregación que no tiene sentido para el tipo de dato (promedio de una columna de texto); olvidar que `groupby` por sí solo no calcula nada hasta que se le aplica una agregación.
+- **Modelo mental:** `groupby` es "divide, aplica, combina" — separa el dataset en grupos, aplica una función a cada uno, y junta los resultados — la misma idea detrás de cualquier resumen estadístico que el estudiante ya calculó a mano en N3.M3.
+- **Por qué:** existe porque casi todo resumen real de datos ("promedio de ventas por región", "conteo de errores por tipo") es un `groupby` / ahora porque T3 ya dio filtrado / habilita el EDA completo de T5-T7.
+- **Evidencia de dominio:** dado un dataset con al menos 2 columnas categóricas, produce un resumen agregado correcto y lo interpreta en una frase (no solo el número).
+- **Práctica principal:** `groupby` con múltiples agregaciones, tablas dinámicas (`pivot_table`).
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** si agrupas por una columna con 50,000 categorías únicas (ej. un ID de usuario), ¿qué te dice eso sobre si esa columna es útil para agrupar?
+
+**N4.M1.T5 · EDA estadístico aplicado a un dataset real**
+- **Objetivo:** aplica la estadística descriptiva de N3.M3 (esperanza, varianza, covarianza) a un dataset real, y detecta outliers con criterio, no solo por inspección visual.
+- **Prerrequisitos:** T4; N3.M3 completo (H-N4-04).
+- **Competencias:** C-N4-04.
+- **Errores habituales:** calcular estadísticas descriptivas sin antes revisar si hay valores faltantes que las distorsionen; detectar outliers con un umbral arbitrario sin justificarlo (ej. "todo lo mayor a 100" sin relación con la distribución real); confundir correlación con relación causal.
+- **Modelo mental:** un outlier no es "un número raro" — es un valor que se explica mejor por un mecanismo distinto al resto de los datos (un error de captura, un caso genuinamente extremo, una unidad de medida distinta) — la estadística (rango intercuartílico, desviaciones estándar) da un criterio verificable, la inspección visual sola no.
+- **Por qué:** existe porque M3 de N3 dio las herramientas matemáticas pero nunca las aplicó a datos reales con ruido genuino, no generado por el propio estudiante con semilla fija / habilita T6-T7.
+- **Evidencia de dominio:** dado un dataset real, identifica y justifica al menos un outlier con un criterio estadístico explícito (no "se ve raro").
+- **Práctica principal:** estadísticas descriptivas con pandas (`.describe()`, `.corr()`), detección de outliers por rango intercuartílico.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** si una columna de "edad" tiene un valor de 200 años, ¿es un outlier estadístico o un error de captura de datos — y cambia en algo cómo lo tratas?
+- **La limitación humana que compensa:** un humano no puede inspeccionar visualmente un millón de filas para detectar un patrón de calidad — la estadística descriptiva sistemática compensa esa limitación perceptual, dando un criterio que escala donde la vista no llega.
+
+**N4.M1.T6 · Visualización de datos con matplotlib**
+- **Objetivo:** construye visualizaciones reales (histogramas, dispersión, líneas) con matplotlib para comunicar un hallazgo de los datos, no como decoración.
+- **Prerrequisitos:** T5.
+- **Competencias:** C-N4-04.
+- **Errores habituales:** elegir un tipo de gráfico que no corresponde al tipo de dato (ej. un gráfico de líneas para datos sin orden temporal); omitir etiquetas de ejes/título, dejando el gráfico ilegible sin contexto; graficar todos los datos sin verificar antes si hay outliers que distorsionan la escala visual.
+- **Modelo mental:** un gráfico es un argumento visual — cada elección (tipo de gráfico, escala, qué se resalta) comunica algo, deliberado o no.
+- **Por qué:** existe porque ningún reporte real de EDA se entrega solo con tablas de números / ahora porque T5 ya dio el criterio estadístico para saber qué vale la pena visualizar / habilita el laboratorio integrador de T7.
+- **Evidencia de dominio:** dado un hallazgo de T5 (ej. un outlier, una correlación), elige y construye el tipo de gráfico correcto para comunicarlo, con ejes y título legibles.
+- **Práctica principal:** `matplotlib.pyplot` — histogramas, scatter plots, gráficos de líneas, subplots.
+- **Evaluación:** estándar.
+- **Pregunta ingenieril:** ¿por qué un histograma es la elección correcta para ver la distribución de una columna, pero un gráfico de líneas sería engañoso para el mismo dato?
+- **Nota técnica declarada (verificada, no supuesta):** `seaborn` no está disponible en esta build de Pyodide — todo este tema se construye sobre `matplotlib` directo. La verificación de que `matplotlib` (3.5.2) carga y renderiza sin error ya se hizo empíricamente antes de diseñar este tema.
+
+**N4.M1.T7 · Calidad y limpieza de datos — laboratorio integrador y desafío (cierra M1)**
+- **Objetivo:** detecta y corrige problemas reales de calidad de datos (valores faltantes, duplicados, inconsistencias de formato) y ejecuta un EDA completo de principio a fin sobre un dataset real, integrando T1-T6.
+- **Prerrequisitos:** T1-T6 completos.
+- **Competencias:** C-N4-04 (evidencia de cierre del módulo).
+- **Errores habituales:** eliminar filas con valores faltantes sin evaluar antes cuánta información se pierde; rellenar valores faltantes con un valor arbitrario (ej. 0) sin justificar por qué esa elección no distorsiona el análisis; asumir que un dataset "se ve limpio" en `.head()` sin verificar sistemáticamente duplicados, inconsistencias de codificación, o valores faltantes codificados de forma no estándar (ej. `-999`, `"N/A"` como texto en vez de nulo real).
+- **Modelo mental:** un dataset "limpio a simple vista" y un dataset realmente listo para modelar son cosas distintas — la limpieza real es sistemática (verificar cada columna, cada tipo, cada rango posible), nunca una impresión visual de las primeras 5 filas.
+- **Por qué:** existe porque cierra la afirmación de DOC-10 ("el 80% del trabajo real de ML") con evidencia concreta, no solo la cita / integra T1-T6 en un flujo real de EDA de principio a fin / habilita M2 con un dataset ya verificado, no crudo.
+- **Evidencia de dominio:** ejecuta un EDA completo (inspección → detección de problemas → limpieza justificada → estadísticas → visualización) sobre un dataset real, documentando cada decisión de limpieza y por qué no distorsiona el análisis.
+- **Práctica principal (laboratorio integrador):** pipeline de EDA completo sobre un dataset real con al menos 2 problemas de calidad reales inyectados deliberadamente (valores faltantes codificados de forma no estándar, duplicados, una columna con tipos mixtos).
+- **Evaluación:** laboratorio + desafío final inédito.
+- **Pregunta ingenieril:** si entrenas un modelo sobre datos con un problema de calidad que no detectaste, ¿el modelo "falla" de forma visible, o produce predicciones incorrectas con confianza silenciosa?
+- **El quiebre de intuición de M1:** el instante preciso donde un dataset que "se veía perfecto" en `df.head()` revela, al inspeccionarlo sistemáticamente, un problema real oculto (valores faltantes codificados como `-999`, una columna duplicada con otra escala, filas repetidas con IDs distintos) — construido para que el estudiante lo descubra él mismo con las herramientas de T1-T6, no que se lo anuncien antes de verlo.
+
+## 6. Esbozo estructural de M2-M5 (a detallar módulo por módulo durante la construcción)
+
+*Mismo principio que M2-M4 de SYL-N3 al inicio de su propia construcción: la estructura de temas se declara ahora para fijar el alcance frente a DOC-10; la ficha pedagógica completa (10 campos + estándares) de cada tema se escribe justo antes de construir su contenido real en `index.html`, nunca antes.*
+
+**M2 · Modelos desde cero** (ancla: Ng ML Specialization Curso 1) — preliminar, 7 temas: T1 regresión lineal simple desde cero (reutiliza H-N4-01/02 directamente) · T2 regresión lineal múltiple vectorizada · T3 función de costo y descenso de gradiente generalizado (reutiliza N3.M2.T4 como algoritmo, H-N4-02) · T4 regularización (Ridge/Lasso) — por qué y cuándo · T5 regresión logística desde cero · T6 frontera de decisión, sigmoide, entropía cruzada · T7 (cierre) clasificación multiclase (softmax) desde cero + comparación contra la implementación de scikit-learn.
+
+**M3 · ML clásico aplicado** (ancla: scikit-learn User Guide + Kaggle Intro/Intermediate ML) — preliminar, 6-7 temas: T1 la API de scikit-learn (`fit`/`predict`/`score`) — por qué usar una librería después de construir desde cero, no antes · T2 árboles de decisión · T3 ensembles (Random Forest, Gradient Boosting) · T4 SVM · T5 pipelines + encoding categórico + imputación en producción · T6 clustering no supervisado (K-means — reconecta con el centroide de N3.M1.T1) · T7 (cierre) comparación fundamentada de modelos sobre un mismo dataset.
+
+**M4 · Metodología** (ancla: scikit-learn User Guide §3 + Kaggle ML Explainability) — preliminar, 6 temas: T1 train/test split y data leakage · T2 validación cruzada (k-fold) · T3 métricas de clasificación (accuracy/precision/recall/F1/matriz de confusión — por qué accuracy engaña con clases desbalanceadas) · T4 métricas de regresión (MSE/MAE/R²) · T5 overfitting/underfitting, curvas de validación, sesgo-varianza · T6 (cierre) diagnóstico real de por qué falla un modelo (datos/features/capacidad) + interpretabilidad (permutation importance).
+
+**M5 · El proyecto gestionado** (sin ancla curricular externa única, ver §3.7) — preliminar, 3-4 temas: plan de un proyecto de ML (pregunta, datos disponibles, criterio de éxito) · registro de experimentos (qué se prueba, qué cambia, qué se mide) · comunicación honesta de limitaciones y sesgos de datos/modelo · cierre hacia el proyecto de nivel.
+
+## 7. Proyecto de nivel (resumen — detalle completo en el Paso 8)
+
+Por DOC-10 §7: *"Proyecto de ML de varias semanas sobre datos reales, con plan, experimentos y reporte honesto de limitaciones — primer 'problema de largo aliento' de etapa."* Integra los 5 módulos: M1 (dataset real limpio y explorado) + M2/M3 (modelos, desde cero y con scikit-learn, comparados con criterio) + M4 (evaluación metodológicamente correcta) + M5 (gestión y reporte honesto). El detalle completo (hitos, checklist, defensa) se escribe en el Paso 8, después de completar M1-M5, mismo patrón que el Capstone ET3 de N3.
+
+## 8. Herencias Declaradas de entrada (recogidas formalmente desde SYL-N3 §9, ya congelado)
+
+| # | N3 sembró | N4 recoge (cómo se instancia en este syllabus) |
+|---|---|---|
+| H-N4-01 | M1 de N3: vectores/matrices/transformaciones a mano, verificados contra numpy con tolerancia | N4.M2 (Modelos desde cero) reutiliza esta literatura directamente — M2.T1-T3 no reintroduce qué es un vector o una matriz |
+| H-N4-02 | N3.M2.T4: descenso de gradiente derivado e implementado desde cero | N4.M2.T3 lo reutiliza directamente como el algoritmo de entrenamiento de la regresión — se aplica, no se re-enseña |
+| H-N4-03 | Disciplina de verificar contra numpy con tolerancia; nota abierta: Pyodide no demuestra limpiamente por qué vectorizar importa a escala | **Cerrada en este syllabus, no solo heredada:** N4.M1.T1 mide con ejecución real la diferencia de rendimiento vectorizado vs. bucle puro sobre arrays grandes |
+| H-N4-04 | M3 de N3: distribuciones, esperanza/varianza/covarianza, inferencia, intervalos de confianza | N4.M1.T5 (EDA estadístico) y N4.M4 (Metodología) presuponen este vocabulario sin re-explicarlo; N4.M3.T6 (clustering) lo usa de forma más indirecta, conectando con la intuición de distribución |
+| H-N4-05 | M4 de N3: lectura sistemática de notación matemática de papers/documentación oficial | N4.M2 ("explicando su matemática") presupone que el estudiante puede leer la fórmula de un modelo en documentación real sin bloquearse |
+| H-N4-06 | La convención de notación no es universal ni entre fuentes oficiales (PyTorch vs. scikit-learn vs. pizarra) | N4 lee documentación real de numpy/pandas/scikit-learn con sus propias convenciones — el estudiante ya trae la disciplina de verificar la convención de cada fuente antes de asumir familiaridad |
+
+**Herencias de salida hacia SYL-N5 (borrador — se consolidan formalmente en el Paso 9 de este mismo syllabus, no ahora):** manejo de datos reales con pandas/numpy a escala de producción (H-N5-01 preliminar) · descenso de gradiente ya generalizado más allá de regresión lineal, aplicable directamente a redes desde cero (H-N5-02 preliminar) · metodología de evaluación (splits/métricas/overfitting) que N5.M1/M4 presupondrán sin re-explicar (H-N5-03 preliminar) · disciplina de reportar honestamente limitaciones y sesgos (H-N5-04 preliminar, hacia la defensa a audiencia técnica y no técnica que pide el proyecto de N5).
+
+---
+
+*Este documento crece incrementalmente, mismo patrón que SYL-N3: cada módulo construido en `index.html` se refleja aquí con su ficha completa antes de pasar al siguiente. Próximo paso: construir M1 completo en `index.html` (`LEVEL4`), con harness de verificación antes de cerrar el módulo.*

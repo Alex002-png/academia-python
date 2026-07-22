@@ -61,12 +61,18 @@ Documenta una decisión YA tomada en este nivel (runtime de M1, quant type de M2
 
 ## 6. Error inducido en vivo
 
-Relee tu ADR del Paso 3 en una semana, o pide a alguien que lo lea sin contexto. Antes de hacerlo: ¿crees que se entendería completo?
+Antes de aceptar de palabra que Kubernetes no usa ADR, verifícalo tú mismo: intenta encontrar una carpeta de ADR en el repositorio de Kubernetes, el mismo patrón que sí existe en Cosmos SDK.
+
+```bash
+curl -s -o /dev/null -w "HTTP %{http_code}\n" https://github.com/kubernetes/kubernetes/tree/master/adr
+```
+
+Observa el resultado real.
 
 ## 7. Comprensión
 
 - ¿Por qué las Consecuencias deben incluir efectos negativos y neutrales, no solo por qué la decisión fue buena?
-- ¿Por qué Kubernetes no es buen ejemplo de "proyecto que usa ADR"?
+- En el error inducido en vivo, ¿qué código HTTP obtuviste al buscar una carpeta de ADR en Kubernetes? ¿Qué diferencia real hay entre un ADR y un KEP?
 - ¿Qué mecanismo concreto evitaría que tus ADR queden obsoletos en silencio?
 
 ## 8. Puntos de verificación
@@ -74,14 +80,14 @@ Relee tu ADR del Paso 3 en una semana, o pide a alguien que lo lea sin contexto.
 ☐ Leí el artículo original y anoté los 5 elementos.
 ☐ Audité un ADR de Backstage y uno de Cosmos SDK.
 ☐ Escribí mi primer ADR real.
-☐ Verifiqué si mi ADR se entiende sin contexto adicional.
+☐ Reproduje el error inducido en vivo y confirmé que Kubernetes no tiene carpeta de ADR, a diferencia de Cosmos SDK.
 
 ## 9. Diagnóstico de errores
 
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
+| `curl` a `github.com/kubernetes/kubernetes/tree/master/adr` devuelve HTTP 404 (error inducido en vivo) | Kubernetes usa KEPs (Kubernetes Enhancement Proposals), no ADR, en un repositorio separado. | Compara contra el mismo tipo de búsqueda en Cosmos SDK (docs/architecture, que sí existe). | Busca "KEP" en vez de "ADR" en el repositorio de Kubernetes. | Usa Backstage o Cosmos SDK como ejemplos verificados de ADR real. | Verificar con un comando real que un proyecto usa el término y formato exactos antes de citarlo como precedente. |
 | Mi ADR no se entiende sin explicación de viva voz | El Contexto asume conocimiento implícito. | Pide a alguien que identifique qué no entendió. | Revisa si el Contexto explica desde cero. | Reescribe asumiendo un lector nuevo. | Escribir el ADR poco después de tomar la decisión. |
-| Confundí un KEP de Kubernetes con un ADR | Ambos documentan decisiones pero con procesos distintos. | Compara estructura real contra los 5 elementos de Nygard. | Busca si el proyecto usa el término "ADR" explícitamente. | Usa Backstage o Cosmos SDK como ejemplos verificados. | Verificar término y formato exactos antes de citar un precedente. |
 
 ## 10. Mini laboratorio
 
@@ -108,7 +114,7 @@ Encuentra un ADR "superseded" en Backstage o Cosmos SDK, lee ambos, y explica qu
 
 **Lo esencial en una frase:** un ADR es la disciplina de documentación que ya practicas, con un formato reconocible que hace que tu razonamiento sobreviva a tu propia memoria.
 
-**Las siete capacidades de dominio:** explicar (5 elementos del formato) · predecir (qué parte no se entenderá sin contexto) · detectar errores (conocimiento implícito, ejemplo mal citado) · corregir (reescribir el Contexto) · modificar (segundo ADR, mini laboratorio) · aplicar en contexto nuevo (analizar un ADR reemplazado, desafío) · usar en un proyecto (documentar la decisión de stack del capstone).
+**Las siete capacidades de dominio:** explicar (5 elementos del formato) · predecir (si Kubernetes tendría carpeta de ADR, antes de verificarlo) · detectar errores (Kubernetes no tiene carpeta de ADR, HTTP 404 real, error inducido en vivo) · corregir (reescribir el Contexto) · modificar (segundo ADR, mini laboratorio) · aplicar en contexto nuevo (analizar un ADR reemplazado, desafío) · usar en un proyecto (documentar la decisión de stack del capstone).
 
 **Repetir desde cero, sin guía:** escribe un ADR completo sobre una decisión técnica cualquiera.
 

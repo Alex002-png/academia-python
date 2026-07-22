@@ -80,11 +80,17 @@ Tu cálculo del Paso 3 asume que tu GPU está siempre disponible cuando la neces
 
 ## 6. Error inducido en vivo
 
-Busca en un buscador "punto de equilibrio tokens self-hosted LLM" y abre los primeros 3-4 resultados. Anota las cifras exactas que cada uno da. Antes de leer la explicación: ¿coinciden entre sí?
+Antes de abrir el reporte real de LLMflation por su URL correcta, intenta acceder con una URL que tiene una sola palabra confundida — un typo real y fácil de cometer ("interference" en vez de "inference").
+
+```bash
+curl -s -o /dev/null -w "HTTP %{http_code}\n" https://a16z.com/llmflation-llm-interference-cost/
+```
+
+Observa el código HTTP exacto que devuelve — no lo que crees que "debería" devolver.
 
 ## 7. Comprensión
 
-- Tras el error inducido en vivo: ¿qué tan distintas fueron las cifras entre los artículos que encontraste? ¿Alguno citaba una fuente primaria rastreable?
+- En el error inducido en vivo, ¿qué código HTTP obtuviste con la URL mal escrita, y qué obtienes si repites el comando con la URL real (sin el typo)?
 - ¿Por qué la caída de precio de las APIs hace que cualquier cálculo de "ROI de comprar GPU" sea una comparación contra un blanco que se mueve?
 - Si tu utilización real de la GPU es del 30% en vez del 100% asumido, ¿qué le dice esto a alguien que decide "comprar GPU" basándose solo en el precio por token anunciado?
 
@@ -94,7 +100,7 @@ Busca en un buscador "punto de equilibrio tokens self-hosted LLM" y abre los pri
 ☐ Leí el argumento central del paper de costo por concurrencia.
 ☐ Construí mi propio modelo de costo con mis propias cifras declaradas.
 ☐ Ajusté mi cálculo por utilización real y entendí por qué cambia tanto.
-☐ Reproduje el error inducido en vivo y confirmé la contradicción entre fuentes de blog.
+☐ Reproduje el error inducido en vivo (URL con typo) y confirmé el código HTTP real, contrastándolo con el de la URL correcta.
 
 ## 9. Diagnóstico de errores
 
@@ -102,7 +108,8 @@ Busca en un buscador "punto de equilibrio tokens self-hosted LLM" y abre los pri
 
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
-| Las cifras de los primeros resultados de búsqueda son muy distintas entre sí | La mayoría de este contenido se escribe para SEO, no para informar — sin metodología publicada, cada autor asume supuestos no declarados. | Ninguno suele citar una fuente primaria verificable — esa ausencia ES la señal de alerta. | Busca si el artículo enlaza a datos reales con metodología explícita. | Descarta la cifra y construye la tuya propia con supuestos declarados. | Aplicar el mismo escepticismo a cualquier cifra técnica sin fuente rastreable, en cualquier tema. |
+| Si buscas "punto de equilibrio tokens self-hosted LLM" en cualquier buscador, las cifras de los primeros resultados son muy distintas entre sí | La mayoría de este contenido se escribe para SEO, no para informar — sin metodología publicada, cada autor asume supuestos no declarados. | Ninguno suele citar una fuente primaria verificable — esa ausencia ES la señal de alerta. | Busca si el artículo enlaza a datos reales con metodología explícita. | Descarta la cifra y construye la tuya propia con supuestos declarados. | Aplicar el mismo escepticismo a cualquier cifra técnica sin fuente rastreable, en cualquier tema. |
+| `curl` a `a16z.com/llmflation-llm-interference-cost/` devuelve HTTP 404 (error inducido en vivo) | "interference" (typo plausible de "inference") no corresponde a la URL real del artículo. | Compara el código HTTP de la URL con typo (404) contra el de la URL real (200). | Repite el comando con la URL exacta citada en los recursos y confirma que pasa de 404 a 200. | Copia siempre la URL exacta desde una fuente confiable, nunca la teclees de memoria. | Verificar la URL exacta de cualquier fuente ANTES de citarla. |
 | Mi cálculo del Paso 3 da un punto de equilibrio absurdo | Un supuesto de precio mal investigado o desactualizado — los precios de API caen ~10x/año. | Verifica la fecha de la cifra de precio que usaste. | Busca el precio ACTUAL del proveedor exacto. | Recalcula con el precio verificado a hoy. | Nunca reusar un precio de API sin verificar su fecha. |
 
 ## 10. Mini laboratorio
@@ -134,7 +141,7 @@ Escribe un párrafo técnico corto recomendando, con evidencia citada, si TU cas
 **Las siete capacidades de dominio:**
 1. **Explicar** — por qué la mayoría de cifras de "punto de equilibrio" en internet no son confiables (sección 4).
 2. **Predecir** — cómo cambia un punto de equilibrio calculado si la utilización baja del 100% al 30% (Paso 4).
-3. **Detectar errores** — reconocer una cifra sin fuente rastreable en el error inducido en vivo.
+3. **Detectar errores** — reconocer que una URL con una sola palabra equivocada produce un fallo real de acceso (HTTP 404), no una versión aproximada de la página — error inducido en vivo.
 4. **Corregir** — descartar una cifra no verificable y sustituirla por un cálculo propio.
 5. **Modificar** — recalcular con un proveedor de API distinto (mini laboratorio).
 6. **Aplicar en contexto nuevo** — producir una recomendación honesta para el propio caso, incluida la opción de declarar evidencia insuficiente (desafío).

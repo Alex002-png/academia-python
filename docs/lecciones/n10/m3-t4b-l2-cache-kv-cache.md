@@ -56,6 +56,8 @@ for contexto in [512, 2048, 8192, 32768]:
     print(f"Contexto {contexto} tokens: KV cache = {kv_mb:.1f} MB")
 ```
 
+Resultado real: ya 256MB con un contexto corto de 512 tokens (nada de "unos pocos MB" — el KV cache pesa más de lo que la intuición sugiere incluso al principio), creciendo a 1GB (2048), 4GB (8192) y 16GB (32768) — escala linealmente con el contexto.
+
 **Paso 2 — Compara contra el L2 real de tu GPU**
 
 ```python
@@ -68,11 +70,17 @@ for contexto in [512, 2048, 8192, 32768]:
 
 ## 6. Error inducido en vivo
 
-Calcula el KV cache para el modelo más grande y contexto máximo que hayas usado en este nivel. Antes de ver el resultado: ¿esperas que quepa en tus 12GB junto con los pesos, con margen cómodo?
+Antes de confiar en la cifra de ~48MB de L2 usada en este laboratorio (ya declarada como no-oficial), intenta consultarla directamente desde tu propia GPU con la herramienta estándar de NVIDIA:
+
+```bash
+nvidia-smi --query-gpu=name,memory.total,l2_cache_size --format=csv
+```
+
+Observa el resultado exacto — no es lo que la mayoría espera la primera vez.
 
 ## 7. Comprensión
 
-- ¿El KV cache de tu caso más exigente dejó margen cómodo, o se acercó al límite de 12GB?
+- ¿Qué mensaje exacto te dio nvidia-smi al pedir "l2_cache_size"? ¿Por qué una herramienta oficial de NVIDIA no expone como campo consultable un dato que sí aparece en agregadores técnicos?
 - ¿Por qué 192MB de L2 (Blackwell datacenter) sigue sin ser suficiente para una conversación larga?
 - Si HeadInfer/Oneiros mueven KV cache a RAM del sistema, ¿qué trade-off de latencia esperarías?
 
@@ -81,7 +89,7 @@ Calcula el KV cache para el modelo más grande y contexto máximo que hayas usad
 ☐ Calculé el KV cache para al menos 4 tamaños de contexto.
 ☐ Comparé contra el L2 real de mi GPU.
 ☐ Confirmé cuantitativamente que el KV cache excede el L2 en uso realista.
-☐ Reproduje el error inducido en vivo con mi caso más exigente.
+☐ Reproduje el error inducido en vivo y confirmé que nvidia-smi no expone el tamaño de L2 como campo consultable.
 
 ## 9. Diagnóstico de errores
 
@@ -89,6 +97,7 @@ Calcula el KV cache para el modelo más grande y contexto máximo que hayas usad
 |---|---|---|---|---|---|
 | Mi cálculo no coincide con la VRAM medida en M3.T4 | La fórmula es una aproximación — no incluye overhead ni optimizaciones de atención. | Compara orden de magnitud, no valor exacto. | Revisa si el modelo usa GQA/MQA. | Ajusta la fórmula si confirmas la optimización. | Tratar fórmulas de estimación como modelos aproximados a verificar. |
 | Mi cifra de L2 no coincide con otras fuentes | No confirmada en fuente oficial de NVIDIA. | Compara consistencia entre fuentes. | Busca confirmar con deviceQuery en tu propia GPU. | Usa la cifra confirmada en tu hardware si es posible. | Tratar cifras no oficiales con cautela declarada. |
+| `nvidia-smi --query-gpu=...,l2_cache_size` da `Field "l2_cache_size" is not a valid field to query.` (error inducido en vivo) | nvidia-smi expone métricas de monitoreo (errores ECC de L2, uso de memoria) pero no el tamaño de L2 como especificación estática. | Ejecuta `nvidia-smi --help-query-gpu` y busca "l2" — solo aparecen campos de errores ECC. | Confirma que los campos de L2 existentes son de conteo de errores, no de tamaño. | Acepta que esta cifra no es verificable con esta herramienta — la misma razón por la que ya se trata con cautela declarada. | Verificar la lista real de campos consultables de una herramienta antes de asumir que expone toda especificación de hardware. |
 
 ## 10. Mini laboratorio
 
@@ -115,7 +124,7 @@ Investiga GQA/MQA (reduce KV cache 4-8x) y recalcula tu tabla asumiendo esa opti
 
 **Lo esencial en una frase:** el L2, por grande que haya crecido, sigue siendo órdenes de magnitud más pequeño que el KV cache real — decode sigue siendo memory-bound porque el dato a mover excede cualquier caché on-chip razonable.
 
-**Las siete capacidades de dominio:** explicar (por qué el L2 no resuelve memory-bound) · predecir (si un contexto cabrá en L2) · detectar errores (discrepancia entre cálculo y medición real) · corregir (ajustar por GQA/MQA) · modificar (calcular con optimización de atención, desafío) · aplicar en contexto nuevo (L2 hipotético necesario, mini laboratorio) · usar en un proyecto (línea de presupuesto de VRAM para M3.T5 y el capstone).
+**Las siete capacidades de dominio:** explicar (por qué el L2 no resuelve memory-bound) · predecir (si un contexto cabrá en L2) · detectar errores (nvidia-smi no expone el tamaño de L2 como campo consultable, error inducido en vivo) · corregir (ajustar por GQA/MQA) · modificar (L2 hipotético necesario, mini laboratorio) · aplicar en contexto nuevo (calcular con optimización de atención, desafío) · usar en un proyecto (línea de presupuesto de VRAM para M3.T5 y el capstone).
 
 **Repetir desde cero, sin guía:** calcula el KV cache de un modelo y contexto distintos, comparando contra el L2 de tu GPU.
 

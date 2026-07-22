@@ -69,7 +69,13 @@ Busca el blog técnico oficial de GitHub sobre cómo evalúan modelos para Copil
 
 ## 6. Error inducido en vivo
 
-Busca el ranking actual de cualquier leaderboard público de modelos de lenguaje. Fíjate en los 3 primeros puestos: ¿son modelos de laboratorios grandes o modelos abiertos más pequeños? Antes de leer la explicación: ¿coincide esto con lo que "The Leaderboard Illusion" documenta?
+Antes de abrir la fuente oficial de OSI sobre la licencia de Llama por su URL correcta, intenta acceder con la variante británica de "licencia" en la URL ("licence" en vez de "license" — un error ortográfico real y común para un hispanohablante escribiendo en inglés).
+
+```bash
+curl -s -o /dev/null -w "HTTP %{http_code}\n" https://opensource.org/blog/metas-llama-licence-is-still-not-open-source
+```
+
+Observa el código HTTP exacto que devuelve.
 
 ## 7. Comprensión
 
@@ -83,16 +89,17 @@ Busca el ranking actual de cualquier leaderboard público de modelos de lenguaje
 ☐ Leí el hallazgo de contaminación de MMLU-CF con la cifra exacta.
 ☐ Leí el hallazgo de distorsión de "The Leaderboard Illusion" con la cifra exacta.
 ☐ Investigué el proceso real de evaluación de un equipo de ingeniería.
-☐ Reproduje el error inducido en vivo y confirmé (o refuté) el patrón en un leaderboard real.
+☐ Reproduje el error inducido en vivo (URL con error ortográfico) y confirmé el código HTTP real, contrastándolo con el de la URL correcta.
 
 ## 9. Diagnóstico de errores
 
-*Checklist de categorías revisada: laboratorio de investigación — ninguna de las 7 categorías estándar aplica; no hay instalación ni comandos de terminal.*
+*Checklist de categorías revisada: laboratorio de investigación — ninguna de las 7 categorías estándar aplica; no hay instalación de software.*
 
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
 | Asumí que un modelo era "open source" porque es descargable gratis | Confundir "pesos públicos" con "licencia open source" — son independientes. | Revisa el archivo LICENSE exacto, no el botón de descarga. | Busca si la licencia está en la lista aprobada por OSI (opensource.org/licenses). | Verifica la licencia exacta antes de asumir uso libre. | Tratar "descargable" y "open source" como preguntas separadas, siempre. |
 | Elegí un modelo solo por su posición en un leaderboard | El leaderboard puede reflejar ventaja de acceso a datos más que capacidad real en tu tarea. | Pregúntate si el leaderboard mide algo parecido a tu caso de uso. | Compara contra un benchmark específico a tu dominio, o construye tus propias pruebas. | Usa el leaderboard como punto de partida, nunca como veredicto final. | Adoptar el hábito de GitHub/Ramp/Zapier: mini-arnés propio antes de decidir. |
+| `curl` a `opensource.org/blog/metas-llama-licence-is-still-not-open-source` devuelve HTTP 404 (error inducido en vivo) | "licence" (ortografía británica) no corresponde a la URL real, que usa "license" (ortografía americana). | Compara el código HTTP de la URL con el error ortográfico (404) contra el de la URL real (200). | Repite el comando con la URL exacta citada en los recursos y confirma que pasa de 404 a 200. | Copia siempre la URL exacta desde una fuente confiable, nunca la teclees de memoria. | Verificar la URL exacta de cualquier fuente ANTES de citarla — el mismo hábito que este laboratorio exige para auditar licencias. |
 
 ## 10. Mini laboratorio
 
@@ -124,7 +131,7 @@ Diseña una mini batería de 3-5 pruebas propias (siguiendo el patrón de GitHub
 **Las siete capacidades de dominio:**
 1. **Explicar** — la diferencia precisa entre "pesos descargables" y "open source" en sentido OSI, con el caso de Llama.
 2. **Predecir** — qué le pasaría al puntaje de un modelo si se eliminara la contaminación de datos.
-3. **Detectar errores** — reconocer, en el error inducido en vivo, el patrón que "The Leaderboard Illusion" documenta.
+3. **Detectar errores** — reconocer que una URL con un solo error ortográfico produce un fallo real de acceso (HTTP 404), no una versión aproximada de la fuente — error inducido en vivo.
 4. **Corregir** — auditar la licencia real de un modelo antes de asumir uso libre.
 5. **Modificar** — repetir la auditoría con una familia de modelo nueva (mini laboratorio).
 6. **Aplicar en contexto nuevo** — diseñar una batería de evaluación propia (desafío).

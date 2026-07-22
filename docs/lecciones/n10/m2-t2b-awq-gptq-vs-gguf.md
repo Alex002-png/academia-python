@@ -63,11 +63,17 @@ Revisa la comparación de oobabooga entre EXL2, AWQ, GPTQ y K-quants al mismo ni
 
 ## 6. Error inducido en vivo
 
-Antes de leer la comparación del Paso 3: escribe tu PREDICCIÓN de cuál método esperarías que tuviera mejor calidad, basándote en cuál "suena" más sofisticado. Después compara contra los datos reales.
+Antes de abrir el paper de AWQ por su URL correcta, intenta acceder con un identificador de arXiv con un dígito de más al final (`2306.009780` en vez de `2306.00978`) — un typo real de "fat-finger", fácil de cometer al copiar un ID de memoria.
+
+```bash
+curl -s -o /dev/null -w "HTTP %{http_code}\n" https://arxiv.org/abs/2306.009780
+```
+
+Observa el código HTTP exacto que devuelve.
 
 ## 7. Comprensión
 
-- ¿Tu predicción coincidió con los datos reales? Si no, ¿qué intuición te llevó por mal camino?
+- ¿Qué código HTTP obtuviste con el identificador con el dígito de más, y qué obtienes al repetir el comando con el identificador real (2306.00978)?
 - ¿Por qué es sorprendente que Q4_K_M y AWQ tengan perplejidad casi idéntica?
 - ¿Por qué es importante declarar explícitamente que no hay fuente oficial confirmada para la razón exacta de la elección de llama.cpp?
 
@@ -76,13 +82,13 @@ Antes de leer la comparación del Paso 3: escribe tu PREDICCIÓN de cuál métod
 ☐ Leí el abstract y resultados de GPTQ, con la cifra real de tiempo.
 ☐ Leí la idea central de AWQ y por qué usa activaciones.
 ☐ Comparé las cifras reales de perplejidad de los 4 métodos.
-☐ Escribí mi predicción ANTES de ver los datos reales.
+☐ Reproduje el error inducido en vivo (identificador de arXiv con un dígito de más) y confirmé el código HTTP real.
 
 ## 9. Diagnóstico de errores
 
 | Error | Por qué aparece | Cómo se diagnostica | Cómo se comprueba la hipótesis | Cómo se soluciona | Cómo se previene |
 |---|---|---|---|---|---|
-| Mi predicción estaba muy alejada de los datos reales | Sesgo intuitivo: "más sofisticado" no siempre implica "mejor resultado medible". | No es un error de ejecución — oportunidad de calibrar intuición. | Revisa otros casos similares del nivel (ej. la cifra de blog de M2.T2). | Ajusta la heurística: sofisticación predice velocidad de desarrollo, no necesariamente mejor resultado final. | Tratar cualquier intuición técnica como hipótesis a verificar. |
+| `curl` a `arxiv.org/abs/2306.009780` devuelve HTTP 404 (error inducido en vivo) | El dígito extra al final no corresponde a ningún paper real. | Compara el código HTTP del identificador con el dígito de más (404) contra el real (200). | Repite el comando con el identificador exacto y confirma que pasa de 404 a 200. | Copia siempre el identificador exacto desde una fuente confiable, nunca lo teclees de memoria. | Verificar el identificador exacto de una fuente académica ANTES de citarla — el mismo hábito que ya corrigió una cita errónea en M2.T1b. |
 | No encuentro fuente oficial de por qué llama.cpp no adoptó AWQ/GPTQ | Información que no existe como declaración formal centralizada. | Revisa si hay discusiones parciales sin ser declaración de diseño formal. | Busca "importance matrix"/"imatrix" en discusiones de llama.cpp. | Documenta la ausencia honestamente con la mejor evidencia circunstancial. | Aceptar que no toda decisión de un proyecto abierto tiene documento formal. |
 
 ## 10. Mini laboratorio
@@ -111,7 +117,7 @@ Escribe un párrafo técnico justificando GGUF/K-quants sobre AWQ/GPTQ para un p
 
 **Lo esencial en una frase:** AWQ y GPTQ usan información real para cuantizar con más cuidado, pero K-quants de GGUF alcanza calidad prácticamente idéntica con una fracción del tiempo — la elección depende de restricciones reales, no de sofisticación aparente.
 
-**Las siete capacidades de dominio:** explicar (información adicional de AWQ/GPTQ) · predecir (formular hipótesis antes de ver datos, error en vivo) · detectar errores (sesgo propio de sofisticación=calidad) · corregir (ajustar heurística tras evidencia) · modificar (investigar "imatrix", mini laboratorio) · aplicar en contexto nuevo (justificación técnica propia, desafío) · usar en un proyecto (fundamenta la elección de stack del capstone).
+**Las siete capacidades de dominio:** explicar (información adicional de AWQ/GPTQ) · predecir (formular hipótesis antes de ver datos, Paso 3) · detectar errores (un identificador de arXiv con un dígito de más produce un fallo real de acceso, error inducido en vivo) · corregir (ajustar heurística de sofisticación=calidad tras contrastar con datos reales) · modificar (investigar "imatrix", mini laboratorio) · aplicar en contexto nuevo (justificación técnica propia, desafío) · usar en un proyecto (fundamenta la elección de stack del capstone).
 
 **Repetir desde cero, sin guía:** explica qué distingue a AWQ de GPTQ, y por qué ninguno garantiza mejor calidad que K-quants.
 

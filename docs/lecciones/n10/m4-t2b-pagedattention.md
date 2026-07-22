@@ -41,7 +41,9 @@ En M4.T2 usaste vLLM sin entender qué hace exactamente PagedAttention. Ya conoc
 
 El paper original (Kwon et al., SOSP 2023) describe: vLLM "organiza el KV cache como bloques KV de tamaño fijo, como páginas en memoria virtual". Los bloques de una secuencia NO necesitan ser contiguos — se mapean mediante una tabla de bloques, análoga a la tabla de páginas de un SO. Esto elimina fragmentación interna (reservar de más "por si acaso") y externa (huecos dispersos).
 
-**Cifra exacta que rompe la intuición de "optimización marginal":** el paper afirma que "solo el 20.4%-38.2% de la memoria del KV cache se usa para almacenar los estados de tokens reales en los sistemas existentes" — entre **61.8% y 79.6% de desperdicio**. Con batch=1 y secuencia=512, el desperdicio llega a **88%**. Con PagedAttention, el throughput mejora 2-4x.
+**Cifra exacta que rompe la intuición de "optimización marginal":** el paper afirma que "solo el 20.4%-38.2% de la memoria del KV cache se usa para almacenar los estados de tokens reales en los sistemas existentes" — entre **61.8% y 79.6% de desperdicio**. Con PagedAttention, el throughput mejora 2-4x.
+
+⚠️ **Nota de honestidad metodológica:** circula en blogs y presentaciones una cifra de "88% de desperdicio" para un caso extremo (batch=1, secuencia=512) atribuida a este paper. Este laboratorio la buscó específicamente en el texto del paper y NO pudo verificarla de forma independiente — solo el rango 61.8%-79.6% es texto confirmado. Por eso se usa únicamente la cifra verificable, siguiendo la disciplina de este nivel: nunca repetir una cifra sin haberla confirmado en la fuente.
 
 **La analogía con memoria virtual está en el propio paper**, cita textual: "se puede pensar en los bloques como páginas, los tokens como bytes, y las solicitudes como procesos" — no es interpretación posterior.
 
@@ -71,20 +73,26 @@ print(f"Desperdicio real: {desperdicio_min:.1f}-{desperdicio_max:.1f}GB")
 
 ## 6. Error inducido en vivo
 
-Predice el desperdicio de memoria de una reserva "por si acaso" (peor caso de longitud, conversación corta real). Después compara contra el 88% real que el paper reporta.
+Antes de abrir el paper por la URL correcta, intenta acceder a él con un identificador de arXiv con UN SOLO carácter cambiado respecto al real (2309.06180): usa `2399.06180` (año trastocado, un typo real y fácil de cometer).
+
+```bash
+curl -s -o /dev/null -w "HTTP %{http_code}\n" https://arxiv.org/abs/2399.06180
+```
+
+Observa el código HTTP exacto que arXiv devuelve — no lo que crees que "debería" devolver.
 
 ## 7. Comprensión
 
-- ¿Tu predicción se acercó al 88% real, o lo subestimaste?
+- ¿Qué código HTTP obtuviste con el identificador equivocado, y qué obtienes si repites el comando con el identificador real (2309.06180)? ¿Por qué un solo carácter mal escrito produce un fallo total?
 - ¿Por qué la tabla de bloques de PagedAttention es estructuralmente igual a la tabla de páginas de N1.M5.T4?
-- Aplicado a tu RTX 5070 (12GB): ¿cuántos GB estarían desperdiciados en el peor caso sin PagedAttention?
+- Aplicado a tu RTX 5070 (12GB): ¿cuántos GB estarían desperdiciados en el peor caso del rango confirmado (79.6%) sin PagedAttention?
 
 ## 8. Puntos de verificación
 
 ☐ Leí el mecanismo técnico exacto del bloque KV y la tabla de bloques.
 ☐ Localicé la cita textual exacta de la analogía con memoria virtual.
-☐ Calculé el desperdicio real en GB para un caso concreto.
-☐ Escribí mi predicción ANTES de ver la cifra real del 88%.
+☐ Calculé el desperdicio real en GB para un caso concreto, usando solo el rango verificado.
+☐ Reproduje el error inducido en vivo (identificador de arXiv equivocado) y confirmé el código HTTP real.
 
 ## 9. Diagnóstico de errores
 
@@ -92,10 +100,11 @@ Predice el desperdicio de memoria de una reserva "por si acaso" (peor caso de lo
 |---|---|---|---|---|---|
 | No encuentro la cita de la analogía | Los papers concentran la analogía central en abstract/introducción. | Revisa esas secciones primero. | Busca "virtual memory"/"paging" con Ctrl+F. | Localiza la cita exacta ahí. | Revisar siempre abstract+introducción antes de buscar en el cuerpo. |
 | Mi cálculo no coincide con lo esperado | El 20.4%-38.2% es un rango, no un valor único. | Revisa si usas el extremo correcto del rango. | Calcula ambos extremos, no un solo valor. | Presenta el resultado como rango. | Nunca colapsar un rango reportado a un solo número sin justificación. |
+| `curl` a `arxiv.org/abs/2399.06180` devuelve HTTP 404 (error inducido en vivo) | El año "2399" no existe en el esquema de IDs de arXiv (AAMM.NNNNN). | Compara el código HTTP de la URL equivocada (404) contra el de la URL real (200). | Repite el comando con el identificador real y confirma que pasa de 404 a 200. | Usa siempre el identificador exacto copiado de una fuente confiable, nunca tecleado de memoria. | Verificar el identificador exacto de una fuente académica ANTES de citarla — el mismo hábito que corrigió la cita errónea de M2.T1b. |
 
 ## 10. Mini laboratorio
 
-Calcula el desperdicio real para tu RTX 5070 completa (12GB) en el peor caso (88%, batch=1).
+Calcula el desperdicio real para tu RTX 5070 completa (12GB) usando el extremo peor del rango verificado (79.6% de desperdicio).
 
 ## 11. Desafío
 
@@ -112,12 +121,13 @@ Explica, con la cita exacta y las cifras reales, por qué la mejora de 44x en th
 | Recurso | Autor/canal | Idioma | Duración | Nivel | Motivo | Tag |
 |---|---|---|---|---|---|---|
 | [Efficient Memory Management for LLM Serving with PagedAttention](https://arxiv.org/abs/2309.06180) | Kwon et al., SOSP 2023 | EN | ~30 min | Avanzado | Paper original de vLLM/PagedAttention. | 🟢 Antes |
+| [vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html) | Equipo vLLM (UC Berkeley) | EN | ~15 min | Intermedio | Anuncio original en prosa accesible, útil para contrastar con la cita textual exacta del paper. | 🔵 Durante |
 
 ## Evaluación
 
-**Lo esencial en una frase:** PagedAttention resuelve un desperdicio de memoria medido de hasta 88%, aplicando literalmente la paginación de memoria virtual del SO a bloques de KV cache.
+**Lo esencial en una frase:** PagedAttention resuelve un desperdicio de memoria medido de entre 61.8% y 79.6% (la única cifra verificable de forma independiente en el texto del paper), aplicando literalmente la paginación de memoria virtual del SO a bloques de KV cache.
 
-**Las siete capacidades de dominio:** explicar (mecanismo de bloques KV) · predecir (desperdicio antes de ver la cifra real) · detectar errores (buscar en el lugar equivocado del paper) · corregir (presentar un rango como rango) · modificar (calcular desperdicio para tu propia GPU, mini laboratorio) · aplicar en contexto nuevo (conectar concurrencia con su causa mecánica, desafío) · usar en un proyecto (argumentar el valor de vLLM en el capstone con precisión).
+**Las siete capacidades de dominio:** explicar (mecanismo de bloques KV) · predecir (si una cifra de fuente secundaria, como el "88%", sería verificable en el texto original) · detectar errores (un identificador de arXiv con un carácter equivocado produce un fallo real de acceso, error inducido en vivo) · corregir (presentar un rango como rango, y descartar una cifra no verificable en vez de repetirla) · modificar (calcular desperdicio para tu propia GPU con el rango verificado, mini laboratorio) · aplicar en contexto nuevo (conectar concurrencia con su causa mecánica, desafío) · usar en un proyecto (argumentar el valor de vLLM en el capstone con precisión).
 
 **Repetir desde cero, sin guía:** explica el mecanismo de PagedAttention con la analogía de memoria virtual y la cifra real de desperdicio.
 

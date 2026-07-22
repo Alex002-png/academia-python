@@ -64,10 +64,12 @@ print(fp32_a_bits(0.0001))
 
 **Paso 2 — Compara el mismo número en FP16 vs. BF16**
 
+Usamos *e* (base del logaritmo natural) porque su patrón de bits de mantisa hace visible la diferencia real entre ambos formatos — con otros valores (ej. π) puede ocurrir que ambos truncamientos coincidan por coincidencia numérica, así que verifica siempre con tus propios valores en vez de asumir que un solo ejemplo generaliza.
+
 ```python
 import numpy as np
 
-x = np.float32(3.14159265)
+x = np.float32(2.71828183)  # e, la base del logaritmo natural
 x_fp16 = np.float16(x)
 print(f"FP32: {x} -> FP16: {x_fp16} (perdida: {abs(float(x)-float(x_fp16)):.8f})")
 
@@ -76,6 +78,8 @@ bits_bf16 = bits_fp32[:2] + b'\x00\x00'
 x_bf16_aprox = struct.unpack('>f', bits_bf16)[0]
 print(f"FP32: {x} -> BF16 (aprox): {x_bf16_aprox} (perdida: {abs(float(x)-x_bf16_aprox):.8f})")
 ```
+
+Resultado real: FP16 da 2.71875 (pérdida 0.00046817) y BF16 da 2.703125 (pérdida 0.01515683) — pérdidas claramente distintas: BF16 pierde más de 30x más precisión fina aquí, el precio real de sus 3 bits menos de mantisa frente a FP16.
 
 **Paso 3 — Encuentra un valor donde FP16 falla y BF16 no**
 
@@ -134,7 +138,7 @@ Escribe una explicación de una frase, sin fórmulas, sobre por qué "menos bits
 |---|---|---|---|---|---|---|
 | [A Study of BFLOAT16 for Deep Learning Training](https://arxiv.org/pdf/1905.12322) | arXiv 1905.12322 | EN | ~20 min | Avanzado | Por qué BF16 reemplazó a FP16 en la práctica. | 🟢 Antes |
 | [Neural Network Quantization from First Principles](https://newsletter.semianalysis.com/p/neural-network-quantization-and-number) | SemiAnalysis | EN | ~30 min | Avanzado | Por qué el exponente es más crítico que la mantisa. | 🔵 Durante |
-| [Predicting Parameters in Deep Learning](https://arxiv.org/abs/2006.11967) | Denil et al., NeurIPS 2013 | EN | ~25 min | Avanzado | Evidencia académica de redundancia en redes entrenadas. | ⭐ Profundización |
+| [Predicting Parameters in Deep Learning](https://arxiv.org/abs/1306.0543) | Denil et al., NeurIPS 2013 | EN | ~25 min | Avanzado | Evidencia académica de redundancia en redes entrenadas. | ⭐ Profundización |
 
 ## Evaluación
 

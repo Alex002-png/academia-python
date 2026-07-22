@@ -58,7 +58,7 @@ Ningún mecanismo nuevo hace falta. Un tema `real` que no complete el patrón de
 
 ### 3.3 Por qué la carga estimada de DOC-10 es más incierta aquí que en niveles anteriores
 
-A diferencia de N0-N10, dos piezas de este nivel dependen de terceros reales fuera del control curricular: (a) que un paper elegido resulte, al intentarlo, genuinamente reproducible en un tiempo razonable — un riesgo conocido y documentado en la propia literatura de reproducibilidad (ver bibliografía, MLRC/Papers with Code); (b) que un mantenedor de un proyecto open source real revise y acepte un PR en un plazo previsible. Ninguna de las dos está garantizada por diseño pedagógico. §6.4 documenta la mitigación propuesta — no es una decisión autodeclarada en silencio, se marca explícitamente para conocimiento del Director.
+A diferencia de N0-N10, dos piezas de este nivel dependen de terceros reales fuera del control curricular: (a) que un paper elegido resulte, al intentarlo, genuinamente reproducible en un tiempo razonable — un riesgo conocido y documentado en la propia literatura de reproducibilidad (ver bibliografía, MLRC); (b) que un mantenedor de un proyecto open source real revise y acepte un PR en un plazo previsible. Ninguna de las dos está garantizada por diseño pedagógico. §6.4 documenta la mitigación propuesta — no es una decisión autodeclarada en silencio, se marca explícitamente para conocimiento del Director.
 
 ### 3.4 Principio del entorno (heredado de SYL-N1 §3, sigue aplicando)
 
@@ -82,9 +82,9 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** el método de las tres pasadas de Keshav — pasada 1 (5-10 min: título/resumen/introducción/encabezados/conclusiones, decide si vale la pena) → pasada 2 (~1 h: figuras, argumento completo, referencias no leídas anotadas) → pasada 3 (horas: re-derivar el trabajo, como si lo reimplementaras).
 - **Por qué:** existe porque ET4 completa ya presupone razonar sobre arquitecturas reales, pero nunca exigió leer la fuente primaria que las originó / ahora porque es el primer acto de un investigador junior real / habilita T2-T5 y, en última instancia, la elección informada del paper del capstone.
 - **Evidencia de dominio:** decide, en una pasada 1 cronometrada sobre un paper nunca visto, si lo reproduciría o no — y defiende esa decisión con evidencia concreta del propio paper, no con intuición.
-- **Práctica principal:** laboratorio real (`modalidad:"real"`) — pasada 1 sobre 3 papers de frontera reales de distintas subáreas (elegidos por el estudiante desde arXiv/Papers With Code), con bitácora de la decisión de cada uno.
+- **Práctica principal:** laboratorio real (`modalidad:"real"`) — pasada 1 sobre 3 papers de frontera reales de distintas subáreas (elegidos por el estudiante desde arXiv/Hugging Face Papers), con bitácora de la decisión de cada uno.
 - **Evaluación:** checkpoints DOC-12 (cronometraje real de la pasada 1, bitácora completa, justificación defendible).
-- **Pregunta ingenieril:** si dos papers afirman lo mismo pero uno cita más follow-ups en Papers With Code, ¿qué te dice eso — y qué NO te dice?
+- **Pregunta ingenieril:** si dos papers afirman lo mismo pero uno tiene muchas más estrellas/upvotes en su repositorio o en Hugging Face Papers, ¿qué te dice eso sobre la calidad del trabajo — y qué NO te dice?
 - **Recursos [🟢 antes]:** S. Keshav, *"How to Read a Paper"*, ACM SIGCOMM CCR 2007 — https://ccr.sigcomm.org/online/files/p83-keshavA.pdf (el método completo, fuente primaria, no un resumen de terceros).
 
 **N11.M1.T2 · Notación y matemática de frontera**
@@ -137,7 +137,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Práctica principal:** laboratorio real — lectura completa + notas + defensa breve.
 - **Evaluación:** checkpoints DOC-12 + defensa breve (siembra directa del formato de defensa del capstone).
 - **Pregunta ingenieril:** de los papers que descartaste en tu lista corta, ¿cuál te costó más descartar y por qué — qué criterio inclinó la balanza?
-- **Recursos [🟣 después]:** Papers With Code (paperswithcode.com) para contrastar si el paper elegido ya tiene intentos de reproducción documentados por terceros — información relevante para M2.T1, no para esta lectura en sí.
+- **Recursos [🟣 después]:** Hugging Face Papers (huggingface.co/papers) para ver qué repositorio de código está asociado al paper elegido y su nivel de adopción real (estrellas de GitHub) — sucesor de Papers With Code, discontinuado por Meta en julio de 2025 (hallazgo verificado durante la construcción de este syllabus, no asumido de memoria); información relevante para M2.T1, no para esta lectura en sí.
 
 *Cierre de M1 (síntesis del módulo).* El estudiante sale de M1 con un paper propio, ya elegido, leído en profundidad y evaluado con criterio — la materia prima real del capstone, no un ejercicio de práctica descartable.
 
@@ -153,7 +153,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Modelo mental:** reproducibilidad como propiedad del *claim acotado*, no del paper entero — un paper puede tener un resultado principal inalcanzable con recursos de estudiante y, a la vez, un resultado secundario perfectamente reproducible en una laptop.
 - **Por qué:** existe porque el capstone completo depende de esta elección / ahora porque M1 ya dio la lectura crítica necesaria para evaluar candidatos / habilita T2-T5 y el capstone entero.
 - **Evidencia de dominio:** produce una comparación real de 2-3 candidatos con criterio de selección explícito (cómputo requerido, disponibilidad de código/datos, claim exacto a reproducir) y una decisión final defendible.
-- **Práctica principal:** laboratorio real — búsqueda real en Papers With Code + arXiv de candidatos, con matriz de comparación explícita.
+- **Práctica principal:** laboratorio real — búsqueda real en Hugging Face Papers + arXiv de candidatos, con matriz de comparación explícita.
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** ¿qué harías si, ya avanzado el capstone, descubres que el paper elegido no es reproducible con tus recursos — cuál es tu plan B antes de que haga falta?
 - **Recursos [🟢 antes]:** MLRC (ML Reproducibility Challenge) — https://reproml.org/challenge_resources/ (criterios reales usados por la comunidad de reproducibilidad para evaluar candidatos).
@@ -169,7 +169,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 - **Práctica principal:** laboratorio real — investigación guiada sobre el repositorio (si existe) del paper elegido en T1, o sobre un repositorio de referencia similar si el propio candidato no tiene código público.
 - **Evaluación:** checkpoints DOC-12.
 - **Pregunta ingenieril:** si el código público diverge del método descrito en el paper (ocurre con frecuencia real), ¿cuál de los dos documentos tratas como la fuente de verdad, y por qué?
-- **Recursos [🔵 durante]:** el repositorio real asociado al paper elegido (si existe) vía Papers With Code.
+- **Recursos [🔵 durante]:** el repositorio real asociado al paper elegido (si existe) vía Hugging Face Papers, o el propio GitHub/arXiv del paper cuando no aparezca ahí.
 
 **N11.M2.T3 · Diseñar un plan de reproducción**
 - **Objetivo:** escribe un plan concreto de reproducción antes de escribir código — qué experimento exacto, qué métrica, qué tolerancia de comparación, qué recursos de cómputo usará (local/Colab/equivalente).
@@ -360,7 +360,7 @@ De ET4 completa: el estudiante ya construyó y operó sistemas reales de IA de e
 
 | Módulo | Eje | Complementos |
 |---|---|---|
-| M1 | S. Keshav, "How to Read a Paper" (CCR 2007) | arXiv API user manual · Papers With Code |
+| M1 | S. Keshav, "How to Read a Paper" (CCR 2007) | arXiv API user manual · Hugging Face Papers (huggingface.co/papers) |
 | M2 | ML Reproducibility Challenge — reproml.org/challenge_resources | Semmelrock et al. 2025 (barreras de reproducibilidad) · Desai et al. 2025 (qué es reproducibilidad en IA/ML) |
 | M3 | NeurIPS Paper Checklist Guidelines | Licencias de código abierto (MIT/Apache-2.0/GPL, comparación práctica) |
 | M4 | Open Source Guides — "How to Contribute" (opensource.guide) | firstcontributions.github.io · goodfirstissue.dev |

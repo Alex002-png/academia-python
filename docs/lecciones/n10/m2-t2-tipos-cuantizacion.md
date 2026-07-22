@@ -50,9 +50,9 @@ Según la tabla oficial de Hugging Face (verificada por fetch directo), el ecosi
 **Paso 1 — Descarga el mismo modelo en 3 quant types distintos**
 
 ```
-ollama pull llama3.2:q4_K_M
-ollama pull llama3.2:q5_K_M
-ollama pull llama3.2:q8_0
+ollama pull llama3.2:3b-instruct-q4_K_M
+ollama pull llama3.2:3b-instruct-q5_K_M
+ollama pull llama3.2:3b-instruct-q8_0
 ```
 
 **Paso 2 — Diseña tu batería de prompts ANTES de comparar**
@@ -70,7 +70,7 @@ prompts_prueba = [
 ```python
 import requests
 
-for modelo in ["llama3.2:q4_K_M", "llama3.2:q5_K_M", "llama3.2:q8_0"]:
+for modelo in ["llama3.2:3b-instruct-q4_K_M", "llama3.2:3b-instruct-q5_K_M", "llama3.2:3b-instruct-q8_0"]:
     print(f"--- {modelo} ---")
     for prompt in prompts_prueba:
         r = requests.post("http://localhost:11434/api/generate",
@@ -81,7 +81,7 @@ for modelo in ["llama3.2:q4_K_M", "llama3.2:q5_K_M", "llama3.2:q8_0"]:
 ## 6. Error inducido en vivo
 
 ```
-ollama pull llama3.2:q9_K_XL
+ollama pull llama3.2:3b-instruct-q9_K_XL
 ```
 
 Intenta descargar un tag de cuantización inventado. Observa el error exacto.

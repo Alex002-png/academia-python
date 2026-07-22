@@ -68,7 +68,7 @@ Troncal: `M1 → M2 → M3 → M4`. M2 (cuantización) depende técnicamente de 
 **N10.M1.T1 · Por qué correr un LLM en local — panorama y primer modelo vivo**
 - **Objetivo:** explica las razones reales (costo, privacidad, latencia, disponibilidad offline, control) para correr inferencia local frente a una API cloud; instala Ollama y ejecuta su primer modelo, observando qué ocurrió realmente (descarga, carga en memoria, primer token).
 - **Prerrequisitos:** N9 Superado (el estudiante ya operó infraestructura real); N7.M1 (ya llamó a una API de modelo cloud — el contraste es directo).
-- **Competencias:** C-N10-01.
+- **Competencias:** C-N10-01, C-N10-02 *(primera introducción real de los ejes de trade-off frente a la nube — costo/privacidad/latencia — que C-N10-02 exige documentar; corrección aplicada en el Paso 9b tras hallazgo de auditoría adversarial: ver §10)*.
 - **Entorno objetivo:** terminal local (Windows/macOS/Linux, divergencias declaradas donde existan — Ollama tiene instaladores nativos en los tres).
 - **Errores habituales:** confundir "descargar un modelo" con "instalar el runtime" (son pasos distintos); asumir que el primer modelo que se prueba usa la GPU sin haberlo verificado nunca; no entender por qué el primer prompt tarda mucho más que el segundo (carga en memoria vs. inferencia).
 - **Modelo mental:** Ollama como **el gestor de paquetes de los modelos** — el mismo tipo de capa de conveniencia que `pip` sobre Python, pero para pesos de un modelo de varios gigabytes en vez de código.
@@ -232,7 +232,7 @@ Troncal: `M1 → M2 → M3 → M4`. M2 (cuantización) depende técnicamente de 
 **N10.M3.T4 · Medir tu propia GPU — VRAM, batching y saturación**
 - **Objetivo:** mide, con `nvidia-smi`/herramientas equivalentes, el uso real de VRAM al cargar distintos modelos/cuantizaciones (conectando con M2), y observa el efecto de procesar varias solicitudes en paralelo (batching) sobre throughput y latencia individual.
 - **Prerrequisitos:** T3.
-- **Competencias:** C-N10-01.
+- **Competencias:** C-N10-01, C-N10-02 *(operar la columna vertebral local con más de un usuario simultáneo, y medir el trade-off real de latencia que eso impone, es exactamente lo que C-N10-02 exige — corrección de cobertura del Paso 9b)*.
 - **Entorno objetivo:** terminal local, RTX 5070 12GB como referencia principal; ruta CPU-only para batching (más limitada, documentada como comparación).
 - **Errores habituales:** medir VRAM justo después de cargar el modelo, sin conversación activa, y sorprenderse cuando una conversación larga hace fallar la inferencia (KV cache crece con el contexto); asumir que batching siempre mejora todo (mejora throughput agregado, pero puede empeorar la latencia de una solicitud individual).
 - **Modelo mental:** batching como **compartir el mismo viaje a la bodega (T2) entre varios pedidos** — si de todos modos hay que mover los pesos desde VRAM global, procesar varias solicitudes a la vez amortiza ese costo fijo entre más trabajo útil.
@@ -246,7 +246,7 @@ Troncal: `M1 → M2 → M3 → M4`. M2 (cuantización) depende técnicamente de 
 **N10.M3.T5 · Laboratorio integrador — diagnosticar el límite de 12GB, cierra M3**
 - **Objetivo:** dado un modelo que NO cabe en los 12GB de VRAM de la RTX 5070 (ni siquiera cuantizado agresivamente), diagnostica exactamente por qué, con los conceptos de T1-T4 (tamaño de pesos + KV cache + overhead), y propone y VERIFICA la mejor alternativa práctica.
 - **Prerrequisitos:** T1-T4.
-- **Competencias:** C-N10-01.
+- **Competencias:** C-N10-01, C-N10-02 *(operar con los límites reales del hardware, y la alternativa práctica verificada, es la pieza central de "opera su columna vertebral en local" — corrección de cobertura del Paso 9b)*.
 - **Entorno objetivo:** terminal local, RTX 5070.
 - **Errores habituales:** proponer una solución sin verificarla realmente (ej. "usar un modelo más chico" sin confirmar que el modelo elegido sí cabe con margen para el contexto real que se necesita); no considerar el offload parcial CPU/GPU como alternativa válida (más lento, pero funcional) frente a directamente descartar el modelo.
 - **Modelo mental:** diagnosticar un fallo de memoria como **un presupuesto que no cierra** — cada componente (pesos cuantizados, KV cache, overhead de runtime) es una línea de gasto contra un total fijo de 12GB; la solución siempre pasa por reducir una de esas líneas o aumentar el total disponible (offload a RAM del sistema, más lento pero real).
@@ -293,7 +293,7 @@ Troncal: `M1 → M2 → M3 → M4`. M2 (cuantización) depende técnicamente de 
 **N10.M4.T3 · Decisión fundamentada — laboratorio integrador, cierra M4 y el nivel**
 - **Objetivo:** produce un informe de adopción o descarte de una herramienta del ecosistema local para el caso de uso de su propia columna vertebral (capstone), integrando M1-M4 completos, con evidencia propia citada por dirección exacta.
 - **Prerrequisitos:** M1-M4.T1-T2.
-- **Competencias:** C-N10-01, C-N10-03.
+- **Competencias:** C-N10-01, C-N10-02, C-N10-03 *(la decisión de stack completo del Paso 2 de este laboratorio integra explícitamente trade-offs frente a la nube — corrección de cobertura del Paso 9b)*.
 - **Entorno objetivo:** terminal local, RTX 5070.
 - **Errores habituales:** producir un informe sin integrar realmente M1-M3 (repetir solo lo de M4.T1-T2 sin citar las mediciones de runtimes/cuantización/GPU ya hechas); no declarar qué NO se evaluó y por qué (honestidad de alcance, mismo principio que rige toda la Academia).
 - **Modelo mental:** el juicio de ecosistema como **la competencia que sobrevive a cualquier herramienta específica** — Ollama, llama.cpp o cualquier alternativa de hoy pueden quedar obsoletas; el método para evaluar la siguiente herramienta, no.
@@ -379,11 +379,11 @@ Ninguna todavía — el nivel no ha comenzado a impartirse.
 
 | Competencia | Verificada por |
 |---|---|
-| C-N10-01 (ejecuta y optimiza inferencia local: cuantización, aceleración, medición antes/después) | M1 completo (4 labs) + M2 completo (4 labs) + ítems 1-2 del banco de examen + Capstone Hitos 1-2 |
-| C-N10-02 (opera su columna vertebral en local, con trade-offs frente a la nube documentados) | M3 completo (5 labs) + ítems 3-4 del banco de examen + Capstone Hitos 3-4 |
+| C-N10-01 (ejecuta y optimiza inferencia local: cuantización, aceleración, medición antes/después) | M1 completo (4 labs) + M2 completo (4 labs) + M3.T1-T3 + ítems 1-2, 6 del banco de examen + Capstone Hitos 1-2 |
+| C-N10-02 (opera su columna vertebral en local, con trade-offs frente a la nube documentados) | M1.T1 (motivación, ejes de trade-off) + M3.T4-T5 (operar con límites reales de hardware, latencia bajo concurrencia) + M4.T3 (síntesis de stack) + ítems 3-4 del banco de examen + Capstone Hitos 1, 3-4 |
 | C-N10-03 (evalúa herramientas del ecosistema local con prototipo, medición y juicio de adopción o descarte) | M4 completo (3 labs) + ítems 5-6 del banco de examen + Capstone Hito 1 (evolución del informe de M4.T3) |
 
-**Hallazgo de la revisión:** a diferencia de N3 (donde las 4 competencias mapeaban 1:1 con los 4 módulos), N10 tiene 3 competencias para 4 módulos — M3 (GPU/hardware) no tiene una competencia propia dedicada, sino que sirve como el fundamento instrumental de C-N10-02 (operar con límites reales conocidos) y, indirectamente, de C-N10-01 (medición antes/después necesita entender por qué cambian los números). Esto es coherente con DOC-01: las 3 competencias de N10 (C-N10-01…03) están diseñadas para cubrir el nivel completo sin una cuarta dedicada a hardware puro — decisión ya tomada en DOC-01, no una omisión de este syllabus. Se declara explícitamente para que una auditoría futura no lo confunda con una laguna real.
+**Corrección aplicada tras la auditoría adversarial (Paso 9b):** la versión anterior de esta tabla afirmaba que C-N10-02 se verificaba con "M3 completo (5 labs)", pero ningún laboratorio del syllabus tenía realmente esa competencia etiquetada en su ficha (§5) — contradicción interna real, encontrada por un auditor independiente, no autodetectada. Corregido en dos frentes: (1) se re-etiquetaron con C-N10-02, con justificación explícita en su propia ficha, los 4 laboratorios donde el contenido genuinamente la sirve (M1.T1, M3.T4, M3.T5, M4.T3) — no todo M3, porque M3.T1-T3 son sobre el hardware en sí, no sobre operar la columna vertebral con trade-offs frente a la nube; (2) esta tabla ahora cita esos labs exactos en vez de "M3 completo". **Hallazgo de diseño que se mantiene, ya verificado como intencional:** N10 tiene 3 competencias para 4 módulos — M3 no tiene una competencia dedicada en solitario, sirve como fundamento instrumental de C-N10-01 (T1-T3) y de C-N10-02 (T4-T5) simultáneamente. Coherente con DOC-01, no una omisión.
 
 ### Banco de examen — ítems rotables (≥3 variantes por ítem, NNR-02)
 

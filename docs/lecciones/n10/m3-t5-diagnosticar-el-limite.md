@@ -4,7 +4,9 @@
 
 **La gran pregunta de este laboratorio:** cuando un modelo real no cabe en tu RTX 5070, ¿puedes diagnosticar exactamente por qué, y verificar la mejor alternativa?
 
-**Entorno objetivo:** terminal local, RTX 5070.
+**Entorno objetivo:** terminal local, RTX 5070 como referencia principal.
+
+⚠️ **Ruta sin GPU disponible:** el mismo método de diagnóstico de presupuesto en tres líneas aplica sustituyendo VRAM por RAM disponible y `-ngl 999` por `-ngl 0` (CPU-only, ya practicado en M1.T3/M2.T3) — el presupuesto que se agota deja de ser VRAM y pasa a ser RAM del sistema, pero la disciplina de desglosar pesos + contexto + overhead antes de intentar cargar es idéntica.
 
 **Fluencia de terminal asumida:** completa (M1-M2, M3.T1-T4).
 

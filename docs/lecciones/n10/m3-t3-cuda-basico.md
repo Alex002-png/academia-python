@@ -4,7 +4,9 @@
 
 **La gran pregunta de este laboratorio:** has usado CUDA indirectamente en cada laboratorio desde M1.T3 sin verla nunca directamente — ¿qué hay realmente ahí debajo?
 
-**Entorno objetivo:** terminal local; RTX 5070 con CUDA Toolkit instalado (M1.T3).
+**Entorno objetivo:** terminal local; RTX 5070 con CUDA Toolkit instalado (M1.T3) como referencia principal.
+
+⚠️ **Ruta sin GPU disponible:** los Pasos 2-3 (lectura y predicción del kernel de ejemplo) son enteramente conceptuales y no requieren GPU. Si no tienes una, sustituye el Paso 1 por releer tus propias estadísticas GPU-vs-CPU ya medidas en M1.T3, y el error inducido en vivo por razonar en papel qué esperarías ver en `nvidia-smi` en cada caso, en vez de observarlo directamente.
 
 **Fluencia de terminal asumida:** completa (M3.T1-T2).
 

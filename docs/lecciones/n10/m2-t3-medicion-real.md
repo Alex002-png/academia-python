@@ -57,7 +57,7 @@ def medir(modelo, prompt, repeticiones=3):
         tiempos.append(time.time() - inicio)
     return sum(tiempos)/len(tiempos), tiempos
 
-promedio, corridas = medir("llama3.2:q4_K_M", "Explica la fotosíntesis en 3 frases.")
+promedio, corridas = medir("llama3.2:3b-instruct-q4_K_M", "Explica la fotosíntesis en 3 frases.")
 print(f"Promedio: {promedio:.2f}s — corridas individuales: {corridas}")
 ```
 
@@ -72,7 +72,7 @@ Mide justo después de cargar el modelo (conversación corta) y de nuevo tras un
 **Paso 3 — Compara los 3 quant types**
 
 ```python
-for modelo in ["llama3.2:q4_K_M", "llama3.2:q5_K_M", "llama3.2:q8_0"]:
+for modelo in ["llama3.2:3b-instruct-q4_K_M", "llama3.2:3b-instruct-q5_K_M", "llama3.2:3b-instruct-q8_0"]:
     prom, _ = medir(modelo, "Explica la fotosíntesis en 3 frases.")
     print(f"{modelo}: {prom:.2f}s promedio")
 ```

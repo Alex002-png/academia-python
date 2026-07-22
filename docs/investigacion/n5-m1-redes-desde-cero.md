@@ -44,3 +44,25 @@ El tema completo es una sola idea aplicada tres veces con creciente generalidad:
 ## 4. Estrategia adoptada para este tema
 
 Cada valor numérico fue verificado con ejecución real de Python (`verify_n5m1t2_full.py`) antes de escribirse en cualquier `check()`; el harness de Node confirmó 14/14 aciertos contra el `check()` real extraído de `index.html`. **Falsable por:** si una futura cohorte demuestra que el hallazgo del truncamiento silencioso de `zip()` es demasiado sutil para un desafío final sin más andamiaje, debería añadirse un paso intermedio explícito antes del reto — no hay evidencia de eso todavía.
+
+---
+
+# Investigación Pedagógica — N5.M1.T3 · Backpropagation (motor de autograd propio)
+
+## 1. Cómo enseñan este concepto exacto las fuentes de referencia
+
+- **Karpathy, micrograd** (`github.com/karpathy/micrograd`, estructura confirmada por WebSearch en el Historial de SYL-N5): construye una clase `Value` con `_prev`, `_backward` por operación, y un `backward()` público que hace orden topológico + `self.grad=1.0` + recorrido inverso — este tema replica esa estructura exacta (con nombres en español: `Valor`, `_backward`, `_prev`), no una variante propia. Es la razón por la que DOC-10/mision-n5 señalan a Karpathy como "pedagógicamente más fuerte": construir el motor ANTES de un framework hace que M2.T2 sea confirmación, no revelación.
+- **PyTorch docs (`torch.autograd`, verificado por WebSearch en Historial de SYL-N5):** confirma que `torch.autograd` funciona con el mismo modelo — grafo acíclico dirigido (DAG) de objetos `Function`, `.backward()` que recorre desde la raíz — validando que el motor de juguete de este tema no es una simplificación que oculte el mecanismo real, sino el mismo mecanismo a escala mínima.
+
+## 2. Errores de novato documentados para este concepto exacto
+
+- Llamar `_backward()` en el orden equivocado (antes de que el nodo padre ya tenga su gradiente correcto) — motivó que el Día 2 lo haga completamente A MANO (Ejercicio 10) antes de automatizarlo (Día 3), para que el estudiante sienta la necesidad del orden topológico en carne propia, no como una explicación abstracta.
+- **Bug real cometido y corregido durante la construcción de este tema:** el Ejercicio 10 originalmente esperaba `b.grad=3.0` en vez del valor real verificado por ejecución (`b.grad=1.0` — la derivada local de la suma es 1, no el valor del otro operando, a diferencia del producto). Corregido tras ejecutar `verify_n5m1t3_full.py` y detectar la discrepancia antes de comitear — evidencia directa de por qué la guía §9 prohíbe escribir un `check()` de memoria.
+
+## 3. Síntesis crítica
+
+El tema resuelve una única tensión real: la regla de la cadena (N3.M2.T2) es fácil de aplicar a mano sobre UNA fórmula, pero inviable de aplicar a mano sobre un grafo con miles de nodos — el motor de autograd no es un algoritmo nuevo, es la automatización de un procedimiento ya dominado. El "quiebre de intuición" del módulo (valor reutilizado en dos ramas, retoFinal) no se explica con prosa: se demuestra con `a*a` y el estudiante confirma con sus propios ojos que `+=` (no `=`) es lo que hace que el resultado sea correcto.
+
+## 4. Estrategia adoptada para este tema
+
+Cada valor de cada `check()` —incluyendo los de una clase con estado, no solo funciones puras— se verificó ejecutando la clase completa en Python real (`verify_n5m1t3_full.py`) antes de escribirse; el harness de Node confirmó 14/14 aciertos contra el `check()` real extraído de `index.html`, y ese mismo proceso detectó y corrigió el bug real del Ejercicio 10 descrito arriba. **Falsable por:** si una futura auditoría encuentra que construir la clase en 3 pasos (mecanismo a mano → clase con backward manual → backward automático) es más lento de lo pedagógicamente necesario frente a construir la clase completa de una vez, debería revisarse — la decisión actual prioriza deliberadamente "sentir la necesidad de cada pieza antes de recibirla" sobre velocidad de construcción, siguiendo la prioridad explícita del Director para N4-N12 (guía §8).

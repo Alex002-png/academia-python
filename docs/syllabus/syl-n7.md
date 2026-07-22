@@ -5,12 +5,12 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | SYL-N7 · Tier T2 |
-| **Versión / Estado** | **0.1.0-draft** · Paso 1 del flujo institucional de 9 pasos (`docs/guia-construccion-niveles.md` §13): investigación pedagógica real completada (4 documentos, `docs/investigacion/n7-m1…m4-*.md`) + decisión de diseño de credenciales fijada (`docs/investigacion/n7-m1-manejo-credenciales.md`) + este syllabus. **Entregado para checkpoint del Director antes de iniciar construcción de contenido real en `index.html`** (decisión explícita: avance "paso a paso con checkpoint", no autónomo hasta el capstone) |
+| **Versión / Estado** | **0.2.0-draft** · Pasos 1-5 del flujo institucional de 9 pasos completos (`docs/guia-construccion-niveles.md` §13): investigación pedagógica + syllabus (Paso 1, aprobado por el Director 2026-07-21) → M1-M4 construidos como contenido real en `index.html`, 30 días/laboratorios (Paso 2-3) → capstone `n7et4` + compuertas + banco de examen de 8 ítems/24 variantes (Paso 4-5, este documento). **Pendiente:** Paso 6-7 (Herencias Declaradas finales, consolidadas contra contenido real) y Paso 8-9 (auditoría integral + auditoría adversarial + Informe Final de Nivel) antes de candidatura a v1.0.0 |
 | **Autoridad de origen** | DOC-10 §8 (interior de N7) · DOC-00 14.8.3 · DOC-01 (C-N7-01…05) |
 | **Depende de** | DOC-10 §8 (mapa, alcance ya aprobado) · DOC-00 (§13, §14, §16, 17.6) · DOC-01 · DOC-02 (instrumentos) · DOC-03 (método) · **DOC-12 (documento gobernante principal de este nivel — DOC-12 dominante, no la excepción, ver `docs/mision-n7.md`)** · DOC-11 (para las porciones conceptuales Pyodide de M2/M3/M4) · SYL-N1 §M4/M5 (precedente más cercano de espíritu DOC-12 completo) · SYL-N3 (plantilla estructural de ficha pedagógica) · **Herencia entrante borrador de SYL-N6 (no existe todavía como documento — N4-N6 se construyen en paralelo, ver §7.1)** |
 | **Produce / desarrolla** | La estructura docente completa de N7: fichas pedagógicas por tema (M1-M4), diseño de la Columna vertebral V1 (proyecto de nivel — RAG operativo de extremo a extremo), y el borrador de Herencias Declaradas hacia SYL-N8 |
 | **Estándar de calidad** | El mismo de SYL-N1/N2/N3: *"Si otro profesor excepcional impartiera este nivel utilizando únicamente el syllabus, ¿obtendría prácticamente la misma calidad formativa?"* |
-| **Historial** | **0.1.0-draft (2026-07-21): Documento de Diseño.** Decisión de credenciales fijada por el Director (key propia del estudiante desde el día 1 de M1, sin modo simulado — `docs/investigacion/n7-m1-manejo-credenciales.md`). Investigación pedagógica real de los 4 módulos completada en paralelo (WebFetch/WebSearch verificado, ~60 fuentes primarias distintas entre los 4 documentos): M1 corrigió el supuesto de que existiera un único curso DL.AI de streaming/costes (no existe, declarado honestamente) y verificó la asimetría real de roles OpenAI/Anthropic como conflicto cognitivo central; M2 corrigió el supuesto de "un curso DL.AI de RAG" a dos cursos reales con roles distintos, y seleccionó Qdrant sobre Chroma/Pinecone por comparación directa de documentación; M3 verificó con precisión de GB (tabla oficial del notebook TRL) qué modelos caben en una T4 gratuita de Colab, y corrigió dos hipótesis iniciales (la regla "alpha=2r" de LoRA no está respaldada por la fuente que se iba a citar; el ejercicio oficial de DPO de HF no corre en Colab gratuito); M4 corrigió "un curso DL.AI de Evals" a tres cursos reales, confirmó RAGAS y el OWASP LLM Top 10 2025 como fuentes citables, y encontró evidencia con cifra concreta (53.8-58.5% de precisión, casi azar) de que un juez LLM sin validar no es confiable. Este documento instancia esas cuatro investigaciones en fichas pedagógicas por tema, siguiendo la plantilla de SYL-N1/SYL-N3 con un campo nuevo (**Modalidad**, DOC-11/DOC-12 explícita por tema, exigida por la ficha de misión de N7). **Pendiente:** revisión y aprobación del Director; tras aprobación, Paso 2 (construcción módulo por módulo en `index.html`, empezando por M1); el capstone detallado, las compuertas y el banco de examen se diseñan en los Pasos 4-5, después de tener contenido real construido — mismo orden que siguieron SYL-N1/N3, nunca al revés. |
+| **Historial** | **0.1.0-draft (2026-07-21): Documento de Diseño.** Decisión de credenciales fijada por el Director (key propia del estudiante desde el día 1 de M1, sin modo simulado — `docs/investigacion/n7-m1-manejo-credenciales.md`). Investigación pedagógica real de los 4 módulos completada en paralelo (WebFetch/WebSearch verificado, ~60 fuentes primarias distintas entre los 4 documentos): M1 corrigió el supuesto de que existiera un único curso DL.AI de streaming/costes (no existe, declarado honestamente) y verificó la asimetría real de roles OpenAI/Anthropic como conflicto cognitivo central; M2 corrigió el supuesto de "un curso DL.AI de RAG" a dos cursos reales con roles distintos, y seleccionó Qdrant sobre Chroma/Pinecone por comparación directa de documentación; M3 verificó con precisión de GB (tabla oficial del notebook TRL) qué modelos caben en una T4 gratuita de Colab, y corrigió dos hipótesis iniciales (la regla "alpha=2r" de LoRA no está respaldada por la fuente que se iba a citar; el ejercicio oficial de DPO de HF no corre en Colab gratuito); M4 corrigió "un curso DL.AI de Evals" a tres cursos reales, confirmó RAGAS y el OWASP LLM Top 10 2025 como fuentes citables, y encontró evidencia con cifra concreta (53.8-58.5% de precisión, casi azar) de que un juez LLM sin validar no es confiable. Este documento instancia esas cuatro investigaciones en fichas pedagógicas por tema, siguiendo la plantilla de SYL-N1/SYL-N3 con un campo nuevo (**Modalidad**, DOC-11/DOC-12 explícita por tema, exigida por la ficha de misión de N7). **Pendiente:** revisión y aprobación del Director; tras aprobación, Paso 2 (construcción módulo por módulo en `index.html`, empezando por M1); el capstone detallado, las compuertas y el banco de examen se diseñan en los Pasos 4-5, después de tener contenido real construido — mismo orden que siguieron SYL-N1/N3, nunca al revés. · **0.2.0-draft (2026-07-21): Paso 1 aprobado por el Director, con criterios adicionales** (foco en profundidad de RAG/memoria/evaluación/tool calling sobre amplitud de herramientas; cada laboratorio construye sobre el anterior como un único sistema evolutivo — la "Columna vertebral V1"; toda decisión tecnológica justificada con alternativas explícitas en el propio contenido). **M1-M4 construidos en `index.html`** (Paso 2-3): M1 (7 laboratorios DOC-12, credenciales desde T1), M2 (17 días/laboratorios, DOC-11 T1-T3 → DOC-12 T4-T7, con un bug real de chunking encontrado y corregido durante la verificación — separar por ". " consume el punto final de cada oración), M3 (7 días/laboratorios, modelo mental de LoRA en Pyodide antes de GPU real, LoRA/QLoRA/DPO en Colab T4 con modelos verificados por VRAM real), M4 (6 laboratorios, OWASP LLM Top 10 → reglas → LLM-as-judge validado → RAGAS → guardrails → design doc). Cada módulo verificado con `node --check` limpio, validación estructural completa (encontró y corrigió 2 bugs reales: un día Pyodide sin `ex:[]`, un campo `comprensión` con tilde no reconocido por el renderer), e ids únicos contra todo el Campus — 57 ids `n7` sin colisión. **Capstone `n7et4` + compuertas + banco de examen construidos** (Paso 4-5, este documento): 5 hitos integrando M1-M4 con el hallazgo explícito de que M3 admite aplicación real o descarte justificado como resultados igualmente válidos; 8 ítems de examen (2 por competencia C-N7-01…04, C-N7-05 verificada por artefacto) con 3 variantes cada uno, los numéricos verificados por ejecución real de Python. Sigue: Paso 6-7 (Herencias Declaradas finales) y Paso 8-9 (auditorías + Informe Final) antes de v1.0.0. |
 
 ---
 
@@ -346,13 +346,95 @@ Troncal: `M1 → M2 → M3 → M4`. M2 depende realmente de M1 (la generación a
 - **Pregunta ingenieril:** si un ingeniero senior leyera solo esta sección de tu design doc, sin ver tu código, ¿confiaría en que evaluaste tu sistema con rigor? ¿Qué le faltaría para confiar más?
 - **Idea universal:** "mi sistema es seguro" no es una afirmación defendible — solo lo es "medí esto, con este método, y obtuve este resultado, y esto es lo que decidí dejar fuera".
 
-## 6. Proyecto de nivel (Columna vertebral V1) — declaración de alcance, no diseño detallado
+## 6. Proyecto de nivel (Columna vertebral V1) — Paso 4-5: capstone, compuertas y banco de examen
 
-Por DOC-10 §8 y `docs/mision-n7.md`: **sistema RAG operativo de extremo a extremo** (el mismo sistema construido progresivamente en M2.T7, evaluado en M4, con fine-tuning opcional de M3 si el estudiante decide incorporarlo a su arquitectura), con **design doc defendible** (redactado progresivamente, cierre real en M4.T6) y **evaluación propia** (M4.T4). Compuerta: examen + proyecto + defensa del design doc.
+Por DOC-10 §8 y `docs/mision-n7.md`: **sistema RAG operativo de extremo a extremo** (el mismo sistema construido progresivamente en M2.T7, evaluado en M4, con fine-tuning aplicado o conscientemente descartado de M3), con **design doc defendible** (redactado progresivamente, cierre real en M4.T6) y **evaluación propia** (M4.T4). Compuerta: examen + proyecto + defensa del design doc.
 
-**Diseño detallado del capstone (hitos, ficha completa, banco de examen) se produce en el Paso 4-5 del flujo de 9 pasos** (`docs/guia-construccion-niveles.md` §13), después de tener M1-M4 construidos como contenido real en `index.html` — mismo orden que siguieron SYL-N1 y SYL-N3 (el capstone de N3, por ejemplo, no tuvo diseño concreto hasta después de que los 24 temas existieran). Escribirlo antes sería diseñar hitos sobre un sistema que todavía no existe en el Campus.
+**Este diseño se produce ahora, en el Paso 4-5 del flujo de 9 pasos** (`docs/guia-construccion-niveles.md` §13), con M1-M4 ya construidos como contenido real en `index.html` (30 días/laboratorios) — mismo orden que siguieron SYL-N1 y SYL-N3, nunca al revés.
 
-**Nota de arquitectura para N8-N10 (peso especial de este nivel, §2):** el design doc de M4.T6 debe documentarse con el cuidado adicional de que otro nivel, construido en paralelo, va a asumir su existencia y extenderlo — este requisito se traduce en el Paso 4 a una sección explícita de "puntos de extensión previstos" dentro del propio design doc, no solo una descripción del sistema tal como está hoy.
+### 6.1 El capstone — diseño de síntesis (`n7et4` en `index.html`)
+
+**Nombre:** *"Columna vertebral V1 — el sistema que puedes defender con evidencia"*. **Por qué esta forma y no otra:** el riesgo, el mismo que las auditorías de N1/N2/N3 ya encontraron en sus propios capstones, es que el proyecto se convierta en cuatro entregas independientes ("aquí mi M1, aquí mi M2..."). La corrección, igual que en niveles anteriores: el hito 2 exige explícitamente que M1 (llamar_modelo) y M2 (RAG) operen COMO UN SOLO sistema, no dos piezas sueltas; el hito 4 exige que la evaluación de M4 se aplique sobre ESE sistema integrado (hitos 2-3), nunca sobre ejemplos aislados de laboratorio.
+
+**Decisión de diseño explícita, no presente en N1/N2/N3 — el hito 3 (M3) admite dos resultados válidos:** aplicar fine-tuning real al sistema, o descartarlo conscientemente con la misma evidencia y rigor que aplicarlo exigiría. Justificación: DOC-10 §8 describe M3 como "LoRA/QLoRA... y medición del efecto" — la medición es obligatoria, la aplicación al sistema final no lo es, porque un ingeniero real a veces decide correctamente que el fine-tuning no aporta a un caso de uso específico, y esa decisión, bien evidenciada, es tan válida pedagógicamente como la aplicación misma. Lo único inaceptable es omitir la decisión sin documentarla.
+
+**Diferencia estructural frente a N3 (100% Pyodide): capstone con `flujoDeGit` real**, igual que N1/N2 — a diferencia de N3, N7 es DOC-12 dominante desde M1.T1, así que el capstone vive en un repositorio real desde el primer commit, con la misma disciplina de `.env`/`.gitignore` de M1.T1 aplicada al proyecto completo, no solo a los laboratorios sueltos.
+
+**Verificación de síntesis (criterio adversarial aplicado en este paso):** ¿podría un estudiante completar esto entregando las cuatro piezas por separado, sin integrarlas? No — el hito 2 exige que la generación aumentada de M2 use la MISMA función `llamar_modelo()` de M1 (no una reimplementación de la llamada a la API), el hito 4 exige que las métricas de M4 se midan sobre el sistema de los hitos 2-3 (no sobre ejemplos sueltos de los laboratorios de M4), y el hito 5 exige que el design doc documente decisiones ya tomadas en los hitos 1-4, no una descripción genérica escrita al final.
+
+### 6.2 Revisión de las compuertas — cobertura de competencias
+
+| Instrumento | Qué verifica | Norma |
+|---|---|---|
+| **Examen** (banco rotable ≥3 variantes/ítem, NNR-02 — ver banco completo abajo) | Conocimiento operativo y capacidad de diagnóstico sobre las competencias C-N7-01…04 | DOC-02 |
+| **Capstone (Columna vertebral V1)** | Síntesis real: M1-M4 integrados en un sistema propio, con evidencia real de evaluación y seguridad | OBJ-05 |
+| **Defensa oral del design doc** | Comprensión real de trade-offs tecnológicos, decisiones de arquitectura, y honestidad sobre qué queda fuera de alcance | RM-05 |
+
+**Cobertura de competencias — verificación explícita:**
+
+| Competencia | Verificada por |
+|---|---|
+| C-N7-01 (RAG completo, extremo a extremo) | M1 completo (4 temas) + M2 completo (7 temas) + ítems 1-2 del banco de examen + Capstone hito 2 |
+| C-N7-02 (fine-tuning LoRA/QLoRA con evaluación propia) | M3 completo (2 temas) + ítems 3-4 del banco de examen + Capstone hito 3 |
+| C-N7-03 (diseña evaluaciones, aplica guardrails) | M4 completo (6 temas) + ítems 5-6 del banco de examen + Capstone hito 4 |
+| C-N7-04 (design doc defendible) | M4.T6 + ítems 7-8 del banco de examen + Capstone hito 5 (defensa oral) |
+| C-N7-05 (inglés profesional en READMEs — pista transversal 🇬🇧, no instrumento propio de la compuerta de nivel) | Verificado como checklist del capstone (el repositorio y el design doc del hito 5 se escriben en inglés) — mismo patrón que SYL-N1 declaró para sus pistas transversales: vive en el artefacto, no en un ítem de examen dedicado |
+
+**Hallazgo de esta revisión:** a diferencia de C-N2-07 en SYL-N2 (competencia transversal sin instrumento propio, por diseño ya documentado) y en paralelo con ese mismo patrón, C-N7-05 no tiene ítem de examen dedicado — se verifica como propiedad del artefacto final (el design doc y el repositorio en inglés), consistente con cómo DOC-10 la describe ("Pista 🇬🇧 producción... Repos documentados en inglés").
+
+### 6.3 Banco de examen — ítems rotables (≥3 variantes por ítem, NNR-02)
+
+*Formato oral, con diagnóstico o cálculo en vivo — el examinador elige UNA variante por ítem al azar en cada aplicación, nunca las tres a la vez. Los ítems de cálculo (2, 3) dan sus propias tarifas/parámetros de ejemplo EN EL ENUNCIADO — nunca piden al estudiante recordar un precio real de mercado, consistente con el principio de M1.T4 de no hardcodear precios que caducan.*
+
+**Ítem 1 (C-N7-01 · contrato de proveedor).** "Dado este fragmento de código que llama a la API de un proveedor, identifica si asume el contrato de OpenAI o de Anthropic, y qué falla exactamente si se usa con el otro proveedor sin adaptar."
+- Variante A: código con `{"role":"system",...}` dentro del array `messages` → asume OpenAI; en Anthropic falla con error de validación (rol `system` no permitido dentro de `messages`).
+- Variante B: código sin `max_tokens` en la llamada → asume un proveedor con default implícito; en Anthropic falla porque `max_tokens` es obligatorio, sin valor por defecto.
+- Variante C: código con `system` como parámetro top-level (fuera de `messages`) → asume Anthropic; en OpenAI ese parámetro no es reconocido y el prompt de sistema se pierde silenciosamente, sin error visible.
+
+**Ítem 2 (C-N7-01 · coste real).** "Calcula el coste de esta sesión, usando EXACTAMENTE las tarifas dadas en el enunciado (no uses ninguna tarifa de memoria)."
+- Variante A: 10.000 tokens de entrada, 3.000 de salida, tarifa $3/millón entrada y $15/millón salida → coste = **$0.075**.
+- Variante B: 50.000 tokens de entrada, 15.000 de salida, tarifa $2/millón entrada y $10/millón salida, sin caché → coste = **$0.25**.
+- Variante C: mismo caso que B, pero con el 80% de los tokens de entrada servidos desde caché a $0.2/millón (el 20% restante a tarifa normal $2/millón) → coste = **$0.178**.
+
+**Ítem 3 (C-N7-02 · parámetros LoRA).** "Para una capa de tamaño m×n con rango r, calcula los parámetros de la matriz completa, los de LoRA, y la razón entre ambos."
+- Variante A: m=n=2048, r=4 → completos=**4.194.304**, LoRA=**16.384**, razón=**256.0**.
+- Variante B: m=n=1024, r=16 → completos=**1.048.576**, LoRA=**32.768**, razón=**32.0**.
+- Variante C: m=n=8192, r=8 → completos=**67.108.864**, LoRA=**131.072**, razón=**512.0**.
+
+**Ítem 4 (C-N7-02 · diagnóstico de fine-tuning).** "Dado este síntoma de un entrenamiento LoRA/QLoRA, diagnostica la causa más probable y cómo la confirmarías."
+- Variante A: la pérdida de entrenamiento sigue bajando pero la de validación empieza a subir → sobreajuste, probablemente rango demasiado alto para el tamaño del dataset (M3.T1.Día2).
+- Variante B: el entrenamiento con QLoRA es inestable o la pérdida no converge → probablemente se omitió `prepare_model_for_kbit_training()` antes de aplicar LoRA (M3.T1.Día3).
+- Variante C: el adaptador entrenado produce resultados distintos tras recargarlo desde disco → probablemente se usó `get_peft_model()` para recargar en vez de `PeftModel.from_pretrained()` (M3.T1.Día2, PEFT Troubleshooting).
+
+**Ítem 5 (C-N7-03 · diagnóstico de RAG con tres métricas).** "Dadas estas tres métricas (context relevance, faithfulness, answer relevance) para un caso de fallo, diagnostica en qué eslabón está el problema."
+- Variante A: context relevance baja, faithfulness alta, answer relevance baja → problema de **recuperación** (el contexto correcto nunca llegó).
+- Variante B: context relevance alta, faithfulness baja → problema de **generación** (el modelo ignoró o mal-usó el contexto correcto que sí recuperó).
+- Variante C: context relevance alta, faithfulness alta, answer relevance baja → la respuesta es fiel al contexto pero **no contesta la pregunta hecha** — un tercer tipo de fallo, distinto de los dos anteriores.
+
+**Ítem 6 (C-N7-03 · mapeo de riesgo OWASP).** "Dado este escenario, identifica la categoría del OWASP Top 10 for LLM Applications más relevante y por qué."
+- Variante A: un chunk indexado en la base vectorial contiene una instrucción oculta que el modelo seguiría si no está aislada → **LLM01, inyección indirecta**.
+- Variante B: un usuario logra que el modelo repita su propio prompt de sistema completo → **LLM07, System Prompt Leakage**.
+- Variante C: el sistema afirma un dato falso con aparente seguridad, y otro proceso automatizado actúa sobre esa afirmación sin verificarla → **LLM09, Misinformation**.
+
+**Ítem 7 (C-N7-04 · trade-off tecnológico defendible).** "Justifica una decisión tecnológica de tu propio sistema frente a la alternativa que descartaste, y describe el escenario donde elegirías la alternativa en su lugar."
+- Variante A: Qdrant vs. Chroma para la vector DB principal.
+- Variante B: sentence-transformers local vs. una API de embeddings de pago.
+- Variante C: `target_modules` acotado a proyecciones de atención vs. una lista ampliada que incluya capas MLP en LoRA.
+
+**Ítem 8 (C-N7-04 · defensa de arquitectura ante un cambio).** "Si [una condición del sistema cambiara], ¿qué parte de tu arquitectura actual lo soportaría sin cambios, y cuál necesitaría rediseño?"
+- Variante A: el corpus de tu RAG se duplica en tamaño de la noche a la mañana.
+- Variante B: tu proveedor de modelo principal sube su precio 5× de un día para otro.
+- Variante C: N8 necesita que tu sistema soporte múltiples tools encadenadas en una sola conversación, no solo una tool por turno.
+
+**Nota de diseño:** 8 ítems cubren C-N7-01…04 con 2 ítems cada una (C-N7-05 verificada por artefacto, §6.2), 3 variantes cada ítem (24 variantes totales) — los ítems numéricos (2, 3) verificados por ejecución real de Python antes de fijarse aquí, misma disciplina que rigió cada `check()` de M1-M4; los ítems de diagnóstico (1, 4, 5, 6) verificados contra los casos reales y las fuentes primarias ya citadas en las fichas de M1-M4, no inventados para el examen. El examinador puede generar variantes adicionales para los ítems numéricos cambiando los valores, siempre que re-verifique por ejecución real antes de usarlos.
+
+### 6.4 Nota de arquitectura para N8-N10 (peso especial de este nivel, §2)
+
+El design doc de M4.T6/Capstone hito 5 se documenta con el cuidado adicional de que otro nivel, construido en paralelo, va a asumir su existencia y extenderlo — de ahí la sección obligatoria de "puntos de extensión previstos" dentro del propio design doc (M4.T6, paso 3; Capstone hito 5), no solo una descripción del sistema tal como está hoy.
+
+---
+
+*Paso 4-5 — pendiente de aprobación por el Director.*
 
 ## 7. Herencias — borrador (a consolidar formalmente en el Paso 6-7, tras construir contenido real)
 

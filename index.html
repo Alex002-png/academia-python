@@ -8223,8 +8223,7 @@ const LEVEL6=[
   {id:"n6m1t2e3",py:true,t:"Ejercicio 3 · Softmax numéricamente estable",
    d:'Implementa <code>softmax(x)</code> restando el máximo ANTES de exponenciar (estabilidad numérica), devolviendo una lista redondeada a 4 decimales que sume 1.',
    starter:'import numpy as np\n\ndef softmax(x):\n    pass\n\nprint(softmax([1,2,3]))\nprint(softmax([1000,1001,1002]))',runs:[[]],
-   check:(o,c)=>{if(!/max\s*\(/.test(c))return"Resta np.max(x) ANTES de exponenciar — sin esto, el segundo caso (valores grandes) desbordará.";
-     const exp="[0.09, 0.2447, 0.6652]\n[0.09, 0.2447, 0.6652]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   check:(o,c)=>{const exp="[0.09, 0.2447, 0.6652]\n[0.09, 0.2447, 0.6652]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])+"\n(pista: si tu segunda línea da 'nan', olvidaste restar el máximo ANTES de exponenciar — sin ese truco, exp() de un número grande desborda.)"},
    hints:["Convierte x a un arreglo de numpy, réstale su propio máximo (esto no cambia el resultado matemático, solo evita desbordamiento), exponencia con np.exp, y divide entre la suma total.","x = np.array(x, dtype=float)\nx = x - np.max(x)\ne = np.exp(x)\nreturn (e / np.sum(e)).round(4).tolist()"]},
  ]},
 {id:"n6m1t2b",n:"Día 3",t:"Self-attention: Q, K, V y el producto punto escalado · Parte 2: práctica extendida",
@@ -8295,8 +8294,7 @@ const LEVEL6=[
   {id:"n6m1t3e1",py:true,t:"Ejercicio 1 · Dividir en cabezas",
    d:'Implementa <code>dividir_en_cabezas(X, n_heads)</code>, que reorganice <code>X</code> (forma <code>(seq_len, d_model)</code>) en <code>n_heads</code> cabezas paralelas.',
    starter:'import numpy as np\n\ndef dividir_en_cabezas(X, n_heads):\n    pass\n\nX = [[1,2,3,4],[5,6,7,8]]\nprint(dividir_en_cabezas(X, 2))',runs:[[]],
-   check:(o,c)=>{if(!/transpose/.test(c))return"Necesitas reshape() Y transpose() — solo reshape mezcla tokens y cabezas incorrectamente (ver el desafío final de este tema).";
-     const exp="[[[1.0, 2.0], [5.0, 6.0]], [[3.0, 4.0], [7.0, 8.0]]]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   check:(o,c)=>{const exp="[[[1.0, 2.0], [5.0, 6.0]], [[3.0, 4.0], [7.0, 8.0]]]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])+"\n(pista: si tu resultado agrupa [1,2] con [3,4] en vez de con [5,6], hiciste reshape SIN reordenar los ejes — revisa el desafío final de este tema.)"},
    hints:["Primero reinterpreta X (seq_len, d_model) como (seq_len, n_heads, d_head) con reshape, y después reordena los ejes con transpose(1,0,2) para que la cabeza quede primero.","seq_len, d_model = X.shape\nd_head = d_model // n_heads\nreturn X.reshape(seq_len, n_heads, d_head).transpose(1, 0, 2).round(4).tolist()"]},
   {id:"n6m1t3e2",py:true,t:"Ejercicio 2 · La forma resultante, sin calcular valores",
    d:'Implementa <code>forma_dividida(seq_len, d_model, n_heads)</code> que devuelva la tupla <code>(n_heads, seq_len, d_head)</code> — sin necesitar ningún dato real, solo las dimensiones.',
@@ -8398,8 +8396,7 @@ const LEVEL6=[
   {id:"n6m1t4e4",py:true,t:"Ejercicio 4 · Positional encoding senoidal completo",
    d:'Implementa <code>positional_encoding(seq_len, d_model)</code> siguiendo la fórmula exacta del paper, redondeando a 4 decimales.',
    starter:'import numpy as np\n\ndef positional_encoding(seq_len, d_model):\n    pass\n\nprint(positional_encoding(4, 4))',runs:[[]],
-   check:(o,c)=>{if(!/10000/.test(c))return"Usa la base 10000 de la formula del paper: pos / 10000^(i/d_model).";
-     const exp="[[0.0, 1.0, 0.0, 1.0], [0.8415, 0.5403, 0.01, 1.0], [0.9093, -0.4161, 0.02, 0.9998], [0.1411, -0.99, 0.03, 0.9996]]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   check:(o,c)=>{const exp="[[0.0, 1.0, 0.0, 1.0], [0.8415, 0.5403, 0.01, 1.0], [0.9093, -0.4161, 0.02, 0.9998], [0.1411, -0.99, 0.03, 0.9996]]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])+"\n(pista: revisa que estés usando la base 10000 de la fórmula del paper, pos / 10000^(i/d_model).)"},
    hints:["Para cada posición pos y cada par de columnas (i, i+1), calcula angulo = pos / (10000 ** (i/d_model)); la columna i es sin(angulo), la columna i+1 (si existe) es cos(angulo).","pe = np.zeros((seq_len, d_model))\nfor pos in range(seq_len):\n    for i in range(0, d_model, 2):\n        angulo = pos / (10000 ** (i / d_model))\n        pe[pos, i] = np.sin(angulo)\n        if i + 1 < d_model:\n            pe[pos, i+1] = np.cos(angulo)\nreturn pe.round(4).tolist()"]},
   {id:"n6m1t4e5",py:true,t:"Ejercicio 5 · La posición 0 es siempre el mismo patrón",
    d:'Usa tu <code>positional_encoding</code> con <code>seq_len=1</code> y <code>d_model=6</code>, y confirma el patrón fijo de la posición 0.',
@@ -8455,14 +8452,12 @@ const LEVEL6=[
   {id:"n6m1t5e2",py:true,t:"Ejercicio 2 · Construir la máscara causal",
    d:'Implementa <code>mascara_causal(seq_len)</code> que devuelva una matriz booleana donde <code>True</code> marca las posiciones que deben BLOQUEARSE (el futuro) — usa <code>np.triu</code>, la herramienta que la teoría de hoy ya introdujo para esto.',
    starter:'import numpy as np\n\ndef mascara_causal(seq_len):\n    pass\n\nprint(mascara_causal(4))',runs:[[]],
-   check:(o,c)=>{if(!/triu/.test(c))return"Usa np.triu(..., k=1) — la parte triangular superior SIN la diagonal marca exactamente 'el futuro' de cada fila.";
-     const exp="[[False, True, True, True], [False, False, True, True], [False, False, False, True], [False, False, False, False]]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   check:(o,c)=>{const exp="[[False, True, True, True], [False, False, True, True], [False, False, False, True], [False, False, False, False]]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["Necesitas una matriz con 1s exactamente por encima de la diagonal principal (nunca en ella ni debajo) — eso marca 'el futuro' de cada fila. Revisa el bloque de teoría de este mismo día si no recuerdas el nombre de la función que construye ese patrón triangular de un solo golpe, y conviértelo al tipo de dato correcto (booleano) al final.","return np.triu(np.ones((seq_len, seq_len)), k=1).astype(bool).tolist()"]},
   {id:"n6m1t5e3",py:true,t:"Ejercicio 3 · Aplicar la máscara a los scores",
    d:'Implementa <code>aplicar_mascara(scores, mascara)</code> que reemplace con <code>-1e9</code> cada posición donde <code>mascara</code> sea <code>True</code> — usa <code>np.where</code>, la función de numpy diseñada exactamente para "elegir entre dos valores según una condición".',
    starter:'import numpy as np\n\ndef aplicar_mascara(scores, mascara):\n    pass\n\nscores = [[1,2,3],[1,2,3],[1,2,3]]\nmask = [[False, True, True], [False, False, True], [False, False, False]]\nprint(aplicar_mascara(scores, mask))',runs:[[]],
-   check:(o,c)=>{if(!/where/.test(c))return"Usa np.where(mascara, -1e9, scores) para reemplazar solo donde la mascara es True.";
-     const exp="[[1.0, -1000000000.0, -1000000000.0], [1.0, 2.0, -1000000000.0], [1.0, 2.0, 3.0]]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   check:(o,c)=>{const exp="[[1.0, -1000000000.0, -1000000000.0], [1.0, 2.0, -1000000000.0], [1.0, 2.0, 3.0]]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["Necesitas recorrer la matriz de scores y la de máscara EN PARALELO, eligiendo entre dos valores distintos según si la posición correspondiente de la máscara es True o False — busca en la documentación de numpy una función de tres argumentos hecha exactamente para esa idea (condición, valor si es verdadera, valor si es falsa).","scores = np.array(scores, dtype=float)\nmascara = np.array(mascara, dtype=bool)\nreturn np.where(mascara, -1e9, scores).tolist()"]},
   {id:"n6m1t5e4",py:true,t:"Ejercicio 4 · Feed-forward de 2 capas con ReLU",
    d:'Implementa <code>feed_forward(x, W1, b1, W2, b2)</code>: una capa lineal, ReLU, y otra capa lineal.',

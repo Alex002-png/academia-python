@@ -951,11 +951,33 @@ def __academia_run(code, stdin_list, max_steps=300000):
   }
   return _pyodidePromise;
 }
+/* Paquetes binarios detectados por uso en el código del estudiante. Cada uno se
+   carga (loadPackage) Y se pre-calienta con un import SIN sys.settrace activo
+   antes de la primera ejecución real. Necesario porque el propio motor traza
+   línea a línea (max_steps=300000) para detectar bucles infinitos, y el grafo
+   de import de paquetes grandes (pandas/scikit-learn/matplotlib) es tan profundo
+   que trazarlo agota ese límite en su primera importación real — lo que además
+   deja el módulo a medio inicializar en sys.modules, rompiendo TODO import
+   posterior de ese paquete en la misma sesión del estudiante (confirmado por
+   verificación empírica directa antes de construir N4). numpy no necesita esto
+   (su grafo de import es lo bastante liviano para no agotar el límite), pero
+   pandas/scikit-learn/matplotlib sí — precalentarlos fuera del trace es la
+   única corrección real: no toca max_steps ni el mecanismo de detección de
+   bucles infinitos, que deben seguir intactos para el resto del contenido. */
+const PY_PKG_DETECT=[
+  {re:/\bnumpy\b/,pkg:"numpy",flag:"__academiaNumpyLoaded",warm:"import numpy"},
+  {re:/\bpandas\b/,pkg:"pandas",flag:"__academiaPandasLoaded",warm:"import pandas"},
+  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn"},
+  {re:/\bmatplotlib\b/,pkg:"matplotlib",flag:"__academiaMatplotlibLoaded",warm:'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot'},
+];
 async function runScriptedPy(code,stdin){
   const py=await getPyodide();
-  if(/\bnumpy\b/.test(code)&&!py.__academiaNumpyLoaded){
-    await py.loadPackage("numpy");
-    py.__academiaNumpyLoaded=true;
+  for(const p of PY_PKG_DETECT){
+    if(p.re.test(code)&&!py[p.flag]){
+      await py.loadPackage(p.pkg);
+      await py.runPythonAsync(p.warm);
+      py[p.flag]=true;
+    }
   }
   const fn=py.globals.get("__academia_run");
   const pyStdin=py.toPy(stdin);
@@ -8247,6 +8269,118 @@ const LEVEL4=[
   starter:'import numpy as np\n\noriginal = np.array([1,2,3,4,5])\nvista = original[1:4]\nvista[0] = 999\nprint(original)',runs:[[]],
   hints:["A diferencia del slicing de LISTAS de Python (que sí copia), el slicing de un array de numpy devuelve una VISTA — una ventana hacia la MISMA memoria del array original, no una copia independiente.","Modificar 'vista' modifica directamente 'original', porque ambos apuntan a los mismos datos en memoria — para obtener una copia real hace falta llamar explícitamente a .copy()."],
   check:(o,c)=>{const exp="[  1 999   3   4   5]";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])}}},
+{id:"n4m1t2",n:"Día 4",t:"pandas: Series y DataFrame · Parte 1: fundamentos",
+ intro:"NumPy te dio la estructura cruda. Hoy conoces pandas — la librería que le pone nombres a las columnas y filas de esa estructura, y que vas a usar el resto de tu carrera para cargar, inspeccionar y entender cualquier dataset real. Empiezas por lo que casi nadie espera de una 'tabla de datos con esteroides': que se alinea sola por índice, incluso cuando eso produce huecos.",
+ intuit:{code:'import pandas as pd\ns1 = pd.Series([10,20,30], index=[\'a\',\'b\',\'c\'])\ns2 = pd.Series([1,2,3], index=[\'b\',\'c\',\'d\'])\nprint(s1 + s2)',py:true,
+  q:"Sin ejecutar: s1 tiene índices a,b,c; s2 tiene índices b,c,d. Solo 'b' y 'c' están en ambas. ¿Qué pasa con 'a' y 'd' al sumar?",
+  req:["NaN","21","32"],out:"a     NaN\nb    21.0\nc    32.0\nd     NaN\ndtype: float64",
+  e:"a y d aparecen igual en el resultado, pero como NaN — pandas alinea por índice ANTES de sumar: donde un índice existe en un lado pero no en el otro, no hay error, hay NaN. Esto es fundamentalmente distinto a sumar dos listas de Python, donde solo importa la posición."},
+ mcq:[
+  {q:"¿Qué es, ante todo, un DataFrame de pandas?",o:["Una matriz de numpy con nombres de columna encima, nada más","Una colección de Series alineadas por un índice compartido — cada columna es, en el fondo, una Series","Una tabla de Excel importada tal cual, sin ninguna diferencia de comportamiento","Un array 2D de numpy con un método .to_csv() añadido"],a:1,e:"Un DataFrame es una colección de Series (una por columna) que comparten el mismo índice. Esa alineación por índice es la diferencia real frente a una simple matriz con etiquetas."},
+  {q:"Si sumas dos Series con índices que no coinciden completamente, ¿qué ocurre con los índices que solo existen en una de las dos?",o:["pandas lanza un error de índices incompatibles","El resultado tiene NaN en esas posiciones — pandas alinea por índice, no oculta la falta de dato","Se ignoran silenciosamente esos índices, el resultado solo tiene los índices compartidos","Se rellenan automáticamente con 0"],a:1,e:"pandas nunca oculta la falta de correspondencia: produce NaN donde un índice no tiene contraparte, en vez de fallar o ignorar — el resultado SIEMPRE incluye la unión completa de ambos índices."}],
+ ing:"Casi ningún dataset real llega ya como array de numpy — llega como CSV, como respuesta JSON de una API, como una tabla exportada de una base de datos. pandas es la puerta de entrada real entre 'un archivo en algún formato' y 'datos con los que puedes razonar' — el primer paso literal de cualquier proyecto de ML antes de tocar un solo algoritmo.",
+ errores:["Tratar un DataFrame como si fuera una hoja de cálculo con métodos extra, sin notar que las operaciones entre Series se alinean por índice, no por posición","Asumir el tipo (dtype) de una columna sin verificarlo — una columna que se ve numérica puede haberse leído como texto por un símbolo como '$' o una coma de miles","No revisar cuántos valores faltantes hay antes de calcular cualquier estadística, que los ignora o los propaga silenciosamente según la operación"],
+ mental:{jr:"“Un DataFrame es una tabla de Excel dentro de Python.”",sr:"“Un DataFrame es una colección de Series alineadas por índice — la alineación automática es una garantía útil (nunca mezcla filas por accidente), pero produce NaN en cualquier desajuste, y hay que esperarlo, no que sorprenda.”",err:"Sumar/combinar columnas de dos DataFrames distintos sin verificar antes que comparten exactamente el mismo índice, y sorprenderse de los NaN resultantes."},
+ theory:[
+  ["Series: una columna con nombre e índice",T('Una <code>Series</code> es un array de numpy con un <strong>índice</strong> explícito asociado a cada valor — no solo una posición numérica, una etiqueta real (un id, una fecha, un nombre). Un <code>DataFrame</code> es una colección de Series que comparten el mismo índice, una por columna.'),
+   'import pandas as pd\nedades = pd.Series([28,34,45], index=[\'Ana\',\'Luis\',\'Carlos\'])\nprint(edades[\'Luis\'])  # 34 -- se accede por etiqueta, no solo por posicion'],
+  ["Cargar datos reales: read_csv",T('<code>pd.read_csv()</code> es la puerta de entrada más común entre un archivo (o una cadena de texto con el mismo formato) y un DataFrame real. pandas INFIERE el tipo de cada columna automáticamente a partir de los valores — inferir no es lo mismo que garantizar: siempre vale la pena verificar.'),
+   'import io\ncsv_data = "nombre,edad\\nAna,28\\nLuis,34"\ndf = pd.read_csv(io.StringIO(csv_data))\nprint(df)'],
+  ["Inspección obligatoria antes de asumir nada: shape, dtypes, head",T('Antes de calcular cualquier cosa sobre un dataset nuevo: <code>.shape</code> (cuántas filas y columnas), <code>.dtypes</code> (el tipo inferido de cada columna — verifica que coincida con lo esperado), <code>.head(n)</code> (las primeras n filas, para una inspección visual rápida, NUNCA suficiente por sí sola).'),
+   'print(df.shape)\nprint(df.dtypes)\nprint(df.head(2))'],
+  ["describe(): un resumen estadístico instantáneo",T('<code>.describe()</code> sobre una columna numérica da conteo, media, desviación estándar, mínimo, cuartiles y máximo de un solo llamado — el mismo tipo de estadística que calculaste a mano en N3.M3, ahora automatizada sobre datos reales.'),
+   'print(df[\'salario\'].describe())'],
+  ["Cuando el tipo inferido no es el esperado",T('Si una columna numérica tiene un símbolo como <code>$</code> o una coma de miles, pandas la lee completa como texto (<code>object</code>) — ninguna operación numérica funcionará hasta limpiarla explícitamente y convertirla con <code>.astype()</code>.'),
+   'precios = pd.Series([\'$1200\',\'$25\'])\nprint(precios.dtype)  # object -- texto, no numero\nlimpio = precios.str.replace(\'$\',\'\',regex=False).astype(float)\nprint(limpio.dtype)   # float64'],
+ ],
+ ex:[
+  {id:"n4m1t2e1",py:true,t:"Ejercicio 1 · Cargar tu primer CSV real y verificar su forma",
+   d:'Carga <code>csv_data</code> con <code>pd.read_csv(io.StringIO(csv_data))</code> e imprime su <code>shape</code> y la lista de sus <code>dtypes</code> (como strings).',
+   starter:'import pandas as pd\nimport io\n\ncsv_data = """nombre,edad,ciudad,salario\nAna,28,Lima,3500\nLuis,34,Arequipa,4200\nMarta,,Lima,3800\nCarlos,45,Trujillo,5100\nSofia,29,Lima,3900"""\n# tu codigo aqui: carga el CSV, imprime shape y dtypes\n',runs:[[]],
+   check:(o,c)=>{const exp="(5, 4)\n['object', 'float64', 'object', 'int64']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Usa pd.read_csv(io.StringIO(csv_data)) para obtener el DataFrame, y después imprime por separado su .shape y list(df.dtypes.astype(str)).","df = pd.read_csv(io.StringIO(csv_data))","print(df.shape)\nprint(list(df.dtypes.astype(str)))"]},
+  {id:"n4m1t2e2",py:true,t:"Ejercicio 2 · Inspección rápida con head()",
+   d:'Con el mismo <code>df</code> del ejercicio anterior, imprime sus primeras 2 filas con <code>.head(2)</code>, convertido a texto con <code>.to_string()</code>.',
+   starter:'import pandas as pd\nimport io\n\ncsv_data = """nombre,edad,ciudad,salario\nAna,28,Lima,3500\nLuis,34,Arequipa,4200\nMarta,,Lima,3800\nCarlos,45,Trujillo,5100\nSofia,29,Lima,3900"""\ndf = pd.read_csv(io.StringIO(csv_data))\n# tu codigo aqui: imprime las primeras 2 filas\n',runs:[[]],
+   check:(o,c)=>{const exp="  nombre  edad    ciudad  salario\n0    Ana  28.0      Lima     3500\n1   Luis  34.0  Arequipa     4200";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["df.head(2) devuelve un DataFrame con las 2 primeras filas — conviértelo a texto con .to_string() antes de imprimirlo para ver el formato completo.","print(df.head(2).to_string())"]},
+  {id:"n4m1t2e3",py:true,t:"Ejercicio 3 · Resumen estadístico con describe()",
+   d:'Sobre la columna <code>salario</code> del mismo <code>df</code>, imprime <code>.describe()</code> redondeado a 2 decimales, convertido a texto.',
+   starter:'import pandas as pd\nimport io\n\ncsv_data = """nombre,edad,ciudad,salario\nAna,28,Lima,3500\nLuis,34,Arequipa,4200\nMarta,,Lima,3800\nCarlos,45,Trujillo,5100\nSofia,29,Lima,3900"""\ndf = pd.read_csv(io.StringIO(csv_data))\n# tu codigo aqui: describe() de salario, redondeado a 2 decimales\n',runs:[[]],
+   check:(o,c)=>{const exp="count       5.00\nmean     4100.00\nstd       612.37\nmin      3500.00\n25%      3800.00\n50%      3900.00\n75%      4200.00\nmax      5100.00";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["df['salario'].describe() da la Series de estadísticas; redondéala con .round(2) antes de convertirla a texto con .to_string().","print(df['salario'].describe().round(2).to_string())"]},
+  {id:"n4m1t2e4",py:true,t:"Ejercicio 4 · Reproducir el desajuste de índices con datos reales",
+   d:'Dadas dos Series de ventas por tienda en meses distintos (con tiendas que no coinciden exactamente), súmalas y observa qué pasa con la tienda que falta en cada una.',
+   starter:'import pandas as pd\n\nventas_enero = pd.Series([100,150,200], index=[\'tienda_A\',\'tienda_B\',\'tienda_C\'])\nventas_febrero = pd.Series([120,180], index=[\'tienda_A\',\'tienda_C\'])\n# tu codigo aqui: suma ambas series e imprime el resultado\n',runs:[[]],
+   check:(o,c)=>{const exp="tienda_A    220.0\ntienda_B      NaN\ntienda_C    380.0\ndtype: float64";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Simplemente suma las dos Series con + e imprime el resultado — pandas alinea automáticamente por índice; 'tienda_B' no existe en ventas_febrero, así que su suma es NaN, no un error.","print(ventas_enero + ventas_febrero)"]},
+ ]},
+{id:"n4m1t2b",n:"Día 5",t:"pandas: Series y DataFrame · Parte 2: práctica extendida — calidad y transformación",
+ intro:"Ayer cargaste e inspeccionaste datos reales. Hoy practicas lo que sigue justo después en cualquier EDA real: contar categorías, medir cuántos valores faltan, detectar duplicados, y limpiar una columna que llegó como texto cuando debía ser numérica.",
+ theory:[
+  ["value_counts(): la distribución de una columna categórica de un vistazo",T('<code>.value_counts()</code> cuenta cuántas veces aparece cada valor único en una columna, ordenado de mayor a menor — el primer paso real para entender qué categorías dominan un dataset.'),
+   'ciudades = pd.Series([\'Lima\',\'Lima\',\'Arequipa\',\'Lima\'])\nprint(ciudades.value_counts())'],
+  ["Contar valores faltantes, columna por columna",T('<code>.isna()</code> produce un DataFrame de <code>True</code>/<code>False</code> del mismo tamaño; <code>.sum()</code> sobre eso cuenta cuántos <code>True</code> hay por columna (recuerda: <code>True</code> vale 1). <code>.isna().sum().sum()</code> (dos veces) da el total de faltantes en TODO el DataFrame.'),
+   'print(df.isna().sum())          # faltantes por columna\nprint(df.isna().sum().sum())    # total de faltantes en todo el DataFrame'],
+  ["Duplicados: filas que no aportan información nueva",T('<code>.duplicated()</code> marca <code>True</code> en cada fila que es una repetición EXACTA de una fila anterior; <code>.drop_duplicates()</code> las elimina, quedándose con la primera aparición de cada una.'),
+   'print(df.duplicated().sum())      # cuantas filas son duplicados\ndf_limpio = df.drop_duplicates()  # sin los duplicados'],
+  ["Renombrar columnas con criterio",T('<code>.rename(columns={...})</code> cambia nombres de columna sin tocar los datos — útil quando un dataset real llega con nombres poco claros o inconsistentes entre fuentes distintas.'),
+   'df2 = df.rename(columns={\'nom\':\'nombre\',\'ed\':\'edad\'})'],
+ ],
+ ex:[
+  {id:"n4m1t2e5",py:true,t:"Ejercicio 5 · Limpiar una columna de precios con símbolo de moneda",
+   d:'Dada una Serie de precios como texto (<code>"$1200"</code>, <code>"$25"</code>...), verifica su dtype original, límpiala quitando el <code>$</code> y conviértela a <code>float</code>, y suma el resultado.',
+   starter:'import pandas as pd\n\nprecios = pd.Series(["$1200","$25","$45"])\n# tu codigo aqui: imprime dtype original, limpia y convierte, imprime dtype nuevo y la suma\n',runs:[[]],
+   check:(o,c)=>{if(!/\.astype\s*\(\s*float\s*\)/.test(c))return"Necesitas convertir explícitamente con .astype(float) después de limpiar el símbolo $.";
+     const exp="object\nfloat64\n1270.0";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Primero imprime .dtype de la Serie original (será 'object', texto). Después usa .str.replace('$','',regex=False) para quitar el símbolo, y .astype(float) para convertir — imprime el nuevo dtype y la .sum().","print(precios.dtype)","limpio = precios.str.replace('$','',regex=False).astype(float)","print(limpio.dtype)\nprint(limpio.sum())"]},
+  {id:"n4m1t2e6",py:true,t:"Ejercicio 6 · Distribución de una columna categórica",
+   d:'Dada una Serie de ciudades, imprime cuántas veces aparece cada una con <code>.value_counts()</code>, convertido a texto.',
+   starter:'import pandas as pd\n\nciudades = pd.Series([\'Lima\',\'Lima\',\'Arequipa\',\'Lima\',\'Trujillo\',\'Arequipa\',\'Lima\'])\n# tu codigo aqui\n',runs:[[]],
+   check:(o,c)=>{const exp="Lima        4\nArequipa    2\nTrujillo    1";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["value_counts() ya hace todo el conteo y el ordenamiento por ti — solo necesitas llamarlo e imprimir el resultado convertido a texto.","print(ciudades.value_counts().to_string())"]},
+  {id:"n4m1t2e7",py:true,t:"Ejercicio 7 · Contar valores faltantes por columna y en total",
+   d:'Dado el <code>df</code> con valores faltantes, imprime cuántos faltan por columna, y después el total de faltantes en todo el DataFrame.',
+   starter:'import pandas as pd\nimport io\n\ncsv_data = """nombre,edad,ciudad,salario\nAna,28,Lima,3500\nLuis,,Arequipa,4200\nMarta,31,,3800\nCarlos,45,Trujillo,\nSofia,29,Lima,3900"""\ndf = pd.read_csv(io.StringIO(csv_data))\n# tu codigo aqui: faltantes por columna, y total\n',runs:[[]],
+   check:(o,c)=>{const exp="nombre     0\nedad       1\nciudad     1\nsalario    1\n3";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["df.isna() marca cada celda faltante como True; .sum() sobre eso cuenta por columna. Para el total, aplica .sum() una segunda vez sobre ese resultado.","print(df.isna().sum().to_string())","print(int(df.isna().sum().sum()))"]},
+  {id:"n4m1t2e8",py:true,t:"Ejercicio 8 · Detectar y eliminar filas duplicadas",
+   d:'Dado un DataFrame con filas exactamente repetidas, cuenta cuántos duplicados hay, e imprime el DataFrame sin ellos.',
+   starter:'import pandas as pd\nimport io\n\ncsv_dup = """id,nombre\n1,Ana\n2,Luis\n3,Ana\n4,Marta\n2,Luis"""\ndf_dup = pd.read_csv(io.StringIO(csv_dup))\n# tu codigo aqui: cuenta duplicados, imprime sin ellos\n',runs:[[]],
+   check:(o,c)=>{const exp="1\n   id nombre\n0   1    Ana\n1   2   Luis\n2   3    Ana\n3   4  Marta";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["duplicated().sum() cuenta cuántas filas son repetición exacta de una anterior; drop_duplicates() las elimina, quedándose con la primera aparición de cada una.","print(int(df_dup.duplicated().sum()))","print(df_dup.drop_duplicates().to_string())"]},
+  {id:"n4m1t2e9",py:true,t:"Ejercicio 9 · Renombrar columnas con nombres poco claros",
+   d:'Dado un DataFrame con columnas <code>nom</code> y <code>ed</code>, renómbralas a <code>nombre</code> y <code>edad</code>, e imprime la lista de columnas resultante.',
+   starter:'import pandas as pd\n\ndf_ren = pd.DataFrame({\'nom\':[\'Ana\',\'Luis\'],\'ed\':[28,34]})\n# tu codigo aqui: renombra columnas y muestra la lista resultante\n',runs:[[]],
+   check:(o,c)=>{const exp="['nombre', 'edad']";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["rename(columns={...}) recibe un diccionario mapeando el nombre viejo al nuevo — no modifica el DataFrame original a menos que se lo reasignes.","df_ren2 = df_ren.rename(columns={'nom':'nombre','ed':'edad'})","print(list(df_ren2.columns))"]},
+ ]},
+{id:"n4m1t2c",n:"Día 6",t:"pandas: Series y DataFrame · Parte 3: laboratorio integrador y desafío — cierra T2",
+ intro:"Cierras el tema con la práctica profesional correcta para evitar advertencias reales de pandas al modificar un subconjunto de datos, un laboratorio que integra carga+limpieza+estadística de principio a fin, y un desafío final sobre una de las sorpresas más consistentes de pandas: qué le pasa al tipo de una columna cuando falta un solo valor.",
+ reto:{id:"n4m1t2r",py:true,t:"Laboratorio · La práctica segura: .copy() antes de modificar un subconjunto",
+  d:'Implementa <code>filtrar_y_modificar_seguro(df, columna, umbral)</code> que seleccione las filas donde <code>columna</code> supera <code>umbral</code> usando <code>.copy()</code> explícito, module esa copia sin afectar el DataFrame original, y devuelva una tupla <code>(df_original_intacto_como_lista, copia_modificada_como_lista)</code>.',
+  starter:'import pandas as pd\n\ndef filtrar_y_modificar_seguro(df, columna, umbral):\n    pass\n\ndf_orig = pd.DataFrame({\'x\':[1,2,3,4,5]})\nresultado = filtrar_y_modificar_seguro(df_orig, \'x\', 2)\nprint(resultado[0])\nprint(resultado[1])',runs:[[]],
+  check:(o,c)=>{if(!/\.copy\s*\(\s*\)/.test(c))return"Necesitas usar .copy() explícito al filtrar, antes de modificar — de lo contrario pandas puede lanzar SettingWithCopyWarning y el comportamiento queda ambiguo.";
+    const exp="[1, 2, 3, 4, 5]\n[999, 999, 999]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+  hints:["Filtra con df[df[columna] > umbral].copy() — el .copy() explícito garantiza que sea una copia real e independiente, nunca una vista ambigua del original. Con umbral=2 sobre [1,2,3,4,5], hay 3 valores que superan 2 (3, 4 y 5), no 2.","sub = df[df[columna] > umbral].copy()","sub[columna] = 999","return (df[columna].tolist(), sub[columna].tolist())"]},
+ ex:[
+  {id:"n4m1t2e10",py:true,t:"Ejercicio 10 · Seleccionar varias columnas a la vez",
+   d:'Dado un DataFrame con columnas <code>a</code>, <code>b</code>, <code>c</code>, selecciona SOLO <code>a</code> y <code>c</code> (en ese orden) usando una lista de nombres, e imprímelo.',
+   starter:'import pandas as pd\n\ndf_sel = pd.DataFrame({\'a\':[1,2,3],\'b\':[4,5,6],\'c\':[7,8,9]})\n# tu codigo aqui: selecciona columnas a y c\n',runs:[[]],
+   check:(o,c)=>{const exp="   a  c\n0  1  7\n1  2  8\n2  3  9";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["Pasar una LISTA de nombres de columna entre corchetes dobles selecciona varias a la vez, en el orden de la lista: df[['a','c']].","print(df_sel[['a','c']])"]},
+  {id:"n4m1t2e11",py:true,t:"Ejercicio 11 · Laboratorio integrador: limpiar y calcular el salario promedio real",
+   d:'Dado un dataset con valores faltantes en varias columnas, elimina las filas incompletas con <code>dropna()</code>, e imprime la forma final y el salario promedio (redondeado a 2 decimales) de los datos ya limpios.',
+   starter:'import pandas as pd\nimport io\n\ncsv_final = """nombre,edad,ciudad,salario\nAna,28,Lima,3500\nLuis,,Arequipa,4200\nMarta,31,Lima,3800\nCarlos,45,Trujillo,\nSofia,29,Lima,3900"""\ndf = pd.read_csv(io.StringIO(csv_final))\n# tu codigo aqui: elimina filas con NaN, imprime shape final y salario promedio\n',runs:[[]],
+   check:(o,c)=>{if(!/\.dropna\s*\(/.test(c))return"Usa .dropna() para eliminar las filas con al menos un valor faltante.";
+     const exp="(3, 4)\n3733.33";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["dropna() elimina, por defecto, toda fila que tenga AL MENOS un valor faltante en cualquier columna — aplícalo y guarda el resultado antes de calcular shape y el promedio.","df_limpio = df.dropna()","print(df_limpio.shape)\nprint(round(df_limpio['salario'].mean(),2))"]},
+ ],
+ retoFinal:{id:"n4m1t2x",py:true,t:"Desafío final · inédito — un solo valor faltante cambia el tipo de TODA la columna",
+  d:'Predice, ANTES de ejecutar: esta columna de "cantidad" tiene solo números enteros, excepto UNA fila sin dato. ¿Qué dtype tendrá la columna completa?',
+  starter:'import pandas as pd\nimport io\n\ncsv_data = """id,cantidad\n1,10\n2,15\n3,\n4,20"""\ndf = pd.read_csv(io.StringIO(csv_data))\nprint(df[\'cantidad\'].dtype)\nprint(df[\'cantidad\'].tolist())',runs:[[]],
+  hints:["Un array de enteros (int64) no puede representar 'valor faltante' — NaN solo existe como concepto de punto flotante.","Si aunque sea UNA fila de una columna numérica falta, pandas asciende automáticamente TODA la columna a float64 — incluso los valores que sí eran enteros pasan a mostrarse como 10.0, no 10."],
+  check:(o,c)=>{const exp="float64\n[10.0, 15.0, nan, 20.0]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
 ];
 /* ============================================================
    NIVELES — registro multi-nivel (N0 ya completo; N1 en construcción)

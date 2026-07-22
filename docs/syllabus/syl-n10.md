@@ -318,22 +318,26 @@ Troncal: `M1 → M2 → M3 → M4`. M2 (cuantización) depende técnicamente de 
 
 **Defensa (mismo estándar que N1/N2/N3):** derivar en vivo el cálculo de presupuesto de VRAM del Hito 3 (no leerlo, explicarlo); justificar cuál de los 4 ejes de trade-off sorprendió más al medirlo; y la **pregunta de validación final** (estándar permanente de todos los capstones de la Academia desde N2, adaptada aquí): ¿confiarías tú mismo en que esta versión local está lista para ser la que usas de verdad, en vez de la de N7-N9? — con la salvedad explícita, coherente con el encuadre de "adopción o descarte" de M4, de que una conclusión honesta de "no vale la pena todavía" es una respuesta tan válida como "sí vale la pena".
 
-## 7. Herencias Declaradas — borrador (a consolidar formalmente en el Paso 9)
+## 7. Paso 9a · Auditoría de coherencia desde SYL-N11 y Herencias Declaradas finales
 
-### 7.1 Herencia entrante asumida de N7/N8/N9 (ver §2.1 — pendiente de confirmación cuando congelen)
+### 7.1 Herencia entrante consolidada desde N7/N8/N9 (ver §2.1 — sigue pendiente de confirmación cuando esas ramas congelen; sin cambios frente al borrador, verificado contra el capstone real `n10et4`)
 
-Sistema RAG operativo (N7) extendido a agéntico con fiabilidad medida (N8), desplegado y observado como infraestructura (N9) — N10 asume que existe, en la forma descrita en §2.1, y no lo reintroduce.
+Sistema RAG operativo (N7) extendido a agéntico con fiabilidad medida (N8), desplegado y observado como infraestructura (N9) — N10 asume que existe, en la forma descrita en §2.1, y no lo reintroduce. Confirmado contra el contenido real: los `componentesSupuestos` del capstone (`n10et4`) instancian exactamente esta herencia, con el fallback honesto ya declarado si N7-N9 no están disponibles al momento real del proyecto.
 
-### 7.2 Borrador de Herencias hacia SYL-N11 (H-N11-xx)
+### 7.2 Auditoría de coherencia desde `docs/mision-n11.md` y DOC-01 (C-N11-01…05) — verificado contra el contenido real de M1-M4 y el capstone, no contra el plan
+
+*Leído `docs/mision-n11.md` completo antes de consolidar esta tabla. Hallazgo relevante para la coherencia: N11 es predominantemente lectura crítica/reproducción de papers/open source — no continúa el proyecto columna vertebral de forma directa (esa cadena, según DOC-10 línea 86, salta de N10 a N12). Esto corrige un error real del borrador anterior de este mismo documento, que declaraba una herencia H-N11-04 sobre "la columna vertebral completa" hacia N11 — encontrado y corregido en esta auditoría, antes de que el Director la señalara.*
 
 | # | N10 siembra | N11 deberá recoger |
 |---|---|---|
-| H-N11-01 | Competencia operativa de inferencia local: runtimes, cuantización, límites de hardware medidos en carne propia | N11.M2 (Reproducción de papers) probablemente exigirá correr modelos/experimentos con recursos limitados — la disciplina de "medir antes de creer" y razonar sobre restricciones de hardware ya está instalada |
-| H-N11-02 | Disciplina de benchmarking real (mediciones propias, metodología controlada, nunca cifras de terceros sin verificar) | N11.M3 (Informe científico, "reporte fiel aunque contradiga lo esperado") reutiliza directamente esta disciplina, ahora aplicada a resultados de investigación en vez de rendimiento de sistemas |
-| H-N11-03 | Juicio de ecosistema — método para evaluar herramientas nuevas sin guía | El ecosistema de investigación de frontera (N11.M1, "papers actuales con autonomía") cambia tan rápido como el de herramientas locales; el mismo método de evaluación con criterio propio aplica |
-| H-N11-04 | La columna vertebral completa, operando en local — el sistema entero que el estudiante puede ahora explicar de punta a punta, de la API hasta el byte de VRAM | El capstone final de N12 ("la columna vertebral final: sistema completo, desplegado, operativo") presupone que el estudiante entiende cada capa que ya construyó, N10 incluida |
+| H-N11-01 | Disciplina de medición real bajo restricciones de hardware (M2.T3, M3.T4-T5): mínimo 3 corridas, promedio y varianza reportados, nunca una cifra de una sola ejecución | N11.M2 (Reproducción de un paper) exige reimplementar y "contrastar resultados obtenidos con lo reportado" (C-N11-01) — la misma disciplina de nunca aceptar una cifra sin medirla, ahora aplicada a resultados de investigación en vez de rendimiento de sistemas |
+| H-N11-02 | Honestidad metodológica explícita cuando una fuente no cubre lo que se necesita (declarada y aplicada en cada investigación pedagógica de N10 — el caso más claro: el roofline model no viene de NVIDIA, M3.T2) | C-N11-04 ("reporta resultados fielmente aunque contradigan lo esperado; atribuye el trabajo ajeno") es, literalmente, la misma disciplina de honestidad de fuente ya practicada 4 veces en N10, ahora exigida como competencia central del nivel siguiente |
+| H-N11-03 | Juicio de ecosistema — criterios declarados antes de investigar, evidencia citada, veredicto de adopción o descarte igualmente válidos (M4 completo) | El ecosistema de investigación de frontera (N11.M1, "papers actuales con autonomía") cambia tan rápido como el de herramientas locales; el mismo método de evaluación con criterio propio, sin guía, aplica directamente |
+| H-N11-04 | Competencia operativa real de instalar/diagnosticar/documentar fallos de compatibilidad de software de frontera (M4.T2, el caso vLLM/RTX 5070) | N11.M4 (Open source: issues, PRs, code review en proyectos reales) exige exactamente este tipo de fricción real con software ajeno, fuera del control del propio diseño — N10 ya lo practicó una vez con un caso real y documentado |
 
-**Nota:** este borrador se consolida formalmente en el Paso 9 de este mismo syllabus (auditoría de coherencia desde SYL-N11), no ahora — mismo principio institucional que rige SYL-N1/N2/N3.
+**Prerrequisitos ocultos verificados (preliminar, sujeto a confirmación cuando N11 module por completo):** ninguno encontrado — N11.M1-M4 son, según su propia ficha de misión, mayoritariamente lectura/escritura/colaboración externa, sin dependencia técnica directa de M1-M4 de N10 más allá del vocabulario y la disciplina de las 4 herencias de arriba. Consistente con el grafo de DOC-10 (N10 no aparece como prerrequisito técnico explícito de N11 más allá de la etapa ET4 completa).
+
+**Nota declarada explícitamente para la ventana de N11:** `docs/mision-n11.md` advierte que su propio nivel "no encaja bien en el esquema estándar de día/tema" (M2 es un proyecto de varias semanas tipo hitos, M3 usa rúbricas de escritura en vez de `check()`, M4 depende de terceros reales) — esto no es una herencia que N10 deba resolver, pero se documenta aquí para que la auditoría de N11 no lo redescubra como sorpresa.
 
 ## 8. Bibliografía oficial del nivel *(registro vivo)*
 

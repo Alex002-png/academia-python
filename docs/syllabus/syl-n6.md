@@ -5,12 +5,12 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | SYL-N6 · Tier T2 |
-| **Versión / Estado** | **0.1.0-draft** · Paso 1 del flujo institucional de 9 pasos (docs/guia-construccion-niveles.md §13): diseño de syllabus completo (identidad, principios, estructura, fichas pedagógicas M1-M4, proyecto de nivel, borrador de Herencias) — **pendiente de construir el contenido real en `index.html`** antes de fijar cifras de días/ejercicios como definitivas (mismo principio de guia-construccion-niveles.md §8: nunca prometer una cifra antes de verificarla contra al menos un tema completo) |
+| **Versión / Estado** | **0.2.0** · Pasos 1-8 del flujo institucional de 9 pasos completos: diseño de syllabus + M1-M4 construidos y verificados en `index.html` (39 días/objetos, 107 ejercicios Pyodide, 1 laboratorio DOC-12, harness 100% pass en los 4 módulos) + Capstone ET3 (Mini-GPT) + Paso 8 (revisión del capstone, cobertura de competencias, banco de examen). Cifras de días/ejercicios ya CONFIRMADAS contra contenido real, no heurística — ver historial. **Pendiente:** Paso 9 (auditoría de coherencia desde N7 + Herencias Declaradas finales + auditoría adversarial) e Informe Final de Nivel. |
 | **Autoridad de origen** | DOC-10 §7 (interior de N6) · DOC-01 (C-N6-01…04) · docs/mision-n6.md |
 | **Depende de** | DOC-10 §7 (alcance ya aprobado, no rediseñado aquí) · DOC-01 · DOC-11 (autoría Pyodide) · DOC-12 (autoría entorno real, para las partes de M2/capstone que salen del Campus) · docs/syllabus/syl-n3.md (plantilla estructural, con atención especial a M4 — ver §3 de este documento) · docs/mision-n5.md (predecesor inmediato — asume backprop desde cero y primer contacto con PyTorch/GPU en nube) |
 | **Produce / desarrolla** | La estructura docente completa de N6: fichas pedagógicas por tema, proyecto de nivel (Mini-GPT + ensayo comparativo, capstone de ET3 completa), compuerta (pendiente del Paso 8), y las Herencias Declaradas hacia N7 (borrador, a consolidar en el Paso 9) |
 | **Estándar de calidad** | El mismo de SYL-N1…SYL-N5: *"Si otro profesor excepcional impartiera este nivel utilizando únicamente el syllabus, ¿obtendría prácticamente la misma calidad formativa?"* |
-| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño. Verificación empírica previa y propia (no de terceros) de la viabilidad de un transformer de juguete en numpy puro corriendo en Pyodide real v0.26.4 (misma build fijada en `index.html`, misma metodología que ya usó N3 para `numpy.linalg.inv()`): forward pass con `seq_len≤32, d_model≤64, 2-4 capas` corre en 1-12ms; hasta `seq_len=128, d_model=128, vocab=1000` se mantiene en ~175ms; solo configuraciones con `d_model≥256` y `vocab≥5000` cruzan el segundo por forward pass. Este rango de diseño (§3, hallazgo técnico) determina el tamaño real de los ejercicios de M1 y del capstone. Investigación bibliográfica real por WebSearch de las 4 fuentes oficiales de DOC-10 §7 (Karpathy *Let's build GPT: from scratch, in code, spelled out*, ene-2023, ~1h56min, construye un transformer siguiendo *Attention Is All You Need* hasta el núcleo de nanoGPT sobre tiny-Shakespeare; Stanford CS224N, Lecture "Self-Attention and Transformers", con Assignment 4 dedicado a "Self-Attention, Transformers, and Pretraining"; HF NLP/LLM Course, capítulos 1-4 arquitectura+uso, capítulo 6 tokenizadores incluyendo construcción de un tokenizador propio "block by block"). Decisión de modalidad DOC-11/DOC-12 confirmada módulo por módulo (§3). |
+| **Historial** | 0.1.0-draft (2026-07-21): Documento de Diseño. Verificación empírica previa y propia (no de terceros) de la viabilidad de un transformer de juguete en numpy puro corriendo en Pyodide real v0.26.4 (misma build fijada en `index.html`, misma metodología que ya usó N3 para `numpy.linalg.inv()`): forward pass con `seq_len≤32, d_model≤64, 2-4 capas` corre en 1-12ms; hasta `seq_len=128, d_model=128, vocab=1000` se mantiene en ~175ms; solo configuraciones con `d_model≥256` y `vocab≥5000` cruzan el segundo por forward pass. Este rango de diseño (§3, hallazgo técnico) determina el tamaño real de los ejercicios de M1 y del capstone. Investigación bibliográfica real por WebSearch de las 4 fuentes oficiales de DOC-10 §7 (Karpathy *Let's build GPT: from scratch, in code, spelled out*, ene-2023, ~1h56min, construye un transformer siguiendo *Attention Is All You Need* hasta el núcleo de nanoGPT sobre tiny-Shakespeare; Stanford CS224N, Lecture "Self-Attention and Transformers", con Assignment 4 dedicado a "Self-Attention, Transformers, and Pretraining"; HF NLP/LLM Course, capítulos 1-4 arquitectura+uso, capítulo 6 tokenizadores incluyendo construcción de un tokenizador propio "block by block"). Decisión de modalidad DOC-11/DOC-12 confirmada módulo por módulo (§3). · **0.2.0 (2026-07-21): M1-M4 construidos completos en `index.html` + Capstone ET3 + Paso 8.** M1 (5 temas, 13 días, 42 ejercicios: cuello de botella RNN/atención, self-attention Q/K/V, multi-head, positional encoding, bloque transformer completo con máscara causal). M2 (4 temas, 8 días Pyodide + 1 laboratorio DOC-12: por qué tokenizar, BPE desde cero, embeddings, y un laboratorio real en Colab con `tiktoken`/`gensim` — investigación previa real: instalé ambas librerías localmente y verifiqué cada cifra citada en el laboratorio, incluyendo el `KeyError` real de vocabulario cerrado, antes de escribir el contenido). M3 (4 temas, 8 días: BERT bidireccional, GPT autorregresivo, la familia decoder-only moderna —RMSNorm/RoPE/SwiGLU/GQA—, comparación fundamentada de tamaños). M4 (4 temas, 8 días: los 4 papers fundacionales —Attention Is All You Need, BERT, GPT-2/GPT-3, Llama— con investigación previa real vía WebSearch/WebFetch verificando cada cifra citada contra la fuente antes de escribirla, nunca de memoria: la Tabla 1 de complejidad del paper original confirmada contra un espejo HTML de arXiv; los porcentajes 15%/80-10-10 de BERT confirmados contra múltiples fuentes coincidentes; 1.5B/175B parámetros de GPT-2/GPT-3 y la definición exacta de few-shot confirmados contra el propio abstract; RMSNorm+SwiGLU+RoPE(+GQA en v2) de Llama confirmados contra el paper real). **Disciplina de verificación aplicada sistemáticamente, con 3 bugs reales encontrados y corregidos por el harness antes de comitear** (mismo patrón institucional que N1/N2/N3): M1.T1.e4 tenía `3e-05` en vez del valor real `2.7e-05`; M1.T5.e4 mezclaba enteros y flotantes (ReLU sobre enteros da `2` en vez de `2.0` sin `dtype=float` explícito); M1.T4.retoFinal predijo `False` sin haber verificado el experimento real, que dio `True` en su primer diseño — el harness lo detectó y el experimento se rediseñó correctamente (contenido correcto en la posición por slot vs. arrastrada) antes de comitear; M3.T2.e3 tenía valores calculados a mano (`duerme/tranquilo/y`) en vez de la salida real de la función (`y/sonrie/duerme`). Harness final: 42+24+20+20 = 106 ejercicios Pyodide, 100% pass, `node --check` limpio, 140 ids `n6` sin duplicados. **Capstone ET3 "Mini-GPT: de la matriz de atención al texto generado"**: 5 hitos que integran N4 (metodología)+N5 (redes desde cero, PyTorch/Colab)+N6 completo, con síntesis real verificada en el diseño (hito 3 exige equivalencia arquitectónica frente al hito 2, no una reimplementación desde cero; hito 4 exige cita exacta a M3/M4, no un resumen genérico) — mismo criterio adversarial que N3/N4/N5 ya aplicaron a sus propios capstones. **Paso 8 completo** (ver §8, nueva): revisión de síntesis del capstone, tabla de cobertura de competencias (las 4 C-N6-01…04 mapean sin huecos a M1-M4+capstone+banco de examen), banco de examen de 8 ítems × 3 variantes (24 variantes totales), todos los ítems numéricos verificados por ejecución real y los ítems de lectura en inglés (C-N6-03) verificados con citas literales reales de los 3 abstracts (WebFetch directo a arXiv), no traducciones inventadas. |
 
 ---
 
@@ -311,4 +311,89 @@ Por diseño de DOC-10 §7 y la Nota de posición de `docs/mision-n6.md`: **Mini-
 
 ---
 
-*Con este Paso 1 completo (identidad, principios, estructura, fichas pedagógicas M1-M4, proyecto de nivel a alto nivel, borrador de Herencias), sigue: investigación pedagógica específica por tema (DOC-11 §0bis / DOC-12 §0bis, `docs/investigacion/n6-*.md`), construcción real de M1 en `index.html` con verificación numérica antes de cada `check()`, y el resto del flujo de 9 pasos de `docs/guia-construccion-niveles.md` §13.*
+## 8. Paso 8 · Revisión global del Capstone ET3 y las compuertas
+
+### El capstone — diseño de síntesis (ya construido en `index.html` como `n6et3`; aquí se documenta el razonamiento)
+
+**Nombre:** *"Mini-GPT: de la matriz de atención al texto generado"* — la prueba de que M1-M4 (y, transitivamente, N4-N5) se sostienen **juntos**, en un artefacto que el estudiante construyó, entrenó de verdad, y puede explicar a cualquier audiencia.
+
+**Por qué esta forma y no otra:** el riesgo — el mismo que las auditorías de SYL-N1…SYL-N5 ya encontraron y corrigieron en sus propios capstones — es que el proyecto se convierta en cuatro entregas independientes ("aquí mi arquitectura, aquí mi entrenamiento, aquí mi ensayo, aquí mi defensa"). La corrección, aplicada desde el diseño mismo del capstone (no dejada a la buena fe del estudiante): el hito 3 (entrenamiento en Colab) exige explícitamente **equivalencia arquitectónica demostrada** frente al hito 2 (la versión Pyodide) — no una reimplementación libre en PyTorch, sino la MISMA configuración verificada dos veces, en dos entornos. El hito 4 (ensayo comparativo) exige cita exacta a un tema de M3 y a un paper de M4 por dirección — nunca un resumen genérico de "lo que aprendí".
+
+**Diferencia estructural real frente a N3/N4 (declarada honestamente):** a diferencia de N1/N2 (capstones que narran una historia de ramas y Pull Requests, DOC-12 con flujo de Git real), el capstone de N6 no incluye `flujoDeGit` — el tramo DOC-12 de este nivel (M2.T4 y el hito 3 del capstone) vive en notebooks de Colab, no en un flujo de control de versiones con ramas — mismo criterio que ya aplicó N3 (100% Pyodide, sin narrativa de Git) adaptado aquí a un nivel mixto: la ausencia de `flujoDeGit` no es un descuido, es la constatación honesta de que este nivel no exige un flujo de repositorio propio del estudiante.
+
+**Responsabilidad ampliada (nota de posición de `docs/mision-n6.md`):** este capstone cierra ET3 completa, no solo N6 — su hito 1 exige declarar explícitamente qué de N4 (metodología) y N5 (redes desde cero, PyTorch/Colab) sigue activo, no solo qué de N6 se usa.
+
+**Verificación de síntesis (criterio adversarial aplicado en este paso, no solo al final):** ¿podría un estudiante completar esto entregando las piezas por separado, sin integrarlas? No — el hito 3 exige la MISMA arquitectura del hito 2, verificada equivalente, no una nueva; el hito 4 exige citar M3/M4 por dirección exacta de tema, verificable por el examinador; la defensa del hito 5 puede repreguntar sobre CUALQUIERA de los 4 papers de M4, no solo el citado en el ensayo. La dependencia entre hitos está en el propio diseño, no en la buena fe del estudiante.
+
+### Revisión de las compuertas — cobertura de competencias
+
+| Instrumento | Qué verifica | Norma |
+|---|---|---|
+| **Examen** (banco rotable ≥3 variantes/ítem, NNR-02 — ver banco completo abajo) | Conocimiento operativo y capacidad de explicar la matemática y las decisiones arquitectónicas | DOC-02 |
+| **Capstone (Mini-GPT + ensayo comparativo)** | Síntesis real: M1-M4 (y N4-N5 transitivamente) integrados en un artefacto propio, entrenado de verdad | OBJ-05 |
+| **Defensa oral con doble audiencia + defensa de lectura** | Comprensión real (no memorización), decisiones de diseño del Mini-GPT, lectura sistemática de los 4 papers de M4 ante repregunta | RM-05 |
+
+**Cobertura de competencias — verificación explícita:**
+
+| Competencia | Verificada por |
+|---|---|
+| C-N6-01 (implementa un transformer desde cero — atención, tokenización, embeddings, posiciones — explicando su matemática) | M1 completo (5 temas) + M2 completo (4 temas) + ítems 1-2 del banco de examen + Capstone hitos 1-2 |
+| C-N6-02 (lee papers fundacionales identificando contribución, método, supuestos y límites) | M4 completo (4 temas) + ítems 3-4 del banco de examen + Capstone hitos 4-5 |
+| C-N6-03 (consume video/charlas técnicas en inglés sin subtítulos, resume papers en inglés con apoyo) | M4 (lectura de los 4 papers en inglés) + ítems 5-6 del banco de examen (citas literales de abstracts reales) + Capstone hito 5 (defensa de lectura) |
+| C-N6-04 (compara arquitecturas y tamaños de modelo, fundamenta cuál conviene a un caso dado) | M3 completo (4 temas) + ítems 7-8 del banco de examen + Capstone hito 4 (ensayo comparativo) |
+
+**Hallazgo de la revisión:** las 4 competencias de N6 mapean con cobertura completa a los 4 módulos + capstone, sin ninguna competencia huérfana de instrumento — consistente con el patrón ya confirmado en SYL-N3 (a diferencia de C-N2-07 en SYL-N2, una competencia transversal sin instrumento propio por diseño). A diferencia de N3 (100% Pyodide), C-N6-03 (consumo de inglés técnico) tiene aquí instrumento MÁS directo que en niveles anteriores — los 4 papers de M4 se leen en su idioma e inglés original, no traducidos, y el banco de examen cita fragmentos literales verificados (ver ítems 5-6), no resúmenes ya traducidos por la Academia.
+
+### Banco de examen — ítems rotables (≥3 variantes por ítem, NNR-02)
+
+*Formato mixto: ítems 1-2 y 7 son numéricos con derivación en vivo; ítems 3-4 y 8 son conceptuales con verificación numérica de apoyo; ítems 5-6 son de comprensión de lectura en inglés técnico real (C-N6-03). El examinador elige UNA variante por ítem al azar en cada aplicación.*
+
+**Ítem 1 (C-N6-01 · pesos de atención escalados).** "Calcula a mano los pesos de atención softmax(QKᵀ/√d_k) para esta Query contra estas Keys, y verifica ejecutando."
+- Variante A: Q=[[1,0]], K=[[1,0],[0,1]], d_k=2 → pesos **[[0.6698, 0.3302]]**.
+- Variante B: Q=[[0,1]], K=[[1,0],[0,1],[1,1]], d_k=2 → pesos **[[0.1978, 0.4011, 0.4011]]**.
+- Variante C: Q=[[1,1]], K=[[2,0],[0,2]], d_k=4 → pesos **[[0.5, 0.5]]** (caso simétrico: la Query equidista de ambas Keys).
+
+**Ítem 2 (C-N6-01 · primera fusión de BPE).** "Dado este corpus con frecuencias, identifica la primera fusión que BPE aprendería, y explica por qué ese par y no otro."
+- Variante A: {bajo:5, baja:3, caja:2} → primera fusión **('a', 'j')**.
+- Variante B: {casa:4, caso:2, cama:3} → primera fusión **('c', 'a')**.
+- Variante C: {perro:6, perra:1, pero:2} → primera fusión **('p', 'e')**.
+
+**Ítem 3 (C-N6-02 · Tabla 1 del paper original, con condición).** "Para esta longitud de secuencia n y dimensión d, ¿cuál arquitectura tiene menor complejidad por capa según la Tabla 1 de *Attention Is All You Need* — y por qué el paper no afirma una ganancia universal?"
+- Variante A: n=20, d=200 → gana **self-attention** (n<d).
+- Variante B: n=200, d=20 → gana **recurrente** (n>d).
+- Variante C: n=50, d=50 → **empate exacto** (n=d, algebraicamente O(n²d)=O(nd²)).
+
+**Ítem 4 (C-N6-02 · identificar el paper por su objetivo de pretraining).** "Este objetivo de entrenamiento descrito, ¿a cuál de los 4 papers de M4 corresponde, y qué límite reconoce ese mismo paper sobre su propio método?"
+- Variante A: "Oculta el 15% de los tokens (80% [MASK]/10% aleatorio/10% sin cambio) y predice usando contexto de ambos lados" → **BERT**; límite: no genera texto secuencialmente, arquitectura no diseñada para eso.
+- Variante B: "Aprende una tarea nueva viendo unos pocos ejemplos en el propio prompt, sin actualizar ningún peso" → **GPT-3**; límite: la capacidad depende fuertemente de la escala, no garantizada en modelos pequeños.
+- Variante C: "Pre-normalización con RMSNorm, SwiGLU en el feed-forward, RoPE para posición relativa" → **Llama**; límite: hereda la complejidad cuadrática de la atención del paper original, no la resuelve.
+
+**Ítem 5 (C-N6-03 · resumir un fragmento real de abstract en inglés).** "Lee este fragmento literal del abstract (verificado contra la fuente, no traducido de antemano) y resúmelo en español en una frase, identificando de qué paper es."
+- Variante A: *"The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism."* → **Attention Is All You Need** (Vaswani et al., 2017).
+- Variante B: *"We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers."* → **BERT** (Devlin et al., 2018).
+- Variante C: *"Recent work has demonstrated substantial gains on many NLP tasks and benchmarks by pre-training on a large corpus of text followed by fine-tuning on a specific task. While typically task-agnostic in architecture, this method still requires task-specific fine-tuning datasets of thousands or tens of thousands of examples."* → **GPT-3 / "Language Models are Few-Shot Learners"** (Brown et al., 2020) — identifica también qué problema (fine-tuning con miles de ejemplos) motiva la propuesta de few-shot del propio paper.
+
+**Ítem 6 (C-N6-03 · interpretar una cifra técnica en inglés sin traducción previa).** "Sin traducción previa: ¿qué significa esta cifra/tabla, citada tal como aparece en la literatura técnica?"
+- Variante A: *"Sequential Operations: O(1) for Self-Attention vs. O(n) for Recurrent"* → self-attention no espera pasos anteriores para procesar cualquier posición; recurrente sí, y ese costo crece con n.
+- Variante B: *"15% of the input tokens... 80% replaced with [MASK], 10% random token, 10% unchanged"* → de los tokens seleccionados para el objetivo de MLM, la mayoría se enmascara pero una fracción se deja intacta o aleatoria para reducir el mismatch pretraining/fine-tuning.
+- Variante C: *"RMSNorm achieves comparable performance to LayerNorm with a 10-50% improvement in efficiency"* → RMSNorm no sacrifica calidad medible frente a LayerNorm, y es más barato de calcular por no restar la media.
+
+**Ítem 7 (C-N6-04 · comparar eficiencia de dos configuraciones).** "Estima los parámetros totales de estas dos configuraciones con `estimar_parametros` (M3.T4) y decide cuál conviene para un caso de uso con presupuesto de cómputo ajustado."
+- Variante A: (6 capas, d_model=512, d_ff=2048, vocab=30000) → **49,594,368** vs. (12 capas, d_model=256, d_ff=1024, vocab=30000) → **24,797,184**.
+- Variante B: (24 capas, d_model=768, d_ff=3072, vocab=50257) → **247,064,064** vs. (6 capas, d_model=1024, d_ff=4096, vocab=50257) → **178,423,808**.
+- Variante C: (4 capas, d_model=256, d_ff=1024, vocab=10000) → **8,265,728** vs. (2 capas, d_model=512, d_ff=2048, vocab=10000) → **16,531,456**.
+
+**Ítem 8 (C-N6-04 · elegir familia según caso de uso).** "Para este caso de uso, ¿qué familia (encoder-only, decoder-only) conviene, y por qué?"
+- Variante A: "Clasificar automáticamente si un correo es spam, en tiempo real, con latencia mínima" → **encoder-only (tipo BERT)**: la tarea es de comprensión/clasificación, no de generación, y se beneficia de ver el texto completo antes de decidir.
+- Variante B: "Generar automáticamente la continuación de un ticket de soporte a partir de lo escrito hasta ahora" → **decoder-only (tipo GPT)**: la tarea ES generación secuencial, exactamente el objetivo de pretraining de esta familia.
+- Variante C: "Extraer, de un contrato largo, el fragmento exacto que responde una pregunta específica" → **encoder-only**: tarea de comprensión con respuesta acotada dentro de un contexto ya dado, no generación libre.
+
+**Nota de diseño:** los 8 ítems cubren las 4 competencias con 2 ítems cada una, 3 variantes cada ítem (24 variantes totales) — los ítems numéricos (1, 2, 3, 7) verificados por ejecución real de Python antes de fijarse aquí; los ítems de lectura en inglés (5, 6) verificados con citas literales reales contra la fuente (WebFetch directo a arXiv para 5; múltiples fuentes coincidentes para las cifras de 6), nunca traducciones o paráfrasis inventadas de memoria — mismo estándar de verificación empírica que rigió cada ejercicio de M1-M4.
+
+---
+
+*Paso 8 — pendiente de aprobación por el Director.*
+
+---
+
+*Con los Pasos 1-8 completos (identidad, principios, estructura, fichas pedagógicas M1-M4 construidas y verificadas en `index.html`, Capstone ET3, cobertura de competencias, banco de examen), sigue el Paso 9 de `docs/guia-construccion-niveles.md` §13: auditoría de coherencia desde N7 + Herencias Declaradas finales (Paso 9a), auditoría adversarial (Paso 9b), y el Informe Final de Nivel antes de declarar N6 candidato a v1.0.0.*

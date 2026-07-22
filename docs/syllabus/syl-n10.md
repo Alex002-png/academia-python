@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | **Document Key** | SYL-N10 · Tier T2 |
-| **Versión / Estado** | **0.2.0-draft** · Paso 1 del flujo institucional de 9 pasos (diseño del syllabus) completo, incluida la investigación pedagógica real de bibliografía (§8) — pendiente de: revisión módulo por módulo con contenido real en `index.html`, capstone detallado, compuertas, auditoría desde N11, Herencias Declaradas finales, auditoría adversarial, v1.0.0 |
+| **Versión / Estado** | **0.5.0-draft** · Pasos 1-4 y 8 del flujo institucional de 9 pasos completos: syllabus, M1-M4 (16 laboratorios reales en `index.html`), capstone ET4 (`n10et4`), compuertas + banco de examen (18 variantes, §10) — pendiente de: Paso 9a (auditoría de coherencia desde N11 + Herencias Declaradas finales), Paso 9b (auditoría adversarial), Informe Final de Nivel, v1.0.0 |
 | **Autoridad de origen** | DOC-10 §8 (interior de N10) · DOC-01 (C-N10-01…03) · `docs/mision-n10.md` |
 | **Depende de** | DOC-10 (mapa, alcance ya aprobado — este documento lo instancia, no lo rediseña) · DOC-12 v1.0.0 (estándar de laboratorios de entorno real — documento gobernante casi absoluto de este nivel) · DOC-01 · DOC-02 · DOC-03 · **Herencias entrantes de N7/N8/N9 (borrador — construidos en paralelo, no congelados; ver §2.1)** |
 | **Produce / desarrolla** | La estructura docente completa de N10: fichas pedagógicas por tema (16 laboratorios en 4 módulos), el diseño del capstone ET4 (columna vertebral local), la compuerta, y el borrador de Herencias Declaradas hacia SYL-N11 |
@@ -360,3 +360,65 @@ Sistema RAG operativo (N7) extendido a agéntico con fiabilidad medida (N8), des
 *(Registro vivo, práctica institucional desde SYL-N0 — se completa cuando existan sesiones reales del estudiante en este nivel.)*
 
 Ninguna todavía — el nivel no ha comenzado a impartirse.
+
+## 10. Paso 8 · Compuertas — cobertura de competencias y banco de examen
+
+### Revisión de las compuertas
+
+| Instrumento | Qué verifica | Norma |
+|---|---|---|
+| **Examen** (banco rotable ≥3 variantes/ítem, NNR-02 — ver banco completo abajo) | Conocimiento operativo: cálculo de presupuestos de hardware, decisiones de cuantización, juicio de adopción/descarte, sobre las 3 competencias | DOC-02 |
+| **Capstone (`n10et4`, "La columna vertebral, en tu propia máquina")** | Síntesis real: M1-M4 integrados migrando un sistema real (N7-N9) a inferencia local, con trade-offs medidos | OBJ-05 |
+| **Defensa oral** (derivación en vivo del presupuesto de VRAM del Hito 3, justificación de los 4 ejes de trade-off del Hito 4) | Comprensión real, no memorización — mismo estándar que N1/N2/N3 | RM-05 |
+
+**Cobertura de competencias — verificación explícita:**
+
+| Competencia | Verificada por |
+|---|---|
+| C-N10-01 (ejecuta y optimiza inferencia local: cuantización, aceleración, medición antes/después) | M1 completo (4 labs) + M2 completo (4 labs) + ítems 1-2 del banco de examen + Capstone Hitos 1-2 |
+| C-N10-02 (opera su columna vertebral en local, con trade-offs frente a la nube documentados) | M3 completo (5 labs) + ítems 3-4 del banco de examen + Capstone Hitos 3-4 |
+| C-N10-03 (evalúa herramientas del ecosistema local con prototipo, medición y juicio de adopción o descarte) | M4 completo (3 labs) + ítems 5-6 del banco de examen + Capstone Hito 1 (evolución del informe de M4.T3) |
+
+**Hallazgo de la revisión:** a diferencia de N3 (donde las 4 competencias mapeaban 1:1 con los 4 módulos), N10 tiene 3 competencias para 4 módulos — M3 (GPU/hardware) no tiene una competencia propia dedicada, sino que sirve como el fundamento instrumental de C-N10-02 (operar con límites reales conocidos) y, indirectamente, de C-N10-01 (medición antes/después necesita entender por qué cambian los números). Esto es coherente con DOC-01: las 3 competencias de N10 (C-N10-01…03) están diseñadas para cubrir el nivel completo sin una cuarta dedicada a hardware puro — decisión ya tomada en DOC-01, no una omisión de este syllabus. Se declara explícitamente para que una auditoría futura no lo confunda con una laguna real.
+
+### Banco de examen — ítems rotables (≥3 variantes por ítem, NNR-02)
+
+*Formato oral con cálculo en vivo — el examinador elige UNA variante por ítem al azar en cada aplicación, nunca las tres a la vez. Todos los valores numéricos verificados por ejecución real (Node.js) antes de fijarse aquí — nunca calculados de memoria, mismo principio que rige cada ejercicio de M1-M4.*
+
+**Ítem 1 (C-N10-01 · tamaño de modelo vs. presupuesto de VRAM).** "Un modelo tiene P mil millones de parámetros, cuantizado a B bits por parámetro. Calcula su tamaño en GB. Si tienes V GB de VRAM y necesitas reservar R GB para KV cache/overhead, ¿cabe el modelo? Si no cabe, ¿cuál es el déficit exacto?"
+- Variante A: P=8, B=8 (Q8), V=12, R=2 → tamaño=**7.45GB**, disponible=10GB, **cabe** (margen 2.55GB).
+- Variante B: P=13, B=4 (Q4), V=12, R=1.5 → tamaño=**6.05GB**, disponible=10.5GB, **cabe** (margen 4.45GB).
+- Variante C: P=32, B=4 (Q4), V=12, R=1 → tamaño=**14.90GB**, disponible=11GB, **NO cabe** (déficit 3.90GB).
+
+**Ítem 2 (C-N10-01 · reducción por cuantización).** "Un modelo de P mil millones de parámetros se cuantiza de A bits-por-peso (bpw) a B bpw. Calcula el tamaño antes, el tamaño después, y el porcentaje de reducción."
+- Variante A: P=7, A=8 (Q8_0), B=4.5 (Q4_K) → antes=**6.52GB**, después=**3.67GB**, reducción=**43.8%**.
+- Variante B: P=13, A=16 (FP16), B=5.5 (Q5_K) → antes=**24.21GB**, después=**8.32GB**, reducción=**65.6%**.
+- Variante C: P=3, A=6.5625 (Q6_K), B=2.625 (Q2_K) → antes=**2.29GB**, después=**0.92GB**, reducción=**60.0%**.
+
+**Ítem 3 (C-N10-02 · punto de equilibrio de costo cloud vs. local).** "Una API cloud cobra C dólares por cada 1000 tokens. Tu hardware local costó H dólares. ¿A partir de cuántos tokens generados el costo local (ya hundido) resulta más barato que seguir pagando por token en la nube?"
+- Variante A: C=$0.002, H=$600 → punto de equilibrio=**300,000,000 tokens**.
+- Variante B: C=$0.01, H=$1200 → punto de equilibrio=**120,000,000 tokens**.
+- Variante C: C=$0.0005, H=$600 → punto de equilibrio=**1,200,000,000 tokens**.
+
+**Ítem 4 (C-N10-02 · presupuesto de VRAM en tres líneas para un caso agéntico).** "Dado el tamaño de los pesos cuantizados, el KV cache estimado para el contexto de una tarea agéntica, el overhead del runtime, y la VRAM disponible: calcula el margen (o déficit) total, y decide si el sistema cabe."
+- Variante A: pesos=6GB, KV=2GB, overhead=1GB, VRAM=12GB → total=9GB, margen=**+3.0GB**, **cabe**.
+- Variante B: pesos=8GB, KV=3GB, overhead=1.5GB, VRAM=12GB → total=12.5GB, margen=**-0.5GB**, **NO cabe**.
+- Variante C: pesos=4GB, KV=1GB, overhead=1GB, VRAM=12GB → total=6GB, margen=**+6.0GB**, **cabe**.
+
+**Ítem 5 (C-N10-03 · juicio de adopción o descarte).** "Evalúa el siguiente escenario de evaluación de una herramienta del ecosistema local y decide: ¿adoptas o descartas, y por qué? Justifica con la evidencia dada, no con preferencia."
+- Variante A: el smoke test de compatibilidad pasó sin problemas, y mides 3× más throughput con 8 solicitudes simultáneas — pero tu columna vertebral sirve, hoy, a un solo usuario. *Respuesta esperada: descarte condicional/diferido — la ventaja medida no aplica al caso de uso actual; se declara explícitamente qué cambiaría la decisión (pasar a multi-usuario), no un descarte definitivo ni una adopción sin justificación real.*
+- Variante B: el smoke test falla con un error de incompatibilidad de arquitectura de GPU, documentado como issue abierto y sin solución en el repositorio oficial del proyecto. *Respuesta esperada: descarte con evidencia (número de issue, mensaje exacto), con fecha de revisión futura declarada — mismo patrón que M4.T2/T3, nunca un descarte sin registro de por qué ni cuándo reconsiderarlo.*
+- Variante C: la herramienta pasa el smoke test, mide 40% de mejora en latencia incluso con un solo usuario, comunidad activa — pero exige migrar de formato de modelo (costo de migración no trivial). *Respuesta esperada: adopción condicionada a que la mejora medida justifique el costo de migración, con un criterio explícito de cuánto esfuerzo es aceptable — ninguna respuesta que ignore el costo de migración cuenta como completa.*
+
+**Ítem 6 (C-N10-03 · roofline aplicado a una decisión de configuración).** "Dado el ancho de banda de memoria de una GPU (GB/s) y el tamaño en GB que hay que mover por token (a una precisión dada), calcula los tokens/segundo teóricos máximos, y úsalo para decidir si esa configuración cumple una restricción de latencia dada."
+- Variante A: ancho de banda=672GB/s, GB/token=1.397 (modelo 3B a Q4) → **~481 tokens/s teóricos** — cumple holgadamente una restricción de ≥50 tokens/s.
+- Variante B: ancho de banda=672GB/s, GB/token=6.519 (modelo 7B a Q8) → **~103 tokens/s teóricos** — cumple una restricción de ≥50 tokens/s, con menos margen que la Variante A.
+- Variante C: ancho de banda=450GB/s, GB/token=5.588 (modelo 3B a FP16, GPU distinta) → **~81 tokens/s teóricos** — cumple una restricción de ≥50 tokens/s, pero evidencia por qué el ancho de banda importa tanto como la precisión elegida.
+
+**Nota de diseño:** los 6 ítems cubren las 3 competencias con 2 ítems cada una, 3 variantes cada ítem (18 variantes totales) — todos los valores numéricos verificados por ejecución real (Node.js) antes de fijarse aquí. El examinador puede generar variantes adicionales cambiando los valores numéricos sin cambiar la estructura del ítem, siempre que re-verifique el resultado por ejecución real antes de usarlo — nunca a mano, mismo principio que rigió cada ejercicio de M1-M4.
+
+---
+
+*Paso 8 — pendiente de aprobación por el Director.*
+
+---

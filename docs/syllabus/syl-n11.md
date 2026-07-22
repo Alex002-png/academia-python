@@ -317,7 +317,7 @@ Troncal `M1 → M2 → M3 → M4 → Capstone`, secuencial — a diferencia de N
 
 ## 6. Capstone del nivel — diseño
 
-**Objeto `modalidad:"proyecto"`, hitos, id `n11et5`** — la reproducción del paper elegido en M1, la contribución open source de mayor peso, el informe científico completo, y la defensa oral crítica, integrados como un solo proyecto de varios meses.
+**Objeto `modalidad:"proyecto"`, hitos, id `n11et11`** — la reproducción del paper elegido en M1, la contribución open source de mayor peso, el informe científico completo, y la defensa oral crítica, integrados como un solo proyecto de varios meses. *(Nomenclatura verificada contra el patrón real de `index.html`: `n1et1`/"Capstone ET1", `n2et2`/"Capstone ET2", `n3et3`/"Capstone ET3" — cada nivel numera su propio capstone secuencialmente, no por Etapa DOC-10; N11 sigue el mismo patrón: `n11et11`.)*
 
 ### 6.1 Qué certifica (nunca "obtuvo los números correctos")
 
@@ -343,11 +343,27 @@ DOC-10 describe el proyecto de N11 como "reproducción publicada + contribucione
 
 Igual que N5/N6 (guía maestra §6), si la reproducción elegida requiere cómputo no disponible localmente, el estudiante usa un entorno externo (Colab u equivalente) — esto es DOC-12 puro, con sus 13 secciones aplicadas al entorno de cómputo elegido, no una excepción del nivel.
 
-## 7. Herencia entrante (borrador — N7-N10 se construyen en paralelo, no asumida como congelada)
+## 7. Compuertas — cobertura de competencias y evaluación del nivel (Paso 5)
+
+**A diferencia de todos los niveles anteriores, N11 no lleva banco de examen separado** (DOC-10 §9, ya citado en la ficha de misión: "el examen aquí ES la reproducción y su defensa"). La compuerta de N11 es el capstone completo (§6) evaluado contra su checklist (§6, `evalu.checklist`) y sostenido en la defensa oral (`evalu.defensa`, hito 5) — no hay ítems rotables NNR-02 que diseñar para este nivel.
+
+Lo que sí exige el Paso 5 (verificado, no solo declarado) es la **tabla de trazabilidad**: cada competencia de DOC-01 debe tener un lugar donde se enseña, se practica, se evalúa y se demuestra — ninguna competencia huérfana, ningún módulo sin competencia servida.
+
+| Competencia | Se enseña | Se practica | Se evalúa | Se demuestra |
+|---|---|---|---|---|
+| C-N11-01 (reproduce un paper) | M2.T1-T3 (elegir, leer código, planificar) | M2.T4-T5 (reproducción pequeña, comparación honesta) | Checkpoints DOC-12 de M2 completos | Capstone hitos 1-2 (reproducción a escala completa) |
+| C-N11-02 (lee papers de frontera con autonomía) | M1.T1-T2 (método de lectura, notación) | M1.T3-T4 (verificación, evaluación crítica) | Checkpoints DOC-12 de M1 completos | Capstone (elección y defensa del paper, hito 5) + M1.T5 (defensa breve, siembra directa) |
+| C-N11-03 (contribuye a open source real) | M4.T1-T2 (convenciones, triage de issue) | M4.T3-T4 (PR real, iteración sobre feedback) | Checkpoints DOC-12 de M4 completos | Capstone hito 3 (contribución de mayor peso) |
+| C-N11-04 (reporta fielmente, atribución y licencias) | M3.T1-T2 (estructura del reporte, divergencia/licencias) | M2.T5 (honestidad sobre la reproducción pequeña, materia prima directa de M3) | Rúbrica de revisión de M3 (no `check()`) | Capstone hito 4 (informe integrado) |
+| C-N11-05 (defiende ante examen crítico oral) | Sembrada en M1.T1 (defender la elección de descarte) y M3.T3 (recibir/dar revisión por pares) | M1.T5 (defensa breve real) y M3.T3 (ciclo de revisión real) | — (no hay instrumento de "evaluación" previo al capstone; se acumula evidencia de práctica, nunca de examen) | Capstone hito 5 (defensa oral crítica completa, sin guion) |
+
+**Verificación de cobertura, módulo por módulo (sin huérfanos):** M1→C-N11-02 · M2→C-N11-01 · M3→C-N11-04 · M4→C-N11-03 · Capstone→las 5, con C-N11-05 consolidada ahí por primera vez a escala completa. Ninguna competencia de DOC-01 (C-N11-01…05) queda sin módulo que la sirva; ningún módulo queda sin competencia principal declarada.
+
+## 8. Herencia entrante (borrador — N7-N10 se construyen en paralelo, no asumida como congelada)
 
 De ET4 completa: el estudiante ya construyó y operó sistemas reales de IA de extremo a extremo — M1.T1 presupone que puede razonar sobre arquitecturas reales sin reintroducirlas. De N3.M4/N6.M4: la disciplina de traducir notación de papers a código ya está instalada — M1.T2-T3 la extienden, no la repiten desde cero. De N1.M4: el flujo Git/PR técnico ya está dominado en contexto controlado — M4 lo extiende a terceros reales, no reenseña sintaxis de Git. **Pendiente de confirmación cuando N7-N10 congelen sus Herencias Declaradas finales** (mismo principio de SYL-N3 §7: no bloquea el avance de este syllabus).
 
-## 8. Herencias declaradas hacia SYL-N12 (borrador — se consolida formalmente en el paso 9 del flujo institucional, no ahora)
+## 9. Herencias declaradas hacia SYL-N12 (borrador — se consolida formalmente en el paso 9 del flujo institucional, no ahora)
 
 | # | N11 siembra | N12 debe recoger |
 |---|---|---|
@@ -356,7 +372,7 @@ De ET4 completa: el estudiante ya construyó y operó sistemas reales de IA de e
 | H-N12-03 (borrador) | Contribución real a un proyecto de terceros con sus propias reglas (M4) | N12.M4 (entrevistas) exige un registro similar de desempeño real ante evaluadores externos, sin guion |
 | H-N12-04 (borrador) | Defensa oral crítica sin guion (capstone N11) | N12.M4/M5 exigen exactamente esta habilidad a mayor escala (entrevista de sistema completo + defensa final integradora de la carrera) |
 
-## 9. Bibliografía oficial del nivel *(registro vivo, verificada por búsqueda real, no de memoria)*
+## 10. Bibliografía oficial del nivel *(registro vivo, verificada por búsqueda real, no de memoria)*
 
 | Módulo | Eje | Complementos |
 |---|---|---|
@@ -367,12 +383,14 @@ De ET4 completa: el estudiante ya construyó y operó sistemas reales de IA de e
 
 **Nota sobre DOC-11 §4bis (heredada de la guía maestra, no resuelta aquí):** igual que N3, este syllabus cita la bibliografía en esta tabla y en el campo `recursos` de cada ficha del contenido real cuando se construya — no hay campo `recursos` inline en el objeto "día" según el esquema actual verificado en `index.html`. Se documenta esta misma ambigüedad heredada en la auditoría de cierre, no se decide en silencio.
 
-## 10. Observaciones de ejecución
+## 11. Observaciones de ejecución
 
 | # | Fecha | Observación | Tipo |
 |---|---|---|---|
 | — | — | *(se inaugura con la construcción real de M1)* | — |
 
-## 11. Cierre (de este paso, no del nivel)
+## 12. Cierre (de este paso, no del nivel)
 
-17 temas con ficha pedagógica completa (5+5+3+4) más el diseño del capstone integrador. La decisión estructural más importante del nivel — preparación acotada en los módulos, integración de gran escala en el capstone — quedó explícita y aprobada antes de instanciar una sola ficha, con su mecanismo técnico confirmado contra el código real de `index.html`, no supuesto. Dos riesgos reales quedaron documentados para el Director en vez de resueltos en silencio: la incertidumbre de calendario del capstone (§3.3) y la dependencia de aceptación externa en M4/hito 3 (§6.4). Lo que sigue (Paso 2 del flujo institucional): construir el contenido real de M1 en `index.html`, tema por tema, verificando cada checkpoint contra la práctica real antes de escribirlo.
+17 temas con ficha pedagógica completa (5+5+3+4) más el diseño del capstone integrador. La decisión estructural más importante del nivel — preparación acotada en los módulos, integración de gran escala en el capstone — quedó explícita y aprobada antes de instanciar una sola ficha, con su mecanismo técnico confirmado contra el código real de `index.html`, no supuesto. Dos riesgos reales quedaron documentados para el Director en vez de resueltos en silencio: la incertidumbre de calendario del capstone (§3.3) y la dependencia de aceptación externa en M4/hito 3 (§6.4). Cobertura de competencias verificada sin huérfanos (§7).
+
+**Actualización (misma jornada) — Paso 2 completo.** Los 17 temas descritos arriba ya no son solo diseño: existen como contenido real en `index.html` (`const LEVEL11=[...]`, ids `n11m1t1`…`n11m4t4` + capstone `n11et11`), cada uno cumpliendo las 13 secciones de DOC-12, con investigación pedagógica real documentada en `docs/investigacion/n11-m1-*.md` a `n11-m4-*.md`. Verificado: `node --check` limpio sobre el bloque `<script>` completo, 218 ids de nivel top-level únicos en todo el Campus, `LEVELS`/`LEVEL_META` sin tocar. Lo que sigue: Paso 9b (auditoría adversarial, §13) y el Informe Final de Nivel.

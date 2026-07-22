@@ -4,8 +4,12 @@
 
 ## 1. N5.M4.T1 · El método científico aplicado a deep learning — cómo enseñan este concepto exacto las fuentes de referencia
 
+*(Actualizado tras la expansión de densidad de 2 días/10 items a 10 días/10 items, mismo estándar de investigación real aplicado a M1 y M3.)*
+
 - **DOC-03 A6** (modelo pedagógico de la Academia, ya citado desde N0): "experimento estructurado hipótesis→predicción→conclusión" — este tema no introduce el método científico desde cero, lo FORMALIZA con vocabulario propio de deep learning (*ablation study*, variable aislada) sobre una práctica que el estudiante ya viene ejercitando desde niveles anteriores.
 - **DL Specialization (Ng)**: la especialización completa insiste en reportar resultados de múltiples corridas y en el ablation study como herramienta estándar de diagnóstico — mismo principio, aplicado aquí con datos ya producidos por el propio estudiante en M2-M3, no ejemplos genéricos de terceros.
+- **Fisher (1935, *The Design of Experiments*, Hafner Press, construyendo sobre su trabajo de 1925/1926 en Rothamsted, verificado por WebSearch):** el origen real del principio de variable aislada — aleatorización, replicación y control local, formalizados hace un siglo para experimentos agrícolas. Usado en el Día 110 para anclar "cambiar una sola cosa a la vez" en su fuente real, no como una regla de deep learning inventada para la ocasión.
+- **Henderson et al. (2018, "Deep Reinforcement Learning that Matters", AAAI, verificado por WebSearch):** evidencia real de la industria de que la variación causada SOLO por la semilla aleatoria puede ser tan grande como las mejoras que varios papers publicados atribuían a sus métodos — usado en el Día 116 para mostrar que "n=1 miente" no es una advertencia abstracta, es un hallazgo documentado con consecuencias reales en la literatura.
 
 ## 2. Errores de novato documentados para este concepto exacto
 
@@ -22,8 +26,11 @@ Cada valor —incluyendo el desafío final sobre n=1— se generó ejecutando Py
 
 ## 5. N5.M4.T2 · Reproducibilidad — cómo enseñan este concepto exacto las fuentes de referencia
 
+*(Actualizado tras la expansión de densidad de 2 días/10 items a 10 días/10 items.)*
+
 - **PyTorch docs, "Reproducibility"** (ya citada en M2.T4, reutilizada aquí): mismo principio — cada generador de números aleatorios (Python `random`, `numpy.random`, `torch`) es independiente y necesita su propia semilla. Este tema generaliza el hallazgo de M2.T4 (específico de GPU/PyTorch) a la disciplina completa de las 3 fuentes.
 - **MLOps / registro de experimentos** (herramientas reales como MLflow, Weights & Biases — mencionadas en `ing` sin cita de documento específico, honestidad metodológica: no hay una única fuente "oficial" de DOC-10 §7 para este subtema): el patrón de "nombre + semilla + hiperparámetros + resultado" es el mínimo común de cualquier sistema de registro de experimentos real.
+- **Pineau et al. (2021, "Improving Reproducibility in Machine Learning Research", JMLR 22, informe del Programa de Reproducibilidad de NeurIPS 2019, verificado por WebSearch):** LA cita que faltaba — NeurIPS adoptó una lista de verificación de reproducibilidad obligatoria exigiendo exactamente los mismos elementos (semilla, hiperparámetros, resultado) que este tema ya enseñaba a registrar. Usado en el Día 123 para conectar el diccionario simple del estudiante con el estándar real de la conferencia más influyente del campo.
 
 ## 6. Bug real encontrado y corregido por el propio harness — un tipo de bug NUEVO
 
@@ -35,8 +42,11 @@ El tema completo demuestra la disciplina de reproducibilidad de forma recursiva:
 
 ## 8. N5.M4.T3 · Análisis honesto de resultados (cierra M4 y el nivel) — cómo enseñan este concepto exacto las fuentes de referencia
 
+*(Actualizado tras la expansión de densidad de 2 días/8 items a 8 días/8 items — cierra la expansión de densidad de N5 completo.)*
+
 - **N4.M5 "El proyecto gestionado"** (herencia entrante declarada en `syl-n5.md` §2bis): ya exigía honestidad en el reporte de resultados de ML clásico — este tema extiende esa disciplina con el vocabulario específico de deep learning (variabilidad entre corridas, GPU no determinista) y la formaliza con C-N5-04 (explicación a dos audiencias).
 - **DOC-03 A5** ("¿cómo sabes que funciona?" — ritual de verificación, ya citado en el modelo pedagógico de la Academia): el reporte honesto de este tema es la aplicación directa de ese ritual al cierre de un módulo de arquitecturas completo.
+- **Ioannidis (2005, "Why Most Published Research Findings Are False", *PLoS Medicine* 2(8):e124, verificado por WebSearch):** LA cita que faltaba para "detectar cherry-picking" — análisis riguroso de por qué el reporte selectivo es una causa central de que una fracción sustancial de resultados científicos publicados no se repliquen. Usado en el Día 112 para mostrar que este no es un problema exclusivo de estudiantes de deep learning, sino un mecanismo documentado a escala de toda la ciencia.
 
 ## 9. Síntesis crítica y cierre de M4
 
@@ -44,4 +54,8 @@ Los 3 temas de M4 forman un ciclo completo y verificable: T1 diseña el experime
 
 ## 10. Estrategia adoptada para M4 completo, y cierre de todo el contenido de N5
 
-Cada valor de M4 (3 temas: T1 método científico, T2 reproducibilidad, T3 análisis honesto) se generó ejecutando Python real antes de escribirse en cualquier `check()`; 1 bug de valor no verificado (T2.Ejercicio 3, categoría nueva: valor inherentemente no-reproducible tratado como fijo) fue encontrado y corregido, verificado con 3 ejecuciones frescas del harness. **Con esto, M4 · Rigor experimental queda completo (156 ids `n5` totales en todo el nivel, 0 duplicados) y el contenido curricular completo de N5 (M1-M4, 27 días/laboratorios, 4 módulos) queda cerrado — sigue el proyecto de nivel (capstone), las compuertas, las Herencias Declaradas, y la auditoría adversarial, conforme al Paso 4 en adelante de `docs/guia-construccion-niveles.md` §13.**
+Cada valor de M4 (3 temas: T1 método científico, T2 reproducibilidad, T3 análisis honesto) se generó ejecutando Python real antes de escribirse en cualquier `check()`; 1 bug de valor no verificado (T2.Ejercicio 3, categoría nueva: valor inherentemente no-reproducible tratado como fijo) fue encontrado y corregido, verificado con 3 ejecuciones frescas del harness.
+
+**Actualización tras la escalada de estándar de calidad del Director:** los 3 temas de M4 (todos DOC-11/Pyodide) se expandieron de 2 días/tema (6 días totales) a 10/10/8 días respectivamente (28 días totales), aplicando el mismo tratamiento que M1 y los temas Pyodide de M3 — fragmentar en días más finos y anclar cada principio central en su fuente académica real: Fisher (1935) para variable aislada, Henderson et al. (2018) para el peligro real de n=1, Pineau et al. (2021) para el estándar de registro de experimentos de NeurIPS, e Ioannidis (2005) para por qué el cherry-picking es un problema de toda la ciencia, no una peculiaridad de deep learning.
+
+**Con esto, M4 · Rigor experimental queda completo (289 ids `n5` totales en todo el nivel, 0 duplicados; 135 días Pyodide con label "Día N" único y secuencial en todo N5) y el contenido curricular completo de N5 queda cerrado con el nuevo estándar de investigación real: M1 (67 días, T1-T4 con citas de McCulloch-Pitts a Adam/momentum), M2 (4 laboratorios DOC-12, ya verificados con PyTorch+CUDA reales, sin necesitar reescritura), M3 (5 temas — T1/T3/T5 expandidos con citas de Hubel-Wiesel a Vaswani et al., T2/T4 verificados sin cambios), M4 (3 temas, este documento). Sigue el proyecto de nivel (capstone, ya construido), las compuertas, las Herencias Declaradas, y la auditoría adversarial — pendiente de revisión para reflejar la magnitud de esta expansión, junto con `syl-n5.md` y el Informe Final de Nivel, conforme al Paso 4 en adelante de `docs/guia-construccion-niveles.md` §13.**

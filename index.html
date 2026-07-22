@@ -963,11 +963,23 @@ def __academia_run(code, stdin_list, max_steps=300000):
    (su grafo de import es lo bastante liviano para no agotar el límite), pero
    pandas/scikit-learn/matplotlib sí — precalentarlos fuera del trace es la
    única corrección real: no toca max_steps ni el mecanismo de detección de
-   bucles infinitos, que deben seguir intactos para el resto del contenido. */
+   bucles infinitos, que deben seguir intactos para el resto del contenido.
+
+   IMPORTANTE (hallazgo posterior, al construir N4.M3.T3): "import sklearn"
+   por sí solo NO precalienta sus submódulos — cada uno (tree/ensemble/svm/
+   cluster/model_selection/pipeline/preprocessing/metrics/impute) tiene su
+   PROPIO costo de primera importación bajo trace, independiente del paquete
+   raíz. Verificado empíricamente: sklearn.cluster y sklearn.impute agotan
+   por sí solos casi TODO el límite de 300000 pasos (dejando ~0 presupuesto
+   para el código real del ejercicio); sklearn.svm/model_selection/metrics
+   consumen 35-80% del límite. Por eso el warm de sklearn precalienta
+   explícitamente cada submódulo que algún nivel de la Academia usa, no solo
+   el paquete raíz — el mismo principio de "precalentar fuera del trace",
+   aplicado un nivel más profundo. */
 const PY_PKG_DETECT=[
   {re:/\bnumpy\b/,pkg:"numpy",flag:"__academiaNumpyLoaded",warm:"import numpy"},
   {re:/\bpandas\b/,pkg:"pandas",flag:"__academiaPandasLoaded",warm:"import pandas"},
-  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn"},
+  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn\nimport sklearn.tree\nimport sklearn.ensemble\nimport sklearn.linear_model\nimport sklearn.svm\nimport sklearn.cluster\nimport sklearn.model_selection\nimport sklearn.pipeline\nimport sklearn.preprocessing\nimport sklearn.metrics\nimport sklearn.impute"},
   {re:/\bmatplotlib\b/,pkg:"matplotlib",flag:"__academiaMatplotlibLoaded",warm:'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot'},
 ];
 async function runScriptedPy(code,stdin){

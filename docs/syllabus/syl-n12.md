@@ -416,6 +416,92 @@ El menú concreto de escenarios (valores numéricos exactos de escala/presupuest
 
 ---
 
-## 9. Cierre de este documento (Paso 1)
+## 9. Paso 8 · Revisión global del Capstone ET5 y las compuertas
 
-Con este documento: la representación de M4 y M5 está decidida y documentada con su fuente institucional exacta (DOC-02, no una invención de este nivel); el capstone tiene una definición concreta y verificable de "bajo restricciones"; los 20 temas + capstone están instanciados desde DOC-10 §9 con investigación real verificada (§6, pendiente de redactarse como documento de investigación completo antes de M1, conforme a DOC-11 §0bis/DOC-12 §0bis); y las Herencias entrantes de N7-N11 están declaradas en borrador, sin bloquear el avance. **Pendiente antes de iniciar Paso 2 (construcción real de M1 en `index.html`):** revisión y aprobación del Director sobre este documento — en particular sobre las dos decisiones de §3bis y sobre la definición del capstone en §7, por ser las de mayor impacto en todo lo que se construye después.
+### El capstone — verificación de síntesis (mismo criterio adversarial que N1/N2/N3 aplicaron a los suyos)
+
+**¿Podría un estudiante entregar los 5 hitos por separado, sin integrarlos?** No, verificado explícitamente en la construcción real (`index.html`, `n12et5`): h2 exige reutilizar literalmente el framework y la estimación de h1 (no reiniciarlos); h3 despliega exactamente el componente que h2 identificó como crítico, no uno elegido libremente; h4 usa el sistema real de h2-h3 como material del simulacro, no un escenario genérico; h5 integra el avance de M5 sobre ese mismo sistema, cerrando con la defensa final. La integración está en el diseño de los hitos, no confiada a la buena fe del estudiante.
+
+**Diferencia estructural real frente a N3 (100% Pyodide) y más cercana a N1/N2 (DOC-12/real):** N12 SÍ incluye `flujoDeGit` en su capstone (ramas + Pull Request desde el hito 2) — a diferencia de N3, que lo omitió por ser 100% Pyodide. N12 es DOC-12 dominante desde M3 en adelante, con despliegue real en AWS (h3) como evidencia [A], consistente con el perfil de nivel declarado en §3.
+
+**El riesgo de alcance que la ficha de misión advertía (M2/M3 "síntesis técnica más amplia de la carrera") — verificado en la construcción real:** ningún ejercicio de M2/M3 reintroduce Kubernetes, vLLM, RAG o agentes desde cero — todos presuponen N7-N10 y practican la DECISIÓN (qué patrón, qué estrategia de paralelismo, administrado vs. autogestionado), consistente con el principio §3.1 de este documento.
+
+### Compuertas — cobertura de competencias
+
+| Instrumento | Qué verifica | Instrumento DOC-02 | Plantilla |
+|---|---|---|---|
+| Examen (banco rotable ≥3 variantes/ítem, NNR-02 — ver abajo) | Conocimiento operativo sobre las 6 competencias, en el formato real de cada una (escrito para C-N12-01, simulacro para C-N12-02/03) | RM-02, RM-08 | — |
+| Capstone (n12et5, 5 hitos) | Síntesis real: M1-M5 integrados en un sistema rediseñado, desplegado y defendido | RM-06 | TP-01 |
+| Simulacro de entrevista completo (M4.T4 + h4 del capstone) | Desempeño bajo formato y presión de industria, en inglés | RM-08 | TS-01 |
+| Defensa final integradora | Calibración honesta de qué sabe/infiere/ignora, sobre el recorrido completo de 13 niveles | RM-05 | TD-03 |
+
+**Cobertura de competencias — verificación explícita:**
+
+| Competencia | Verificada por |
+|---|---|
+| C-N12-01 (design doc de arquitectura bajo restricciones) | M2 completo (5 temas) + ítem 2 del banco + Capstone h2 |
+| C-N12-02 (system design en vivo, trade-offs y repregunta) | M1 completo (4 temas) + ítem 1 del banco + Capstone h1, h4 |
+| C-N12-03 (proceso de entrevista internacional completo en inglés) | M4 completo (4 temas) + ítem 3 del banco + Capstone h4 |
+| C-N12-04 (culmina la columna vertebral, desplegada y defendida) | M3 completo (5 labs) + Capstone h3, h5 + defensa final |
+| C-N12-05 (vigencia autónoma, integración real de un avance) | M5 completo (2 temas) + Capstone h5 |
+| C-N12-06 (defensa final integradora, calibración honesta) | Defensa final del Capstone (evalu.defensa, última pregunta) — única competencia de toda la carrera cuyo instrumento es exclusivamente la defensa de cierre, sin examen ni proyecto propio, consistente con DOC-10 §10 ("toda la carrera" como lugar donde se enseña) |
+
+**Hallazgo de la revisión:** a diferencia de N3 (4 competencias, 1:1 con 4 módulos), N12 tiene 6 competencias para 5 módulos — C-N12-04 se sirve de M3+M5 combinados (el despliegue real y la culminación son, por diseño de DOC-01, la misma competencia vista en dos momentos), y C-N12-06 no tiene un módulo propio: se sirve de TODA la carrera, verificada únicamente en la defensa de cierre. Esto no es una omisión — es la naturaleza real de una competencia de cierre de carrera (mismo patrón que N11 ya advirtió para su propio nivel de apertura de ET5), y se declara aquí explícitamente en vez de forzar un módulo dedicado que no aportaría nada real.
+
+### Banco de examen — ítems rotables (≥3 variantes por ítem, NNR-02)
+
+*Formato mixto, según el instrumento real de cada competencia (a diferencia de N3, íntegramente oral/numérico): ítems 1-2 son escritos con respuesta numérica verificada por ejecución real de Python antes de fijarse aquí (mismo principio de la guía §9); ítems 3-4 son escenarios de simulacro rotables sin respuesta única, evaluados contra las anclas I/U/S de RM-08/RM-02 — consistente con que N12 no es un nivel de respuesta cerrada.*
+
+**Ítem 1 (C-N12-02 · estimación bajo el framework).** "Aplica el Paso 2 del framework: calcula QPS promedio y QPS pico (factor 3×) para este escenario, declarando tus supuestos."
+- Variante A: 5,000,000 usuarios diarios, 3 peticiones cada uno → QPS promedio=**174**, pico=**521**.
+- Variante B: 20,000,000 usuarios diarios, 1 petición cada uno → QPS promedio=**231**, pico=**694**.
+- Variante C: 1,000,000 usuarios diarios, 10 peticiones cada uno → QPS promedio=**116**, pico=**347**.
+
+**Ítem 2 (C-N12-01 · componente de costo dominante).** "Dado este desglose de costos mensuales por componente, identifica el componente dominante y el costo total — y argumenta, sin calcularlo, qué decisión de arquitectura atacarías primero."
+- Variante A: cómputo=1200, almacenamiento=400, egress=5200, reentrenamiento=300 → dominante=**egress**, total=**7100**.
+- Variante B: cómputo=3000, almacenamiento=2800, egress=150, reentrenamiento=100 → dominante=**cómputo**, total=**6050**.
+- Variante C: cómputo=500, almacenamiento=500, egress=500, reentrenamiento=6000 → dominante=**reentrenamiento**, total=**7500**.
+
+**Ítem 3 (C-N12-02/C-N12-01 · system design en vivo — escenario rotable).** El examinador elige UNA variante al azar y aplica el simulacro TS-01 completo (framework + estimación + trade-offs + repregunta), nunca las tres a la vez.
+- Variante A: "Diseña un sistema de reservas de asientos para eventos en vivo, con protección contra sobreventa."
+- Variante B: "Diseña un sistema de notificaciones push para una app con 50M de usuarios, con entrega garantizada."
+- Variante C: "Diseña un sistema de detección de fraude en transacciones, con latencia de decisión menor a 200ms."
+
+**Ítem 4 (C-N12-03 · behavioral en inglés — pregunta rotable).** El examinador elige UNA variante al azar; el estudiante responde con STAR y sostiene la repregunta "how do you know?" sobre su propio Result.
+- Variante A: "Tell me about a time you had to make a technical decision with incomplete information."
+- Variante B: "Tell me about a real mistake you made and what you verifiably changed afterward."
+- Variante C: "Tell me about a time you had to defend a technical decision to someone who disagreed with you."
+
+**Nota de diseño:** los 4 ítems cubren 4 de las 6 competencias con instrumento propio en el banco; C-N12-04 y C-N12-06 se evalúan exclusivamente por proyecto/defensa (tabla de cobertura arriba), consistente con su naturaleza de cierre — no se fuerzan a un ítem de banco que no representaría fielmente cómo se demuestran en la realidad. Todos los valores numéricos de los ítems 1-2 fueron verificados por ejecución real de Python antes de fijarse aquí, siguiendo la misma disciplina que rigió cada ejercicio de M1-M5.
+
+---
+
+*Paso 8 — pendiente de aprobación por el Director.*
+
+---
+
+## 10. Paso 9a · Herencias entrantes finales (N12 es hoja terminal — sin Herencias salientes)
+
+*A diferencia de SYL-N1…N11, este paso no tiene "auditoría de coherencia desde el nivel siguiente" — no existe SYL-N13 (DOC-10 §4: N12 es hoja terminal del grafo troncal). Lo que este paso SÍ hace: consolidar las Herencias entrantes de §8 contra el contenido REAL de M1-M5 y el Capstone ya construidos, no contra la intención inicial de diseño — mismo principio que rigió el Paso 9a de SYL-N3.*
+
+| # | N12 presupuso (borrador, §8) | Verificado contra el contenido REAL construido |
+|---|---|---|
+| H-N12-01 | RAG operativo de N7, con design doc propio | M2.T1 (comparación de patrones) y M2.T5/Capstone h2 lo confirman: el patrón RAG se usa como opción de decisión, nunca re-explicado desde cero — consistente |
+| H-N12-02 | Sistema agéntico de N8 (V2), con fiabilidad medida | M2.T1 (decisión agente vs. RAG puro) y M2.T4 (seguridad, elevación explícita de N8.M5 de "por agente" a "por sistema multi-tenant") lo confirman — consistente |
+| H-N12-03 | Infraestructura de N9, con trade-offs de escalabilidad medidos | M2.T2-T3 y M3.T1-T3 lo confirman — M3.T3 en particular exige comparación DIRECTA contra lo ya medido en N9 (vLLM/Ray), no una repetición — consistente |
+| H-N12-04 | Columna vertebral local de N10, con trade-offs frente a la nube documentados | M3.T3 confirma esto como la "tercera pata" explícita de una comparación que N10 ya empezó (local vs. nube autogestionada vs. nube administrada) — consistente, y el propio Capstone (h1) parte de este sistema como punto de partida real declarado |
+| H-N12-05 | Capacidad de lectura/reproducción crítica de N11 | M5.T1 (criterio de evaluación de fuentes) y M2.T2 (lectura crítica de *The Ultra-Scale Playbook* como fuente primaria) lo confirman — consistente |
+
+**Prerrequisitos ocultos verificados — ninguno encontrado.** Ningún tema de M1-M5 introduce contenido técnico nuevo no cubierto por el alcance de DOC-10 §8-9 para N7-N11 — consistente con el principio §3.1 (síntesis y decisión, no introducción), verificado ahora contra el contenido real, no solo la intención de diseño.
+
+**Herencias salientes: no aplica.** N12 es el nodo terminal del grafo troncal (DOC-10 §4) — no existe un nivel siguiente que reciba un contrato de Herencias Declaradas. Lo que N12 "siembra" no es contenido para un nivel posterior: es la certificación institucional completa (DOC-10 6.6) al final del recorrido. Se declara esto explícitamente, en vez de dejarlo implícito, porque es una diferencia estructural real frente a los 11 niveles anteriores, no un olvido.
+
+---
+
+## 11. Paso 9b · Auditoría Adversarial Final de SYL-N12
+
+*Pendiente — mandato: demostrar que N12 no debería existir en su forma actual, mismo patrón de comité independiente que N1/N2/N3 (4 auditores sin coordinación entre sí).*
+
+## 12. Cierre
+
+*Pendiente del Informe Final de Nivel (`docs/informes/n12-informe-final-de-nivel.md`) y del veredicto de la Auditoría Adversarial (§11) antes de declarar "candidato a v1.0.0" — nunca autodeclarado (guía §12).*

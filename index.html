@@ -979,7 +979,7 @@ def __academia_run(code, stdin_list, max_steps=300000):
 const PY_PKG_DETECT=[
   {re:/\bnumpy\b/,pkg:"numpy",flag:"__academiaNumpyLoaded",warm:"import numpy"},
   {re:/\bpandas\b/,pkg:"pandas",flag:"__academiaPandasLoaded",warm:"import pandas"},
-  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn\nimport sklearn.tree\nimport sklearn.ensemble\nimport sklearn.linear_model\nimport sklearn.svm\nimport sklearn.cluster\nimport sklearn.model_selection\nimport sklearn.pipeline\nimport sklearn.preprocessing\nimport sklearn.metrics\nimport sklearn.impute"},
+  {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn\nimport sklearn.tree\nimport sklearn.ensemble\nimport sklearn.linear_model\nimport sklearn.svm\nimport sklearn.cluster\nimport sklearn.model_selection\nimport sklearn.pipeline\nimport sklearn.preprocessing\nimport sklearn.metrics\nimport sklearn.impute\nimport sklearn.compose"},
   {re:/\bmatplotlib\b/,pkg:"matplotlib",flag:"__academiaMatplotlibLoaded",warm:'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot'},
 ];
 async function runScriptedPy(code,stdin){

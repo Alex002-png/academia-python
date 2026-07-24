@@ -262,6 +262,7 @@
   <button data-v="clases">Clases</button>
   <button data-v="terminal">Terminal</button>
   <button data-v="examen">Examen</button>
+  <button data-v="examennivel">Examen de nivel</button>
   <button data-v="repaso">Repaso</button>
   <button data-v="ruta">Ruta</button>
 </nav>
@@ -416,6 +417,7 @@
 
 <!-- ======== EXAMEN ======== -->
 <section class="view" id="v-examen"><div id="examenBox"></div></section>
+<section class="view" id="v-examennivel"><div id="examenNivelBox"></div></section>
 
 <!-- ======== REPASO ======== -->
 <section class="view" id="v-repaso">
@@ -27623,6 +27625,7 @@ function go(v){
   window.scrollTo({top:0});
   if(v==="clases")renderClases();
   if(v==="examen")renderExamen();
+  if(v==="examennivel")renderExamenNivel();
   if(v==="ruta")renderRuta();
 }
 tabs.forEach(b=>b.addEventListener("click",()=>go(b.dataset.v)));
@@ -28699,6 +28702,100 @@ const _renderHome=renderHome;renderHome=function(){_renderHome();renderGam()};
 setInterval(()=>{if(!document.hidden){S.mins=(S.mins||0)+0.5;localStorage.setItem(KEY,JSON.stringify(S));
   const el=document.getElementById("kTime");
   if(el){const m=Math.round(S.mins);el.textContent=m>=60?Math.floor(m/60)+" h "+(m%60)+" min":m+" min"}}},30000);
+/* ===================== EXAMEN DE NIVEL (temporizador · 17/20 · repeticion) ===================== */
+if(!S.examenNivel)S.examenNivel={};
+const EXAMENES_NIVEL={
+ 3:{nivel:3,titulo:"Matematica para IA",minutos:40,total:20,aprobar:17,preguntas:[
+  {q:"En la descomposicion A = UΣVᵀ, ¿que son los valores singulares (la diagonal de Σ)?",o:["Los autovalores de A","Las raices cuadradas de los autovalores de AᵀA","Los elementos de la diagonal de A","Siempre iguales a 1"],a:1,e:"Los valores singulares son σᵢ = √λᵢ, con λᵢ los autovalores de AᵀA (siempre ≥ 0). Por eso la SVD existe para cualquier matriz."},
+  {q:"Para comprimir una matriz conservando la mejor aproximacion de rango k, ¿que haces?",o:["Te quedas con las k columnas mas grandes","Truncas la SVD a los k mayores valores singulares (Eckart-Young)","Eliminas las filas con ceros","Aplicas Gram-Schmidt k veces"],a:1,e:"Teorema de Eckart-Young: la mejor aproximacion de rango k (norma de Frobenius/espectral) es la SVD truncada a los k mayores σᵢ. Es la base de PCA y de la compresion."},
+  {q:"La factorizacion QR de A produce una Q con una propiedad clave. ¿Cual?",o:["Q es diagonal","Q tiene columnas ortonormales (QᵀQ = I)","Q es triangular superior","Q es la inversa de A"],a:1,e:"Q tiene columnas ortonormales (base ortonormal del espacio columna, via Gram-Schmidt); R es triangular superior. QR estabiliza los minimos cuadrados."},
+  {q:"Si una matriz es simetrica (A = Aᵀ), ¿que garantiza el teorema espectral?",o:["Que no tiene inversa","Autovalores reales y autovectores ortogonales","Que todos sus autovalores son positivos","Que es diagonal"],a:1,e:"Toda matriz simetrica real tiene autovalores reales y una base ortonormal de autovectores. Que sean positivos es 'definida positiva', un caso particular."},
+  {q:"El gradiente ∇f de una funcion en un punto apunta en la direccion de...",o:["mayor descenso","mayor ascenso (crecimiento mas rapido)","los minimos globales","la curvatura cero"],a:1,e:"El gradiente apunta al ascenso mas pronunciado; por eso el descenso de gradiente va en −∇f. Su magnitud es la pendiente en esa direccion."},
+  {q:"En un punto con gradiente cero, ¿que indica que sea un minimo local?",o:["El Hessiano es definido positivo (autovalores > 0)","El gradiente es negativo","La funcion vale cero","El Hessiano es cero"],a:0,e:"Gradiente cero + Hessiano definido positivo ⇒ minimo local. Con autovalores de signos mixtos es un punto de silla."},
+  {q:"¿Por que es tan deseable que una funcion a minimizar sea convexa?",o:["Porque se calcula mas rapido","Porque cualquier minimo local es tambien el global","Porque no necesita derivadas","Porque siempre vale cero en el minimo"],a:1,e:"En una funcion convexa no hay minimos locales trampa: todo minimo local es global. Por eso la optimizacion convexa (Ridge, SVM) tiene solucion garantizada."},
+  {q:"La regla de la cadena, base del backpropagation, dice que la derivada de f(g(x)) es...",o:["f'(x)·g'(x)","f'(g(x))·g'(x)","f'(g'(x))","f(x)·g(x)"],a:1,e:"d/dx f(g(x)) = f'(g(x))·g'(x): se multiplican las derivadas locales en cadena. Backprop es exactamente esto aplicado nodo a nodo."},
+  {q:"Lanzas una moneda n veces y salen k caras. La MLE (maxima verosimilitud) del sesgo p es...",o:["1/2 siempre","k/n (la proporcion muestral)","k·n","(k+1)/(n+2)"],a:1,e:"La MLE de una Bernoulli/Binomial es la proporcion k/n. La opcion (k+1)/(n+2) es la media posterior con prior uniforme — bayesiana, no MLE."},
+  {q:"Una distribucion de Poisson modela conteos de eventos raros. ¿Que relacion cumplen su media y su varianza?",o:["media = 2·varianza","media = varianza = λ","varianza = media al cuadrado","no tienen relacion fija"],a:1,e:"En Poisson, media = varianza = λ. Si en datos reales la varianza supera a la media hay sobredispersion y Poisson se queda corta."},
+  {q:"Una enfermedad afecta al 0.1% de la poblacion. Un test tiene 99% de sensibilidad y 5% de falsos positivos. Si das positivo, la probabilidad real de estar enfermo es...",o:["99%","alrededor del 2% (el descuido de la tasa base)","95%","50%"],a:1,e:"Con una enfermedad tan rara, la mayoria de positivos son falsos. P(enfermo|+) ≈ 0.001·0.99 / (0.001·0.99 + 0.999·0.05) ≈ 2%. Ignorar la tasa base (el prior) es el error clasico."},
+  {q:"Con un prior Beta(α,β) sobre el sesgo de una moneda y observas h caras y t cruces, el posterior es...",o:["Beta(α+t, β+h)","Beta(α+h, β+t)","Normal(h, t)","Beta(α·h, β·t)"],a:1,e:"Conjugacion Beta-Binomial: el posterior es Beta(α+h, β+t). Actualizar es sumar exitos a α y fracasos a β, como anadir pseudo-conteos."},
+  {q:"¿Cuando coincide la estimacion MAP (maximo a posteriori) con la MLE?",o:["Nunca","Cuando el prior es uniforme (plano)","Cuando hay pocos datos","Cuando el prior es muy fuerte"],a:1,e:"Con prior uniforme, maximizar el posterior equivale a maximizar la verosimilitud: MAP = MLE. Un prior informativo separa ambas."},
+  {q:"¿Que puedes afirmar de un intervalo CREIBLE bayesiano del 95%, que NO puedes de un intervalo de confianza frecuentista?",o:["Que es mas estrecho siempre","Que hay 95% de probabilidad de que el parametro este en ese intervalo","Que no depende de los datos","Que garantiza el valor exacto"],a:1,e:"El intervalo creible SI permite decir 'hay 95% de probabilidad de que θ este aqui'. El de confianza no: se refiere a la frecuencia del procedimiento, no a este intervalo concreto."},
+  {q:"La regresion Ridge (minimos cuadrados + λ‖w‖²) equivale a una estimacion MAP bayesiana con ¿que prior sobre los pesos?",o:["Prior uniforme","Prior gaussiano centrado en cero","Prior de Poisson","Sin prior"],a:1,e:"Ridge = MAP con prior gaussiano N(0,σ²) sobre los pesos: el termino λ‖w‖² es el log del prior. λ codifica la razon de precisiones."},
+  {q:"¿Por que la distribucion predictiva posterior bayesiana suele ser mas ANCHA que la prediccion plug-in (usar solo la estimacion puntual)?",o:["Por un error de calculo","Porque suma la incertidumbre del parametro a la del dato","Porque usa menos datos","Nunca es mas ancha"],a:1,e:"La predictiva integra sobre la incertidumbre del parametro ademas de la del dato: dobla la incertidumbre. La plug-in la ignora y subestima el riesgo de cola."},
+  {q:"En regresion lineal bayesiana, ¿que le pasa a la incertidumbre de la prediccion lejos de los datos observados?",o:["Se mantiene constante","Crece (las bandas se abren al extrapolar)","Se hace cero","Se vuelve negativa"],a:1,e:"A diferencia de la recta frecuentista (igual de segura en todas partes), el posterior bayesiano abre las bandas donde no hay datos. Sabe cuando no sabe."},
+  {q:"Al combinar un prior Normal con datos Normales (varianza conocida), la media posterior es un promedio ponderado. ¿Por que peso?",o:["Por la media","Por la precision (1/varianza) de cada fuente","A partes iguales siempre","Por el numero de decimales"],a:1,e:"La media posterior pondera prior y datos por su PRECISION (1/varianza): la fuente mas precisa manda. Y las precisiones se SUMAN, asi que el posterior es mas preciso que ambos."},
+  {q:"Para variables aleatorias cualesquiera (incluso dependientes), ¿que propiedad de la esperanza SIEMPRE se cumple?",o:["E[XY] = E[X]E[Y]","E[X+Y] = E[X] + E[Y]","Var[X+Y] = Var[X] + Var[Y]","E[X²] = E[X]²"],a:1,e:"La esperanza es lineal SIEMPRE: E[X+Y]=E[X]+E[Y], sin importar dependencia. Las otras requieren INDEPENDENCIA."},
+  {q:"Minimizas una funcion convexa con descenso de gradiente. Si la tasa de aprendizaje es DEMASIADO grande, ¿que ocurre tipicamente?",o:["Converge mas rapido siempre","Oscila o diverge (se pasa del minimo)","Encuentra un minimo local distinto","No cambia nada"],a:1,e:"Una tasa demasiado grande hace que el paso se pase del minimo y oscile o diverja; demasiado pequena, converge lento. Por eso se usan schedules que decaen."}
+ ]}
+};
+let _examTimer=null,_examEstado=null;
+function nivelExamDisponible(){return Object.keys(EXAMENES_NIVEL).map(Number).sort((a,b)=>a-b);}
+function _examShuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function _examFmt(s){s=Math.max(0,s);const m=Math.floor(s/60),ss=s%60;return (m<10?"0":"")+m+":"+(ss<10?"0":"")+ss;}
+function renderExamenNivel(){
+  if(_examTimer){clearInterval(_examTimer);_examTimer=null;}_examEstado=null;
+  const box=document.getElementById("examenNivelBox");if(!box)return;
+  let h='<div class="card"><p class="eyebrow">Examen de nivel</p><h2>Certifica cada nivel</h2>'+
+   '<p class="small muted" style="margin:4px 0 0">Un examen cronometrado por nivel, al estandar de la malla mundial. <strong>Nota minima 17/20</strong> para aprobar; si no llegas, se repite con las preguntas barajadas. Sin Terminal: aqui se demuestra lo que ya dominas.</p></div>';
+  nivelExamDisponible().forEach(n=>{
+    const ex=EXAMENES_NIVEL[n];const st=S.examenNivel[n]||{best:null,attempts:0,passed:false};
+    const chip=st.passed?'<span class="chip good">APROBADO · '+st.best+'/'+ex.total+'</span>':(st.best!==null?'<span class="chip bad">Mejor: '+st.best+'/'+ex.total+' — repite</span>':'<span class="chip">Sin intentos</span>');
+    h+='<div class="card"><div class="row" style="justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
+     '<div><strong>Nivel '+n+' · '+ex.titulo+'</strong><br><span class="small muted">'+ex.total+' preguntas · '+ex.minutos+' min · aprobar '+ex.aprobar+'/'+ex.total+(st.attempts?' · '+st.attempts+' intento(s)':'')+'</span></div>'+
+     '<div>'+chip+' <button class="btn" onclick="iniciarExamenNivel('+n+')">'+(st.passed?'Repetir':'Empezar examen')+'</button></div></div></div>';
+  });
+  box.innerHTML=h;
+}
+function iniciarExamenNivel(n){
+  const ex=EXAMENES_NIVEL[n];if(!ex)return;
+  if(_examTimer){clearInterval(_examTimer);_examTimer=null;}
+  _examEstado={n:n,orden:_examShuffle(ex.preguntas.map((q,i)=>i)),restante:ex.minutos*60,entregado:false};
+  _pintarExamenNivel();
+  _examTimer=setInterval(_tickExamenNivel,1000);
+}
+function _pintarExamenNivel(){
+  const box=document.getElementById("examenNivelBox");const ex=EXAMENES_NIVEL[_examEstado.n];
+  let h='<div class="card" style="position:sticky;top:0;z-index:5"><div class="row" style="justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
+   '<div><p class="eyebrow" style="margin:0">Examen · Nivel '+_examEstado.n+' — '+ex.titulo+'</p><span class="small muted">Aprobar: '+ex.aprobar+'/'+ex.total+' · responde las '+ex.total+'</span></div>'+
+   '<div id="examTimer" class="chip good" style="font-size:1.15rem;font-weight:800">⏱ '+_examFmt(_examEstado.restante)+'</div></div></div>';
+  h+='<div class="card">';
+  _examEstado.orden.forEach((qi,pos)=>{const q=ex.preguntas[qi];
+    h+='<div class="q" id="eq'+pos+'"><p class="enun"><span class="num" style="color:var(--blue)">'+String(pos+1).padStart(2,"0")+'</span> · '+q.q+'</p>'+
+      q.o.map((o,j)=>'<label><input type="radio" name="eq'+pos+'" value="'+j+'"><span>'+o+'</span></label>').join('')+
+      '<div class="fb"></div></div>';
+  });
+  h+='<button class="btn" style="margin-top:14px" onclick="entregarExamenNivel(false)">Entregar examen</button></div>';
+  h+='<div class="card" id="examResult" style="display:none"></div>';
+  box.innerHTML=h;window.scrollTo({top:0});
+}
+function _tickExamenNivel(){
+  if(!_examEstado||_examEstado.entregado)return;
+  _examEstado.restante--;
+  const el=document.getElementById("examTimer");
+  if(el){el.textContent="⏱ "+_examFmt(_examEstado.restante);if(_examEstado.restante<=60){el.classList.remove("good");el.classList.add("bad");}}
+  if(_examEstado.restante<=0)entregarExamenNivel(true);
+}
+function entregarExamenNivel(porTiempo){
+  if(!_examEstado||_examEstado.entregado)return;
+  _examEstado.entregado=true;
+  if(_examTimer){clearInterval(_examTimer);_examTimer=null;}
+  const ex=EXAMENES_NIVEL[_examEstado.n];let ok=0;
+  _examEstado.orden.forEach((qi,pos)=>{const q=ex.preguntas[qi];const el=document.getElementById("eq"+pos);if(!el)return;
+    const sel=el.querySelector("input:checked");el.classList.remove("ok","ko");const fb=el.querySelector(".fb");
+    if(!sel){el.classList.add("ko");fb.textContent="Sin responder. "+q.e;return;}
+    if(+sel.value===q.a){ok++;el.classList.add("ok");fb.textContent="Correcto. "+q.e;}
+    else{el.classList.add("ko");fb.textContent="Incorrecto — era: “"+q.o[q.a]+"”. "+q.e;}
+  });
+  const n=_examEstado.n,passed=ok>=ex.aprobar;
+  const prev=S.examenNivel[n]||{best:null,attempts:0,passed:false};
+  S.examenNivel[n]={best:(prev.best===null?ok:Math.max(prev.best,ok)),attempts:prev.attempts+1,passed:prev.passed||passed};
+  save();if(typeof renderHome==="function")renderHome();
+  const r=document.getElementById("examResult");if(!r)return;r.style.display="block";
+  r.innerHTML='<p class="eyebrow">Resultado · Nivel '+n+'</p><h2 style="color:'+(passed?"var(--good)":"var(--bad)")+'">'+ok+'/'+ex.total+' — '+(passed?"APROBADO":"NO APROBADO")+'</h2>'+
+   '<p class="small muted">'+(porTiempo?"⏱ Se acabo el tiempo. ":"")+(passed?("Aprobaste el examen del Nivel "+n+" con "+ok+"/"+ex.total+". Nivel certificado por el corrector."):("Necesitas "+ex.aprobar+"/"+ex.total+". Repasa las explicaciones de arriba y las flashcards de esos temas, y repite el examen — las preguntas se barajan cada intento."))+'</p>'+
+   (passed?'':'<button class="btn" style="margin-top:10px" onclick="iniciarExamenNivel('+n+')">Repetir examen</button>');
+  r.scrollIntoView({behavior:"smooth"});
+}
 renderHome();renderWeak();renderFC();renderRuta();renderCloudForm();cloudPull();
 </script>
 </body>

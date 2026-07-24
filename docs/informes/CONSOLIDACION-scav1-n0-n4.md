@@ -52,3 +52,19 @@ Tras la Ola 1 (correcciones + consolidación), el Director pidió ir al límite:
 **Métrica actualizada del consolidado:** N0 141 ids · N2 41 · N3 397 · N4 273. **2981 ids en los 13 niveles, 0 duplicados**, `node --check` OK. Los huecos de nivel mundial que la Ola 1 había *documentado* (SVD/correlación/MLE en N3; ROC-AUC/Lasso/SGD en N4; SQL injection/pooling/rate-limit en N2) quedan ahora **construidos y verificados**, no solo recomendados.
 
 **Sigue pendiente de decisión del Director:** fusionar `staging/scav1-n0-n4` a release/main y desplegar.
+
+---
+
+## OLA 3 — 2ª capa de temas de nivel mundial (N2/N3/N4)
+
+Tercera pasada: los huecos "de 2ª capa" que la Ola 2 había documentado se **construyeron y verificaron**. **8 temas/labs nuevos** (13 días + 3 labs), cada uno construido y autoverificado por un agente dedicado, re-integrado y re-verificado por mí (eval limpio, 0 colisiones, node --check, verificadores re-ejecutados, y **KNN confirmado en el Pyodide REAL**).
+
+| Nivel | Temas nuevos | Verificación |
+|---|---|---|
+| **N3** | Hessiano y convexidad (2d) · Ortogonalidad/Gram-Schmidt/QR/espacio nulo (2d) | numpy 1.26.4 exacto; verify_qr re-ejecutado 41 PASS; spot-checks manuales |
+| **N4** | KNN (2d) · PolynomialFeatures (2d) · GridSearchCV + curva PR (2d) | agentes cross-verificaron en venv sklearn **1.4.2 exacto**; KNN confirmado en Pyodide REAL ([0]/[1]) |
+| **N2** | Aislamiento de transacción · Observabilidad · Idempotencia (3 labs reales) | aislamiento verificado contra **PostgreSQL 16 REAL**; observabilidad e idempotencia con demos ejecutados en python |
+
+**FIX CRÍTICO DE MOTOR (solo detectable en el runtime real):** los ejercicios de KNN importan `sklearn.neighbors`, que NO estaba en el warm-up de sklearn (línea 982). Medido en el Pyodide real: importar `sklearn.neighbors` en frío bajo el tracer cuesta **292 702 pasos (97,6% del límite de 300 000)** — sumado al código del ejercicio habría disparado un falso "bucle infinito". Con el warm-up (import fuera del tracer) baja a **6 pasos**. Bug que ni Python local ni la réplica del tracer podían atrapar.
+
+**Métrica final del consolidado:** N2 44 ids · N3 423 ids · N4 296 ids. **3033 ids en los 13 niveles, 0 duplicados**, `node --check` OK. Con esto, **las dos capas de huecos de nivel mundial (N2/N3/N4) están construidas y verificadas**, no solo documentadas.

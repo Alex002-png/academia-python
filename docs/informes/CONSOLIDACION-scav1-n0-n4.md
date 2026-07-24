@@ -68,3 +68,21 @@ Tercera pasada: los huecos "de 2ª capa" que la Ola 2 había documentado se **co
 **FIX CRÍTICO DE MOTOR (solo detectable en el runtime real):** los ejercicios de KNN importan `sklearn.neighbors`, que NO estaba en el warm-up de sklearn (línea 982). Medido en el Pyodide real: importar `sklearn.neighbors` en frío bajo el tracer cuesta **292 702 pasos (97,6% del límite de 300 000)** — sumado al código del ejercicio habría disparado un falso "bucle infinito". Con el warm-up (import fuera del tracer) baja a **6 pasos**. Bug que ni Python local ni la réplica del tracer podían atrapar.
 
 **Métrica final del consolidado:** N2 44 ids · N3 423 ids · N4 296 ids. **3033 ids en los 13 niveles, 0 duplicados**, `node --check` OK. Con esto, **las dos capas de huecos de nivel mundial (N2/N3/N4) están construidas y verificadas**, no solo documentadas.
+
+---
+
+## 3ª CAPA — Cierre de los huecos remanentes (N2/N3/N4)
+
+Cuarta pasada: los últimos huecos "de 3ª capa" que la Ola 3 había documentado se **construyeron y verificaron**, cerrando la lista de mejoras de nivel mundial pendientes. **5 temas/labs nuevos** (8 días-objeto), cada uno construido y autoverificado por un agente dedicado (orquestados en un solo workflow), re-integrado y re-verificado por mí (eval limpio, 0 colisiones, `node --check`, verificadores re-ejecutados, y **el tema sklearn confirmado en el Pyodide REAL con la versión 1.4.2 del Campus**).
+
+| Nivel | Temas/labs nuevos | Verificación |
+|---|---|---|
+| **N2** | Problema N+1, índices y paginación (Lab 27c) · HTTPS/TLS y revocación de JWT (Lab 22c) | N+1 (1+N→1 con JOIN), SEQ SCAN→INDEX y OFFSET→keyset demostrados en **sqlite3 real** con EXPLAIN QUERY PLAN; denylist de `jti` demostrada con **pyjwt real** (token revocado sigue firmado-válido pero rechazado por estado) |
+| **N3** | Distribución de Poisson (Día 45b) · Densidad continua / PDF (Día 45c) | PMF de Poisson, límite binomial→Poisson, área bajo la normal (68-95-99.7) por integración numérica — 10/10 contra **numpy 1.26.4 real**; sin `np.trapz` (robustez cross-version) |
+| **N4** | Datos desbalanceados: class_weight y resampling (Día 62g/62h) · Schedules de learning-rate (Día 39d/39e) | recall de la clase rara 0.7333→0.9333 **confirmado en Pyodide real (sklearn 1.4.2)**, **29 305 pasos (9,8% del límite)**; schedules step/exp/1-t en numpy puro, 147 pasos |
+
+**Disciplina de motor aplicada:** el tema de desbalanceados usa solo submódulos ya presentes en el warm-up (`linear_model`, `model_selection`, `metrics`) y hace el resampling con **numpy puro** (no `sklearn.utils`, que no está en el warm-up) — por eso `warmupNeeded=ninguno` en los 5 temas. El test en Pyodide real (misma versión 1.4.2 del Campus) reprodujo los valores de recall **exactos** y midió el costo bajo el tracer, lo único que Python local no puede medir.
+
+**Métrica final del consolidado:** N0 141 · N1 549 · N2 46 · N3 435 · N4 311 ids. **3062 ids en los 13 niveles, 0 duplicados**, `node --check` OK. **N0-N4: 358 días, 1482 ids, 47 laboratorios reales, 282 pasos de laboratorio.** Con esto, **las tres capas de huecos de nivel mundial (N2/N3/N4) están cerradas** — no queda ningún hueco documentado sin construir.
+
+**Sigue pendiente de decisión del Director:** fusionar `staging/scav1-n0-n4` a release/main y desplegar.

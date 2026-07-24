@@ -471,7 +471,7 @@
    MINI-INTÉRPRETE PYTHON (subconjunto Nivel 0) — corre en JS
    ============================================================ */
 const KWS=new Set(["if","elif","else","while","True","False","None","and","or","not","break","continue","pass"]);
-const FUTURE={"for":"Nivel 1","in":"Nivel 1","def":"Nivel 1","return":"Nivel 1","try":"Nivel 1","except":"Nivel 1",
+const FUTURE={"for":"tema de bucles for, más adelante en este mismo nivel","in":"tema de bucles for, más adelante en este mismo nivel","def":"tema de funciones, más adelante en este mismo nivel","return":"tema de funciones, más adelante en este mismo nivel","try":"Nivel 1","except":"Nivel 1",
   "import":"Nivel 2","from":"Nivel 2","with":"Nivel 2","lambda":"Nivel 2","class":"Nivel 3","yield":"Nivel 4","async":"Nivel 5","await":"Nivel 5"};
 function PyErr(type,msg,line){return{py:1,type,msg,line}}
 
@@ -1615,6 +1615,55 @@ const LEVEL0=[
     const t1=norm(o[1]);
     if(!t1.includes("no primo"))return"Con 8 (que no es primo) tu programa debe indicarlo como no primo.";
     return true}}},
+{id:"d7c",n:"Día 14b",t:"El bucle for y range: repetir sobre una secuencia",
+ intro:"Ayer el while repetía MIENTRAS una condición fuera cierta. Pero la forma de repetir más común en Python es otra: 'haz esto PARA CADA elemento de esta colección'. Eso es el bucle for. Y su compañero range() fabrica secuencias de números al vuelo, para cuando quieres repetir un número exacto de veces. Este es el bucle que vas a ver en TODOS los programas de aquí en adelante — desde el primer día de N1. Domínalo hoy, desde cero.",
+ intuit:{code:'for i in range(3):\n    print(i)',py:false,
+  q:"Sin ejecutar: range(3) genera los números 0, 1, 2 (empieza en 0 y NO llega a 3). El for ejecuta el bloque una vez por cada número, poniéndolo en 'i'. ¿Qué imprime — 0 1 2, o 1 2 3?",
+  req:["0","1","2"],out:"0\n1\n2",
+  e:"0, 1, 2 (cada uno en su línea). range(3) produce 0, 1, 2 — empieza en 0 y se detiene ANTES de 3, así que son exactamente 3 valores. El for toma cada uno, lo guarda en 'i', y ejecuta el bloque. Es 'repite 3 veces, y en cada vuelta i vale 0, luego 1, luego 2'."},
+ mcq:[
+  {q:"¿Cuándo usas for y cuándo while?",o:["for cuando sabes SOBRE QUÉ iterar (una secuencia, o un número exacto de veces con range); while cuando repites MIENTRAS una condición sea cierta, sin saber cuántas vueltas serán","for es siempre mejor que while","while solo sirve para números y for solo para texto","Son idénticos, se elige al azar"],a:0,e:"for recorre una colección conocida ('para cada elemento de...') o repite N veces con range(N). while repite hasta que una condición deje de cumplirse, cuando no sabes de antemano cuántas vueltas hará (ej. pedir input hasta que el usuario escriba 'fin'). Elegir el correcto hace el código más claro."},
+  {q:"range(2, 7) genera...",o:["2, 3, 4, 5, 6 — empieza en 2 (incluido) y se detiene ANTES de 7 (excluido)","2, 3, 4, 5, 6, 7 — incluye ambos extremos","2 y 7 solamente","0, 1, 2, 3, 4, 5, 6, 7"],a:0,e:"range(a, b) va de a (incluido) hasta b (EXCLUIDO): 2, 3, 4, 5, 6. La exclusión del extremo derecho es la misma regla que el slicing de strings — es la fuente del clásico error 'off-by-one' de todo principiante. range(n) a secas equivale a range(0, n): 0..n-1."}],
+ ing:"El for es, con diferencia, el bucle más usado en Python real: recorrer las líneas de un archivo, cada producto de un carrito, cada carácter de un texto, cada resultado de una consulta. break (salir antes de tiempo, apenas encontraste lo que buscabas) y continue (saltar esta vuelta y seguir con la siguiente) son las dos válvulas que lo hacen preciso. Desde el primer tema de N1 en adelante, el for está en cada programa.",
+ errores:["El error 'off-by-one': olvidar que range(n) llega hasta n-1, no hasta n — range(1, 10) NO incluye el 10","Usar while con un contador manual (i = 0; while i < n: ...; i += 1) cuando un simple for i in range(n) hace lo mismo sin riesgo de olvidar el i += 1 (bucle infinito)","Confundir break (sale del bucle por completo) con continue (solo salta a la siguiente vuelta)"],
+ mental:{jr:"“Para repetir algo N veces, monto un while con un contador que voy sumando a mano.”",sr:"“Uso for i in range(N) para repetir N veces sin contador manual, y for x in coleccion para recorrer cada elemento; break para salir en cuanto encuentro lo que busco, continue para saltar los casos que no me interesan.”",err:"Un while con contador manual donde se olvida el i += 1 y el programa se cuelga en un bucle infinito — algo que un for i in range(n) hace imposible por construcción."},
+ theory:[
+  ["for: repetir para cada elemento",T('<code>for variable in secuencia:</code> ejecuta su bloque una vez por cada elemento de la secuencia, poniendo cada uno en la variable. Funciona sobre cualquier colección — por ahora, un string (cada carácter) o un range (cada número).'),
+   'for letra in "abc":\n    print(letra)      # a, luego b, luego c'],
+  ["range: fabricar secuencias de números",T('<code>range(n)</code> genera 0, 1, …, n-1 (n números, empezando en 0). <code>range(a, b)</code> va de a hasta b-1. <code>range(a, b, paso)</code> salta de "paso" en "paso". Siempre EXCLUYE el extremo derecho — la misma regla que el slicing.'),
+   'for i in range(3):\n    print(i)            # 0, 1, 2\nprint(list(range(2, 7)))    # [2, 3, 4, 5, 6]\nprint(list(range(0, 10, 2))) # [0, 2, 4, 6, 8]'],
+  ["Repetir N veces y acumular",T('El patrón más común: repetir un número exacto de veces con <code>range</code>, acumulando un resultado. Si no necesitas el número de la vuelta, la convención es usar <code>_</code> como nombre ("no me importa el valor").'),
+   'total = 0\nfor n in range(1, 6):     # 1, 2, 3, 4, 5\n    total = total + n\nprint(total)              # 15\n\npotencia = 1\nfor _ in range(4):        # repite 4 veces\n    potencia = potencia * 2\nprint(potencia)           # 16 (2 elevado a 4)'],
+  ["🧠 Truco de experto: break y continue, las dos válvulas del bucle",T('<code>break</code> ABANDONA el bucle por completo en el acto — úsalo apenas encuentres lo que buscabas, para no seguir recorriendo en vano. <code>continue</code> SALTA el resto de esta vuelta y pasa directo a la siguiente — úsalo para descartar los casos que no te interesan sin anidar más ifs. Es la diferencia entre "ya terminé, me voy" y "este no, siguiente". Un buscador eficiente hace break en cuanto acierta.'),
+   'for n in range(1, 100):\n    if n * n > 50:\n        print(n)          # 8 (8*8=64>50)\n        break             # encontrado: salgo, no sigo hasta 99\n\nfor n in range(1, 6):\n    if n % 2 == 0:\n        continue          # salta los pares\n    print(n)              # 1, 3, 5'],
+ ],
+ ex:[
+  {id:"d7ce1",py:true,t:"Ejercicio 1 · Repetir N veces con range",
+   d:'Usa <code>for</code> con <code>range</code> para imprimir los números del 1 al 5 (inclusive), uno por línea. Cuidado con el off-by-one: range no incluye su extremo derecho.',
+   starter:'# imprime 1, 2, 3, 4, 5 con for + range\n',runs:[[]],
+   check:(o,c)=>{if(!/for\b/.test(c)||!/range\s*\(/.test(c))return"Usa for ... in range(...).";const exp="1\n2\n3\n4\n5";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])+"\n(pista: para llegar al 5, range debe ir hasta 6)"},
+   hints:["for n in range(1, 6):\n    print(n)","range(1, 6) da 1,2,3,4,5 — el 6 queda EXCLUIDO."]},
+  {id:"d7ce2",py:true,t:"Ejercicio 2 · Acumular una suma",
+   d:'Suma todos los números del 1 al 100 (inclusive) con un <code>for</code> y <code>range</code>, y imprime el total. (La respuesta famosa es 5050.)',
+   starter:'total = 0\n# recorre del 1 al 100 acumulando en total\n\nprint(total)',runs:[[]],
+   check:(o,c)=>{if(!/for\b/.test(c)||!/range\s*\(/.test(c))return"Usa for ... in range(...) para recorrer del 1 al 100.";return norm(o[0])==="5050"?true:"Esperaba: 5050\nObtuve:\n"+norm(o[0])},
+   hints:["for n in range(1, 101):\n    total = total + n","range(1, 101) para incluir el 100."]},
+  {id:"d7ce3",py:true,t:"Ejercicio 3 · Recorrer un texto letra por letra",
+   d:'Cuenta cuántas veces aparece la letra <code>"a"</code> en <code>"cazadora amarilla"</code>, recorriéndolo con un <code>for</code> letra por letra (sin usar .count()). Imprime el número.',
+   starter:'texto = "cazadora amarilla"\ncuenta = 0\n# recorre texto y cuenta las "a"\n\nprint(cuenta)',runs:[[]],
+   check:(o,c)=>{if(!/for\b/.test(c))return"Recorre el texto con un for letra por letra.";if(/\.count\s*\(/.test(c))return"Este ejercicio es para practicar el for -- no uses .count().";return norm(o[0])==="6"?true:"Esperaba: 6\nObtuve:\n"+norm(o[0])},
+   hints:["for letra in texto:\n    if letra == \"a\":\n        cuenta = cuenta + 1","cazadora amarilla: caz(a)dor(a)... 'cazadora' tiene 3 'a' y 'amarilla' tiene 3 'a' -> 6 en total."]},
+  {id:"d7ce4",py:true,t:"Ejercicio 4 · break: salir en cuanto encuentras",
+   d:'Encuentra el primer número entre 1 y 100 cuyo cuadrado supere 200, e imprímelo. Usa <code>break</code> para salir del bucle apenas lo encuentres (no sigas recorriendo).',
+   starter:'# recorre del 1 en adelante; en cuanto n*n > 200, imprime n y sal con break\n',runs:[[]],
+   check:(o,c)=>{if(!/break/.test(c))return"Usa break para salir del bucle apenas encuentres el número.";return norm(o[0])==="15"?true:"Esperaba: 15\nObtuve:\n"+norm(o[0])+"\n(14*14=196 no supera 200; 15*15=225 sí)"},
+   hints:["for n in range(1, 101):\n    if n * n > 200:\n        print(n)\n        break","14²=196 (no basta), 15²=225 (primero en superar 200)."]},
+ ],
+ retoFinal:{id:"d7cx",py:true,t:"Desafío final · inédito — continue para saltar, y el off-by-one de range",
+  d:'Predice, ANTES de ejecutar: sumamos solo los números IMPARES del 1 al 10 usando <code>continue</code> para saltar los pares. Y range(1, 10) — ¿incluye el 10 o no? Ejecuta y confirma tu predicción del total.',
+  starter:'suma = 0\nfor n in range(1, 10):     # ¿hasta dónde llega?\n    if n % 2 == 0:\n        continue            # salta los pares\n    suma = suma + n\nprint(suma)',runs:[[]],
+  hints:["range(1, 10) llega hasta el 9 (el 10 queda EXCLUIDO). Los impares en 1..9 son 1, 3, 5, 7, 9.","continue salta el resto de la vuelta cuando n es par, así que solo se suman los impares: 1+3+5+7+9 = 25."],
+  check:(o,c)=>{const exp="25";return norm(o[0])===exp?true:"Esperaba: 25\nObtuve:\n"+norm(o[0])+"\n(range(1,10) NO incluye 10; impares 1+3+5+7+9=25)"}}},
 {id:"d8",n:"Día 15",t:"Errores y tracebacks · Parte 1: fundamentos",
  intro:"Los programadores mediocres temen a los errores; los ingenieros los leen como mapas. Hoy transformas tu relación con los tracebacks: de enemigo que asusta a informante que te dice exactamente dónde mirar. Ya depuraste un 404 real conmigo — esto te va a sonar familiar.",
  intuit:{code:'print(int("12.5"))',

@@ -27608,7 +27608,7 @@ function dayUnlocked(i){
 function projectDone(){return!!S.ex["d9p"]}
 function practicaDone(){return PRACTICA.every(p=>S.ex[p.id])}
 function quizPassed(){return S.quiz.best!==null&&S.quiz.best>=85}
-function levelApproved(){return projectDone()&&practicaDone()&&quizPassed()}
+function levelApproved(){return projectDone()&&practicaDone()&&quizPassed()&&nivelExamAprobado(0)}
 
 /* ============================================================
    UI
@@ -28267,6 +28267,7 @@ function veredictoHTML(){
      '<p class="small">Queda una sola puerta: la <strong>defensa oral</strong> (Fase 8 · Dominio). Llévale tu calculadora a tu tutor en el chat — te preguntará por qué cada línea está donde está, hará el code review y verificará las 4 preguntas del dominio. Si apruebas, te dará el <strong>código del sello</strong> para tu certificado (Inicio → Certificados) y añadirá el Nivel 1 completo a esta app.</p>';
   const f=[];
   if(!quizPassed())f.push("examen teórico ≥ 85% (regla 8.5/10)");
+  if(!nivelExamAprobado(0))f.push("el Examen de Nivel cronometrado (17/20)");
   if(!practicaDone())f.push("los 3 prácticos");
   return'<p class="eyebrow">Veredicto</p><h2 style="color:var(--warn)">En curso</h2><p class="small muted">Falta: '+f.join(" · ")+".</p>";
 }
@@ -28730,13 +28731,14 @@ const EXAMENES_NIVEL={
 };
 let _examTimer=null,_examEstado=null;
 function nivelExamDisponible(){return Object.keys(EXAMENES_NIVEL).map(Number).sort((a,b)=>a-b);}
+function nivelExamAprobado(n){return !EXAMENES_NIVEL[n]||!!(S.examenNivel[n]&&S.examenNivel[n].passed);}
 function _examShuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function _examFmt(s){s=Math.max(0,s);const m=Math.floor(s/60),ss=s%60;return (m<10?"0":"")+m+":"+(ss<10?"0":"")+ss;}
 function renderExamenNivel(){
   if(_examTimer){clearInterval(_examTimer);_examTimer=null;}_examEstado=null;
   const box=document.getElementById("examenNivelBox");if(!box)return;
   let h='<div class="card"><p class="eyebrow">Examen de nivel</p><h2>Certifica cada nivel</h2>'+
-   '<p class="small muted" style="margin:4px 0 0">Un examen cronometrado por nivel, al estandar de la malla mundial. <strong>Nota minima 17/20</strong> para aprobar; si no llegas, se repite con las preguntas barajadas. Sin Terminal: aqui se demuestra lo que ya dominas.</p></div>';
+   '<p class="small muted" style="margin:4px 0 0">Un examen cronometrado por nivel, al estandar de la malla mundial. <strong>Nota minima 17/20</strong> para aprobar; si no llegas, se repite con las preguntas barajadas. <strong>Aprobar el examen de tu nivel es requisito</strong> para que el corrector lo de por dominado y desbloquees el siguiente. Sin Terminal: aqui se demuestra lo que ya dominas.</p></div>';
   nivelExamDisponible().forEach(n=>{
     const ex=EXAMENES_NIVEL[n];const st=S.examenNivel[n]||{best:null,attempts:0,passed:false};
     const chip=st.passed?'<span class="chip good">APROBADO · '+st.best+'/'+ex.total+'</span>':(st.best!==null?'<span class="chip bad">Mejor: '+st.best+'/'+ex.total+' — repite</span>':'<span class="chip">Sin intentos</span>');

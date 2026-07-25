@@ -881,19 +881,7 @@ function traceback(err){
   }
   return"Error interno del intérprete: "+err;
 }
-/* runner con stdin programado (para ejercicios) */
-async function runScripted(code,stdin){
-  let out="";const feed=stdin.slice();
-  const ctx={ops:0,repl:false,
-    out:t=>{out+=t},
-    echo:()=>{},
-    input:async(prompt,ln)=>{
-      if(!feed.length)throw PyErr("EOFError","input(): el programa pidió más datos de los que da la prueba — revisa cuántas veces llamas a input()",ln);
-      const v=feed.shift();out+=prompt+v+"\n";return v}};
-  try{const prog=parseProgram(code);await execBlock(prog,new Map(),ctx);
-    return{ok:true,out}}
-  catch(err){return{ok:false,out,tb:traceback(err)}}
-}
+
 const norm=s=>s.split("\n").map(l=>l.replace(/\s+$/,"")).join("\n").replace(/\n+$/,"");
 
 /* ============================================================
@@ -1400,28 +1388,28 @@ const LEVEL0=[
    'print(\'Reporte diario\')\nprint("Ventas:" + \' \' + \'120\')\nprint(\'Ventas:\', 120)'],
  ],
  ex:[
-  {id:"d1e1",t:"Ejercicio 1 · Saluda al intérprete",
+  {id:"d1e1",py:true,t:"Ejercicio 1 · Saluda al intérprete",
    d:'Escribe un programa que imprima exactamente: <code>Hola, Python</code> (con la coma y las mayúsculas exactas — el corrector es implacable).',
    starter:"",runs:[[]],
    check:(o,c)=>norm(o[0])==="Hola, Python"?true:"La salida debe ser EXACTAMENTE: Hola, Python — obtuve:\n"+(norm(o[0])||"(nada)"),
    hints:["Necesitas la función print() con un string entre comillas.","Cuida mayúsculas, la coma y el espacio: Hola, Python"]},
-  {id:"d1e2",t:"Ejercicio 2 · Tres líneas",
+  {id:"d1e2",py:true,t:"Ejercicio 2 · Tres líneas",
    d:'Imprime tres líneas, en este orden: <code>aprendiendo</code>, <code>python</code>, <code>2026</code>.',
    starter:"",runs:[[]],
    check:(o)=>norm(o[0])==="aprendiendo\npython\n2026"?true:"Esperaba tres líneas exactas:\naprendiendo\npython\n2026\n\nObtuve:\n"+(norm(o[0])||"(nada)"),
    hints:["Cada print() genera su propia línea.","Tres print() seguidos, uno debajo del otro. El 2026 puede ir con o sin comillas."]},
-  {id:"d1e3",t:"Ejercicio 3 · Repara el código roto",
+  {id:"d1e3",py:true,t:"Ejercicio 3 · Repara el código roto",
    d:'Este programa tiene un error de sintaxis. Ejecútalo, <strong>lee el error</strong> y repáralo para que imprima <code>hola</code>.',
    starter:'print("hola"',runs:[[]],
    check:(o)=>norm(o[0])==="hola"?true:"Aún no imprime exactamente: hola",
    hints:["Ejecuta y lee el mensaje: Python te dice qué esperaba.","Cuenta los paréntesis: ¿cuántos abren y cuántos cierran?"]},
-  {id:"d1e4",t:"Ejercicio 4 · Caza el error de mayúscula",
+  {id:"d1e4",py:true,t:"Ejercicio 4 · Caza el error de mayúscula",
    d:'Este programa explota. Lee el error con calma — no es un typo de letras, es algo más sutil sobre cómo Python trata los nombres — y repáralo para que imprima <code>hola</code>.',
    starter:'Print("hola")',runs:[[]],
    check:(o,c)=>{if(/^\s*Print\s*\(/m.test(c))return"Todavía usas Print con mayúscula — Python distingue mayúsculas de minúsculas en los nombres.";
      return norm(o[0])==="hola"?true:"Debe imprimir: hola"},
    hints:["El error dice: name 'Print' is not defined. ¿Existe alguna función con ese nombre EXACTO?","Python es sensible a mayúsculas: la función se llama print, no Print."]},
-  {id:"d1e5",t:"Ejercicio 5 · Refactoriza el exceso de concatenación",
+  {id:"d1e5",py:true,t:"Ejercicio 5 · Refactoriza el exceso de concatenación",
    d:'Este código funciona, pero está mal escrito: demasiadas piezas pegadas con +. Reescríbelo simplificado para que produzca EXACTAMENTE <code>Total: 45 soles</code>.',
    starter:'print("Total" + ":" + " " + "45" + " " + "soles")',runs:[[]],
    check:(o,c)=>{const plus=(c.match(/\+/g)||[]).length;
@@ -1432,7 +1420,7 @@ const LEVEL0=[
 {id:"d1b",n:"Día 2",t:"Tu primer programa · Parte 2: laboratorio y desafío",
  intro:"Ayer construiste el modelo del intérprete y practicaste literales, expresiones y errores. Hoy lo pones a prueba en un proyecto real — el recibo — y cierras con un desafío que nadie te enseñó a resolver directamente.",
  errores:["Olvidar cerrar comillas o paréntesis → SyntaxError","Escribir Print con mayúscula: Python distingue mayúsculas","Poner texto sin comillas y esperar que se imprima"],
- reto:{id:"d1r",t:"Desafío final · sin pistas",
+ reto:{id:"d1r",py:true,t:"Desafío final · sin pistas",
   d:'Imprime EXACTAMENTE estas tres líneas:<pre class="codebox">== RECIBO ==\nTotal: 25 soles\nGracias, Alex</pre>',
   starter:"",runs:[[]],hints:[],
   check:(o)=>norm(o[0])==="== RECIBO ==\nTotal: 25 soles\nGracias, Alex"?true:"La salida no coincide. Compara carácter por carácter. Obtuve:\n"+norm(o[0])},
@@ -1441,20 +1429,20 @@ const LEVEL0=[
    'print("Alex", 25)\nprint("Hola\\nAdios")'],
  ],
  ex:[
-  {id:"d1e6",t:"Ejercicio 6 · Un solo print, dos valores",
+  {id:"d1e6",py:true,t:"Ejercicio 6 · Un solo print, dos valores",
    d:'Imprime, con un ÚNICO <code>print()</code>, tu nombre <code>"Alex"</code> seguido de tu edad <code>25</code> — sepáralos con una coma dentro del print; no escribas el espacio a mano.',
    starter:"",runs:[[]],
    check:(o,c)=>{if((c.match(/print\s*\(/g)||[]).length!==1)return"Debe ser un ÚNICO print(), con los dos valores separados por coma dentro.";
      return norm(o[0])==="Alex 25"?true:"Esperaba: Alex 25\nObtuve:\n"+norm(o[0])},
    hints:["print(\"Alex\", 25) — la coma dentro del print separa los valores; Python agrega el espacio solo.","No uses + para unirlos: eso exigiría convertir 25 a texto primero."]},
-  {id:"d1e7",t:"Ejercicio 7 · Dos líneas, un solo print",
+  {id:"d1e7",py:true,t:"Ejercicio 7 · Dos líneas, un solo print",
    d:'Imprime estas DOS líneas usando un ÚNICO <code>print()</code> (prohibido usar dos print): <code>Hola</code> y luego <code>Adios</code>.',
    starter:"",runs:[[]],
    check:(o,c)=>{if((c.match(/print\s*\(/g)||[]).length!==1)return"Debe ser un solo print() — usa \\n dentro del string para el salto de línea.";
      return norm(o[0])==="Hola\nAdios"?true:"Esperaba:\nHola\nAdios\nObtuve:\n"+norm(o[0])},
    hints:["\\n dentro de un string es un salto de línea real, no dos caracteres sueltos.","print(\"Hola\\nAdios\") — una sola llamada, dos líneas de salida."]},
  ],
- retoFinal:{id:"d1x",t:"Desafío final · inédito — comillas dentro de comillas",
+ retoFinal:{id:"d1x",py:true,t:"Desafío final · inédito — comillas dentro de comillas",
   d:'Imprime EXACTAMENTE esta línea, incluidas las comillas dentro del texto: <pre class="codebox">Ella dijo "hola" y se fue</pre> Ningún ejercicio anterior mostró cómo incluir comillas dentro de un string delimitado por el mismo tipo de comillas — vas a descubrirlo usando la anatomía del error como herramienta de diagnóstico.',
   starter:"",runs:[[]],
   hints:["Si delimitas con comillas dobles y el texto también tiene comillas dobles, Python se confunde antes de tiempo — el error te lo dirá.","Dos caminos válidos: usa comillas simples para delimitar todo el string, o escapa las comillas internas con \\\"."],
@@ -1480,33 +1468,33 @@ const LEVEL0=[
    'list = "mi lista de compras"\n# a partir de aquí, list() ya no funciona como esperabas\n# print(list([1, 2, 3])) → explotaría'],
  ],
  ex:[
-  {id:"d2e1",t:"Ejercicio 1 · Primera etiqueta",
+  {id:"d2e1",py:true,t:"Ejercicio 1 · Primera etiqueta",
    d:'Crea una variable <code>nombre</code> con el valor <code>"Alex"</code> e imprímela usando la variable (no el texto directo).',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/nombre\s*=/.test(c))return"Debes crear la variable llamada exactamente: nombre";
      if(!/print\s*\(\s*nombre\s*\)/.test(c))return"Imprime la VARIABLE: print(nombre) — sin comillas dentro del print.";
      return norm(o[0])==="Alex"?true:"Debe imprimir: Alex"},
    hints:["Primera línea: la asignación con =. Segunda: print con el nombre de la variable.","Si escribes print(\"nombre\") imprimes el texto 'nombre', no el contenido de la etiqueta."]},
-  {id:"d2e2",t:"Ejercicio 2 · La etiqueta se mueve",
+  {id:"d2e2",py:true,t:"Ejercicio 2 · La etiqueta se mueve",
    d:'Crea <code>contador</code> con valor <code>10</code>. Luego reasígnala a <code>25</code>. Imprime la variable. La salida debe ser <code>25</code> y el <code>10</code> debe seguir en tu código.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/contador\s*=\s*10\b/.test(c))return"Falta la primera asignación: contador = 10";
      if(!/contador\s*=\s*25\b/.test(c))return"Falta la reasignación a 25.";
      return norm(o[0])==="25"?true:"Debe imprimir: 25"},
    hints:["Asignar dos veces la misma variable es legal: la etiqueta simplemente se mueve.","Tres líneas: asignación, reasignación, print."]},
-  {id:"d2e3",t:"Ejercicio 3 · Dos etiquetas",
+  {id:"d2e3",py:true,t:"Ejercicio 3 · Dos etiquetas",
    d:'Dado <code>precio = 100</code>, crea <code>precio_final</code> que apunte al valor de <code>precio</code> (usando la variable, no escribiendo 100 otra vez) e imprime ambas en dos líneas.',
    starter:"precio = 100",runs:[[]],
    check:(o,c)=>{if(!/precio_final\s*=\s*precio\b/.test(c))return"precio_final debe crearse A PARTIR de la variable: precio_final = precio";
      return norm(o[0])==="100\n100"?true:"Esperaba:\n100\n100"},
    hints:["Una variable puede asignarse desde otra variable.","print(precio) y print(precio_final) en líneas separadas."]},
-  {id:"d2e4",t:"Ejercicio 4 · Caza el nombre sombreado",
+  {id:"d2e4",py:true,t:"Ejercicio 4 · Caza el nombre sombreado",
    d:'Este código imprime <code>5</code> en vez de fallar — pero sombreó un nombre que Python ya usaba, y eso es un problema que aparecerá más adelante. Renombra la variable a algo que no choque con ninguna función incorporada, conservando el mismo resultado.',
    starter:'list = 5\nprint(list)',runs:[[]],
    check:(o,c)=>{if(/^\s*list\s*=/m.test(c))return"Sigues usando 'list' como nombre de variable — elige otro nombre que no sombree una función incorporada.";
      return norm(o[0])==="5"?true:"Debe seguir imprimiendo: 5"},
    hints:["'list' es el nombre de una función incorporada de Python (convierte cosas en listas) — usarlo como variable la sombrea.","Prueba con un nombre descriptivo, como cantidad o numero."]},
-  {id:"d2e5",t:"Ejercicio 5 · Refactoriza la reasignación inútil",
+  {id:"d2e5",py:true,t:"Ejercicio 5 · Refactoriza la reasignación inútil",
    d:'La segunda línea de este código no cumple ninguna función real. Refactorízalo para que sea más simple, sin cambiar el resultado (<code>20</code>).',
    starter:'temperatura = 20\ntemperatura = temperatura + 0\nprint(temperatura)',runs:[[]],
    check:(o,c)=>{if(/\+\s*0\b/.test(c))return"Todavía tienes la reasignación que suma 0 — no cambia nada, elimínala.";
@@ -1515,7 +1503,7 @@ const LEVEL0=[
  ]},
 {id:"d2b",n:"Día 4",t:"Variables: etiquetas, no cajas · Parte 2: laboratorio y desafío",
  intro:"Ayer construiste el modelo de etiquetas y lo pusiste a prueba con nombres sombreados y reasignaciones inútiles. Hoy lo aplicas a un intercambio real de valores, y cierras con un desafío que parece un intercambio... pero no lo es.",
- reto:{id:"d2r",t:"Desafío final · sin pistas",
+ reto:{id:"d2r",py:true,t:"Desafío final · sin pistas",
   d:'Intercambia los valores de las dos variables usando una <strong>variable auxiliar</strong> (prohibido reasignar los textos directamente) e imprime ambas: primero la izquierda, luego la derecha. Salida esperada: <code>dolar</code> y luego <code>sol</code>.',
   starter:'moneda_izquierda = "sol"\nmoneda_derecha = "dolar"',runs:[[]],hints:[],
   check:(o,c)=>{if(/moneda_izquierda\s*=\s*"dolar"/.test(c)||/moneda_derecha\s*=\s*"sol"/.test(c))return"Tramposo: reasignaste los textos a mano. El intercambio debe usar una variable auxiliar.";
@@ -1525,20 +1513,20 @@ const LEVEL0=[
    'contador = 0\ncontador = contador + 10\ncontador = contador + 10\nprint(contador)'],
  ],
  ex:[
-  {id:"d2e6",t:"Ejercicio 6 · Acumula reasignando",
+  {id:"d2e6",py:true,t:"Ejercicio 6 · Acumula reasignando",
    d:'Empieza con <code>contador = 0</code> y, SIN escribir el resultado final a mano, reasigna <code>contador = contador + 10</code> tres veces seguidas. Imprime el valor final.',
    starter:"contador = 0",runs:[[]],
    check:(o,c)=>{if((c.match(/contador\s*=\s*contador\s*\+\s*10/g)||[]).length<3)return"Necesitas la reasignación contador = contador + 10 escrita (o repetida) tres veces.";
      return norm(o[0])==="30"?true:"Esperaba: 30\nObtuve:\n"+norm(o[0])},
    hints:["Cada vez que reasignas, la etiqueta se mueve al nuevo resultado — el valor anterior no se \"acumula\" solo, tú lo sumas explícitamente.","Tres líneas iguales: contador = contador + 10, repetida tres veces, luego el print."]},
-  {id:"d2e7",t:"Ejercicio 7 · Una variable calculada desde otras dos",
+  {id:"d2e7",py:true,t:"Ejercicio 7 · Una variable calculada desde otras dos",
    d:'Crea <code>base = 5</code> y <code>altura = 8</code>, y crea <code>area</code> a partir de MULTIPLICAR esas dos variables (no escribas 40 directamente). Imprime <code>area</code>.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/area\s*=\s*base\s*\*\s*altura/.test(c))return"area debe crearse como base * altura, usando las variables, no el número final.";
      return norm(o[0])==="40"?true:"Esperaba: 40\nObtuve:\n"+norm(o[0])},
    hints:["Una variable nueva puede crearse a partir de una OPERACIÓN entre otras dos variables, no solo copiando una.","area = base * altura — la etiqueta area apunta al resultado de esa cuenta."]},
  ],
- retoFinal:{id:"d2x",t:"Desafío final · inédito — el intercambio que no intercambia",
+ retoFinal:{id:"d2x",py:true,t:"Desafío final · inédito — el intercambio que no intercambia",
   d:'Dado <code>a = 10</code> y <code>b = 20</code>, alguien escribió <code>a = b</code> seguido de <code>b = a</code> pensando que así se intercambian los valores. Predice qué imprimirían <code>print(a)</code> y <code>print(b)</code> al final de ESE código (sin arreglarlo primero) y luego escribe la versión que si intercambia de verdad, usando una variable auxiliar, imprimiendo primero a y luego b.',
   starter:"a = 10\nb = 20",runs:[[]],
   hints:["Traza línea por línea con el modelo de etiquetas: a = b mueve la etiqueta a ANTES de que b cambie. Para cuando ejecutas b = a, a ya no vale 10.","El intercambio real necesita una tercera etiqueta temporal que guarde uno de los dos valores antes de sobrescribir nada."],
@@ -1565,30 +1553,30 @@ const LEVEL0=[
    'entrada = "20"\nedad = int(entrada)\nmensaje = "Tienes " + str(edad + 1) + " el próximo año"\nprint(mensaje)'],
  ],
  ex:[
-  {id:"d3e1",t:"Ejercicio 1 · Inspector de tipos",
+  {id:"d3e1",py:true,t:"Ejercicio 1 · Inspector de tipos",
    d:'Imprime el <code>type()</code> de estos cuatro valores, en este orden: <code>42</code>, <code>3.14</code>, <code>"hola"</code>, <code>True</code> (cuatro líneas).',
    starter:"",runs:[[]],
    check:(o)=>norm(o[0])==="<class 'int'>\n<class 'float'>\n<class 'str'>\n<class 'bool'>"?true:
      "Esperaba las 4 clases en orden: int, float, str, bool. Obtuve:\n"+norm(o[0]),
    hints:["type() va DENTRO del print: print(type(42)).","Cuatro prints, cuatro valores, en el orden pedido."]},
-  {id:"d3e2",t:"Ejercicio 2 · Rescata el número",
+  {id:"d3e2",py:true,t:"Ejercicio 2 · Rescata el número",
    d:'La variable <code>edad_texto</code> llega como string. Conviértela a entero, súmale 5 e imprime el resultado: <code>30</code>.',
    starter:'edad_texto = "25"',runs:[[]],
    check:(o,c)=>{if(!/int\s*\(/.test(c))return"Debes usar la conversión int( ) — sumar un str con un número lanza TypeError.";
      return norm(o[0])==="30"?true:"Debe imprimir: 30"},
    hints:["\"25\" + 5 explota. Primero convierte el string.","int(edad_texto) te da el número 25; a eso sí puedes sumarle 5."]},
-  {id:"d3e3",t:"Ejercicio 3 · Repara el TypeError",
+  {id:"d3e3",py:true,t:"Ejercicio 3 · Repara el TypeError",
    d:'Este código explota. Ejecútalo, lee el traceback y repáralo para que imprima <code>Tengo 25 años</code>. Pista: hay dos caminos válidos (conversión o f-string).',
    starter:'print("Tengo " + 25 + " años")',runs:[[]],
    check:(o)=>norm(o[0])==="Tengo 25 años"?true:"Debe imprimir exactamente: Tengo 25 años",
    hints:["El error dice que no puede sumar str con int. Haz que TODO sea texto.","Camino 1: str(25). Camino 2: print(f\"Tengo {25} años\") — las f-strings se ven en detalle más adelante, en Strings a fondo."]},
-  {id:"d3e4",t:"Ejercicio 4 · Caza el ValueError (distinto del TypeError)",
+  {id:"d3e4",py:true,t:"Ejercicio 4 · Caza el ValueError (distinto del TypeError)",
    d:'Este error NO es una mezcla de tipos como el ejercicio anterior — es una <strong>conversión inválida</strong>: <code>int()</code> no interpreta el punto decimal. Repáralo para que imprima <code>18</code>.',
    starter:'edad_texto = "17.5"\nprint(int(edad_texto) + 1)',runs:[[]],
    check:(o,c)=>{if(!/float\s*\(/.test(c)||!/int\s*\(/.test(c))return"Necesitas ambas conversiones: primero float() (que sí interpreta el punto), luego int() (que trunca).";
      return norm(o[0])==="18"?true:"Debe imprimir: 18"},
    hints:["int('17.5') falla porque int() sobre un string no acepta el punto.","Primero float('17.5') (da 17.5), después int(...) (da 17), luego suma 1."]},
-  {id:"d3e5",t:"Ejercicio 5 · Refactoriza la variable intermedia",
+  {id:"d3e5",py:true,t:"Ejercicio 5 · Refactoriza la variable intermedia",
    d:'Este código funciona, pero la variable intermedia no aporta claridad real. Decide: ¿la consolidas en menos líneas, o la conservas? Debe seguir imprimiendo <code>18</code>.',
    starter:'edad_texto = "17"\nedad_numero = int(edad_texto)\nedad_numero_mas_uno = edad_numero + 1\nprint(edad_numero_mas_uno)',runs:[[]],
    check:(o,c)=>norm(o[0])==="18"?true:"Debe seguir imprimiendo: 18",
@@ -1597,7 +1585,7 @@ const LEVEL0=[
 {id:"d3b",n:"Día 6",t:"Tipos de datos · Parte 2: laboratorio y desafío",
  intro:"Ayer dominaste los cuatro tipos y sus conversiones. Hoy los integras con lo de T1 y T2 en la calculadora de vuelto, y cierras con un tercer comportamiento del operador * que ninguna teoría te mostró directamente.",
  errores:['Sumar str + int → TypeError','Creer que int("3.5") funciona','Confundir "True" (string) con True (bool)'],
- reto:{id:"d3r",t:"Desafío final · sin pistas",
+ reto:{id:"d3r",py:true,t:"Desafío final · sin pistas",
   d:'El precio llega como texto y hay un descuento. Imprime EXACTAMENTE <code>Pagas: 120</code> — pero el 120 debe salir de un CÁLCULO (prohibido escribir 120 en tu código).',
   starter:'precio_texto = "150"\ndescuento = 30',runs:[[]],hints:[],
   check:(o,c)=>{if(/120/.test(c))return"Prohibido escribir 120: debe salir del cálculo precio - descuento.";
@@ -1608,14 +1596,14 @@ const LEVEL0=[
    'print(True + True)\nprint(False + 5)'],
  ],
  ex:[
-  {id:"d3e6",t:"Ejercicio 6 · Verifica el tipo antes de operar",
+  {id:"d3e6",py:true,t:"Ejercicio 6 · Verifica el tipo antes de operar",
    d:'Dado <code>texto = "42"</code>, imprime primero su <code>type()</code>, y luego, después de convertirlo con <code>int()</code>, el resultado de sumarle 8.',
    starter:'texto = "42"',runs:[[]],
    check:(o,c)=>{if(!/type\s*\(/.test(c))return"Falta imprimir type(texto) primero.";
      if(!/int\s*\(/.test(c))return"Necesitas convertir con int() antes de sumar 8.";
      return norm(o[0])==="<class 'str'>\n50"?true:"Esperaba:\n<class 'str'>\n50\nObtuve:\n"+norm(o[0])},
    hints:["Primera línea: print(type(texto)) — todavía es str, sin convertir.","Segunda línea: print(int(texto) + 8) — ahora sí es un número."]},
-  {id:"d3e7",t:"Ejercicio 7 · Concatenación real con +",
+  {id:"d3e7",py:true,t:"Ejercicio 7 · Concatenación real con +",
    d:'Dado <code>edad = 16</code>, arma e imprime EXACTAMENTE la frase <code>Tengo 16 años</code> usando <code>+</code> (concatenación de strings, no f-string) — necesitas convertir <code>edad</code> a texto primero.',
    starter:"edad = 16",runs:[[]],
    check:(o,c)=>{if(!/str\s*\(\s*edad\s*\)/.test(c))return"Convierte edad con str(edad) antes de concatenar con +.";
@@ -1623,7 +1611,7 @@ const LEVEL0=[
      return norm(o[0])==="Tengo 16 años"?true:"Esperaba: Tengo 16 años\nObtuve:\n"+norm(o[0])},
    hints:["\"Tengo \" + edad explota: no puedes pegar str con int directamente.","\"Tengo \" + str(edad) + \" años\" — tres piezas de texto unidas con +."]},
  ],
- retoFinal:{id:"d3x",t:"Desafío final · inédito — un tercer comportamiento de *",
+ retoFinal:{id:"d3x",py:true,t:"Desafío final · inédito — un tercer comportamiento de *",
   d:'Predice, ANTES de ejecutar, qué imprime <code>"10" * 3</code> — sabiendo que <code>"10" + "10"</code> pega texto y <code>10 * 3</code> multiplica. Aquí un operando es string y el otro es int: ningún ejemplo de esta lección mostró esta combinación. Luego escribe el código que lo demuestre.',
   starter:"",runs:[[]],
   hints:["El tipo decide qué hace el operador — pero * entre string y número no es ni concatenación por pares ni multiplicación numérica.","Python define '\"10\" * 3' como repetición: el string se repite 3 veces seguidas, sin separador."],
@@ -1648,31 +1636,31 @@ const LEVEL0=[
    'print(5 > 3 and 3 > 1)  # True — la forma explícita\nprint(2 ** 3 ** 2)      # 512, no 64'],
  ],
  ex:[
-  {id:"d4e1",t:"Ejercicio 1 · Las cuatro divisiones",
+  {id:"d4e1",py:true,t:"Ejercicio 1 · Las cuatro divisiones",
    d:'Imprime, en cuatro líneas y en este orden, el resultado de: <code>7 / 2</code>, <code>7 // 2</code>, <code>7 % 2</code>, <code>2 ** 10</code>.',
    starter:"",runs:[[]],
    check:(o)=>norm(o[0])==="3.5\n3\n1\n1024"?true:"Esperaba:\n3.5\n3\n1\n1024\nObtuve:\n"+norm(o[0]),
    hints:["Un print por operación; pon la operación directamente dentro del print.","Fíjate: / da 3.5 (float), // da 3 (int). Esa diferencia es examen seguro."]},
-  {id:"d4e2",t:"Ejercicio 2 · ¿Es par?",
+  {id:"d4e2",py:true,t:"Ejercicio 2 · ¿Es par?",
    d:'Usando el operador <code>%</code> y una comparación (sin if), haz que el programa imprima <code>False</code> evaluando si <code>15</code> es par.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!c.includes("%"))return"Debes usar el operador % (resto).";
      if(!c.includes("=="))return"Debes COMPARAR el resto con 0 usando ==";
      return norm(o[0])==="False"?true:"Debe imprimir: False"},
    hints:["Un número es par si al dividirlo entre 2 el resto es 0.","print(15 % 2 == 0) — la comparación entera va dentro del print."]},
-  {id:"d4e3",t:"Ejercicio 3 · Los paréntesis mandan",
+  {id:"d4e3",py:true,t:"Ejercicio 3 · Los paréntesis mandan",
    d:'Este código intenta calcular el promedio de 8 y 10, pero imprime <code>13.0</code>. Corrígelo con paréntesis para que imprima <code>9.0</code>.',
    starter:"print(8 + 10 / 2)",runs:[[]],
    check:(o,c)=>{if(!c.includes("("))return"La corrección es con paréntesis.";
      return norm(o[0])==="9.0"?true:"Debe imprimir: 9.0"},
    hints:["La división se ejecuta ANTES que la suma: 8 + 5.0.","Agrupa la suma para que ocurra primero, luego divide."]},
-  {id:"d4e4",t:"Ejercicio 4 · Caza la precedencia de //",
+  {id:"d4e4",py:true,t:"Ejercicio 4 · Caza la precedencia de //",
    d:'Este código imprime <code>10</code>, no <code>5</code> como esperaba quien lo escribió. Corrígelo con paréntesis para que SÍ imprima <code>5</code>.',
    starter:"print(7 + 10 // 3)",runs:[[]],
    check:(o,c)=>{if(!c.includes("("))return"La corrección es con paréntesis, igual que en el ejercicio anterior.";
      return norm(o[0])==="5"?true:"Debe imprimir: 5"},
    hints:["// tiene la MISMA prioridad que *, mayor que +. Por eso 10 // 3 = 3 se calcula antes que la suma.","Agrupa (7 + 10) primero, luego divide entre 3."]},
-  {id:"d4e5",t:"Ejercicio 5 · Refactoriza los paréntesis redundantes",
+  {id:"d4e5",py:true,t:"Ejercicio 5 · Refactoriza los paréntesis redundantes",
    d:'Los paréntesis de este código no cambian el resultado — son ruido visual, no necesidad real. Simplifícalo sin cambiar el resultado (<code>9.0</code>).',
    starter:"print(((8 + 10) / 2))",runs:[[]],
    check:(o,c)=>{const opens=(c.match(/\(/g)||[]).length;
@@ -1683,7 +1671,7 @@ const LEVEL0=[
 {id:"d4b",n:"Día 8",t:"Operadores · Parte 2: laboratorio y desafío",
  intro:"Ayer dominaste la familia aritmética y su precedencia. Hoy la integras en el divisor de cuenta de restaurante, y cierras combinando comparaciones con and/or de una forma que ninguna teoría anterior mostró.",
  errores:["Esperar que 10/2 dé 5 (da 5.0: / siempre float)","Confundir / con //","Olvidar paréntesis: 8 + 10 / 2 no es un promedio"],
- reto:{id:"d4r",t:"Desafío final · sin pistas",
+ reto:{id:"d4r",py:true,t:"Desafío final · sin pistas",
   d:'Convierte los minutos totales a horas y minutos usando <code>//</code> y <code>%</code>, e imprime EXACTAMENTE <code>3 horas y 20 minutos</code> — calculado, no escrito a mano.',
   starter:"minutos_totales = 200",runs:[[]],hints:[],
   check:(o,c)=>{if(!/\/\//.test(c)||!/%/.test(c))return"Obligatorio usar // (horas) y % (minutos sobrantes).";
@@ -1694,20 +1682,20 @@ const LEVEL0=[
    'print(81 ** 0.5)\nprint(27 ** (1/3))'],
  ],
  ex:[
-  {id:"d4e6",t:"Ejercicio 6 · Días y horas sobrantes",
+  {id:"d4e6",py:true,t:"Ejercicio 6 · Días y horas sobrantes",
    d:'Imprime, en dos líneas, cuántos días completos hay en <code>100</code> horas y cuántas horas sobran — usando <code>//</code> y <code>%</code>.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/\/\//.test(c)||!/%/.test(c))return"Necesitas // (días completos) y % (horas sobrantes).";
      return norm(o[0])==="4\n4"?true:"Esperaba:\n4\n4\nObtuve:\n"+norm(o[0])},
    hints:["100 // 24 te da los días completos; 100 % 24, las horas que sobran.","Dos prints, en ese orden: días primero, luego horas sobrantes."]},
-  {id:"d4e7",t:"Ejercicio 7 · Cuadrado y raíz cuadrada",
+  {id:"d4e7",py:true,t:"Ejercicio 7 · Cuadrado y raíz cuadrada",
    d:'Imprime, en dos líneas, el cuadrado de <code>6</code> y la raíz cuadrada de <code>81</code>, usando <code>**</code> en ambos casos.',
    starter:"",runs:[[]],
    check:(o,c)=>{if((c.match(/\*\*/g)||[]).length<2)return"Usa ** para ambas operaciones — el cuadrado y la raíz cuadrada.";
      return norm(o[0])==="36\n9.0"?true:"Esperaba:\n36\n9.0\nObtuve:\n"+norm(o[0])},
    hints:["6 ** 2 es el cuadrado.","81 ** 0.5 es la raíz cuadrada — nota que el resultado es float (9.0), no int."]},
  ],
- retoFinal:{id:"d4x",t:"Desafío final · inédito — and/or combinados",
+ retoFinal:{id:"d4x",py:true,t:"Desafío final · inédito — and/or combinados",
   d:'Dado <code>x = 10</code>, predice el valor de <code>x &gt; 5 and x &lt; 20 or x == 100</code> ANTES de ejecutar — combinando comparación con dos operadores lógicos de distinta precedencia (<code>and</code> se evalúa antes que <code>or</code>, algo que ningún bloque anterior mencionó explícitamente). Luego escribe el código que lo demuestre.',
   starter:"x = 10",runs:[[]],
   hints:["and se evalúa antes que or, igual que * se evalúa antes que + — incluso sin paréntesis visibles.","(x > 5 and x < 20) es True, así que el resultado ya está decidido antes de mirar la parte del or."],
@@ -1733,33 +1721,33 @@ const LEVEL0=[
    'palabra = "python"\nprint(palabra[1:4])   # yth\nprint(palabra[10:20]) # \'\' — el slicing nunca falla por rango\nprint(palabra[10])    # IndexError — indexar un solo carácter sí falla'],
  ],
  ex:[
-  {id:"d5e1",t:"Ejercicio 1 · Cortes precisos",
+  {id:"d5e1",py:true,t:"Ejercicio 1 · Cortes precisos",
    d:'Dada la variable de abajo, imprime en dos líneas: los primeros 3 caracteres y los últimos 3 (usando slicing con índices negativos para la segunda).',
    starter:'palabra = "programando"',runs:[[]],
    check:(o,c)=>{if(!c.includes("["))return"Debes usar slicing con corchetes [ ].";
      return norm(o[0])==="pro\nndo"?true:"Esperaba:\npro\nndo\nObtuve:\n"+norm(o[0])},
    hints:["Primeros 3: desde el inicio hasta antes del índice 3.","Últimos 3: [-3:] — desde tres antes del final hasta el final."]},
-  {id:"d5e2",t:"Ejercicio 2 · Limpieza profesional",
+  {id:"d5e2",py:true,t:"Ejercicio 2 · Limpieza profesional",
    d:'La variable llega sucia. Imprímela limpia (sin espacios en los bordes) y en MAYÚSCULAS: <code>PYTHON ES ELEGANTE</code>. Encadena los métodos.',
    starter:'frase = "   python es elegante   "',runs:[[]],
    check:(o,c)=>{if(!/\.strip\s*\(/.test(c))return"Usa .strip() para los espacios de los bordes.";
      if(!/\.upper\s*\(/.test(c))return"Usa .upper() para las mayúsculas.";
      return norm(o[0])==="PYTHON ES ELEGANTE"?true:"Esperaba: PYTHON ES ELEGANTE"},
    hints:["Los métodos se pueden encadenar: el resultado de uno recibe al siguiente.","frase.strip().upper() — primero limpia, luego eleva."]},
-  {id:"d5e3",t:"Ejercicio 3 · Presentación con f-string",
+  {id:"d5e3",py:true,t:"Ejercicio 3 · Presentación con f-string",
    d:'Con las variables dadas, imprime EXACTAMENTE <code>Me llamo Alex y tengo 25 años</code> usando una f-string (obligatorio: nada de sumas de strings).',
    starter:'nombre = "Alex"\nedad = 25',runs:[[]],
    check:(o,c)=>{if(!/f["']/.test(c))return"Obligatorio usar f-string: f\"...{ }...\"";
      if(/\+/.test(c))return"Sin concatenación con + : para eso existe la f-string.";
      return norm(o[0])==="Me llamo Alex y tengo 25 años"?true:"Esperaba: Me llamo Alex y tengo 25 años"},
    hints:["f\"texto {variable} texto\" — las llaves evalúan lo que pongas dentro.","Dos huecos: {nombre} y {edad}, con los espacios bien puestos alrededor."]},
-  {id:"d5e4",t:"Ejercicio 4 · Caza el IndexError",
+  {id:"d5e4",py:true,t:"Ejercicio 4 · Caza el IndexError",
    d:'Este programa explota — una clase de error distinta a las que ya viste (ni mutación directa ni olvidar guardar un resultado). Repáralo para que imprima la última letra de la palabra sin adivinar cuántas letras tiene.',
    starter:'palabra = "python"\nprint(palabra[10])',runs:[[]],
    check:(o,c)=>{if(/palabra\s*\[\s*10\s*\]/.test(c))return"Sigues pidiendo un índice fijo fuera de rango — usa un índice que funcione para cualquier longitud.";
      return norm(o[0])==="n"?true:"Debe imprimir: n"},
    hints:["Pedir un índice que no existe (10, en un string de 6 letras) lanza IndexError.","palabra[-1] siempre da la última letra, sin importar cuán larga sea la palabra."]},
-  {id:"d5e5",t:"Ejercicio 5 · Refactoriza a una cadena de métodos",
+  {id:"d5e5",py:true,t:"Ejercicio 5 · Refactoriza a una cadena de métodos",
    d:'Este código funciona, pero usa variables intermedias innecesarias. Refactorízalo a una sola línea encadenando métodos, mismo resultado: <code>hola</code>.',
    starter:'texto = "  HOLA  "\ntexto2 = texto.strip()\ntexto3 = texto2.lower()\nprint(texto3)',runs:[[]],
    check:(o,c)=>{if(/texto2|texto3/.test(c))return"Todavía usas las variables intermedias — encadena strip() y lower() directamente.";
@@ -1769,7 +1757,7 @@ const LEVEL0=[
 {id:"d5b",n:"Día 10",t:"Strings a fondo · Parte 2: laboratorio y desafío",
  intro:"Ayer dominaste índices, slicing y métodos encadenados. Hoy los integras en el normalizador de contactos, y cierras encadenando .replace() más veces de las que cualquier ejemplo anterior mostró.",
  errores:["Creer que [0:3] incluye el índice 3","Esperar que .strip() borre espacios internos","Pedir un índice que no existe → IndexError"],
- reto:{id:"d5r",t:"Desafío final · sin pistas",
+ reto:{id:"d5r",py:true,t:"Desafío final · sin pistas",
   d:'Ese correo llegó sucio de un formulario. Imprímelo limpio y normalizado: EXACTAMENTE <code>alex@gmail.com</code> — usando métodos, no escribiéndolo a mano.',
   starter:'correo = "  ALEX@GMAIL.COM  "',runs:[[]],hints:[],
   check:(o,c)=>{if(/"alex@gmail\.com"/.test(c)||/'alex@gmail\.com'/.test(c))return"Prohibido escribir el resultado a mano: transforma la variable con métodos.";
@@ -1780,21 +1768,21 @@ const LEVEL0=[
    'palabra = "python"\nprint(palabra[::-1])   # nohtyp'],
  ],
  ex:[
-  {id:"d5e6",t:"Ejercicio 6 · Cuenta sin espacios",
+  {id:"d5e6",py:true,t:"Ejercicio 6 · Cuenta sin espacios",
    d:'Dado <code>frase = "hola mundo"</code>, imprime cuántos caracteres tiene SIN contar el espacio, combinando <code>len()</code> y <code>.replace()</code>.',
    starter:'frase = "hola mundo"',runs:[[]],
    check:(o,c)=>{if(!/\.replace\s*\(/.test(c))return"Usa .replace() para quitar el espacio antes de contar.";
      if(!/len\s*\(/.test(c))return"Usa len() para contar los caracteres restantes.";
      return norm(o[0])==="9"?true:"Esperaba: 9\nObtuve:\n"+norm(o[0])},
    hints:["frase.replace(\" \", \"\") quita todos los espacios, no solo los de los bordes (a diferencia de .strip()).","len(frase.replace(\" \", \"\")) — todo en una línea."]},
-  {id:"d5e7",t:"Ejercicio 7 · Invierte con slicing",
+  {id:"d5e7",py:true,t:"Ejercicio 7 · Invierte con slicing",
    d:'Dado <code>palabra = "python"</code>, imprime la palabra invertida usando slicing con paso <code>-1</code> — sin ningún bucle.',
    starter:'palabra = "python"',runs:[[]],
    check:(o,c)=>{if(!/\[\s*::\s*-1\s*\]/.test(c))return"Usa exactamente el slicing [::-1] para invertir.";
      return norm(o[0])==="nohtyp"?true:"Esperaba: nohtyp\nObtuve:\n"+norm(o[0])},
    hints:["palabra[::-1] — sin índices de inicio/fin, solo el paso -1.","No necesitas ningún while ni función: el slicing lo hace en una línea."]},
  ],
- retoFinal:{id:"d5x",t:"Desafío final · inédito — censura las vocales",
+ retoFinal:{id:"d5x",py:true,t:"Desafío final · inédito — censura las vocales",
   d:'Dado <code>apodo = "alexito"</code>, produce <code>*l*x*t*</code> reemplazando cada vocal (a, e, i, o, u) por <code>*</code> — encadenando <code>.replace()</code> tantas veces como haga falta. Ningún ejercicio anterior encadenó más de dos métodos seguidos; aquí vas a necesitar varios, en el orden correcto, sin que ninguno deshaga el trabajo del anterior.',
   starter:'apodo = "alexito"',runs:[[]],
   hints:["Un .replace() reemplaza UNA letra por *. Nada te impide encadenar varios: texto.replace('a','*').replace('e','*')...","Cada vocal que aparece en 'alexito' necesita su propio .replace() — cuenta cuáles son antes de escribir la cadena completa. (Aunque 'alexito' no tiene 'u', un censurador completo cubriría las cinco vocales.)"],
@@ -1818,13 +1806,13 @@ const LEVEL0=[
   ["El bucle de validación — nombrado, no construible aún",T('La respuesta profesional completa a "¿y si el dato es inconvertible?" no es solo detectarlo una vez — es <strong>volver a preguntar hasta obtener un dato válido</strong>, en un bucle. Hoy no puedes construirlo todavía (eso exige <code>while</code>, que llega en la próxima lección) — pero puedes al menos detectar el problema con <code>.isdigit()</code> y avisar en vez de explotar, en lugar de fingir que el dato siempre viene limpio.')],
  ],
  ex:[
-  {id:"d6e1",t:"Ejercicio 1 · Saludo interactivo",
+  {id:"d6e1",py:true,t:"Ejercicio 1 · Saludo interactivo",
    d:'Pide el nombre con <code>input()</code> y saluda con el formato exacto <code>Hola, X!</code>. La prueba escribirá <code>Alex</code>.',
    starter:"",runs:[["Alex"]],
    check:(o,c)=>{if(!/input\s*\(/.test(c))return"Debes pedir el nombre con input().";
      return o[0].includes("Hola, Alex!")?true:"Con la entrada 'Alex' debe aparecer: Hola, Alex!"},
    hints:["Guarda el input en una variable y úsala en una f-string.","f\"Hola, {nombre}!\" — con la coma y el signo de exclamación."]},
-  {id:"d6e2",t:"Ejercicio 2 · La suma real",
+  {id:"d6e2",py:true,t:"Ejercicio 2 · La suma real",
    d:'Lee dos números con input y muestra su suma REAL. La prueba escribe <code>4</code> y <code>8</code>: debe aparecer <code>12</code>, no <code>48</code>.',
    starter:"",runs:[["4","8"]],
    check:(o,c)=>{if(!/(int|float)\s*\(/.test(c))return"Sin conversión, 4 + 8 será '48'. Convierte lo que devuelve input().";
@@ -1832,14 +1820,14 @@ const LEVEL0=[
      if(t.includes("48"))return"¡Imprimió 48! Estás pegando strings, no sumando números.";
      return(t.includes("12.0")||/\b12\b/.test(t))?true:"Con 4 y 8 debe aparecer 12."},
    hints:["input() devuelve '4' (texto). '4' + '8' pega, no suma.","Envuelve cada input: float(input(...)) — o int() si prefieres enteros."]},
-  {id:"d6e3",t:"Ejercicio 3 · Calculadora de edad",
+  {id:"d6e3",py:true,t:"Ejercicio 3 · Calculadora de edad",
    d:'Pide el año de nacimiento e imprime la edad que cumple la persona en 2026, en una frase con f-string. La prueba escribe <code>2000</code>: debe aparecer <code>26</code>.',
    starter:"",runs:[["2000"]],
    check:(o,c)=>{if(!/int\s*\(/.test(c))return"El año llega como texto: conviértelo con int() para poder restar.";
      if(!/f["']/.test(c))return"La frase final debe usar una f-string.";
      return /\b26\b/.test(norm(o[0]))?true:"Con 2000 debe aparecer 26 (2026 - 2000)."},
    hints:["Tres pasos: leer, convertir, restar de 2026.","f\"Cumples {2026 - anio} años\" — la cuenta puede ir dentro de las llaves."]},
-  {id:"d6e4",t:"Ejercicio 4 · Detecta el dato inconvertible",
+  {id:"d6e4",py:true,t:"Ejercicio 4 · Detecta el dato inconvertible",
    d:'Pide una edad con <code>input()</code>. Si NO son puros dígitos (usa <code>.isdigit()</code>), imprime <code>entrada inválida</code> en vez de intentar convertir y explotar; si sí lo son, imprime la edad más 1. Se probará con <code>veinte</code> (debe avisar) y con <code>20</code> (debe imprimir <code>21</code>).',
    starter:"",runs:[["veinte"],["20"]],
    check:(o,c)=>{if(!/\.isdigit\s*\(/.test(c))return"Usa .isdigit() para verificar antes de convertir.";
@@ -1847,7 +1835,7 @@ const LEVEL0=[
      if(!norm(o[0]).includes("entrada inválida"))return"Con 'veinte' debe avisar: entrada inválida";
      return norm(o[1]).includes("21")?true:"Con 20 debe imprimir 21."},
    hints:[".isdigit() devuelve True solo si el texto son puros dígitos — 'veinte' no lo es, '20' sí.","if texto.isdigit(): conviertes y sumas 1. else: avisas 'entrada inválida'."]},
-  {id:"d6e5",t:"Ejercicio 5 · Refactoriza el paso intermedio",
+  {id:"d6e5",py:true,t:"Ejercicio 5 · Refactoriza el paso intermedio",
    d:'Este código funciona, pero tiene una variable intermedia innecesaria. Simplifícalo para que siga imprimiendo <code>7.0</code> con la entrada <code>7</code>.',
    starter:'texto = input("Número: ")\nnumero = float(texto)\nresultado = numero\nprint(resultado)',runs:[["7"]],
    check:(o,c)=>{if(!/input\s*\(/.test(c))return"Lee el número con input(...), no lo escribas a mano.";if(/resultado\s*=\s*numero/.test(c))return"Todavía tienes la variable 'resultado' que solo copia 'numero' sin transformarlo — elimínala.";
@@ -1857,7 +1845,7 @@ const LEVEL0=[
 {id:"d6b",n:"Día 12",t:"Entrada y salida · Parte 2: laboratorio y desafío",
  intro:"Ayer aprendiste que input() siempre devuelve texto y a detectar datos inconvertibles. Hoy lo integras en la boleta de calificaciones, y cierras comprobando que float() ya tolera espacios de más sin que tú tengas que limpiarlos.",
  errores:["Operar el input sin convertir → el bug del 48","Convertir a int cuando puede traer decimales","Olvidar el mensaje del prompt: input() mudo confunde al usuario"],
- reto:{id:"d6r",t:"Desafío final · sin pistas",
+ reto:{id:"d6r",py:true,t:"Desafío final · sin pistas",
   d:'Pide un nombre y una nota (0–20). Imprime el nombre en MAYÚSCULAS con la nota, formato exacto: <code>ALEX: 15 puntos</code>. La prueba escribe <code>alex</code> y <code>15</code>.',
   starter:"",runs:[["alex","15"]],hints:[],
   check:(o,c)=>{if(!/\.upper\s*\(/.test(c))return"El nombre debe salir en MAYÚSCULAS con .upper().";
@@ -1868,20 +1856,20 @@ const LEVEL0=[
    'print("Cargando...", end="")\nprint("listo")'],
  ],
  ex:[
-  {id:"d6e6",t:"Ejercicio 6 · Fecha con sep personalizado",
+  {id:"d6e6",py:true,t:"Ejercicio 6 · Fecha con sep personalizado",
    d:'Dado <code>anio = 2026</code>, <code>mes = 11</code>, <code>dia = 20</code>, imprime <code>2026-11-20</code> con un ÚNICO print() usando <code>sep="-"</code> — sin concatenar nada a mano.',
    starter:"anio = 2026\nmes = 11\ndia = 20",runs:[[]],
    check:(o,c)=>{if(!/sep\s*=/.test(c))return"Usa el parámetro sep= del print, no concatenación manual.";
      return norm(o[0])==="2026-11-20"?true:"Esperaba: 2026-11-20\nObtuve:\n"+norm(o[0])},
    hints:["print(anio, mes, dia, sep=\"-\") — sep reemplaza el espacio automático entre valores por el separador que elijas.","No necesitas convertir nada a texto: print() lo hace por ti."]},
-  {id:"d6e7",t:"Ejercicio 7 · Misma línea con end",
+  {id:"d6e7",py:true,t:"Ejercicio 7 · Misma línea con end",
    d:'Imprime <code>Cargando...</code> y, en la MISMA línea, inmediatamente después, <code>listo</code> — usando <code>end=""</code> en el primer print para evitar el salto de línea automático.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/end\s*=\s*["']["']/.test(c))return"Usa end=\"\" en el primer print para que no salte de línea.";
      return norm(o[0])==="Cargando...listo"?true:"Esperaba: Cargando...listo\nObtuve:\n"+norm(o[0])},
    hints:["print(\"Cargando...\", end=\"\") deja la línea abierta.","El segundo print (\"listo\") continúa justo donde terminó el primero."]},
  ],
- retoFinal:{id:"d6x",t:"Desafío final · inédito — robustez ante espacios",
+ retoFinal:{id:"d6x",py:true,t:"Desafío final · inédito — robustez ante espacios",
   d:'Pide el precio de un producto y la cantidad comprada, en ese orden. El precio podría llegar con espacios de más (como <code>" 10.5 "</code>) — tu programa debe funcionar igual. Imprime EXACTAMENTE <code>Total: 31.50</code> con precio <code>" 10.5 "</code> y cantidad <code>3</code>.',
   starter:"",runs:[[" 10.5 ","3"]],
   hints:["float() ya ignora los espacios de sobra alrededor del número — no necesitas limpiarlo tú mismo con métodos de string.","Total = precio * cantidad, mostrado con f-string y formato :.2f."],
@@ -1908,7 +1896,7 @@ const LEVEL0=[
    'edad = 20\n# innecesario:\n# if edad >= 18: es_mayor = True\n# else: es_mayor = False\nes_mayor = edad >= 18   # lo mismo, en una línea\nprint(es_mayor)'],
  ],
  ex:[
-  {id:"d7e1",t:"Ejercicio 1 · Par o impar",
+  {id:"d7e1",py:true,t:"Ejercicio 1 · Par o impar",
    d:'Lee un número y responde <code>par</code> o <code>impar</code> usando if/else y el operador %. Se probará con <code>7</code> y con <code>10</code>.',
    starter:"",runs:[["7"],["10"]],
    check:(o,c)=>{if(!/\bif\b/.test(c))return"Debes usar if/else.";
@@ -1917,26 +1905,26 @@ const LEVEL0=[
      if(!/\bpar\b/.test(t.replace("impar","")))return"Con 10 debe responder: par";
      return true},
    hints:["numero % 2 == 0 → par. El if evalúa exactamente eso.","No olvides convertir el input a int antes del %."]},
-  {id:"d7e2",t:"Ejercicio 2 · Cuenta regresiva",
+  {id:"d7e2",py:true,t:"Ejercicio 2 · Cuenta regresiva",
    d:'Con un <code>while</code> (prohibido escribir cinco prints), imprime <code>5 4 3 2 1</code> en líneas separadas y al final la palabra <code>despegue</code>.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Obligatorio usar while.";
      if((c.match(/print/g)||[]).length>3)return"Demasiados print: el bucle debe hacer el trabajo repetitivo.";
      return norm(o[0])==="5\n4\n3\n2\n1\ndespegue"?true:"Esperaba:\n5\n4\n3\n2\n1\ndespegue\nObtuve:\n"+norm(o[0])},
    hints:["Una variable que empiece en 5 y baje de 1 en 1 mientras sea > 0.","Dentro del bucle: imprimir y LUEGO restar. El 'despegue' va fuera, sin indentación."]},
-  {id:"d7e3",t:"Ejercicio 3 · Insistir hasta que sea válido",
+  {id:"d7e3",py:true,t:"Ejercicio 3 · Insistir hasta que sea válido",
    d:'Pide una opción con el mensaje que quieras, repitiendo la pregunta con <code>while</code> hasta que el usuario escriba <code>1</code> o <code>2</code>; entonces imprime <code>Elegiste X</code>. La prueba escribirá 9, 0 y luego 2.',
    starter:"",runs:[["9","0","2"]],
    check:(o,c)=>{if(!/\bwhile\b/.test(c))return"La insistencia se logra con while.";
      return norm(o[0]).includes("Elegiste 2")?true:"Tras rechazar 9 y 0, con 2 debe imprimir: Elegiste 2"},
    hints:["Patrón: leer una vez ANTES del while; condición: opcion != \"1\" and opcion != \"2\"; volver a leer DENTRO.","input() devuelve texto: compara con \"1\" y \"2\" entre comillas, o convierte a int."]},
-  {id:"d7e4",t:"Ejercicio 4 · Caza la rama inalcanzable",
+  {id:"d7e4",py:true,t:"Ejercicio 4 · Caza la rama inalcanzable",
    d:'Con <code>nota = 19</code>, este código responde <code>Aprobado</code> en vez de <code>Excelente</code> — un bug silencioso, sin ningún error de Python. Reordena las condiciones para que <code>19</code> sí se reconozca como <code>Excelente</code>, sin perder ningún caso.',
    starter:'nota = 19\nif nota >= 11:\n    print("Aprobado")\nelif nota >= 18:\n    print("Excelente")\nelse:\n    print("Desaprobado")',runs:[[]],
    check:(o,c)=>{if(!/nota\s*>=\s*18/.test(c)||!/nota\s*>=\s*11/.test(c))return"Conserva ambas condiciones (>= 18 y >= 11) — solo cambia su orden.";
      return norm(o[0])==="Excelente"?true:"Con nota = 19 debe imprimir: Excelente"},
    hints:["Python evalúa las condiciones en orden y se detiene en la primera que sea True — si la más amplia va primero, la más estricta nunca se alcanza.","La condición más exigente (>= 18) debe ir ANTES que la más permisiva (>= 11)."]},
-  {id:"d7e5",t:"Ejercicio 5 · Refactoriza el if/else de cuatro líneas",
+  {id:"d7e5",py:true,t:"Ejercicio 5 · Refactoriza el if/else de cuatro líneas",
    d:'Simplifica este código a una sola línea de asignación, con el mismo resultado (<code>True</code> con edad 20).',
    starter:'edad = 20\nif edad >= 18:\n    es_mayor = True\nelse:\n    es_mayor = False\nprint(es_mayor)',runs:[[]],
    check:(o,c)=>{if(/if\s+edad/.test(c))return"Todavía usas el if/else de cuatro líneas — la comparación ya es un valor por sí misma.";
@@ -1946,7 +1934,7 @@ const LEVEL0=[
 {id:"d7b",n:"Día 14",t:"Decisiones y repetición · Parte 2: laboratorio y desafío",
  intro:"Ayer construiste if/while y descubriste que una condición ya es un valor. Hoy los integras en un FizzBuzz con entrada validada — el laboratorio de mayor integración de todo N0 hasta ahora — y cierras diseñando desde cero cómo verificar si un número es primo.",
  errores:["Olvidar los dos puntos al final del if/while","Indentación desigual dentro del mismo bloque","Bucle donde nada cambia la condición → infinito"],
- reto:{id:"d7r",t:"Desafío final · sin pistas",
+ reto:{id:"d7r",py:true,t:"Desafío final · sin pistas",
   d:'Lee un número n e imprime del 1 al n (uno por línea) con while, PERO: si el número es múltiplo de 3, imprime <code>fizz</code> en su lugar. La prueba escribe <code>7</code>: espera 1, 2, fizz, 4, 5, fizz, 7.',
   starter:"",runs:[["7"]],hints:[],
   check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while.";
@@ -1957,14 +1945,14 @@ const LEVEL0=[
    'total = 0\nn = 1\nwhile n <= 5:\n    total = total + n\n    n = n + 1\nprint(total)'],
  ],
  ex:[
-  {id:"d7e6",t:"Ejercicio 6 · Suma acumulada con while",
+  {id:"d7e6",py:true,t:"Ejercicio 6 · Suma acumulada con while",
    d:'Con <code>while</code> (prohibido escribir 15 a mano), suma los números del 1 al 5 e imprime el total.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while, acumulando en una variable.";
      if(/print\s*\(\s*15\s*\)/.test(c))return"Prohibido escribir 15 directamente — el total debe salir de la suma acumulada.";
      return norm(o[0])==="15"?true:"Esperaba: 15\nObtuve:\n"+norm(o[0])},
    hints:["Dos variables: una que cuenta (n, empieza en 1) y otra que acumula (total, empieza en 0).","Dentro del while: total = total + n, luego n = n + 1."]},
-  {id:"d7e7",t:"Ejercicio 7 · Cuenta los pares en un rango",
+  {id:"d7e7",py:true,t:"Ejercicio 7 · Cuenta los pares en un rango",
    d:'Con <code>while</code>, cuenta cuántos números pares hay entre 1 y 10 (ambos incluidos) e imprime el conteo.',
    starter:"",runs:[[]],
    check:(o,c)=>{if(!/\bwhile\b/.test(c))return"Debe resolverse con while.";
@@ -1972,7 +1960,7 @@ const LEVEL0=[
      return norm(o[0])==="5"?true:"Esperaba: 5\nObtuve:\n"+norm(o[0])},
    hints:["Un contador acumulador (pares = 0) que sube 1 cada vez que n % 2 == 0.","Recorre n desde 1 hasta 10 con while, verificando la paridad en cada vuelta."]},
  ],
- retoFinal:{id:"d7x",t:"Desafío final · inédito — ¿es primo?",
+ retoFinal:{id:"d7x",py:true,t:"Desafío final · inédito — ¿es primo?",
   d:'Lee un número con <code>input()</code> y determina, con <code>while</code>, si es primo (divisible solo por 1 y por sí mismo). Imprime tu respuesta con la palabra "primo" incluida cuando lo sea, y "no primo" cuando no. Pruébalo con <code>7</code> (primo) y <code>8</code> (no primo). Ningún ejercicio anterior mostró este patrón — tienes que diseñarlo desde cero.',
   starter:"",runs:[["7"],["8"]],
   hints:["Un número es primo si NINGÚN número entre 2 y el anterior a él lo divide exacto (resto 0 con %).","Recorre los posibles divisores con while, empezando en 2; si alguno divide exacto, ya sabes que no es primo — pero sigue probando con los demás patrones de esta lección: una bandera (variable booleana) que empiece en True y se vuelva False si encuentras un divisor."],
@@ -2192,31 +2180,31 @@ const LEVEL0=[
    'x = 5\nprint("DEBUG: valor de x =", x)   # rastro, no salida real\nprint(x + 3)                       # esto sí es el resultado'],
  ],
  ex:[
-  {id:"d8e1",t:"Ejercicio 1 · Caza el NameError",
+  {id:"d8e1",py:true,t:"Ejercicio 1 · Caza el NameError",
    d:'Este programa explota. Lee el traceback, encuentra el error de dedo y repáralo para que imprima <code>hola mundo</code>.',
    starter:'mensaje = "hola mundo"\nprint(mensage)',runs:[[]],
    check:(o)=>norm(o[0])==="hola mundo"?true:"Debe imprimir: hola mundo",
    hints:["El traceback dice: name 'mensage' is not defined. Compara letra por letra.","La variable se llama mensaje (con j). Los errores de dedo son el NameError más común."]},
-  {id:"d8e2",t:"Ejercicio 2 · Caza el TypeError",
+  {id:"d8e2",py:true,t:"Ejercicio 2 · Caza el TypeError",
    d:'Explota al sumar. Repáralo para que, cuando la prueba escriba <code>20</code>, imprima <code>21</code>.',
    starter:'edad = input("Tu edad: ")\nprint(edad + 1)',runs:[["20"]],
    check:(o,c)=>{if(!/int\s*\(/.test(c))return"La reparación correcta es convertir con int().";
      return norm(o[0]).includes("21")?true:"Con 20 debe imprimir 21."},
    hints:["input() devolvió '20' (str). No se puede sumar str + int.","Convierte al leer: int(input(...)) — o antes de sumar."]},
-  {id:"d8e3",t:"Ejercicio 3 · Anticipa el desastre",
+  {id:"d8e3",py:true,t:"Ejercicio 3 · Anticipa el desastre",
    d:'Lee un divisor y calcula <code>10 / divisor</code>… pero si el divisor es 0, imprime <code>no se puede dividir entre cero</code> en lugar de explotar. Pruebas: <code>0</code> y <code>4</code>.',
    starter:"",runs:[["0"],["4"]],
    check:(o,c)=>{if(!/\bif\b/.test(c))return"Anticipa con un if ANTES de dividir.";
      if(!norm(o[0]).includes("no se puede dividir entre cero"))return"Con 0 debe imprimir: no se puede dividir entre cero";
      return norm(o[1]).includes("2.5")?true:"Con 4 debe imprimir 2.5"},
    hints:["if divisor == 0: mensaje. else: la división.","Convierte el input a float (o int) antes de comparar con 0."]},
-  {id:"d8e4",t:"Ejercicio 4 · Caza el IndexError en contexto",
+  {id:"d8e4",py:true,t:"Ejercicio 4 · Caza el IndexError en contexto",
    d:'Este programa explota, pero el error no está aislado como en T5 — está entre otras líneas que sí funcionan. Repáralo para que imprima <code>Az</code>, sin adivinar cuántas letras tiene "Lopez".',
    starter:'nombre = "Ana"\ninicial = nombre[0]\napellido = "Lopez"\ninicial2 = apellido[10]\nprint(inicial + inicial2)',runs:[[]],
    check:(o,c)=>{if(/apellido\s*\[\s*10\s*\]/.test(c))return"Sigues pidiendo un índice fijo fuera de rango — usa uno que funcione sin importar la longitud.";
      return norm(o[0])==="Az"?true:"Debe imprimir: Az"},
    hints:["'Lopez' tiene 5 letras (índices 0 a 4) — el índice 10 no existe.","apellido[-1] siempre da la última letra, sin importar cuán larga sea la palabra."]},
-  {id:"d8e5",t:"Ejercicio 5 · Aplica la convención DEBUG:",
+  {id:"d8e5",py:true,t:"Ejercicio 5 · Aplica la convención DEBUG:",
    d:'El primer print de este código es un rastro de depuración que quedó pegado, no información real para quien use el programa. Márcalo con <code>DEBUG:</code> o elimínalo — pero el resultado real (<code>8</code>) debe seguir imprimiéndose al final.',
    starter:'x = 5\nprint("valor de x:", x)\ny = x + 3\nprint(y)',runs:[[]],
    check:(o,c)=>{const lines=norm(o[0]).split("\n");
@@ -2228,7 +2216,7 @@ const LEVEL0=[
 {id:"d8b",n:"Día 16",t:"Errores y tracebacks · Parte 2: cierre integral de N0",
  intro:"Ayer sistematizaste la lectura de tracebacks y la convención DEBUG:. Hoy cierras todo el Nivel 0: el laboratorio integra las ocho lecciones completas (T1–T8) en un solo artefacto, y el desafío final combina dos clases de error distintas — el broche del nivel.",
  errores:["Leer el traceback de arriba hacia abajo","Ignorar el número de línea que te regala","Borrar código hasta que 'funcione' en vez de entender la causa"],
- reto:{id:"d8r",t:"Desafío final · sin pistas",
+ reto:{id:"d8r",py:true,t:"Desafío final · sin pistas",
   d:'Un divisor robusto: lee dos números y muestra la división con 2 decimales (formato <code>Resultado: X.XX</code>), pero si el divisor es 0, imprime <code>no se puede dividir entre cero</code> sin explotar. Pruebas: (9, 4) y (5, 0).',
   starter:"",runs:[["9","4"],["5","0"]],hints:[],
   check:(o,c)=>{if(!/\bif\b/.test(c))return"La robustez se construye anticipando con if.";
@@ -2239,14 +2227,14 @@ const LEVEL0=[
   ["Anticipar combina varias validaciones, no solo una",T('El cierre integral del nivel combina lo de T6 (¿son dígitos válidos, con <code>.isdigit()</code>?) con lo de hoy (¿es cero, antes de dividir?) — dos anticipaciones distintas, en el mismo bloque de código, evaluadas en el orden correcto: primero si el dato es siquiera convertible, después si el valor convertido es seguro de usar.')],
  ],
  ex:[
-  {id:"d8e6",t:"Ejercicio 6 · Valida antes de indexar",
+  {id:"d8e6",py:true,t:"Ejercicio 6 · Valida antes de indexar",
    d:'Lee un texto con <code>input()</code>. Si NO está vacío, imprime su primera letra; si está vacío, imprime <code>vacío</code> — sin que tu programa explote con IndexError. Pruebas: cadena vacía y <code>"hola"</code>.',
    starter:"",runs:[[""],["hola"]],
    check:(o,c)=>{if(!/\bif\b/.test(c))return"Anticipa el caso vacío con if, antes de indexar.";
      if(!norm(o[0]).includes("vacío"))return"Con la cadena vacía debe imprimir: vacío";
      return norm(o[1]).split("\n").pop()==="h"?true:"Con 'hola' la última línea debe imprimir: h\nObtuve:\n"+norm(o[1])},
    hints:["if texto == \"\": aviso. else: imprime texto[0].","Indexar [0] sobre un string vacío lanza IndexError — por eso hay que anticipar antes de tocar el índice."]},
-  {id:"d8e7",t:"Ejercicio 7 · Dos anticipaciones combinadas",
+  {id:"d8e7",py:true,t:"Ejercicio 7 · Dos anticipaciones combinadas",
    d:'Lee un texto con <code>input()</code>. Si NO son puros dígitos, imprime <code>entrada invalida</code>. Si lo son, conviértelo e imprime <code>10</code> dividido entre ese número con 2 decimales — salvo que sea <code>0</code>, en cuyo caso imprime <code>no se puede dividir entre cero</code>. Pruebas: <code>"abc"</code>, <code>"0"</code>, <code>"5"</code>.',
    starter:"",runs:[["abc"],["0"],["5"]],
    check:(o,c)=>{if(!/\.isdigit\s*\(/.test(c))return"Usa .isdigit() para la primera anticipación (¿es convertible?).";
@@ -2256,7 +2244,7 @@ const LEVEL0=[
      return norm(o[2]).split("\n").pop()==="2.00"?true:"Con '5' la última línea debe imprimir: 2.00\nObtuve:\n"+norm(o[2])},
    hints:["Primero verifica .isdigit(); si falla, avisa y no sigas.","Si es dígito, conviértelo con int() y RECIÉN AHÍ verifica si es 0, antes de dividir."]},
  ],
- retoFinal:{id:"d8x",t:"Desafío final · inédito — dos errores, dos clases distintas",
+ retoFinal:{id:"d8x",py:true,t:"Desafío final · inédito — dos errores, dos clases distintas",
   d:'Este programa tiene DOS errores simultáneos, de clases distintas: uno que Python detecta antes de ejecutar, y otro que solo aparece al correr. Diagnostícalos y repáralos en el orden correcto (el que Python te obliga a seguir), sin que se te diga cuántos hay ni de qué tipo son. Al final debe imprimir <code>HOLA</code> y luego <code>10</code>.',
   starter:'mensaje = "hola"\nif len(mensaje) > 3\n    print(mensaje.upper())\ntotal = 10\nprint(total + valor_extra)',runs:[[]],
   hints:["El primer error impide que el programa arranque siquiera — revisa la anatomía de un error de T1: dónde, qué tipo, qué mensaje.","Cuando repares el primero, aparecerá un segundo error distinto: una referencia a algo que nunca se definió. Puedes quitar esa referencia, o definir la variable con un valor que no cambie el resultado esperado."],
@@ -2328,7 +2316,7 @@ const LEVEL0=[
    check:(o,c)=>{if(!/return\s+total/.test(c))return"Agrega 'return total' al final de la función — sin él, la función devuelve None en silencio.";return norm(o[0])==="30"?true:"Esperaba: 30\nObtuve:\n"+norm(o[0])},
    hints:["return total — la línea exacta que faltaba."]},
  ],
- retoFinal:{id:"d9x",t:"Reflexión · ¿Por qué una función sin return no da error?",
+ retoFinal:{id:"d9x",py:true,t:"Reflexión · ¿Por qué una función sin return no da error?",
   d:'Sin código que ejecutar: si Python detectara automáticamente que "esta función no devuelve nada útil" y lanzara un error, ¿sería mejor o peor para aprender? Escribe tu razonamiento en al menos 2 líneas.',
   starter:'# Sin código que ejecutar. Escribe tu razonamiento como comentario:\n# ...\nprint("reflexion registrada")',runs:[[]],
   hints:["Piensa en funciones que de verdad NO necesitan devolver nada (como print() mismo, o una función que solo guarda algo en un archivo) — ¿Python podría distinguir esos casos de un olvido real?"],
@@ -2350,22 +2338,22 @@ const LEVEL0=[
   ["El estilo no es la lógica","Nombres cortos (x, y, acc, itm), sangrías distintas, o un orden distinto de las mismas ideas no cambian QUÉ hace el código — solo cómo se ve. Leer código ajeno con soltura significa separar 'me resulta incómodo' de 'está mal'."],
  ],
  ex:[
-  {id:"d10e1",t:"Ejercicio 1 · Trazar con nombres cortos y ajenos",
+  {id:"d10e1",py:true,t:"Ejercicio 1 · Trazar con nombres cortos y ajenos",
    d:'Sin ejecutar primero: traza <code>x, y, z, w</code> en orden y agrega UNA línea que imprima el valor final de <code>w</code> — sin cambiar ninguna línea existente.',
    starter:'x = 4\ny = x * 3\nz = y - 5\nw = z + x\n# tu código aquí: imprime w',runs:[[]],
    check:(o,c)=>{if(/^\s*(x|y|z|w)\s*=/m.test(c.split("\n").slice(4).join("\n")))return"No cambies la lógica existente — solo agrega el print final.";return norm(o[0])==="11"?true:"Esperaba: 11\nObtuve:\n"+norm(o[0])},
    hints:["print(w) — la línea que faltaba, sin tocar nada de lo anterior."]},
-  {id:"d10e2",t:"Ejercicio 2 · Trazar un acumulador en un while",
+  {id:"d10e2",py:true,t:"Ejercicio 2 · Trazar un acumulador en un while",
    d:'Traza <code>acc</code> a través de las 5 vueltas del while (nombres de otro autor: acc = acumulador, n = contador). Agrega UNA línea que imprima el valor final de <code>acc</code>.',
    starter:'acc = 0\nn = 1\nwhile n <= 5:\n    acc = acc + n\n    n = n + 1\n# tu código aquí: imprime acc',runs:[[]],
    check:(o,c)=>norm(o[0])==="15"?true:"Esperaba: 15\nObtuve:\n"+norm(o[0]),
    hints:["print(acc) — acc acumula 1+2+3+4+5 = 15."]},
-  {id:"d10e3",t:"Ejercicio 3 · Trazar un if/elif con nombres poco obvios",
+  {id:"d10e3",py:true,t:"Ejercicio 3 · Trazar un if/elif con nombres poco obvios",
    d:'Traza qué rama de <code>if/elif/else</code> se ejecuta con <code>p=7</code> y <code>q=3</code>, y agrega UNA línea que imprima <code>r</code>.',
    starter:'p = 7\nq = 3\nif p > q * 2:\n    r = "grande"\nelif p > q:\n    r = "mediano"\nelse:\n    r = "pequeno"\n# tu código aquí: imprime r',runs:[[]],
    check:(o,c)=>norm(o[0])==="grande"?true:"Esperaba: grande\nObtuve:\n"+norm(o[0]),
    hints:["q*2 es 6, y p (7) SÍ es mayor que 6 — la primera condición ya se cumple, entra a 'grande'.","print(r)"]},
-  {id:"d10e4",t:"Ejercicio 4 · Trazar un encadenamiento de métodos ajeno",
+  {id:"d10e4",py:true,t:"Ejercicio 4 · Trazar un encadenamiento de métodos ajeno",
    d:'Traza el resultado de encadenar <code>.strip().lower().replace(...)</code> sobre <code>s</code>, y agrega UNA línea que imprima <code>t</code>.',
    starter:'s = "  HOLA mundo  "\nt = s.strip().lower().replace("mundo", "python")\n# tu código aquí: imprime t',runs:[[]],
    check:(o,c)=>norm(o[0])==="hola python"?true:"Esperaba: hola python\nObtuve:\n"+norm(o[0]),
@@ -2398,7 +2386,7 @@ const LEVEL0=[
    check:(o,c)=>{if(/lista\s*\[\s*1\s*:\s*2\s*\]/.test(c))return"El slice [1:2] solo trae el índice 1 (un solo elemento) — revisa desde qué índice deberían empezar 'los primeros dos'.";return norm(o[0])==="[1, 2]"?true:"Esperaba: [1, 2]\nObtuve:\n"+norm(o[0])},
    hints:["Los PRIMEROS dos elementos empiezan en el índice 0, no en el 1.","return lista[0:2]"]},
  ],
- retoFinal:{id:"d10x",t:"Reflexión de cierre · De leer tu propio código a leer el de cualquiera",
+ retoFinal:{id:"d10x",py:true,t:"Reflexión de cierre · De leer tu propio código a leer el de cualquiera",
   d:'Cierra este tema: en al menos 3 líneas, ¿qué cambia en tu forma de acercarte a un programa nuevo ahora que sabes trazarlo sin ejecutar, comparado con cómo lo hacías antes de este tema? ¿Por qué esta habilidad importa tanto para el proyecto que viene?',
   starter:'# Sin código que ejecutar. Escribe tu reflexión como comentario:\n# ...\nprint("reflexion de lectura de codigo registrada")',runs:[[]],
   hints:["Piensa en el propio código de la Calculadora que construirás a continuación — vas a tener que releer y depurar TU PROPIO código, con la misma paciencia que hoy le diste al de 'otro autor'."],
@@ -2409,7 +2397,7 @@ const LEVEL0=[
   ["Especificación (contrato estricto)",T('Construye una calculadora de consola con menú en bucle. El corrector ejecutará tu programa con secuencias de entradas reales y verificará cada salida. Contrato:<ul class="tight small"><li>Menú con opciones <strong>1</strong> suma · <strong>2</strong> resta · <strong>3</strong> multiplicación · <strong>4</strong> división · <strong>5</strong> potencia · <strong>6</strong> resto · <strong>7</strong> salir.</li><li>Tras elegir operación, pide dos números (léelos con <code>float()</code>).</li><li>Muestra el resultado EXACTAMENTE como <code>Resultado: X</code> con 2 decimales (f-string con <code>:.2f</code>). Ej.: <code>Resultado: 12.00</code></li><li>División entre cero → imprime una línea que contenga <code>no se puede dividir entre cero</code> (sin explotar) y vuelve al menú.</li><li>Opción no válida → imprime una línea que contenga <code>Opción inválida</code> y vuelve al menú.</li><li>Opción 7 → imprime una línea que contenga <code>Hasta luego</code> y termina.</li><li>Nombres de variables profesionales: nada de <code>a</code>, <code>b</code>, <code>x</code>.</li></ul>Cuando lo apruebes aquí, llévalo al chat con tu tutor para el <strong>code review y la defensa oral</strong> — el corrector mide el contrato; el tutor mide tu comprensión.')],
  ],
  ex:[
-  {id:"d9p",t:"Entrega del proyecto",
+  {id:"d9p",py:true,t:"Entrega del proyecto",
    d:'Escribe tu calculadora completa aquí. Batería de pruebas: suma 4+8, división 10/4, división 5/0, opción 9 inválida, salir; y en una segunda corrida: potencia 2^10, resto 7%2, salir.',
    starter:"",big:true,
    runs:[["1","4","8","4","10","4","4","5","0","9","7"],["5","2","10","6","7","2","7"]],
@@ -2435,7 +2423,7 @@ const LEVEL0=[
  intro:"Antes del examen, un repaso real: tres ejercicios que combinan deliberadamente conceptos de varias lecciones distintas — igual que exigirán los proyectos reales de aquí en adelante. Usa también la pestaña Repaso (flashcards) y revisa tus Puntos débiles en Inicio antes de continuar.",
  theory:[],
  ex:[
-  {id:"drp1",t:"Repaso 1 · Presentación completa",
+  {id:"drp1",py:true,t:"Repaso 1 · Presentación completa",
    d:'Pide un nombre y una edad. Imprime EXACTAMENTE <code>ALEX tiene 25 años y su nombre tiene 4 letras.</code> — combinando mayúsculas, conversión de tipo y <code>len()</code>. Prueba: <code>Alex</code> y <code>25</code>.',
    starter:"",runs:[["Alex","25"]],
    check:(o,c)=>{if(!/\.upper\s*\(/.test(c))return"Usa .upper() para el nombre en mayúsculas.";
@@ -2443,7 +2431,7 @@ const LEVEL0=[
      if(!/len\s*\(/.test(c))return"Usa len() para contar las letras del nombre.";
      return norm(o[0]).split("\n").pop()==="ALEX tiene 25 años y su nombre tiene 4 letras."?true:"Con Alex y 25 la última línea debe ser: ALEX tiene 25 años y su nombre tiene 4 letras.\nObtuve:\n"+norm(o[0])},
    hints:["Necesitas tres piezas: nombre.upper(), int(edad), y len(nombre) — todas dentro de una f-string.","len() cuenta el nombre tal como se leyó, antes o después de .upper() da lo mismo: la cantidad de letras no cambia."]},
-  {id:"drp2",t:"Repaso 2 · Múltiplos con validación",
+  {id:"drp2",py:true,t:"Repaso 2 · Múltiplos con validación",
    d:'Pide un número. Si NO son puros dígitos, imprime <code>entrada inválida</code>. Si lo son, y es múltiplo de 5, imprime algo que incluya <code>múltiplo de 5</code>; si no, algo que incluya <code>no es múltiplo de 5</code>. Pruébalo con <code>abc</code>, <code>15</code> y <code>7</code>.',
    starter:"",runs:[["abc"],["15"],["7"]],
    check:(o,c)=>{if(!/\.isdigit\s*\(/.test(c))return"Valida con .isdigit() antes de convertir.";
@@ -2455,7 +2443,7 @@ const LEVEL0=[
      if(!t2.includes("no es múltiplo de 5"))return"Con 7 debe indicar que no es múltiplo de 5.";
      return true},
    hints:["Primer filtro: if texto.isdigit(): ... else: entrada inválida.","Dentro de ese if, convierte y compara numero % 5 == 0."]},
-  {id:"drp3",t:"Repaso 3 · Repara el bug integrador",
+  {id:"drp3",py:true,t:"Repaso 3 · Repara el bug integrador",
    d:'Este código explota. El error no está donde parece — revisa el nombre exacto del método. Repáralo para que imprima <code>HOLA MUNDO</code>.',
    starter:'frase = "  Hola Mundo  "\nlimpio = frase.strip().Upper()\nprint(limpio)',runs:[[]],
    check:(o,c)=>{if(/\.Upper\s*\(/.test(c))return"Los métodos de Python son sensibles a mayúsculas — revisa el nombre exacto del método.";
@@ -2464,7 +2452,7 @@ const LEVEL0=[
  ]},
 {id:"d10examen",n:"Día 24",t:"Evaluación final del nivel",eval:true,
  intro:"Fase 13: demostrar. Primero contra el corrector (teórico + práctico, sin pistas) y después la defensa oral conmigo en el chat — sin copiar, solo razonar. Si algo sale mal, no es fracaso: es el mapa de tu repaso.",
- theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen teórico en la pestaña <strong>Examen</strong> (15 preguntas, mínimo 85% (regla 8.5/10)); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
+ theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen de nivel cronometrado en la pestaña <strong>Examen</strong> (se muestrean 20 preguntas de un banco de 26, mínimo 17/20); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
  ex:[]},
 ];
 /* ============================================================
@@ -32033,7 +32021,7 @@ async function checkEx(id){
   if(e.py&&!_pyodidePromise)fb.innerHTML='<div class="hintbox">Cargando Python real por primera vez (unos segundos, solo la primera vez)…</div>';
   const outs=[];
   for(const stdin of e.runs){
-    const r=await(e.py?runScriptedPy(code,stdin):runScripted(code,stdin));
+    const r=await(runScriptedPy(code,stdin));
     if(!r.ok){fb.innerHTML='<div class="kobox">'+esc((r.out?r.out+"\n":"")+r.tb)+"</div>"+
       '<p class="small muted" style="margin:6px 0 0">Lee el error de abajo hacia arriba: te dice tipo, mensaje y línea.</p>';return}
     outs.push(r.out);

@@ -260,9 +260,8 @@
 <nav class="tabs" aria-label="Secciones">
   <button data-v="inicio" class="on">Inicio</button>
   <button data-v="clases">Clases</button>
-  <button data-v="terminal">Terminal</button>
-  <button data-v="examen">Examen</button>
-  <button data-v="examennivel">Examen de nivel</button>
+  <button data-v="terminal">Terminal</button>
+  <button data-v="examennivel">Examen</button>
   <button data-v="repaso">Repaso</button>
   <button data-v="ruta">Ruta</button>
 </nav>
@@ -31520,7 +31519,7 @@ function dayUnlocked(i){
 }
 function projectDone(){return!!S.ex["d9p"]}
 function practicaDone(){return PRACTICA.every(p=>S.ex[p.id])}
-function quizPassed(){return S.quiz.best!==null&&S.quiz.best>=85}
+function quizPassed(){return nivelExamAprobado(0)}
 function levelApproved(){return projectDone()&&practicaDone()&&quizPassed()&&nivelExamAprobado(0)}
 
 /* ============================================================
@@ -32336,7 +32335,7 @@ function nextStepInfo(){
   for(let i=0;i<LEVEL0.length;i++){
     const d=LEVEL0[i];
     if(!dayUnlocked(i))break;
-    if(d.eval){if(!levelApproved())return{label:"Evaluación final: examen teórico y práctico",target:"examen",di:i};continue}
+    if(d.eval){if(!levelApproved())return{label:"Evaluación final: examen teórico y práctico",target:"examennivel",di:i};continue}
     const p=phOf(d);
     if(d.intuit&&!p.int)return{label:d.n+" · Fase 1: Comprensión e intuición",target:"clases",di:i};
     if(d.mcq&&!p.mcq)return{label:d.n+" · Fase 2: Teoría y razonamiento",target:"clases",di:i};
@@ -32344,7 +32343,7 @@ function nextStepInfo(){
     if(d.reto&&!S.ex[d.reto.id])return{label:d.n+" · Fase 6: Laboratorio integrador",target:"clases",di:i};
     if(d.retoFinal&&!S.ex[d.retoFinal.id])return{label:d.n+" · Fase 7: Desafío final",target:"clases",di:i};
   }
-  if(levelApproved())return{label:"Defensa oral con tu tutor → sello + Nivel 1",target:"examen",di:-1};
+  if(levelApproved())return{label:"Defensa oral con tu tutor → sello + Nivel 1",target:"examennivel",di:-1};
   return{label:"—",target:"clases",di:-1};
 }
 function rutaGo(){const ns=nextStepInfo();
@@ -32676,6 +32675,13 @@ const EXAMENES_NIVEL={
   {q:"La igualdad de oportunidades (equal opportunity) como criterio de equidad exige que...",o:["Todos reciban el mismo resultado","La tasa de verdaderos positivos (recall) sea igual entre grupos","El modelo ignore los datos","Nadie sea seleccionado"],a:1,e:"Equal opportunity (Hardt et al. 2016) exige el mismo TPR/recall por grupo: entre quienes SÍ merecen el resultado positivo, la misma proporción lo recibe sin importar el grupo. Es más débil que equalized odds, que además iguala el FPR."}
  ]},
  0:{nivel:0,titulo:"Fundamentos de Python",minutos:30,total:20,aprobar:17,preguntas:[
+{q:"Cuando ejecutas un programa Python, ¿qué hace principalmente el intérprete?",o:["Convierte todo el archivo a un .exe y lo guarda","Lee el código, lo traduce a instrucciones internas y las ejecuta una por una","Envía el código a un servidor de internet","Solo revisa la ortografía"],a:1,e:"Python es interpretado: traduce a bytecode y lo ejecuta instrucción por instrucción. No genera .exe ni necesita internet."},
+  {q:"¿Cuál es la diferencia entre = y ==?",o:["Son intercambiables","= compara y == asigna","= asigna un valor; == compara y devuelve True/False","== solo funciona con números"],a:2,e:"= guarda un valor en una variable; == pregunta si dos valores son iguales."},
+  {q:"¿Mejor nombre para el precio total de una compra?",o:["pt","PrecioTotal","precio_total","x1"],a:2,e:"PEP 8: snake_case descriptivo. El código se escribe para el lector."},
+  {q:"¿Qué imprime print(\"py\" * 3)?",o:["Error","py3","pypypy","py py py"],a:2,e:"String por entero = repetición: 'pypypy'."},
+  {q:"¿Cómo se lee un traceback?",o:["De arriba hacia abajo, la primera línea es el error","De abajo hacia arriba: la última línea dice el tipo de error","Solo importa el número de línea","Es un mensaje aleatorio"],a:1,e:"La última línea dice QUÉ pasó (tipo + mensaje); encima, DÓNDE (archivo y línea)."},
+  {q:"¿Qué imprime print(len(\"hola \"))?",o:["4","5","6","Error"],a:1,e:"len() cuenta TODO, espacios incluidos: 5."},
+
   {q:"¿Cuál de estos valores es 'truthy' (se evalúa como verdadero dentro de un if)?",
    o:["0 (el número cero)","[] (una lista vacía)","'' (una cadena de texto vacía)","'0' (una cadena con el carácter cero)"],
    a:3,

@@ -33840,8 +33840,427 @@ const EXTRA={
    "✅ Reconocer que split y join son operaciones inversas y reconstruir el texto original a partir de las piezas",
    "✅ Usar la \"verdad de lo vacío\": una lista o string vacío es falso y con datos es verdadero, para preguntar \"¿hay datos?\" sin escribir len(...) > 0"
   ]
+ },
+ "n0mp11": {
+  "comp": [
+   "✅ Estructurar un programa completo con un menú en bucle (while) que repite hasta que el usuario elige 'salir'",
+   "✅ Descomponer un problema en varias funciones pequeñas, cada una con una sola responsabilidad, en vez de un solo bloque gigante",
+   "✅ Convertir la entrada de input() al tipo correcto con int()/float() antes de operar, evitando el bug de comparar texto con número",
+   "✅ Contar la frecuencia de palabras de un texto usando un diccionario (patrón contador) e imprimir la más repetida",
+   "✅ Construir un validador que revisa varias reglas (longitud, mayúscula, dígito) y le dice al usuario CUÁLES condiciones falló"
+  ],
+  "hook": "Nadie te paga por saber qué hace un for aislado: te pagan por JUNTAR bucles, condiciones y funciones en un programa que resuelve un problema de principio a fin. Cada repositorio de GitHub, cada startup y tu futuro JARVIS empezaron exactamente con lo que harás hoy — no piezas sueltas, sino un programa entero que corre y hace algo útil. Este es el día en que cruzas la línea entre 'me sé la sintaxis' y 'sé programar'.",
+  "hist": "En 1972 Brian Kernighan escribió en un manual de Bell Labs el primer 'Hello, World' — la idea de construir un programa COMPLETO y diminuto antes de estudiar teoría, ritual que quedó grabado en 'The C Programming Language' (1978). Ese mismo año, David Ahl publicó 'BASIC Computer Games', el primer libro de computación en vender un millón de copias: no tenía teoría, solo programitas completos como GUESS (adivina el número) que la gente TECLEABA y modificaba. Aprender programando programas enteros —no fragmentos— es el método más viejo y probado que existe, y es justo el de este taller.",
+  "chk": {
+   "q": "En 'Adivina el número' guardas el secreto con secreto = 7 y lees el intento con intento = input('Tu número: '). Tecleas 7 y el programa insiste en que fallaste. ¿Por qué?",
+   "o": [
+    "Hay un bug de Python con el número 7",
+    "input() devuelve el TEXTO '7', y '7' == 7 es False: estás comparando texto con número",
+    "Falta un else en el if",
+    "input() solo sirve para leer letras, no números"
+   ],
+   "a": 1,
+   "e": "input() SIEMPRE devuelve str. Hasta que no hagas int(intento), comparas '7' (texto) con 7 (número): nunca son iguales. Es EL bug que más atrapa al integrar I/O con lógica — por eso lo enfrentas hoy, no en teoría."
+  },
+  "defensa": [
+   "Tu conversor y tu validador usan un menú en bucle casi idéntico. ¿Qué parte extraerías a una función para reutilizar ese menú en cualquier proyecto, en vez de copiarlo y pegarlo?",
+   "En el analizador de texto, ¿por qué un diccionario es mejor que una lista para contar palabras? ¿Qué tendrías que hacer a mano con la lista que el diccionario te ahorra?",
+   "(inédita) Si tu 'Adivina el número' tuviera que dar una pista ('más alto' / 'más bajo') además de decir si acertaste, ¿en qué punto exacto de tu código añadirías esa lógica y con qué estructura de control?"
+  ],
+  "metacog": [
+   "De tus mini-proyectos, ¿cuál te costó MÁS empezar (mirar la hoja en blanco), y qué hiciste concretamente para dar el primer paso?",
+   "¿En qué momento dejaste de pensar 'línea por línea' y empezaste a pensar 'qué función necesito'? Describe ese cambio.",
+   "Si mañana te pidieran un mini-proyecto nuevo desde cero, ¿qué es lo PRIMERO que harías antes de escribir una sola línea de código?"
+  ]
+ },
+ "n0mp21": {
+  "comp": [
+   "✅ Modelar una entidad del mundo real (un contacto, un producto, una tarea) como un diccionario de campos clave→valor",
+   "✅ Guardar muchas entidades en una lista de diccionarios y recorrerla completa con for",
+   "✅ Acceder a un campo con el doble salto índice→clave (carrito[i]['precio']) sin confundir los dos niveles",
+   "✅ Construir un menú en bucle (agregar / listar / buscar / salir) que conserva los datos entre una vuelta y la siguiente",
+   "✅ Calcular un agregado sobre toda la colección —total del carrito, promedio de notas, cuántas tareas quedan pendientes— recorriendo la lista"
+  ],
+  "hook": "Abre el carrito de Amazon, tus contactos, una playlist de Spotify o un tablero de Notion: por dentro no hay magia, hay una lista de diccionarios — exactamente la estructura que construirás hoy. Es la forma en que casi TODA app guarda una colección de cosas donde cada una tiene varios campos, y es lo que te devuelve el JSON de casi cualquier API. Dominar la lista de diccionarios es dominar el 90% de la 'lógica de datos' de las apps reales.",
+  "hist": "La idea de un 'registro' —un paquete de campos con nombre: nombre, saldo, dirección— es de las más viejas de la computación: COBOL la formalizó en 1959 para los datos de las empresas. El motor que hace que un diccionario encuentre una clave al instante es la tabla hash, que Hans Peter Luhn esbozó en un memo interno de IBM en 1953. Y a inicios de los 2000, Douglas Crockford tomó justamente 'lista de objetos con campos' y la llamó JSON — hoy el idioma en que casi toda API del mundo habla. La lista de diccionarios que armas hoy es a la vez la espina dorsal de 60 años de software empresarial y el formato de la web moderna.",
+  "chk": {
+   "q": "Tu carrito es carrito = [{'nombre': 'pan', 'precio': 3}, {'nombre': 'leche', 'precio': 5}]. ¿Cómo obtienes el precio de la leche?",
+   "o": [
+    "carrito['precio']",
+    "carrito[1]['precio']  — primero el índice de la lista, luego la clave del diccionario",
+    "carrito['leche']['precio']",
+    "carrito.precio[1]"
+   ],
+   "a": 1,
+   "e": "Una lista de diccionarios tiene DOS niveles: primero eliges QUÉ diccionario con un índice de lista (carrito[1]), y sobre ese diccionario eliges QUÉ campo con la clave (['precio']). Ese doble salto —índice, luego clave— es el gesto que repites en cada proyecto de hoy."
+  },
+  "defensa": [
+   "En tu agenda, ¿por qué un diccionario {'Ana': '555-1234'} es mejor que dos listas paralelas (nombres[] y telefonos[])? ¿Qué se puede desincronizar con las dos listas que el diccionario impide de raíz?",
+   "Tu carrito y tu lista de tareas son, los dos, 'listas de diccionarios'. ¿Qué tienen en común el código de 'agregar un elemento' y el de 'recorrer y mostrar' en ambos?",
+   "(inédita) Si tu lista de tareas tuviera que guardar, además de 'hecha/pendiente', una PRIORIDAD (alta/media/baja) y luego mostrar solo las de prioridad alta que siguen pendientes, ¿qué campo añadirías al diccionario y qué condición pondría tu filtro?"
+  ],
+  "metacog": [
+   "¿En qué momento 'viste' que el carrito de Amazon y tu lista de tareas son, por dentro, la misma estructura? ¿Cambió eso cómo miras las apps que usas a diario?",
+   "¿Qué te costó más: diseñar QUÉ campos tendría cada diccionario, o escribir el código para recorrerlos? ¿Por qué crees que fue así?",
+   "Si quisieras que estos datos NO se borraran al cerrar el programa, ¿qué sientes que te falta aprender todavía? (pista: lo verás pronto, con archivos)"
+  ]
+ },
+ "n0tst1": {
+  "hook": "Netflix corre en producción un programa llamado Chaos Monkey que apaga sus propios servidores AL AZAR, a propósito, para obligar a sus ingenieros a construir sistemas que no se caigan cuando algo falla de verdad. Esa es la mentalidad de hoy a tu escala: antes de que un usuario escriba 'abc' donde pediste una edad, lo escribes tú. Quien imagina la entrada que rompe su programa ANTES es quien no se cae en producción — y por esa disciplina de QA las empresas pagan sueldos que no ves por escribir código 'que funciona solo cuando todo sale bien'.",
+  "hist": "El término 'bug' se hizo legendario el 9 de septiembre de 1947, cuando el equipo de Grace Hopper encontró una polilla real atascada en la computadora Harvard Mark II y la pegó en la bitácora: «primer caso real de un bicho encontrado». Décadas después, en 1969, Edsger Dijkstra dejó la frase que define la disciplina de hoy: «las pruebas pueden mostrar la PRESENCIA de errores, nunca su ausencia». Por eso no basta con probar que funciona: hay que imaginar activamente cómo se rompe.",
+  "chk": {
+   "q": "Usas edad = int(texto) solo si texto.isdigit(). Llega el texto '-5'. ¿Qué decide .isdigit()?",
+   "o": [
+    "Lo acepta: -5 es un número entero válido",
+    "Lo rechaza: el signo '-' no es un dígito, así que .isdigit() da False",
+    "Da error, porque no puede evaluar el signo",
+    "Lo acepta, pero lo guarda como 5 (valor absoluto)"
+   ],
+   "a": 1,
+   "e": ".isdigit() solo devuelve True si TODOS los caracteres son 0-9; el '-' no lo es → False. Efecto secundario feliz: tu guarda contra 'texto no numérico' también bloquea negativos sin que lo pidieras. Pero no confíes en la suerte: el día que necesites aceptar negativos legítimos hará falta otra comprobación."
+  },
+  "defensa": [
+   "¿Por qué es mucho más barato imaginar la entrada que rompe tu programa ANTES de escribirlo que descubrirla cuando ya está en producción con usuarios reales?",
+   "Tienes edad = int(input()). Nombra tres entradas distintas de un usuario real que lo harían estallar, y di con qué error concreto cae cada una.",
+   "(inédita) Si una guarda con .isdigit() rechaza '-5' y también '3.5', ¿en qué casos legítimos te estaría estorbando, y cómo la arreglarías sin quitar la protección?"
+  ],
+  "metacog": [
+   "De las entradas peligrosas de hoy (vacío, texto, cero, negativo, número enorme), ¿cuál NO se te habría ocurrido a ti solo? ¿Qué te dice eso sobre cómo piensas cuando programas 'en modo feliz'?",
+   "Cuando escribes un programa, ¿en qué momento empiezas a pensar en lo que puede fallar: mientras lo escribes, o solo cuando ya falló? ¿Qué te costaría adelantar ese momento?",
+   "Piensa en la última app que te dio un error feo. ¿Crees que alguien no imaginó tu caso? ¿Cómo se sintió, como usuario, chocar con ese hueco?"
+  ],
+  "comp": [
+   "✅ Listar las entradas peligrosas clásicas (campo vacío, texto donde va un número, cero, negativo, número fuera de rango) antes de ejecutar un programa",
+   "✅ Blindar un input con una guarda: comprobar con .isdigit() antes de convertir con int() para que el programa no reviente",
+   "✅ Predecir qué error concreto (ValueError, ZeroDivisionError) lanza cada entrada peligrosa",
+   "✅ Combinar varias guardas para volver robusta una mini calculadora o un registro de usuario",
+   "✅ Adoptar el hábito de QA: preguntarte «¿cómo rompo esto?» como paso previo al código, no como reacción al fallo"
+  ]
+ },
+ "n0doc1": {
+  "hook": "Cada vez que abres un proyecto en GitHub y entiendes en 30 segundos qué hace, es porque alguien escribió un README y docstrings. Los ingenieros de OpenAI o Amazon no memorizan las miles de funciones de Python: teclean help() y leen. Saber encontrar la respuesta en segundos — en vez de guardarla en la cabeza — es la habilidad que separa a un profesional de alguien que se traba cada vez que olvida un nombre.",
+  "hist": "El nombre PEP viene de «Python Enhancement Proposal». En 2001, Guido van Rossum (creador de Python) junto a Barry Warsaw escribió el PEP 8, la guía de estilo que hoy siguen millones de programadores; ese mismo año el PEP 257 fijó cómo escribir docstrings. La idea de fondo es más vieja: en 1984 Donald Knuth propuso la «programación literaria» — código escrito para que lo lea primero un humano y después la máquina.",
+  "chk": {
+   "q": "Pones # Suma dos números como primera línea dentro de tu función, en vez de una cadena entre triple comillas. ¿Lo mostrará help(mi_funcion)?",
+   "o": [
+    "Sí: cualquier texto explicativo cuenta como documentación",
+    "No: el comentario # lo descarta el intérprete; solo una cadena puesta como primera instrucción se vuelve el docstring",
+    "Solo si el comentario empieza con mayúscula",
+    "Da error: no se permite # dentro de una función"
+   ],
+   "a": 1,
+   "e": "help() y .__doc__ leen el docstring: una cadena de texto (normalmente entre triple comillas) colocada como PRIMERA instrucción de la función. El comentario # existe solo para quien lee el código fuente; Python lo descarta y help() no lo ve nunca. Misma intención de explicar, mecanismos distintos."
+  },
+  "defensa": [
+   "Sin ejecutar nada: ¿en qué se diferencia lo que te muestra dir(str) de lo que te muestra help(str.upper)?",
+   "¿Por qué un programador experto teclea help(algo) en el REPL en lugar de abrir Google? ¿Qué ventaja tiene preguntarle a Python mismo antes que a internet?",
+   "(inédita) Si un comentario con # y un docstring con triple comillas 'explican' lo mismo, ¿por qué Python tira uno a la basura y el otro lo guarda en .__doc__? ¿Para quién es cada uno?"
+  ],
+  "metacog": [
+   "Antes de hoy, ¿cuánto de tu esfuerzo era 'memorizar Python' y cuánto era 'saber buscar cómo se hace'? ¿Cambió esa proporción al terminar la lección?",
+   "Vuelve a una función que escribiste esta semana. ¿La entenderías dentro de tres meses? ¿Qué docstring de una sola línea te la salvaría?",
+   "¿Qué se siente más 'profesional': recordar de memoria el nombre de un método, o saber encontrarlo en 5 segundos? ¿Por qué crees que la industria valora más lo segundo?"
+  ],
+  "comp": [
+   "✅ Interrogar a Python desde el REPL con help(objeto) y dir(objeto) para descubrir qué puede hacer un dato sin memorizarlo",
+   "✅ Escribir un docstring (cadena entre triple comillas como primera instrucción) y leerlo con help() o con .__doc__",
+   "✅ Distinguir un comentario # (solo para quien lee el código) de un docstring (que Python guarda y help() muestra)",
+   "✅ Aplicar reglas básicas de PEP8: snake_case, espacios alrededor de operadores y los imports arriba del archivo",
+   "✅ Navegar docs.python.org para encontrar la firma y el comportamiento de una función que no recuerdas"
+  ]
+ },
+ "n0nes1": {
+  "comp": [
+   "✅ Escribir un bucle for dentro de otro y predecir cuántas veces corre el bloque interno (vueltas de afuera × vueltas de adentro)",
+   "✅ Dibujar una cuadrícula i×j con dos bucles: tabla de multiplicar 3×3, triángulo de asteriscos y filas de butacas",
+   "✅ Recorrer una matriz (lista de listas) celda por celda y sumar todos sus valores",
+   "✅ Decidir qué código va en el bucle EXTERNO y cuál en el INTERNO según qué debe repetirse por cada vuelta",
+   "✅ Rastrear a mano el valor de i y de j en cada paso, y saber que el interno termina completo antes de que el externo avance"
+  ],
+  "hook": "La pantalla de inicio de Netflix es una cuadrícula: filas de categorías y, dentro de cada fila, decenas de carátulas en columnas — el código la dibuja con un bucle dentro de otro. Cada foto de tu galería es una rejilla de píxeles que se recorre fila por fila, cada hoja de cálculo y cada tablero de ajedrez es una matriz. El bucle anidado es cómo el código 'barre' cualquier rejilla del mundo; sin él no habría imágenes en pantalla ni tablas en una base de datos.",
+  "hist": "El bucle anidado no lo 'inventó' una persona: nació con la programación estructurada que Edsger Dijkstra defendió en 1968, en su célebre carta 'Go To Statement Considered Harmful', cuando la industria decidió que los programas debían armarse con bloques anidados y claros en vez de saltos caóticos. La cuadrícula doble —recorrer filas y, dentro, columnas— es tan vieja como las matrices de las matemáticas, y hoy es exactamente cómo una GPU procesa cada píxel de una imagen.",
+  "chk": {
+   "q": "Un bucle externo da 3 vueltas y, dentro de cada una, un bucle interno da 4 vueltas. ¿Cuántas veces se ejecuta en total la línea más interna?",
+   "o": [
+    "3 veces (solo cuentan las del externo)",
+    "4 veces (solo cuentan las del interno)",
+    "7 veces (3 + 4)",
+    "12 veces (3 × 4)"
+   ],
+   "a": 3,
+   "e": "Por CADA vuelta del externo, el interno completa TODAS las suyas: 4 + 4 + 4 = 3 × 4 = 12. Los bucles anidados MULTIPLICAN, no suman — por eso una cuadrícula de 1000×1000 son un millón de pasos."
+  },
+  "defensa": [
+   "Si intercambias los bucles (el que iba en filas ahora recorre columnas y viceversa), ¿cambia el número TOTAL de vueltas? ¿Cambia el ORDEN en que se visitan las celdas?",
+   "¿Por qué el triángulo de asteriscos necesita que el rango del bucle interno dependa de la variable del externo (range(i)), y la cuadrícula rectangular no?",
+   "(inédita) Para pintar los 8×8 = 64 cuadros de un tablero de ajedrez decides el color según si (fila + columna) es par o impar. ¿Esa decisión va en el bucle externo, en el interno, o dentro de ambos? ¿Por qué ahí y no en los otros dos sitios?"
+  ],
+  "metacog": [
+   "¿En qué ejemplo 'viste' con claridad que el bucle interno termina por completo antes de que el externo avance un solo paso? ¿Qué lo hizo clic?",
+   "Cuando un doble bucle no da el resultado esperado, ¿qué revisas primero: el rango del externo, el del interno, o qué línea quedó dentro de cada bloque?",
+   "¿Con qué analogía cotidiana (un reloj con sus manecillas, un edificio con pisos y habitaciones, un calendario con meses y días) explicarías que el interno 'gira más rápido' que el externo?"
+  ],
+  "viz": "<div style=\"font-family:'Segoe UI',system-ui,sans-serif;background:#131b2b;color:var(--muted);padding:18px 20px;border-radius:12px;border:1px solid #23304a;line-height:1.5;max-width:620px;\">\n  <div style=\"font-size:15px;color:var(--gold);font-weight:700;margin-bottom:4px;\">Un bucle anidado recorre una cuadrícula i × j</div>\n  <div style=\"font-size:12.5px;color:var(--muted);margin-bottom:16px;\">Por CADA valor de <b style=\"color:var(--gold)\">i</b> (fila), la variable <b style=\"color:var(--cyan)\">j</b> (columna) da TODAS sus vueltas. El número dentro de cada celda es el orden en que se visita.</div>\n\n  <div style=\"display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;\">\n    <div style=\"font-family:'Consolas','Courier New',monospace;font-size:13px;background:#0e1626;padding:14px 16px;border-radius:8px;border:1px solid #23304a;white-space:pre;color:var(--muted);\"><span style=\"color:var(--gold)\">for i in range(3):</span>     <span style=\"color:#5b6b85\"># 3 filas</span>\n    <span style=\"color:var(--cyan)\">for j in range(4):</span> <span style=\"color:#5b6b85\"># 4 columnas</span>\n        <span style=\"color:var(--good)\">visita(i, j)</span></div>\n\n    <div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div></div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=0</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=1</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=2</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=3</div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=0</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">1</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">2</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">3</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">4</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,3)</span></div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=1</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">5</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">6</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">7</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">8</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,3)</span></div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=2</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">9</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">10</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">11</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">12</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,3)</span></div>\n      </div>\n    </div>\n  </div>\n\n  <div style=\"margin-top:16px;font-size:12px;color:var(--muted);border-top:1px solid #23304a;padding-top:12px;\">\n    Fíjate: al llegar a <b style=\"color:var(--cyan)\">j=3</b>, <b style=\"color:var(--cyan)\">j</b> vuelve a <b style=\"color:var(--cyan)\">0</b> y <b style=\"color:var(--gold)\">i</b> avanza una fila (paso 4 &rarr; 5). Total = <b style=\"color:var(--good)\">3 &times; 4 = 12</b> visitas, no 3+4=7. Los bucles anidados <b style=\"color:var(--gold)\">multiplican</b>: 1000 &times; 1000 filas serían un millón de pasos (lo medirás en el Día 14k).\n  </div>\n</div>"
+ },
+ "n0cx1": {
+  "comp": [
+   "✅ 'Medir' el trabajo de un programa insertando un contador que suma 1 en cada paso y leyendo el total",
+   "✅ Explicar por qué buscar en una lista recorre hasta N elementos, mientras que buscar en un set es casi instantáneo",
+   "✅ Predecir cómo crece el trabajo cuando los datos se multiplican por 10 (lineal: 10× vs anidado: 100×)",
+   "✅ Reconocer que un bucle dentro de otro sobre los mismos datos multiplica el trabajo (N×N) y por eso escala mal",
+   "✅ Elegir la estructura adecuada (lista o set) según cuántas búsquedas hará el programa"
+  ],
+  "hook": "Cuando Amazon te muestra un producto entre cientos de millones en menos de un segundo, no es que sus servidores sean mágicos: es que NUNCA revisan todo. La diferencia entre un programa que responde al instante y uno que se congela casi nunca es el hardware — es haber elegido bien cómo buscar. Esa intuición, que hoy vas a medir con un simple contador, es de las primeras cosas que evalúan en una entrevista técnica de Google o Meta.",
+  "hist": "La idea de 'contar pasos' para comparar algoritmos sin siquiera ejecutarlos tiene nombre: complejidad. La notación O-grande la introdujo el matemático Paul Bachmann en 1894 y la trajo al mundo de la informática Donald Knuth desde los años 60 en su obra 'The Art of Computer Programming'. Hoy no verás la notación formal (eso llega en estructuras de datos, más adelante): aprenderás la intuición que hay debajo — la misma que permitía a Knuth decidir qué algoritmo era 'mejor' mucho antes de tener una computadora rápida donde probarlo.",
+  "chk": {
+   "q": "Un bucle simple recorre una lista y cuenta 1 000 pasos para 1 000 datos. Mañana tendrás 10 000 datos (10× más). ¿Cuántos pasos hará aproximadamente ESE MISMO bucle simple?",
+   "o": [
+    "Los mismos ~1 000 (el trabajo no depende del tamaño)",
+    "~10 000: 10× datos → 10× pasos, crece IGUAL que los datos",
+    "~100 000: se multiplica por 10 dos veces",
+    "~1 000 000: siempre acaba en un millón"
+   ],
+   "a": 1,
+   "e": "Un bucle simple hace un paso por dato: 10× datos → 10× pasos. Crece de forma LINEAL. Ojo al contraste: si fuera un bucle ANIDADO (uno dentro de otro sobre los mismos datos), 10× datos darían 100× pasos (crecimiento cuadrático) — esa diferencia es la que decide si tu programa aguanta o se cae."
+  },
+  "defensa": [
+   "¿Por qué preguntar '¿está x?' en un set no se vuelve más lento aunque el set tenga un millón de elementos, y en una lista sí?",
+   "Si tu programa solo va a buscar UNA vez, ¿vale la pena convertir la lista en set antes? ¿Y si va a buscar un millón de veces? ¿Qué cambia el cálculo?",
+   "(inédita) Tienes dos bucles anidados que recorren una lista de N nombres para hallar duplicados: ¿cuántos pasos hace, en función de N? Si en cambio metes los nombres en un set mientras recorres la lista UNA sola vez, ¿cuántos pasos harías? ¿Por qué el segundo escala tanto mejor cuando N crece?"
+  ],
+  "metacog": [
+   "Antes de esta lección, ¿creías que un programa lento se arreglaba comprando una computadora más rápida? ¿Qué cambió en tu forma de verlo?",
+   "¿Qué te resultó más contraintuitivo: que el set no se ralentice al crecer, o que un bucle anidado 'explote' tan rápido? ¿Por qué?",
+   "La próxima vez que escribas un bucle dentro de otro sobre datos grandes, ¿qué pregunta concreta te vas a hacer ANTES de ejecutarlo?"
+  ]
+ },
+ "n0dic1": {
+  "comp": [
+   "✅ Crear un diccionario con {} y leer un valor por su clave (dic[\"nombre\"]), sin depender de posiciones numéricas",
+   "✅ Agregar y actualizar pares con dic[clave] = valor, sabiendo que una clave es única (la segunda asignación reemplaza a la primera)",
+   "✅ Leer sin romper el programa usando dic.get(clave, defecto) en lugar de arriesgar un KeyError con los corchetes",
+   "✅ Comprobar si una clave existe con `clave in dic`, recordando que `in` mira las CLAVES, nunca los valores",
+   "✅ Decidir entre lista y diccionario según cómo buscarás el dato (por posición → lista; por nombre → diccionario) y leer el JSON de una API como pares clave→valor"
+  ],
+  "hook": "Cuando abres Netflix, pides el clima o llamas a la API de OpenAI, lo que llega por la red es un diccionario: pares clave→valor como {\"ciudad\": \"Lima\", \"temp\": 24}. Una fila de una base de datos, el JSON de CUALQUIER API y hasta la forma en que tu JARVIS guardará cada documento junto a su vector son exactamente esto: buscar por NOMBRE, no por posición. Dominar el diccionario es dominar el formato en que casi todo el software del mundo se pasa datos entre sí.",
+  "hist": "El motor que hay debajo de un diccionario es la tabla hash, que Hans Peter Luhn propuso en un memo interno de IBM en 1953 para poder buscar por clave casi al instante. Python la lleva como tipo nativo (dict) desde su primera versión en 1991, obra de Guido van Rossum. Y desde Python 3.7 (2018) el lenguaje GARANTIZA que un diccionario recuerda el orden en que insertaste las claves — antes ni siquiera prometía un orden fijo.",
+  "chk": {
+   "q": "Quieres guardar el teléfono de 500 personas y luego buscar rápido 'el número de María'. ¿Qué estructura eliges y por qué?",
+   "o": [
+    "Una lista, porque puede guardar más datos que un diccionario",
+    "Un diccionario, porque buscarás por un NOMBRE (la clave), no por una posición",
+    "Una lista, porque siempre es más rápida que un diccionario",
+    "Da igual: lista y diccionario hacen exactamente lo mismo"
+   ],
+   "a": 1,
+   "e": "La pregunta clave es '¿cómo voy a buscar?'. Buscas por un nombre ('María'), no por 'el de la posición 237', así que va un diccionario: agenda[\"María\"] llega DIRECTO a la clave, tarde casi lo mismo con 5 personas o con 5 millones. En una lista tendrías que recorrer nombre por nombre hasta encontrarlo. Elegir la estructura por cómo buscarás es media solución del problema."
+  },
+  "defensa": [
+   "¿Por qué agenda[\"Zoe\"] rompe el programa con un KeyError, pero agenda.get(\"Zoe\", \"?\") no? ¿Qué hace .get por dentro que los corchetes no hacen?",
+   "Si precios = {\"pan\": 5}, explica en voz alta por qué `\"pan\" in precios` es True pero `5 in precios` es False, aunque el 5 esté ahí escrito.",
+   "(inédita) Tienes que guardar las 30 notas de un curso. Da un ejemplo de una búsqueda que haría a la LISTA la mejor opción, y otra que haría al DICCIONARIO la mejor opción."
+  ],
+  "metacog": [
+   "Antes de hoy, ¿cómo habrías guardado los datos de 5 usuarios (nombre, edad, correo)? Compara tu idea de ayer con lo que harías ahora con diccionarios.",
+   "¿Qué se te hizo más raro al principio: que un diccionario no tenga 'posiciones', o que pedir una clave inexistente rompa el programa? ¿Por qué crees que fue justo eso?"
+  ],
+  "viz": "<div style='background:#0d1117;border:1px solid #30363d;border-radius:12px;padding:22px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted);max-width:560px;line-height:1.4'><div style='color:var(--gold);font-size:15px;font-weight:700'>agenda = { clave: valor }</div><div style='font-size:12.5px;margin:6px 0 18px'>Un diccionario no tiene <b>posiciones</b> (0, 1, 2…). Cada valor cuelga de un <b style='color:var(--gold)'>NOMBRE</b> único.</div><div style='display:flex;font-size:10.5px;letter-spacing:1px;padding:0 4px 8px'><span style='width:120px;color:var(--gold)'>CLAVE (nombre)</span><span style='width:56px'></span><span style='color:var(--good)'>VALOR</span></div><div style='display:flex;align-items:center;background:#161b22;border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;margin-bottom:7px'><span style='width:108px;color:var(--gold)'>\"Ana\"</span><span style='width:56px;color:var(--cyan);font-weight:700;text-align:center'>──→</span><span style='color:var(--good)'>\"999-111\"</span></div><div style='display:flex;align-items:center;background:#161b22;border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;margin-bottom:7px'><span style='width:108px;color:var(--gold)'>\"Luis\"</span><span style='width:56px;color:var(--cyan);font-weight:700;text-align:center'>──→</span><span style='color:var(--good)'>\"999-222\"</span></div><div style='display:flex;align-items:center;background:#161b22;border-left:3px solid var(--gold);border-radius:6px;padding:9px 12px;margin-bottom:7px'><span style='width:108px;color:var(--gold)'>\"Sofía\"</span><span style='width:56px;color:var(--cyan);font-weight:700;text-align:center'>──→</span><span style='color:var(--good)'>\"988-777\"</span></div><div style='margin-top:16px;padding:11px 13px;background:#161b22;border-radius:6px;font-size:13px'><span style='color:var(--cyan)'>agenda[\"Luis\"]</span> <span style='color:var(--muted)'>busca la clave y devuelve</span> <span style='color:var(--good)'>\"999-222\"</span></div><div style='display:flex;gap:10px;margin-top:12px;font-size:12px;flex-wrap:wrap'><div style='flex:1;min-width:200px;background:#161b22;border-radius:6px;padding:10px 12px'><span style='color:var(--good);font-weight:700'>✔ \"Ana\" in agenda → True</span><br><span style='color:var(--muted)'>porque </span><span style='color:var(--gold)'>in mira las CLAVES</span></div><div style='flex:1;min-width:200px;background:#161b22;border-radius:6px;padding:10px 12px'><span style='color:var(--muted);font-weight:700'>✗ agenda[\"Zoe\"] → KeyError</span><br><span style='color:var(--muted)'>usa mejor </span><span style='color:var(--cyan)'>.get(\"Zoe\", \"?\")</span></div></div></div>"
+ },
+ "n0dic21": {
+  "comp": [
+   "✅ Recorrer un diccionario con for y saber que, a secas, entrega las CLAVES (y pedir el valor con dic[clave])",
+   "✅ Elegir la vista correcta para recorrer: .keys() (claves), .values() (valores) o .items() (desempaquetando el par clave, valor)",
+   "✅ Sumar o promediar los valores de un diccionario acumulándolos en un total con .values()",
+   "✅ Contar la frecuencia de cualquier cosa (palabras, letras, votos, clics) con el patrón conteo[x] = conteo.get(x, 0) + 1",
+   "✅ Encontrar el valor (o la clave) máximo recorriendo el diccionario y comparando contra un 'mejor hasta ahora'"
+  ],
+  "hook": "Cada diciembre, Spotify Wrapped te dice tu artista más escuchado; Netflix arma su fila de 'Tendencias'; y cuando OpenAI construye el vocabulario de un modelo, empieza contando cuántas veces aparece cada palabra en miles de millones de textos. Debajo de todo eso vive un solo patrón humilde que aprendes hoy: recorrer un diccionario y usarlo como CONTADOR de frecuencias. Es, sin exagerar, uno de los trucos más usados en toda la programación — y el mismo que tu JARVIS usará para adivinar de qué tratan tus PDFs.",
+  "hist": "Contar frecuencias es tan antiguo como útil: el lenguaje AWK (1977, de Aho, Weinberger y Kernighan) popularizó los 'arreglos asociativos' precisamente para llevar cuentas de líneas y palabras. Contar palabras se volvió LUEGO el ejemplo canónico con el que Google explicó MapReduce en 2004, el motor detrás de su buscador. Python añadió collections.Counter en la versión 2.7 (2010) para hacer este patrón en una sola línea — pero entenderlo a mano, como hoy, es lo que te da el control real de tu código.",
+  "chk": {
+   "q": "Procesas la lista ['a', 'b', 'a'] con el patrón conteo[x] = conteo.get(x, 0) + 1, empezando con conteo = {}. Al llegar a la SEGUNDA 'a', ¿qué devuelve conteo.get('a', 0) justo antes de sumarle 1?",
+   "o": [
+    "0, porque .get siempre arranca en 0",
+    "1, porque ya se contó una 'a' antes y ese es su conteo actual",
+    "2, porque en la lista hay dos letras 'a'",
+    "Lanza KeyError porque 'a' ya existía"
+   ],
+   "a": 1,
+   "e": "La primera 'a' creó conteo['a'] = 1. La segunda vez, .get('a', 0) devuelve el valor ACTUAL de esa clave (1), y al sumarle 1 queda en 2. El default 0 solo entra en acción la PRIMERA vez que aparece una clave nueva; después, .get devuelve lo que ya había. Y nunca lanza KeyError: ese es justamente el escudo que .get pone sobre los corchetes."
+  },
+  "defensa": [
+   "¿Por qué `for x in mi_dict:` te da las CLAVES y no los valores? Y si dentro del bucle necesitas el valor, ¿cómo lo consigues?",
+   "Explica, línea por línea, por qué conteo[x] = conteo.get(x, 0) + 1 no se rompe la PRIMERA vez que ve una palabra nueva. ¿Qué papel exacto juega el 0?",
+   "(inédita) Si cambiaras .get(x, 0) por .get(x, 1) en el patrón contador, ¿qué pasaría con todos los conteos? ¿Por qué el 0 es el default correcto?"
+  ],
+  "metacog": [
+   "El patrón contador se escribe casi igual siempre. ¿Sientes que ya lo entiendes de verdad, o todavía lo copias 'de memoria'? ¿Qué parte tendrías que explicarle a alguien para estar seguro de que lo dominas?",
+   "Hoy contaste palabras y letras con el mismo molde de tres líneas. ¿Qué OTRA cosa de tu vida diaria podrías contar con este patrón? Imagina cómo se vería el diccionario que saldría."
+  ]
+ },
+ "n0tup1": {
+  "comp": [
+   "✅ Crear una tupla y acceder a un valor por su índice: punto = (3, 4); punto[0]",
+   "✅ Desempaquetar una tupla en varias variables en una sola línea: x, y = punto",
+   "✅ Intercambiar dos variables sin una auxiliar: a, b = b, a",
+   "✅ Escribir una función que devuelve DOS valores y recibirlos por desempaquetado: return minimo, maximo",
+   "✅ Explicar por qué (5) es un int y (5,) es una tupla, y cuándo elegir tupla sobre lista por su inmutabilidad"
+  ],
+  "hook": "Cada vez que Google Maps te ubica, tu posición viaja como una tupla (latitud, longitud): dos números que van SIEMPRE juntos y que no tiene sentido tocar por separado. El color de cada píxel de esta pantalla es una tupla (R, G, B), y cada fila que devuelve una base de datos es —literalmente— una tupla. Dominarla es aprender a agrupar datos que deben permanecer intactos y a devolver varios resultados de una función sin inventar trucos.",
+  "hist": "La palabra 'tupla' nace en las matemáticas: generaliza par, terna, cuádrupla… hasta la n-tupla, una secuencia ordenada de valores. En 1970 Edgar F. Codd publicó el modelo relacional de datos y llamó 'tupla' a cada fila de una tabla — por eso hoy TODA base de datos habla ese idioma. Python trae tuplas desde su primera versión (Guido van Rossum, 1991) y las hizo inmutables a propósito: esa rigidez es justo lo que les permite servir de clave en un diccionario, algo que una lista jamás podría.",
+  "chk": {
+   "q": "¿Cuál de estas expresiones crea una tupla con UN solo elemento?",
+   "o": [
+    "(5)",
+    "(5,)",
+    "[5]",
+    "{5}"
+   ],
+   "a": 1,
+   "e": "Trampa clásica que muerde hasta a seniors: (5) es solo el número 5 entre paréntesis — los paréntesis agrupan, NO crean la tupla. Lo que la crea es la COMA: (5,). Además [5] es una lista y {5} es un set. Recuérdalo cuando una función te devuelva '(algo)' y creas que ya es tupla."
+  },
+  "defensa": [
+   "¿Por qué (5) NO es una tupla pero (5,) sí? ¿Qué papel juega la coma frente a los paréntesis?",
+   "Si una tupla no se puede modificar, ¿cómo consigues la 'versión cambiada' de un punto (3, 4) que ahora debe ser (9, 4)?",
+   "(inédita) Una lista y una tupla pueden guardar los mismos valores. Da UN caso real donde elegirías tupla y explica qué te protege esa inmutabilidad que una lista no te daría."
+  ],
+  "metacog": [
+   "¿Confundiste en algún momento 'no puedo modificarla' con 'no me sirve para nada'? ¿Qué te hizo cambiar de idea?",
+   "Antes de hoy, ¿habrías resuelto 'devolver el mínimo y el máximo' con dos funciones separadas? ¿Qué te ahorró la tupla?",
+   "¿Qué te costó más aceptar: la inmutabilidad o el desempaquetado x, y = punto? ¿Por qué crees que fue justo eso?"
+  ],
+  "viz": "<div style=\"font-family:'Consolas','Monaco',monospace;background:#0d1117;border:1px solid #30363d;border-radius:10px;padding:16px;color:var(--muted);font-size:13px;line-height:1.6\"><div style=\"text-align:center;color:var(--gold);font-weight:700;margin-bottom:14px;letter-spacing:.5px\">MISMO DATO · DOS CONTRATOS</div><div style=\"display:flex;gap:14px;flex-wrap:wrap\"><div style=\"flex:1;min-width:230px;border:1px solid var(--cyan);border-radius:8px;padding:12px\"><div style=\"color:var(--cyan);font-weight:700;margin-bottom:8px\">LISTA · mutable&nbsp;&nbsp;[ ]</div><div style=\"color:#e6edf3\">colores = ['rojo', 'azul']</div><div style=\"display:flex;gap:6px;margin:10px 0\"><span style=\"background:#161b22;border:1px solid #30363d;border-radius:5px;padding:3px 9px\">rojo</span><span style=\"background:#161b22;border:1px solid #30363d;border-radius:5px;padding:3px 9px\">azul</span></div><div style=\"color:#e6edf3\">colores[0] = 'verde'</div><div style=\"color:var(--good);margin:6px 0\">✔ permitido — cambia EN SU SITIO</div><div style=\"display:flex;gap:6px;margin-top:4px\"><span style=\"background:#0f2b17;border:1px solid var(--good);color:var(--good);border-radius:5px;padding:3px 9px\">verde ↺</span><span style=\"background:#161b22;border:1px solid #30363d;border-radius:5px;padding:3px 9px\">azul</span></div></div><div style=\"flex:1;min-width:230px;border:1px solid var(--gold);border-radius:8px;padding:12px\"><div style=\"color:var(--gold);font-weight:700;margin-bottom:8px\">TUPLA · inmutable&nbsp;&nbsp;( ) 🔒</div><div style=\"color:#e6edf3\">punto = (3, 4)</div><div style=\"display:flex;gap:6px;margin:10px 0\"><span style=\"background:#161b22;border:1px solid var(--gold);border-radius:5px;padding:3px 9px\">3</span><span style=\"background:#161b22;border:1px solid var(--gold);border-radius:5px;padding:3px 9px\">4</span></div><div style=\"color:#e6edf3\">punto[0] = 9</div><div style=\"color:#ff7b72;margin:6px 0\">✗ TypeError</div><div style=\"font-size:12px\">'tuple' object does not<br>support item assignment</div><div style=\"color:var(--gold);margin-top:8px\">→ para 'cambiarla' creas una NUEVA:<br><span style=\"color:#e6edf3\">punto = (9, 4)</span></div></div></div><div style=\"text-align:center;margin-top:12px;font-size:12px\">La rigidez no es un defecto: es una <span style=\"color:var(--good)\">garantía</span> de que ese dato no cambiará por accidente.</div></div>"
+ },
+ "n0set1": {
+  "comp": [
+   "✅ Crear un set y eliminar los duplicados de una lista con set(lista)",
+   "✅ Contar cuántos elementos DISTINTOS hay usando len(set(...))",
+   "✅ Comprobar pertenencia con 'x in mi_set' y explicar por qué es más eficiente que en una lista",
+   "✅ Aplicar unión (|), intersección (&) y diferencia (-) entre dos sets y decir qué responde cada una",
+   "✅ Decidir cuándo usar un set (unicidad/pertenencia) frente a una lista (orden/índices/repetidos)"
+  ],
+  "hook": "Cuando Netflix te muestra los géneros de una película o YouTube las etiquetas de un video, nunca ves 'Comedia, Comedia, Drama': cada valor aparece UNA sola vez. Esa garantía de unicidad —y la de responder '¿pertenece x?' casi al instante sin importar cuántos millones haya— es exactamente lo que hace un set. Las bases de datos la llaman restricción UNIQUE; tu futuro JARVIS la usa para descartar fragmentos repetidos antes de responder.",
+  "hist": "Los conjuntos vienen de la teoría de conjuntos que Georg Cantor fundó en la década de 1870; de ahí heredan la unión, la intersección y la diferencia que usarás hoy en código. Python no tuvo un tipo set 'de fábrica' desde el inicio: primero llegó un módulo experimental (sets, en 2003) y recién en Python 2.4 (2004, PEP 218) el set y el frozenset se volvieron tipos incorporados del lenguaje. Por dentro comparten la maquinaria de tablas hash con los diccionarios: por eso ambos encuentran las cosas sin recorrerlas una por una.",
+  "chk": {
+   "q": "Buscar si un correo está en un set de 1 000 000 de elementos es casi instantáneo; en una lista del mismo tamaño puede tardar. ¿Por qué?",
+   "o": [
+    "El set está siempre ordenado y usa búsqueda binaria",
+    "El set guarda cada elemento en una posición calculada a partir de su valor (su hash) y va directo a ella",
+    "El set tiene menos elementos porque quitó los duplicados",
+    "No hay diferencia real, es solo percepción"
+   ],
+   "a": 1,
+   "e": "Python calcula el hash del valor y salta DIRECTO al lugar donde debería estar, sin comparar uno por uno (≈O(1) frente a O(n) de la lista). No importa que el set esté 'desordenado': ese orden aparente es un efecto de dónde cae cada hash. Es la misma máquina que hace veloces a los diccionarios."
+  },
+  "defensa": [
+   "¿Por qué un set no tiene índices como set[0], si una lista sí? ¿Qué ganó y qué perdió a cambio?",
+   "Explica, sin usar la palabra 'rápido', por qué 'x in mi_set' funciona por dentro distinto a 'x in mi_lista'.",
+   "(inédita) Tienes los correos de dos cursos. Sin nombrar métodos de Python, describe con palabras qué haces para obtener 'los que están en AMBOS' y 'los que están solo en el primero'."
+  ],
+  "metacog": [
+   "¿En qué momento del día pasaste de ver el set como 'una lista rara sin orden' a verlo como una herramienta con un propósito claro?",
+   "Unión, intersección y diferencia venían de las matemáticas. ¿Te ayudó reconocerlas de la escuela, o las entendiste mejor viéndolas en código?",
+   "¿Qué problema que antes habrías resuelto con un bucle y muchos 'if' resolverías ahora con un set en una línea?"
+  ],
+  "viz": "<div style=\"font-family:'Consolas','Monaco',monospace;background:#0d1117;border:1px solid #30363d;border-radius:10px;padding:16px;color:var(--muted);font-size:13px;line-height:1.6\"><div style=\"text-align:center;color:var(--gold);font-weight:700;margin-bottom:14px;letter-spacing:.5px\">set( ) — EL FILTRO DE DUPLICADOS</div><div style=\"display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap\"><div style=\"border:1px solid #30363d;border-radius:8px;padding:10px;min-width:150px\"><div style=\"color:var(--cyan);font-weight:700;margin-bottom:6px\">lista (5)</div><div style=\"color:#e6edf3\">ana@x</div><div style=\"color:#e6edf3\">luis@x</div><div style=\"color:#8b949e;text-decoration:line-through\">ana@x</div><div style=\"color:#e6edf3\">eva@x</div><div style=\"color:#8b949e;text-decoration:line-through\">luis@x</div><div style=\"margin-top:6px;font-size:12px\">len = 5 (con repetidos)</div></div><div style=\"text-align:center;color:var(--gold);font-weight:700;min-width:90px\">set(...)<br><span style=\"font-size:24px\">→</span><br><span style=\"font-size:11px;color:var(--muted)\">descarta<br>los repetidos</span></div><div style=\"border:1px solid var(--good);border-radius:8px;padding:10px;min-width:150px\"><div style=\"color:var(--good);font-weight:700;margin-bottom:6px\">set { } (3)</div><div style=\"color:#e6edf3\">ana@x</div><div style=\"color:#e6edf3\">luis@x</div><div style=\"color:#e6edf3\">eva@x</div><div style=\"color:var(--good);margin-top:6px;font-size:12px\">len = 3 (únicos)</div></div></div><div style=\"border-top:1px solid #30363d;margin-top:14px;padding-top:10px;font-size:12px;text-align:center\">Y además: <span style=\"color:var(--cyan)\">'ana@x' in conjunto</span> responde casi al instante — va directo por el <span style=\"color:var(--gold)\">hash</span>, no lo busca uno por uno.</div></div>"
+ },
+ "n0evo1": {
+  "hook": "Ninguna app que abres nació terminada: el Instagram de 2010 solo subía una foto con filtro, y GitHub guarda de cada proyecto una fila de etiquetas —v1.0, v1.1, v2.0— que son fotos del mismo programa madurando. Saber arrancar con una v1 mínima que FUNCIONE y hacerla crecer sin romperla es, literalmente, lo que separa a un ingeniero de alguien que se queda mirando la página en blanco. Por eso 'MVP' e 'iterar' son las dos palabras que más se repiten en cualquier startup de Silicon Valley.",
+  "hist": "La idea de numerar el software y hacerlo crecer por versiones se formalizó tarde: hacia 2011, Tom Preston-Werner —cofundador de GitHub— publicó el 'versionado semántico' (SemVer) para poner orden en ese v1.0.0, v1.1.0, v2.0.0. Pero la filosofía es más vieja: en 1997 Eric Raymond, describiendo cómo se construía Linux, la resumió en 'release early, release often' (publica pronto, publica seguido). Y el 'MVP' que hoy repite toda startup lo popularizó Eric Ries en 2011 con 'The Lean Startup'.",
+  "chk": {
+   "q": "La v2 de tu gestor mete el código en funciones depositar y retirar, pero imprime EXACTAMENTE lo mismo que la v1. Un compañero dice: 'perdiste el tiempo, la salida es idéntica'. ¿Tiene razón?",
+   "o": [
+    "Sí: si la pantalla muestra lo mismo, el cambio no sirvió de nada",
+    "No: refactorizar mejora la ESTRUCTURA (piezas con nombre, reutilizables) sin cambiar el QUÉ — ese valor se cobra en la v3 y la v4",
+    "Sí, porque meter todo en funciones siempre hace el programa más lento",
+    "No, pero solo porque ahora el programa ocupa más líneas"
+   ],
+   "a": 1,
+   "e": "Refactorizar es cambiar el CÓMO sin tocar el QUÉ: la salida idéntica prueba que no rompiste nada, y las funciones con nombre son justo lo que hará posible añadir validación e historial después sin volverte loco. El valor de un buen refactor no se ve hoy; se cobra mañana."
+  },
+  "comp": [
+   "✅ Explicar qué significa que un programa 'crece por versiones' (cada una parte de la anterior, sigue funcionando y añade valor)",
+   "✅ Refactorizar un guion lineal a funciones (depositar/retirar) manteniendo IDÉNTICA la salida",
+   "✅ Añadir una capa de validación con if para rechazar una operación inválida sin alterar el saldo",
+   "✅ Dar memoria a un programa: registrar cada operación en una lista (historial) con append y recorrerla con un for",
+   "✅ Envolver el programa en un menú con while True + input() que responde al usuario hasta que elige salir"
+  ],
+  "defensa": [
+   "¿Por qué construir un programa en cinco versiones que funcionan es más seguro que escribir la versión final de un solo tirón?",
+   "Un refactor deja la salida idéntica. Entonces, ¿qué fue exactamente lo que mejoró, y cómo se lo explicarías a alguien que dice que fue tiempo perdido?",
+   "(inédita) Si tu gestor pasara de un menú con input() a procesar una lista de órdenes con un for, ¿qué parte del programa NO tendrías que reescribir, y por qué eso es la recompensa de tener un buen núcleo?"
+  ],
+  "metacog": [
+   "¿Cuál de las cinco versiones te costó más entender, y fue por el concepto nuevo (validación, historial, menú) o por cómo encajaba con lo anterior?",
+   "Antes de hoy, ¿tu instinto era planear el programa entero o empezar por algo pequeño que ya funcione? ¿Cambió algo después de vivir el proceso v1→v5?",
+   "Cuando añadiste una capa nueva (por ejemplo el historial en la v4), ¿comprobaste que lo anterior siguiera funcionando o diste por hecho que sí? ¿Qué te enseña eso sobre probar en cada etapa?"
+  ],
+  "viz": "<div style=\"font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;line-height:1.5;color:var(--text)\"><div style=\"color:var(--muted);margin-bottom:12px\">Un <b style=\"color:var(--gold)\">mismo</b> programa (gestor de cuenta) creciendo. El <b style=\"color:var(--cyan)\">núcleo</b> casi no cambia; a su alrededor se apilan capas.</div><div style=\"display:flex;align-items:center;gap:8px;flex-wrap:wrap\"><span style=\"color:var(--gold);font-weight:700;width:30px\">v1</span><span style=\"color:var(--muted);width:116px\">guion lineal</span><span style=\"border:1px solid var(--cyan);color:var(--cyan);border-radius:5px;padding:3px 9px\">saldo = saldo + 50</span><span style=\"color:var(--good);font-size:.72rem\">↳ 4 líneas, pero FUNCIONA</span></div><div style=\"color:var(--gold);font-size:.72rem;padding-left:34px;margin:3px 0\">│ refactor · mismo QUÉ, mejor CÓMO&nbsp;&nbsp;▼</div><div style=\"display:flex;align-items:center;gap:8px;flex-wrap:wrap\"><span style=\"color:var(--gold);font-weight:700;width:30px\">v2</span><span style=\"color:var(--muted);width:116px\">en funciones</span><span style=\"border:1px solid var(--cyan);color:var(--cyan);border-radius:5px;padding:3px 9px\">def depositar · def retirar</span><span style=\"color:var(--muted);font-size:.72rem\">↳ misma salida, ya reutilizable</span></div><div style=\"color:var(--gold);font-size:.72rem;padding-left:34px;margin:3px 0\">│ + validación&nbsp;&nbsp;▼</div><div style=\"display:flex;align-items:center;gap:8px;flex-wrap:wrap\"><span style=\"color:var(--gold);font-weight:700;width:30px\">v3</span><span style=\"color:var(--muted);width:116px\">robusto</span><span style=\"border:1px solid var(--cyan);color:var(--cyan);border-radius:5px;padding:3px 9px\">núcleo</span><span style=\"border:1px solid var(--gold);color:var(--gold);background:rgba(255,212,59,.12);border-radius:5px;padding:3px 9px;font-weight:700\">+ if monto &gt; saldo</span><span style=\"color:var(--muted);font-size:.72rem\">↳ no deja saldo negativo</span></div><div style=\"color:var(--gold);font-size:.72rem;padding-left:34px;margin:3px 0\">│ + memoria&nbsp;&nbsp;▼</div><div style=\"display:flex;align-items:center;gap:8px;flex-wrap:wrap\"><span style=\"color:var(--gold);font-weight:700;width:30px\">v4</span><span style=\"color:var(--muted);width:116px\">con historial</span><span style=\"border:1px solid var(--cyan);color:var(--cyan);border-radius:5px;padding:3px 9px\">núcleo</span><span style=\"border:1px solid rgba(143,160,184,.4);color:var(--muted);border-radius:5px;padding:3px 9px\">validación</span><span style=\"border:1px solid var(--gold);color:var(--gold);background:rgba(255,212,59,.12);border-radius:5px;padding:3px 9px;font-weight:700\">+ historial[] · append</span><span style=\"color:var(--muted);font-size:.72rem\">↳ recuerda lo que hizo</span></div><div style=\"color:var(--gold);font-size:.72rem;padding-left:34px;margin:3px 0\">│ + interfaz&nbsp;&nbsp;▼</div><div style=\"display:flex;align-items:center;gap:8px;flex-wrap:wrap\"><span style=\"color:var(--gold);font-weight:700;width:30px\">v5</span><span style=\"color:var(--muted);width:116px\">menú en bucle</span><span style=\"border:1px solid var(--cyan);color:var(--cyan);border-radius:5px;padding:3px 9px\">núcleo</span><span style=\"border:1px solid rgba(143,160,184,.4);color:var(--muted);border-radius:5px;padding:3px 9px\">validación</span><span style=\"border:1px solid rgba(143,160,184,.4);color:var(--muted);border-radius:5px;padding:3px 9px\">historial</span><span style=\"border:1px solid var(--gold);color:var(--gold);background:rgba(255,212,59,.12);border-radius:5px;padding:3px 9px;font-weight:700\">+ while True: menú</span><span style=\"color:var(--good);font-size:.72rem\">↳ un programa que se USA</span></div><div style=\"margin-top:13px;border-top:1px solid rgba(143,160,184,.25);padding-top:9px;color:var(--muted);font-size:.73rem\">Ninguna versión reescribe desde cero: cada una toma la anterior <b style=\"color:var(--good)\">que ya andaba</b> y le suma UNA capa. Así crece el software de verdad — de v1 a v5.</div></div>"
+ },
+ "n0rme1": {
+  "hook": "Abre cualquier repositorio en GitHub —React, Linux, el modelo que subió un investigador de OpenAI— y lo primero que ves, antes de una sola línea de código, es el README. Es la portada con la que un reclutador decide en 30 segundos si tu proyecto de portafolio vale la pena, y la forma en que tu yo de dentro de seis meses recordará cómo se usaba lo que hoy tienes fresco. Un código brillante sin README es una caja cerrada que nadie sabe encender.",
+  "hist": "La costumbre de dejar un archivo en MAYÚSCULAS que se lea PRIMERO es viejísima: ya en los años 70 el software se distribuía con un fichero 'READ ME' para que nadie lo ignorara. El salto moderno llegó con dos piezas: Markdown, el formato de texto simple que crearon John Gruber y Aaron Swartz en 2004, y GitHub (2008), que decidió mostrar automáticamente el README.md como portada de cada repo. Los docstrings de Python tienen su propia norma oficial, la PEP 257, escrita por David Goodger y Guido van Rossum en 2001.",
+  "chk": {
+   "q": "Escribes  # Suma dos numeros  como primera línea dentro de una función y luego  print(funcion.__doc__). ¿Qué se imprime?",
+   "o": [
+    "'Suma dos numeros' — todo lo que escribes arriba de la función es su documentación",
+    "None — un comentario (#) no es un docstring; solo el texto entre triple comillas llega a .__doc__",
+    "Un error, porque .__doc__ no existe hasta que lo defines a mano",
+    "El código completo de la función, línea por línea"
+   ],
+   "a": 1,
+   "e": "Solo el docstring —texto entre triple comillas como primera instrucción— queda guardado en .__doc__ y lo muestra help(); un # ahí deja .__doc__ en None. Esa es la diferencia entre una nota para quien LEE el código y documentación accesible desde el programa."
+  },
+  "comp": [
+   "✅ Escribir un docstring (triple comillas, primera línea del cuerpo) y leerlo con .__doc__ o help()",
+   "✅ Distinguir comentario (#), docstring y README, y saber cuál es accesible desde el programa",
+   "✅ Redactar las tres secciones mínimas de un README: qué HACE, cómo se EJECUTA y un EJEMPLO",
+   "✅ Documentar un archivo entero con un docstring de módulo (primera instrucción, leído con __doc__)",
+   "✅ Aplicar el 'test de clonar y ejecutar' para decidir si un README está completo"
+  ],
+  "defensa": [
+   "¿Cuáles son las tres secciones que ningún README puede omitir, y qué pregunta responde cada una?",
+   "¿En qué se diferencian un comentario, un docstring y un README? Ordénalos del detalle más pequeño al panorama más grande.",
+   "(inédita) El 'test de clonar y ejecutar' dice: alguien descarga tu proyecto desde cero y solo tiene tu README. Si no logra hacerlo funcionar sin preguntarte, ¿qué sección probablemente te faltó escribir?"
+  ],
+  "metacog": [
+   "Piensa en un programa que escribiste esta semana. Si lo abrieras dentro de seis meses sin recordar nada, ¿qué necesitarías que dijera su README para volver a usarlo?",
+   "¿Te costó más entender qué es un docstring o cómo se diferencia de un comentario? ¿Por qué crees que se confunden tan fácil?",
+   "Documentar se siente como 'trabajo extra que no es programar'. ¿Cambió esa sensación al ver que el README es en realidad el diseño del proyecto escrito en español?"
+  ]
+ },
+ "n0lib1": {
+  "hook": "Todo software que hoy usas empezó como un archivo diminuto: el primer commit de casi cualquier proyecto en GitHub son 20 líneas que apenas funcionan. Las startups lanzan un MVP —una versión recortada que hace UNA cosa bien— antes de construir el producto completo, porque software que funciona a medias siempre gana a software perfecto que nunca corre. Hoy haces lo mismo que un ingeniero de verdad: eliges un problema pequeño, lo diseñas y lo TERMINAS — con la disciplina de calidad que separa un juguete de un proyecto que da orgullo enseñar.",
+  "hist": "Las buenas prácticas que aplicas hoy tienen autores concretos. El principio DRY ('Don't Repeat Yourself', no te repitas) lo acuñaron Andy Hunt y Dave Thomas en 'The Pragmatic Programmer' (1999). El estilo oficial de Python —snake_case, líneas ordenadas— vive en la PEP 8, que Guido van Rossum y Barry Warsaw publicaron en 2001. Y la idea de arrancar por un MVP en vez de la versión perfecta la popularizó Eric Ries en 'The Lean Startup' (2011).",
+  "chk": {
+   "q": "Quieres construir 'un asistente tipo JARVIS con voz, memoria y 20 comandos' en una sola tarde. ¿Cuál es la jugada de ingeniero?",
+   "o": [
+    "Empezar por lo más difícil (la voz) para quitártelo de encima cuanto antes",
+    "Recortar a un MVP: la versión más pequeña que funcione de punta a punta (leer una pregunta y responder algo), y crecer desde ahí",
+    "Escribir las 20 funciones vacías primero y rellenarlas todas al final",
+    "Planear el programa completo en tu cabeza y escribirlo entero de un tirón"
+   ],
+   "a": 1,
+   "e": "El error clásico del principiante es enamorarse de la idea gigante y quedarse con código a medio hacer que nunca corre entero. Un MVP que funciona de punta a punta —aunque sea feo, aunque le falten opciones— te da un punto firme desde donde crecer: algo pequeño y TERMINADO gana siempre."
+  },
+  "comp": [
+   "✅ Recortar una idea grande a un MVP: la versión mínima que funciona de principio a fin",
+   "✅ Nombrar variables y funciones en snake_case siguiendo PEP 8 (precio_total, no x ni precioTotal)",
+   "✅ Aplicar DRY: mover la lógica repetida a una función que se escribe una vez y se llama donde haga falta",
+   "✅ Validar la entrada del usuario (rango, tipo o try/except) para que el programa no reviente ante datos raros",
+   "✅ Autoevaluar un proyecto con una rúbrica /10 y repasar un checklist de calidad antes de darlo por terminado"
+  ],
+  "defensa": [
+   "¿Por qué recortar tu idea a un MVP pequeño y terminado es mejor que empezar por la versión completa y ambiciosa?",
+   "Estás copiando casi la misma fórmula en cuatro lugares de tu código. ¿Qué principio se rompe y cómo lo arreglas de raíz?",
+   "(inédita) Tu programa pide un número con input() y el usuario escribe 'hola'. Sin tocar el código, ¿qué pasa al ejecutarlo, y qué buena práctica del checklist de hoy lo habría evitado?"
+  ],
+  "metacog": [
+   "De los cinco criterios de la rúbrica (funciona, estructura, legibilidad, robustez, documentación), ¿cuál sería hoy tu punto más flojo, y qué harías para subirlo un nivel?",
+   "¿Te da más miedo la página en blanco (elegir qué hacer) o la ejecución (escribir el código)? ¿Qué parte del método de hoy —ideas, rúbrica, checklist— ataca ese miedo?",
+   "Cuando programas, ¿persigues primero que 'funcione ya' o que 'quede limpio'? Después de hoy, ¿en qué orden crees que conviene buscar cada cosa?"
+  ]
  }
-};;
+};;;
 /* examen práctico */
 const PRACTICA=[
  {id:"p1",t:"Práctico 1 · Eco en mayúsculas",

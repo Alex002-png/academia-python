@@ -35589,6 +35589,11 @@ function mergeS(a,b){
     const x=(a.ph||{})[k]||{},y=(b.ph||{})[k]||{};
     m.ph[k]={};if(x.int||y.int)m.ph[k].int=1;if(x.mcq||y.mcq)m.ph[k].mcq=1;
   });
+  m.examenNivel={};
+  new Set([...Object.keys(a.examenNivel||{}),...Object.keys(b.examenNivel||{})]).forEach(k=>{
+    const x=(a.examenNivel||{})[k]||{},y=(b.examenNivel||{})[k]||{};
+    m.examenNivel[k]={best:Math.max(x.best||0,y.best||0),attempts:Math.max(x.attempts||0,y.attempts||0),passed:!!(x.passed||y.passed)};
+  });
   m.log=Object.assign({},b.log||{},a.log||{});
   const seen=new Set();m.dyn=[];
   [...(a.dyn||[]),...(b.dyn||[])].forEach(c=>{if(!seen.has(c.f)){seen.add(c.f);m.dyn.push(c)}});
@@ -36217,7 +36222,7 @@ const EXAMENES_NIVEL={
 };
 let _examTimer=null,_examEstado=null;
 function nivelExamDisponible(){return Object.keys(EXAMENES_NIVEL).map(Number).sort((a,b)=>a-b);}
-function nivelExamAprobado(n){return !EXAMENES_NIVEL[n]||!!(S.examenNivel[n]&&S.examenNivel[n].passed);}
+function nivelExamAprobado(n){const E=(S&&S.examenNivel)||{};return !EXAMENES_NIVEL[n]||!!(E[n]&&E[n].passed);}
 function _examShuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function _examFmt(s){s=Math.max(0,s);const m=Math.floor(s/60),ss=s%60;return (m<10?"0":"")+m+":"+(ss<10?"0":"")+ss;}
 function renderExamenNivel(){

@@ -1384,10 +1384,10 @@ const LEVEL0=[
    check:(o,c)=>{if(/3\.0/.test(c)&&!/\//.test(c))return"No escribas 3.0 a mano: divide distancia entre velocidad.";if(!/\//.test(c))return"El proceso divide: usa /.";return norm(o[0])==="3.0"?true:"Esperaba: 3.0\nObtuve:\n"+norm(o[0])},
    hints:["tiempo = distancia / velocidad","240 ÷ 80 = 3.0 horas."]},
   {id:"n0pc8e2b",py:true,t:"Ejercicio 2b · Capstone E→P→S: el promedio, con las tres etapas marcadas",
-   d:'El cierre del bloque, con TODO el método: resuelve «calcular el promedio de tres notas (14, 18 y 11)» marcando las tres etapas con comentarios <code># ENTRADA</code>, <code># PROCESO</code> y <code># SALIDA</code>, y luego el código de cada una. Imprime <code>Promedio: 14.333333333333334</code> (sin redondear: así sale de la división).',
+   d:'El cierre del bloque, con TODO el método: resuelve «calcular el promedio de tres notas (14, 18 y 11)» marcando las tres etapas con comentarios <code># ENTRADA</code>, <code># PROCESO</code> y <code># SALIDA</code>, y luego el código de cada una. Usa una variable por nota (las listas llegan en el Día 24). Imprime <code>Promedio: 14.333333333333334</code> (sin redondear: así sale de la división).',
    starter:'# ENTRADA\n\n# PROCESO\n\n# SALIDA\n',runs:[[]],
    check:(o,c)=>{const u=c.toUpperCase();if(!u.includes("# ENTRADA")||!u.includes("# PROCESO")||!u.includes("# SALIDA"))return"Marca las tres etapas con los comentarios # ENTRADA, # PROCESO y # SALIDA.";if(c.includes("14.33"))return"No escribas el resultado a mano: que el proceso lo calcule.";return norm(o[0])==="Promedio: 14.333333333333334"?true:"Esperaba: Promedio: 14.333333333333334\nObtuve:\n"+norm(o[0])},
-   hints:["ENTRADA: notas = [14, 18, 11] · PROCESO: promedio = sum(notas) / len(notas) · SALIDA: print(...)","print(\"Promedio:\", promedio) — el decimal largo es normal: así representa la máquina 43/3."]},
+   hints:["ENTRADA: nota1 = 14, nota2 = 18, nota3 = 11 · PROCESO: promedio = (nota1 + nota2 + nota3) / 3 · SALIDA: print(...)","print(\"Promedio:\", promedio) — el decimal largo es normal: así representa la máquina 43/3."]},
   {id:"n0pc8e3",py:true,t:"🏆 Mini-proyecto · Tu primera creación I: tu edad en días",
    d:'Tu primer programa 100% TUYO. Diseña con E→P→S y constrúyelo: parte de una edad en años, calcula cuántos días ha vivido esa persona (aproximado: multiplica por 365) e imprime una frase que incluya el número y la palabra <code>dias</code>. Empieza con <code>edad = 25</code> y luego <strong>cámbiala a TU edad real</strong> — el corrector acepta cualquier edad, porque este programa es tuyo.',
    starter:'edad = 25   # <- pon TU edad real aqui\n# PROCESO: calcula los dias vividos (multiplica por 365)\n\n# SALIDA: imprime una frase que incluya el numero y la palabra dias\n',runs:[[]],
@@ -1605,6 +1605,8 @@ const LEVEL0=[
    'print(0.1 + 0.2)\nprint(0.1 + 0.2 == 0.3)\nprint(int("25") + 5)'],
   ["Leer código: dos conversiones, dos motivos distintos",T('Sin ejecutar: ¿por qué hay DOS conversiones distintas en este fragmento (<code>int()</code> y <code>str()</code>), y qué pasaría si se omitiera cualquiera de las dos?'),
    'entrada = "20"\nedad = int(entrada)\nmensaje = "Tienes " + str(edad + 1) + " el próximo año"\nprint(mensaje)'],
+  ["La tercera vía: f-strings",T('Juntar texto y números tiene tres caminos. Ya viste dos: <strong>convertir</strong> con <code>str()</code> y <strong>concatenar</strong> con <code>+</code>. El tercero es el que usarás siempre en la práctica: la <strong>f-string</strong>. Pon una <code>f</code> justo antes de las comillas y escribe la variable entre llaves — Python la reemplaza por su valor y convierte sola, sin <code>str()</code> ni sumas. En el Día 17 le añadirás formato (como los dos decimales de <code>:.2f</code>); hoy basta con que la reconozcas y la uses.'),
+   'edad = 16\nprint("Tengo " + str(edad) + " años")   # concatenando\nprint(f"Tengo {edad} años")              # f-string: más corta y más clara'],
  ],
  ex:[
   {id:"d3e1",py:true,t:"Ejercicio 1 · Inspector de tipos",
@@ -32107,7 +32109,7 @@ const EXTRA={
    "✅ Distinguir print('5') de print(5): saber que la pantalla oculta el tipo real del dato",
    "✅ Diferenciar un string literal ('2 + 3', texto muerto) de una expresión que Python evalúa (2 + 3)",
    "✅ Leer un SyntaxError/NameError e identificar sus 3 partes (tipo, línea culpable, mensaje) para ubicar la causa",
-   "✅ Emitir logs con contexto usando f-strings: print(f'[{etapa}] {mensaje}')"
+   "✅ Emitir mensajes con contexto pasando varios valores a print: print('[inicio]', mensaje)"
   ]
  },
  "d2": {
@@ -34434,8 +34436,108 @@ const EXTRA={
    "¿Te da más miedo la página en blanco (elegir qué hacer) o la ejecución (escribir el código)? ¿Qué parte del método de hoy —ideas, rúbrica, checklist— ataca ese miedo?",
    "Cuando programas, ¿persigues primero que 'funcione ya' o que 'quede limpio'? Después de hoy, ¿en qué orden crees que conviene buscar cada cosa?"
   ]
+ },
+ "d1b": {
+  "comp": [
+   "✅ Producir una salida de varias líneas con formato exacto usando un solo print y \\n",
+   "✅ Pasar varios valores a un mismo print separándolos con comas (y saber que se unen con un espacio)",
+   "✅ Incluir comillas dentro de un texto sin romper el string",
+   "✅ Leer un SyntaxError y localizar la línea culpable antes de corregir"
+  ]
+ },
+ "d2b": {
+  "comp": [
+   "✅ Acumular sobre una misma variable reasignándola (contador = contador + 10)",
+   "✅ Calcular una variable a partir de otras dos, sin escribir el resultado a mano",
+   "✅ Intercambiar los valores de dos variables usando una auxiliar",
+   "✅ Explicar por qué a = b seguido de b = a NO intercambia nada (una etiqueta ya se movió)"
+  ]
+ },
+ "d3b": {
+  "comp": [
+   "✅ Verificar el tipo de un dato con type() antes de operar con él",
+   "✅ Concatenar texto y número convirtiendo explícitamente con str()",
+   "✅ Interpolar valores con una f-string, incluso con formato de decimales",
+   "✅ Predecir qué hace * cuando un operando es texto y otro número (\"10\" * 3)",
+   "✅ Reconocer que bool es un int disfrazado (True + True da 2)"
+  ]
+ },
+ "d4b": {
+  "comp": [
+   "✅ Repartir una cantidad en unidades enteras y resto usando // y % juntos",
+   "✅ Calcular potencias y raíces con ** (incluido el exponente 0.5)",
+   "✅ Anticipar una división entre cero en vez de dejar que el programa explote",
+   "✅ Combinar comparaciones con and/or sabiendo que and se evalúa antes que or"
+  ]
+ },
+ "d5b": {
+  "comp": [
+   "✅ Limpiar y normalizar un texto sucio encadenando métodos (.strip().lower().replace())",
+   "✅ Invertir un texto con slicing de paso -1, sin bucles",
+   "✅ Contar caracteres combinando len() con .replace()",
+   "✅ Encadenar varios .replace() en el orden correcto para que ninguno deshaga al anterior"
+  ]
+ },
+ "d6b": {
+  "comp": [
+   "✅ Formatear una salida con sep y end en lugar de concatenar a mano",
+   "✅ Construir una boleta legible combinando input, conversión y f-strings",
+   "✅ Tolerar entradas con espacios de más apoyándote en que float() limpia los bordes",
+   "✅ Elegir int() o float() según el dato que esperas recibir"
+  ]
+ },
+ "d7b": {
+  "comp": [
+   "✅ Acumular un total dentro de un while (patrón acumulador)",
+   "✅ Contar cuántos elementos de un rango cumplen una condición",
+   "✅ Multiplicar acumulando (factorial) partiendo de 1, no de 0",
+   "✅ Detener un bucle con un valor centinela leído por input",
+   "✅ Combinar bucle y condición en un mismo programa (FizzBuzz)"
+  ]
+ },
+ "d8b": {
+  "comp": [
+   "✅ Validar un dato ANTES de convertirlo y antes de operar con él (dos anticipaciones en orden)",
+   "✅ Escribir un divisor robusto que avisa en vez de explotar ante el cero",
+   "✅ Diagnosticar dos errores de clases distintas y repararlos en el orden que Python obliga",
+   "✅ Distinguir un error de sintaxis (antes de ejecutar) de uno de ejecución"
+  ]
+ },
+ "d9b": {
+  "comp": [
+   "✅ Componer una función que usa a otras dos, sin repetir su lógica",
+   "✅ Detectar el bug silencioso de olvidar el return (la función devuelve None)",
+   "✅ Combinar mayúsculas, f-string y una decisión dentro de una misma función",
+   "✅ Explicar por qué una función sin return no da error pero rompe el programa más adelante"
+  ]
+ },
+ "d10b": {
+  "comp": [
+   "✅ Trazar un programa completo de otro autor sin ejecutarlo",
+   "✅ Detectar la trampa de reasignar la variable del bucle dentro del propio bucle",
+   "✅ Encontrar un bug de índice leyendo el código, antes de correrlo",
+   "✅ Separar «me resulta incómodo» de «está mal» al leer estilo ajeno"
+  ]
+ },
+ "d9proyecto": {
+  "comp": [
+   "✅ Construir un programa completo con menú en bucle a partir de una especificación escrita",
+   "✅ Validar la entrada del usuario y manejar los casos límite (división por cero, opción inválida) sin que el programa muera",
+   "✅ Formatear toda salida numérica con dos decimales de forma consistente",
+   "✅ Nombrar variables de forma profesional en un programa de varias decenas de líneas",
+   "✅ Defender en voz alta por qué cada parte de tu programa está donde está"
+  ]
+ },
+ "d_repaso": {
+  "comp": [
+   "✅ Combinar en un mismo ejercicio conversión, métodos de string y len()",
+   "✅ Validar una entrada y decidir con condiciones anidadas",
+   "✅ Escribir una función que devuelve un valor y usarla dos veces con datos distintos",
+   "✅ Filtrar una lista con for + append y ordenarla con sorted",
+   "✅ Contar frecuencias con un diccionario usando .get(clave, 0) + 1"
+  ]
  }
-};;;
+};;;;
 /* examen práctico */
 const PRACTICA=[
  {id:"p1",t:"Práctico 1 · Eco en mayúsculas",

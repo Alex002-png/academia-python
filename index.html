@@ -366,6 +366,26 @@
       <button class="btn" style="margin-top:8px" onclick="importar()">Importar progreso</button>
     </div>
     <p class="small" id="syncMsg" style="margin:8px 0 0;color:var(--good)"></p>
+
+    <p class="small muted" style="margin:14px 0 6px;border-top:1px dashed var(--line);padding-top:10px">Empezar de nuevo:</p>
+    <div class="row">
+      <button class="btn ghost" style="border-color:var(--bad);color:var(--bad)" onclick="pedirReinicio()">Reiniciar mi avance…</button>
+    </div>
+    <div id="resetBox" style="display:none;margin-top:10px;padding:12px 14px;border:1px solid var(--bad);border-radius:10px;background:#2a1618">
+      <p class="small" style="margin:0 0 8px"><strong style="color:var(--bad)">Esto borra TODO tu avance de este dispositivo</strong>: ejercicios aprobados, XP, rachas, insignias, flashcards, puntos débiles y los borradores de código. No se puede deshacer.</p>
+      <p class="small muted" style="margin:0 0 8px">Antes de borrar, se copiará automáticamente un respaldo a tu portapapeles (por si te arrepientes: podrás recuperarlo con “Importar…”).</p>
+      <p class="small" style="margin:0 0 6px">Para confirmar, escribe <strong>BORRAR</strong>:</p>
+      <input type="text" id="resetConfirm" placeholder="escribe BORRAR" style="margin-bottom:8px">
+      <label class="small" style="display:flex;gap:7px;align-items:flex-start;margin-bottom:10px">
+        <input type="checkbox" id="resetCloud" style="width:auto;margin-top:3px">
+        <span>Borrar también mi avance de la <strong>nube</strong> (si no lo marcas, tu avance seguirá guardado en la nube y volverá al sincronizar).</span>
+      </label>
+      <div class="row">
+        <button class="btn" style="background:var(--bad);color:#fff" onclick="confirmarReinicio()">Sí, borrar todo</button>
+        <button class="btn ghost" onclick="document.getElementById('resetBox').style.display='none'">Cancelar</button>
+      </div>
+      <p class="small" id="resetMsg" style="margin:8px 0 0"></p>
+    </div>
   </div>
 </section>
 
@@ -35434,6 +35454,45 @@ function renderWeak(){
 function addWeak(){const inp=document.getElementById("weakInput");
   if(inp.value.trim()){S.weak.push(inp.value.trim());inp.value="";save();renderWeak()}}
 function delWeak(i){S.weak.splice(i,1);save();renderWeak()}
+function pedirReinicio(){
+  const b=document.getElementById("resetBox");
+  b.style.display="block";
+  document.getElementById("resetConfirm").value="";
+  document.getElementById("resetMsg").textContent="";
+  const chk=document.getElementById("resetCloud");
+  if(chk){chk.checked=false;chk.parentElement.style.display=CLOUD?"flex":"none"}
+  b.scrollIntoView({behavior:"smooth",block:"center"});
+}
+async function confirmarReinicio(){
+  const msg=document.getElementById("resetMsg");
+  const txt=(document.getElementById("resetConfirm").value||"").trim().toUpperCase();
+  if(txt!=="BORRAR"){msg.style.color="var(--bad)";msg.textContent="Escribe BORRAR (en mayúsculas) para confirmar.";return}
+  // respaldo al portapapeles antes de destruir nada
+  try{
+    const data=JSON.stringify(S);
+    if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(data);
+  }catch(e){}
+  // ¿borrar también la nube?
+  const borrarNube=document.getElementById("resetCloud")&&document.getElementById("resetCloud").checked;
+  if(borrarNube&&CLOUD){
+    try{
+      msg.style.color="var(--muted)";msg.textContent="Borrando de la nube…";
+      await cloudFetch("POST",[{sync_code:CLOUD.code,data:{},updated_at:new Date().toISOString()}]);
+    }catch(e){
+      msg.style.color="var(--bad)";
+      msg.textContent="No se pudo borrar en la nube ("+String(e.message||e).slice(0,60)+"). Nada se ha borrado: revisa tu conexión e inténtalo otra vez.";
+      return;
+    }
+  }
+  // borrar todo lo local
+  try{
+    Object.keys(localStorage).filter(k=>k.indexOf("academiaPython")===0||k.indexOf("apydraft.")===0)
+      .forEach(k=>localStorage.removeItem(k));
+  }catch(e){}
+  msg.style.color="var(--good)";
+  msg.textContent="Avance borrado. Recargando…";
+  setTimeout(()=>location.reload(),700);
+}
 function exportar(){
   const data=JSON.stringify(S),msg=document.getElementById("syncMsg");
   if(navigator.clipboard&&navigator.clipboard.writeText)

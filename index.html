@@ -32077,6 +32077,8 @@ const LEVEL12=[
 ];
 
 const LEVELS=[LEVEL0,LEVEL1,LEVEL2,LEVEL3,LEVEL4,LEVEL5,LEVEL6,LEVEL7,LEVEL8,LEVEL9,LEVEL10,LEVEL11,LEVEL12];
+/* normalización defensiva: 3 días (N1·85, N1·91, N6·16) no declaran ex[] y rompían el render del nivel entero */
+LEVELS.forEach(L=>L.forEach(d=>{if(!d.ex)d.ex=[]}));
 const LEVEL_META=[
   {id:"n0",label:"Nivel 0 — Fundamentos",approved:()=>levelApproved()},
   {id:"n1",label:"Nivel 1 — Computer Science",approved:()=>LEVEL1.every(d=>dayDone(d))},
@@ -34814,6 +34816,182 @@ function go(v){
 }
 tabs.forEach(b=>b.addEventListener("click",()=>go(b.dataset.v)));
 
+/* ---- 🎓 Certificaciones recomendadas (opcional) ---- */
+const CERT_DIF=[null,{i:"🟢",t:"Fácil"},{i:"🟡",t:"Media"},{i:"🟠",t:"Difícil"},{i:"🔴",t:"Muy difícil"}];
+const CERTS={
+0:{c:[{n:"CS50x — Introduction to Computer Science",em:"Harvard University · HarvardX",
+  pq:"Valida los fundamentos de ciencias de la computación con un proyecto propio.",
+  dif:2,pres:5,util:2,prep:"6–10 semanas",pr:"Gratis",
+  prn:"El certificado de CS50 no cuesta nada. Los 219 USD de edX solo verifican tu identidad: no añaden ni una lección.",
+  pqn:"Recorre casi el mismo territorio que N0 pero por otro camino: empieza en C, con memoria manual. Hacerla después de N0 convierte esa dificultad en algo asumible, porque ya sabes programar y lo que aprendes es qué hace tu código por debajo.",
+  val:["Programación imperativa en C y en Python","Memoria, punteros y estructuras de datos construidas a mano","Algoritmos de búsqueda y ordenación con su análisis","SQL, HTML/CSS/JavaScript y Flask a nivel introductorio","Un proyecto final propio, entregado y evaluado"],
+  cv:"Es el curso de introducción a la informática más reconocido del mundo y su nombre se identifica al instante. Pero Harvard lo dice por escrito: sus certificados no son ofertas académicas acreditadas. Vale como curso completado con proyecto, no como credencial de Harvard. De ahí el contraste entre su prestigio y su utilidad laboral.",
+  url:"https://cs50.harvard.edu/x/"}],
+  no:"<strong>PCEP (Python Institute, 69 USD)</strong> es real y vigente, pero su contenido lo cubre cualquier curso gratuito y N0 lo supera con creces. Es la peor relación valor/precio de la lista: ese dinero rinde más en un dominio para tu portafolio."},
+
+1:{c:[{n:"GitHub Foundations",em:"GitHub (Microsoft) · examen vía Pearson VUE",sig:"GH-900 · 100 min",
+  pq:"Demuestra que sabes colaborar en equipo con Git y GitHub.",
+  dif:1,pres:3,util:4,prep:"1–2 semanas",pr:"99 USD",
+  prn:"Gratis para estudiantes verificados con el GitHub Student Developer Pack: un voucher, válido para Foundations o Copilot, no ambas. Validez: 3 años.",
+  pqn:"N1 dedica nueve días a Git y GitHub y los usa a diario durante los 200 siguientes. Al terminar el nivel ya has hecho con las manos casi todo lo que el examen pregunta.",
+  val:["Fundamentos de Git y del modelo de repositorios","Flujo de colaboración: ramas, pull requests, revisión, issues","Actions, Pages y Codespaces a nivel de concepto","Gestión de proyectos con GitHub Projects","Privacidad, seguridad y administración de organizaciones"],
+  cv:"El control de versiones aparece en absolutamente toda oferta de desarrollo, y GitHub es su implementación dominante. Un reclutador no técnico la entiende sin explicación. Su límite: es de nivel foundations — demuestra que sabes colaborar, no que sepas construir.",
+  url:"https://learn.microsoft.com/en-us/credentials/certifications/github-foundations/"},
+ {n:"PCAP — Certified Associate Python Programmer",em:"Python Institute (OpenEDG)",sig:"PCAP-31-03 · 65 min",opc:1,
+  pq:"Valida Python intermedio de forma externa, útil solo si aún no tienes portafolio.",
+  dif:2,pres:3,util:2,prep:"3–4 semanas",pr:"295 USD",
+  prn:"345 USD con reintento, 359 con reintento y simulacro. Hay vouchers pero sus importes no se publican. Validez: 5 años. Ojo: la versión PCAP-31-04 llega en el tercer trimestre de 2026.",
+  pqn:"Si la haces, hazla aquí: su temario queda cubierto de sobra por N0 y N1 juntos, y en N2 estarías certificando algo que dejaste atrás hace meses. Pero léela con escepticismo — ver la nota de abajo.",
+  val:["Módulos, paquetes y el sistema de importación","Jerarquía de excepciones y su manejo","Cadenas, métodos de texto y procesamiento de archivos","POO: herencia, polimorfismo y métodos especiales","Funciones anónimas, closures y funciones de orden superior"],
+  cv:"Al buscar su demanda real aparece una trampa: la mayoría de resultados de «PCAP» en portales de empleo se refieren a <em>packet capture</em>, de redes y ciberseguridad, no a esta certificación. Con la búsqueda limpia quedan unas pocas decenas de ofertas en todo el mundo. Su valor es de desempate, y solo si no tienes historial. Terminando N1 tu portafolio ya demuestra más Python que este examen.",
+  url:"https://pythoninstitute.org/pcap"}]},
+
+2:{c:[{n:"AWS Certified Cloud Practitioner",em:"Amazon Web Services (AWS)",sig:"CLF-C02 · 90 min",
+  pq:"Demuestra que entiendes el vocabulario y la economía de la nube.",
+  dif:1,pres:4,util:4,prep:"2–3 semanas",pr:"100 USD",
+  prn:"65 preguntas (50 puntúan), corte 700/1000. Validez: 3 años. AWS no incluye reintento gratis, pero al aprobar cualquier examen te da un voucher del 50% para el siguiente.",
+  pqn:"N2 te enseña a construir y desplegar un backend completo: contenedores, entornos, integración continua, despliegue sin cortes, vuelta atrás, observabilidad. Lo que no te enseña es el vocabulario y el modelo económico de la nube donde ese backend acabará viviendo. Intentarla antes de N2 sería memorizar nombres de servicios sin haber desplegado nunca nada.",
+  val:["Conceptos de computación en la nube y su propuesta de valor (24%)","Seguridad y cumplimiento, con el modelo de responsabilidad compartida (30%)","Servicios principales: cómputo, almacenamiento, red y bases de datos (34%)","Facturación, modelos de precio y planes de soporte (12%)"],
+  cv:"AWS mantiene la mayor cuota del mercado de infraestructura en la nube — 28%, frente al 21% de Microsoft y el 14% de Google (Synergy Research, primer trimestre de 2026) — lo que le da la mayor superficie de reconocimiento. Es de nivel foundational: no demuestra que sepas construir en AWS, sino que entiendes de qué se habla. El salto real de empleabilidad está en Solutions Architect, que llega en N12.",
+  url:"https://aws.amazon.com/certification/certified-cloud-practitioner/"},
+ {n:"Linux Essentials",em:"Linux Professional Institute (LPI)",sig:"010-160 · 60 min",
+  pq:"Valida que te manejas en la terminal sin depender de una interfaz gráfica.",
+  dif:1,pres:3,util:3,prep:"2–3 semanas",pr:"120 USD",
+  prn:"100 u 80 USD en regiones de precio reducido — Latinoamérica suele entrar en una de ellas, compruébalo antes de pagar. Corte: 500 sobre escala 200–800. Vitalicia: no caduca nunca.",
+  pqn:"Aquí y no antes. En N1 la terminal aparece, pero es en N2 cuando vives en ella: servidores, contenedores, despliegues, logs, procesos. Certificar los fundamentos cuando ya los usas a diario tiene sentido; certificarlos antes es memorizar comandos.",
+  val:["La comunidad Linux, el software libre y sus licencias","Navegación del sistema de archivos y línea de comandos","Redirección, tuberías, expresiones regulares y edición de texto","Procesos, paquetes y componentes del sistema","Usuarios, grupos, permisos y propiedad de archivos"],
+  cv:"LPI es vendor-neutral y reconocida internacionalmente, con especial peso fuera de Estados Unidos. Su ventaja práctica sobre las alternativas es concreta: no caduca. CompTIA Linux+ cuesta 338 USD y caduca a los 3 años; LPIC-1 cuesta 400 USD en dos exámenes y caduca a los 5.",
+  url:"https://www.lpi.org/our-certifications/linux-essentials-overview/"}],
+  alt:"Si trabajas en un entorno con Microsoft 365 y Entra desplegados, <strong>Azure Fundamentals (AZ-900)</strong> cumple la misma función que la de AWS y tiene una ventaja: no caduca nunca. Microsoft no publica su precio en dólares en ninguna página oficial, así que compruébalo al registrarte."},
+
+3:{vac:"Busqué específicamente si existe alguna certificación de matemáticas para IA con examen proctorizado, organismo certificador reconocido y demanda real de empleadores. <strong>No existe ninguna.</strong> Todo lo que hay son certificados de curso.<br><br>Para calibrarlo: las únicas credenciales matemáticas con peso real en el mercado son los exámenes actuariales (SOA y CAS) y los títulos universitarios de matemáticas o estadística — y ninguno es de IA.<br><br><strong>Qué hacer en su lugar:</strong> si quieres una segunda vía sobre este material, las especializaciones de DeepLearning.AI o Imperial College son excelentes — por el conocimiento, no por el papel, y van en la sección «Formación» del CV. Las matemáticas se demuestran derivando <em>backpropagation</em> en una pizarra, no con un PDF. El capstone de este nivel es mejor evidencia que cualquier examen."},
+
+4:{vac:"Estos tres niveles enseñan a <strong>construir modelos</strong>: implementar <em>backpropagation</em> a mano, escribir un motor de autodiferenciación, levantar un mini-GPT desde la matriz de atención. Las certificaciones que existen en esta franja evalúan otra cosa — servicios gestionados de una nube concreta, no la capacidad de construir.<br><br>Y la única que sí evaluaba el framework, el <strong>TensorFlow Developer Certificate</strong>, está cerrada desde 2024. PyTorch nunca ha tenido certificación oficial.<br><br><strong>Qué hacer en su lugar:</strong> los capstones de estos niveles valen más en una entrevista que cualquier examen de opción múltiple. Publícalos con su README, sus decisiones documentadas y sus resultados honestos.",vacN:"N4 · N5 · N6"},
+
+7:{c:[{n:"AWS Certified Generative AI Developer — Professional",em:"Amazon Web Services (AWS)",sig:"AIP-C01 · 180 min",
+  pq:"Valida que sabes llevar sistemas con LLM a producción, no solo prototiparlos.",
+  dif:4,pres:4,util:4,prep:"2–3 meses",pr:"300 USD",
+  prn:"75 preguntas en 180 minutos. Validez: 3 años. Aplica el voucher del 50% si aprobaste Cloud Practitioner en N2.",
+  pqn:"Es la certificación de IA generativa más exigente que existe hoy y la única de nivel Professional en su categoría. AWS declara como perfil esperado dos años de nube y uno de IA generativa — que es, con bastante precisión, lo que deja N7 tras 201 días construyendo sistemas con LLM.",
+  val:["Diseño de aplicaciones de IA generativa en producción","Recuperación aumentada (RAG): indexación, recuperación y evaluación","Selección, personalización y ajuste fino de modelos","Seguridad, controles y gobernanza de sistemas con LLM","Optimización de coste, latencia y calidad de respuesta"],
+  cv:"Es reciente y todavía escasa, lo que la hace visible. Por su nivel Professional comunica algo distinto a las de fundamentos: que has operado estos sistemas, no solo que sabes qué son. El matiz honesto: evalúa el ecosistema de AWS, así que si construyes con modelos locales parte del temario te será ajeno aunque los conceptos se transfieran.",
+  url:"https://aws.amazon.com/certification/certified-generative-ai-developer-professional/"},
+ {n:"Databricks Certified Generative AI Engineer Associate",em:"Databricks",sig:"45 preguntas · 90 min",opc:1,
+  pq:"Valida el trabajo diario con RAG: datos, ensamblado, despliegue y monitorización.",
+  dif:3,pres:3,util:3,prep:"4–6 semanas",pr:"200 USD",prn:"Validez: 2 años.",
+  pqn:"Es la alternativa práctica a la de AWS y la más orientada al trabajo diario con RAG. Tiene sentido sobre todo si tu entorno laboral usa Databricks, habitual en empresas con plataformas de datos grandes.",
+  val:["Diseño de aplicaciones de IA generativa (14%)","Preparación de datos para recuperación (14%)","Desarrollo de la aplicación (30%)","Ensamblado y despliegue (22%)","Gobernanza (8%) y evaluación y monitorización (12%)"],
+  cv:"Databricks tiene presencia fuerte en empresas con plataformas de datos consolidadas, y sus certificaciones se piden por nombre en ese nicho. Fuera de él su reconocimiento es menor que el de AWS o Microsoft.",
+  url:"https://www.databricks.com/learn/certification/genai-engineer-associate"}],
+  no:"<strong>AWS Certified AI Practitioner (AIF-C01, 100 USD)</strong> existe y es oficial, pero la propia AWS la dirige a «analistas de negocio, especialistas de marketing, gestores de producto y ventas». Para alguien que ha pasado 201 días construyendo sistemas con LLM es un trámite, no una credencial diferenciadora. No la confundas con la de nivel Professional."},
+
+8:{c:[{n:"Azure AI Apps and Agents Developer Associate",em:"Microsoft",sig:"AI-103 · 120 min",opc:1,
+  pq:"Es la única certificación de un gran proveedor que evalúa sistemas de agentes.",
+  dif:3,pres:3,util:3,prep:"4–6 semanas",pr:"~165 USD",
+  prn:"Microsoft no publica precios en dólares; el único dato oficial es que «los exámenes Associate cuestan típicamente 165 USD». Examen solo en inglés. Validez: 1 año, con renovación gratuita en línea.",
+  pqn:"Es la única certificación de un gran proveedor que evalúa explícitamente soluciones agénticas y orquestación multiagente, que es justo lo que N8 construye durante sus laboratorios. Sustituye a la retirada AI-102.",
+  val:["Planificación y gestión de una solución de IA en Azure","Implementación de soluciones generativas y agénticas","Visión por computador y análisis de texto","Extracción de información de documentos"],
+  cv:"Cubre un terreno — agentes — donde casi no hay credenciales formales, y Microsoft tiene el 21% del mercado de nube y una presencia enorme en grandes empresas. Dos advertencias: está atada a Microsoft Foundry, así que buena parte del temario es específico de ese producto, y su validez es de solo 1 año.",
+  url:"https://learn.microsoft.com/en-us/credentials/certifications/exams/ai-103/"}]},
+
+9:{c:[{n:"Certified Kubernetes Administrator (CKA)",em:"CNCF · The Linux Foundation",sig:"examen práctico · 120 min",imp:1,
+  pq:"Valida administración práctica de Kubernetes en clústeres reales, no en teoría.",
+  dif:4,pres:5,util:5,prep:"1–2 meses",pr:"445 USD",
+  prn:"Incluye un reintento gratis, 12 meses para agendar y dos accesos al simulador killer.sh. Validez: 2 años. <strong>La Linux Foundation documenta oficialmente promociones recurrentes: en 2026 se han visto descuentos del 40% al 75%, dejando el examen en 250–290 USD. No la compres nunca a precio de lista.</strong>",
+  pqn:"Es el encaje más perfecto de toda la Academia. El día 1 de N9 se titula «Del proceso único al clúster: tu primer Kubernetes real», y el nivel entero opera clústeres: pods, sondas de salud, namespaces, señales, redes y almacenamiento. El examen evalúa exactamente eso.",
+  val:["Diagnóstico y resolución de problemas en clústeres (30%)","Arquitectura del clúster, instalación y configuración (25%)","Servicios y redes (20%)","Cargas de trabajo y planificación (15%)","Almacenamiento (10%)"],
+  cv:"Es la única certificación de Kubernetes que el propio proyecto lista en su web de formación, y el estándar de facto del sector. Y hay una razón de fondo por la que es distinta a todas las demás: <strong>es un examen práctico</strong>. No hay opción múltiple — son entre 15 y 20 tareas reales que resuelves en una terminal, sobre clústeres vivos, con la documentación abierta. Se puntúa el estado final del clúster, no el método. Es prácticamente imposible aprobarla memorizando preguntas filtradas, a diferencia de todas las de opción múltiple de esta lista. Es la única a la que doy cinco estrellas en ambas métricas.",
+  url:"https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"},
+ {n:"Kubernetes and Cloud Native Associate (KCNA)",em:"CNCF · The Linux Foundation",sig:"60 preguntas · 90 min",opc:1,
+  pq:"Escalón intermedio antes de la CKA, solo si quieres una credencial temprana.",
+  dif:1,pres:3,util:2,prep:"2–3 semanas",pr:"250 USD",
+  prn:"Con reintento gratis incluido. Corte del 75%. Validez: 2 años. Se aplican las mismas promociones frecuentes.",
+  pqn:"Solo si quieres un escalón intermedio. Y un detalle que cambia la decisión: desde 2026 el programa CARE de la CNCF hace que <strong>aprobar la CKA renueve automáticamente la KCNA</strong>. Si tu objetivo es la CKA, esta no es un requisito: son 250 USD adicionales que solo tienen sentido como credencial temprana mientras estudias.",
+  val:["Fundamentos de Kubernetes (46%)","Orquestación de contenedores (22%)","Entrega de aplicaciones cloud native (16%)","Arquitectura cloud native (16%)"],
+  cv:"Demuestra vocabulario del ecosistema, útil si aspiras a roles de plataforma pero aún no operas clústeres. Es notablemente menos valorada que la CKA, precisamente por no ser práctica.",
+  url:"https://training.linuxfoundation.org/certification/kubernetes-cloud-native-associate/"}]},
+
+10:{vac:"<strong>N10</strong> trata de correr modelos en tu propia máquina: cuantización, licencias de modelos abiertos, coste real por token, elección de hardware. No existe ninguna certificación que evalúe eso — las de NVIDIA se acercan, pero están orientadas a su infraestructura de centro de datos, no a decidir si un modelo cabe en tu GPU.<br><br><strong>N11</strong> forma investigadores: leer papers en capas, verificar afirmaciones con código propio, reproducir resultados y recibir revisión. <strong>La investigación no se certifica: se publica.</strong> La credencial de este nivel es tu reproducción publicada y tu capacidad de defender un método ante preguntas.",vacN:"N10 · N11"},
+
+5:{ali:4},6:{ali:4},11:{ali:10},
+12:{c:[{n:"AWS Certified Solutions Architect — Associate",em:"Amazon Web Services (AWS)",sig:"SAA-C03 · 130 min",
+  pq:"Valida criterio de diseño de arquitecturas bajo restricciones reales.",
+  dif:3,pres:4,util:5,prep:"6–8 semanas",pr:"150 USD",
+  prn:"65 preguntas, corte 720/1000. Validez: 3 años. Aplica el voucher del 50% si vienes de la de N2.",
+  pqn:"N12 enseña a diseñar sistemas bajo restricciones reales: presupuestos de latencia, percentiles, compromisos entre coste y fiabilidad. Los cuatro dominios de esta certificación son, casi literalmente, los ejes de N12. Es la credencial que cierra el recorrido.",
+  val:["Diseño de arquitecturas seguras (30%)","Diseño de arquitecturas resilientes (26%)","Diseño de arquitecturas de alto rendimiento (24%)","Diseño de arquitecturas optimizadas en coste (20%)"],
+  cv:"Es de las certificaciones de nube más pedidas por nombre en ofertas, en gran medida porque las consultoras necesitan cierto número de profesionales certificados para mantener su nivel de partnership con AWS. Ese mecanismo económico — no la calidad del examen — es lo que sostiene su demanda, y conviene saberlo. Es de opción múltiple: valida criterio de diseño, no habilidad operativa. Se complementa bien con la CKA de N9, que valida justo lo contrario.",
+  url:"https://aws.amazon.com/certification/certified-solutions-architect-associate/"},
+ {n:"Professional Machine Learning Engineer",em:"Google Cloud",sig:"50–60 preguntas · 120 min",opc:1,
+  pq:"Valida el ciclo completo de un sistema de ML en producción.",
+  dif:3,pres:4,util:3,prep:"6–8 semanas",pr:"200 USD",
+  prn:"Validez: 2 años, la más corta de esta lista, con renovación de pago.",
+  pqn:"Es la certificación de ML que más aparece nombrada en ofertas, junto con la de AWS. Solo tiene sentido al final, cuando ya has recorrido de N4 a N9.",
+  val:["Arquitectura de sistemas de ML a escala","Colaboración entre equipos de datos y de modelos","Escalado de prototipos a producción","Automatización y orquestación de pipelines","Monitorización y optimización de soluciones en producción"],
+  cv:"Reconocimiento alto en empresas que usan Google Cloud y, por el mismo mecanismo de partners que la de AWS, demanda sostenida en consultoras. Su desventaja concreta: es la que caduca antes de todas.",
+  url:"https://cloud.google.com/learn/certification/machine-learning-engineer"}]}
+};
+function certStars(n){return "★".repeat(n)+"<span style='opacity:.28'>"+"★".repeat(5-n)+"</span>"}
+function certToggle(k){const e=document.getElementById("certd"+k);if(!e)return;
+  const ab=e.style.display!=="none";e.style.display=ab?"none":"block";
+  const b=document.getElementById("certb"+k);if(b)b.textContent=ab?"Ver ficha completa ▾":"Ocultar ficha ▴";}
+function certificacionesHTML(nv){
+  let D=CERTS[nv];if(D&&D.ali!==undefined)D=CERTS[D.ali];if(!D)return "";
+  let h='<div class="card" style="border-color:var(--gold-dim);margin-top:18px">'+
+    '<p class="eyebrow" style="color:var(--gold)">🎓 Certificaciones recomendadas · opcional</p>';
+  if(D.vac){
+    h+='<h2 style="margin-bottom:6px">'+(D.vacN||("Nivel "+nv))+' — ninguna certificación recomendada</h2>'+
+      '<p class="small muted" style="margin:0 0 10px">Y es una conclusión, no un olvido.</p>'+
+      '<div class="small" style="color:var(--text)">'+D.vac+'</div></div>';
+    return h;
+  }
+  h+='<h2 style="margin-bottom:2px">Complementos opcionales para tu CV</h2>'+
+    '<p class="small muted" style="margin:2px 0 14px">Ninguna es obligatoria. Puedes terminar la Academia entera sin sacar ninguna.</p>';
+  h+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.72rem;min-width:520px">'+
+    '<tr style="text-align:left;color:var(--muted)"><th style="padding:6px 8px;font-weight:600">Certificación</th>'+
+    '<th style="padding:6px 8px;font-weight:600">¿Por qué obtenerla?</th>'+
+    '<th style="padding:6px 8px;font-weight:600;white-space:nowrap">Dificultad</th>'+
+    '<th style="padding:6px 8px;font-weight:600;white-space:nowrap">Prestigio</th>'+
+    '<th style="padding:6px 8px;font-weight:600;white-space:nowrap">Impacto CV</th>'+
+    '<th style="padding:6px 8px;font-weight:600;white-space:nowrap">Preparación</th>'+
+    '<th style="padding:6px 8px;font-weight:600;white-space:nowrap">Precio</th></tr>';
+  D.c.forEach(c=>{const df=CERT_DIF[c.dif];
+    h+='<tr style="border-top:1px solid var(--line)">'+
+      '<td style="padding:8px"><strong>'+c.n.split("—")[0].trim()+'</strong>'+(c.imp?' <span class="chip gold" style="font-size:.52rem">imprescindible</span>':c.opc?' <span class="chip blue" style="font-size:.52rem">opcional</span>':"")+'</td>'+
+      '<td style="padding:8px;color:var(--muted)">'+c.pq+'</td>'+
+      '<td style="padding:8px;white-space:nowrap">'+df.i+" "+df.t+'</td>'+
+      '<td style="padding:8px;color:var(--gold);white-space:nowrap">'+certStars(c.pres)+'</td>'+
+      '<td style="padding:8px;color:var(--gold);white-space:nowrap">'+certStars(c.util)+'</td>'+
+      '<td style="padding:8px;white-space:nowrap;color:var(--muted)">'+c.prep+'</td>'+
+      '<td style="padding:8px;white-space:nowrap;font-weight:600">'+c.pr+'</td></tr>';
+  });
+  h+='</table></div>';
+  h+='<p class="small muted" style="margin:10px 0 0"><strong>Prestigio</strong> mide cuánto pesa el nombre; <strong>impacto en el CV</strong>, cuánto ayuda de verdad a conseguir el puesto. No siempre coinciden.</p>';
+  h+='<div style="margin-top:14px;padding:12px 14px;border-left:3px solid var(--gold);background:rgba(212,175,55,.06);border-radius:0 8px 8px 0">'+
+    '<p class="small" style="margin:0;color:var(--text)"><strong>Nota importante.</strong> Las certificaciones son un complemento de la formación, no su objetivo principal. Un portafolio sólido, proyectos bien documentados y la capacidad de resolver problemas reales tendrán un impacto mayor en la mayoría de procesos de selección. Las certificaciones recomendadas en esta Academia se incluyen únicamente cuando cuentan con reconocimiento internacional o validan habilidades relevantes para la industria.</p></div>';
+  D.c.forEach((c,i)=>{const k=nv+"_"+i;
+    h+='<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">'+
+      '<div class="row" style="justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">'+
+      '<strong class="small">'+c.n+'</strong>'+
+      '<button class="btn ghost" id="certb'+k+'" style="font-size:.66rem;padding:4px 10px" onclick="certToggle(\''+k+'\')">Ver ficha completa ▾</button></div>'+
+      '<p class="small muted" style="margin:4px 0 0">'+c.em+(c.sig?" · "+c.sig:"")+'</p>'+
+      '<div id="certd'+k+'" style="display:none;margin-top:10px">'+
+      '<p class="small" style="margin:0 0 4px;color:var(--gold)"><strong>¿Por qué realizarla después de este nivel?</strong></p>'+
+      '<p class="small" style="margin:0 0 10px;color:var(--text)">'+c.pqn+'</p>'+
+      '<p class="small" style="margin:0 0 4px;color:var(--gold)"><strong>¿Qué conocimientos valida?</strong></p>'+
+      '<ul class="small" style="margin:0 0 10px;padding-left:18px;color:var(--text)">'+c.val.map(v=>"<li>"+v+"</li>").join("")+'</ul>'+
+      '<p class="small" style="margin:0 0 4px;color:var(--gold)"><strong>¿Por qué fortalece el CV?</strong></p>'+
+      '<p class="small" style="margin:0 0 10px;color:var(--text)">'+c.cv+'</p>'+
+      '<p class="small" style="margin:0 0 4px;color:var(--gold)"><strong>Precio y condiciones</strong></p>'+
+      '<p class="small" style="margin:0 0 10px;color:var(--text)"><strong>'+c.pr+'</strong>'+(c.prn?" — "+c.prn:"")+'</p>'+
+      '<a class="btn ghost" style="font-size:.68rem" href="'+c.url+'" target="_blank" rel="noopener">Sitio oficial ↗</a>'+
+      '</div></div>';
+  });
+  if(D.alt)h+='<p class="small muted" style="margin:14px 0 0;padding-top:10px;border-top:1px solid var(--line)"><strong>Alternativa según tu entorno.</strong> '+D.alt+'</p>';
+  if(D.no)h+='<p class="small muted" style="margin:12px 0 0;padding:10px 12px;border-left:3px solid var(--bad);border-radius:0 8px 8px 0;background:rgba(248,113,113,.06)"><strong>Lo que NO recomiendo aquí.</strong> '+D.no+'</p>';
+  h+='</div>';
+  return h;
+}
 /* ---- clases ---- */
 let curDay=null;
 let curLevel=0;
@@ -34871,6 +35049,7 @@ function renderClases(){
         (tot?'<span class="small">'+hecho+"/"+tot+unidad+"</span>":"")+
         "</div>"+st+"</div>";
     });
+    h+=certificacionesHTML(curLevel);
     box.innerHTML=h;return;
   }
   const d=lvl[curDay],p=phOf(d);

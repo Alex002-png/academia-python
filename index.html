@@ -999,14 +999,14 @@ async function runScriptedPy(code,stdin){
    ============================================================ */
 function T(html){return html}
 const LEVEL0=[
-/* ══════════════════ Día 0a · ¿Qué es un algoritmo? ══════════════════ */
-{id:"n0pc1",n:"Día 0a",t:"¿Qué es un algoritmo? · pensar antes de programar",
+/* ══════════════════ Día 1 · ¿Qué es un algoritmo? ══════════════════ */
+{id:"n0pc1",n:"Día 1",t:"¿Qué es un algoritmo? · pensar antes de programar",
  ing:"Todo lo que hace tu computadora —y tu futuro JARVIS— es ejecutar algoritmos: recetas de pasos que alguien pensó ANTES de escribir código. Un modelo de IA que responde, un GPS que traza una ruta, un cajero que reparte billetes: por debajo, todos son algoritmos. Antes de escribir tu primera línea de Python, aprendes lo que de verdad separa a un programador de quien solo teclea: saber diseñar los pasos.",
  intro:"Bienvenido al Bloque 0. Aquí todavía NO programas: aprendes a PENSAR como programador, que es lo difícil de verdad. La sintaxis de Python se aprende en semanas; resolver problemas, en años. Empezamos por la pieza más antigua de la informática, anterior a cualquier computadora: el algoritmo. Un algoritmo es, simplemente, una receta — pero una receta tan exacta que hasta una máquina que no piensa podría seguirla sin equivocarse.",
  intuit:{code:'x = 10\nx = x + 5\nx = x * 2\nprint(x)',py:false,
   q:"Un algoritmo es una secuencia de pasos ORDENADOS: cada uno se ejecuta en su turno. Sigue estos tres pasos en orden, empezando con x = 10. ¿Qué imprime al final — 30, o 25? (Pista: si multiplicaras ANTES de sumar, saldría otra cosa; el orden manda.)",
   req:["30"],out:"30",
-  e:"30. Los pasos se ejecutan en orden, de arriba hacia abajo: x parte en 10, luego 10 + 5 = 15, luego 15 * 2 = 30. Si hubieras multiplicado primero (10 * 2 = 20) y sumado después (20 + 5 = 25), el resultado sería 25. Mismos pasos, distinto orden, distinto resultado: por eso un algoritmo no es solo QUÉ pasos, sino en QUÉ ORDEN."},
+  e:"30. Los pasos se ejecutan en orden, de arriba hacia abajo: x parte en 10, luego 10 + 5 = 15, luego 15 * 2 = 30. Si hubieras multiplicado primero (10 * 2 = 20) y sumado después (20 + 5 = 25), el resultado sería 25. Mismos pasos, distinto orden, distinto resultado: por eso un algoritmo no es solo QUÉ pasos, sino en QUÉ ORDEN. Y una aclaración clave del símbolo =: en Python NO es la igualdad de las mates (ahí x = x + 5 sería imposible); significa GUARDA en x el resultado de la derecha. x = x + 5 se lee: toma lo que hay en x, súmale 5, y guárdalo de nuevo en x."},
  mcq:[
   {q:"¿Cuál de estas NO es una propiedad de un algoritmo bien definido?",o:["Preciso (cada paso dice exactamente qué hacer)","Ambiguo (deja espacio a interpretación)","Ordenado (los pasos van en una secuencia clara)","Finito (termina tras un número limitado de pasos)"],a:1,e:"Un algoritmo debe ser justo lo contrario de ambiguo: NO ambiguo. Si un paso admite dos interpretaciones (‘echa un poco de sal’), la máquina no sabría cuál elegir. Las cuatro propiedades clásicas son: preciso, ordenado, sin ambigüedad y finito. La ambigüedad es enemiga del algoritmo, no una propiedad suya."},
   {q:"¿Cuál de estas instrucciones sirve como paso de un algoritmo válido para una máquina?",o:["Sazona al gusto","Agrega sal hasta que quede rico","Agrega exactamente 5 gramos de sal","Ponle la sal que creas necesaria"],a:2,e:"‘Agrega exactamente 5 gramos de sal’ es preciso y sin ambigüedad: una máquina lo puede ejecutar igual siempre. Las otras tres dependen del criterio de quien cocina (‘al gusto’, ‘rico’, ‘que creas necesaria’) — perfectas para un humano, imposibles para una máquina que no interpreta ni opina. Un algoritmo se escribe para el ejecutor más literal del mundo."},
@@ -1038,15 +1038,20 @@ const LEVEL0=[
    d:'Ejecuta este algoritmo de 3 pasos EN ORDEN: parte de 8, réstale 3, y luego multiplica el resultado por 5. Complétalo para que imprima el resultado final. Fíjate: primero se resta, DESPUÉS se multiplica — ese orden decide el resultado.',
    starter:'n = 8\nn = n - 3     # paso 2: ahora n vale 5\n# paso 3: multiplica n por 5\n\nprint(n)',runs:[[]],
    check:(o,c)=>{if(/\b25\b/.test(c))return"No escribas 25 a mano: deja que los pasos lo calculen.";if(!/\*/.test(c))return"Falta el paso 3: multiplicar por 5 (usa *).";return norm(o[0])==="25"?true:"Esperaba: 25\nObtuve:\n"+norm(o[0])+"\n(8 - 3 = 5; 5 * 5 = 25)"},
-   hints:["n = n * 5","Después de restar (8 - 3 = 5), multiplicas 5 * 5 = 25."]}],
+   hints:["n = n * 5","Después de restar (8 - 3 = 5), multiplicas 5 * 5 = 25."]},
+  {id:"n0pc1e4",py:true,t:"Ejercicio 4 · Diagnostica y corrige: el orden equivocado",
+   d:'Este algoritmo debía imprimir <code>30</code> partiendo de 10 (PRIMERO sumar 5, DESPUÉS multiplicar por 2), pero alguien intercambió dos pasos y ahora imprime 25. No agregues ni quites líneas: REORDENA las dos del medio.',
+   starter:'x = 10\nx = x * 2   # <- paso fuera de lugar\nx = x + 5\nprint(x)',runs:[[]],
+   check:(o,c)=>{const i1=c.indexOf("x + 5"),i2=c.indexOf("x * 2");if(i1<0||i2<0)return"Conserva las dos operaciones: sumar 5 y multiplicar por 2.";if(i1>i2)return"Sigue el orden equivocado: la SUMA debe ocurrir antes que la multiplicación.";return norm(o[0])==="30"?true:"Esperaba: 30\nObtuve:\n"+norm(o[0])},
+   hints:["El plan decía: primero +5 (10→15), después ×2 (15→30).","Mismo código, otro orden: x = x + 5 arriba, x = x * 2 abajo."]}],
  retoFinal:{id:"n0pc1x",py:true,t:"Desafío final · inédito — un algoritmo FINITO tiene un número exacto de pasos",
   d:'Predice ANTES de ejecutar: un algoritmo finito repite un paso una cantidad EXACTA de veces (nunca ‘para siempre’). Este parte de 2 y duplica el valor exactamente 3 veces. ¿En cuánto termina? Ejecuta y confirma. Y piensa: si en vez de 3 duplicaciones pusieras ‘duplica para siempre’, ¿seguiría siendo un algoritmo?',
   starter:'resultado = 2\nresultado = resultado * 2   # duplicacion 1\nresultado = resultado * 2   # duplicacion 2\nresultado = resultado * 2   # duplicacion 3\nprint(resultado)',runs:[[]],
   hints:["Cada línea multiplica por 2: 2 → 4 → 8 → 16.","Duplicar 3 veces empezando en 2: 2·2·2·2 = 16. ‘Para siempre’ NO sería algoritmo: violaría la propiedad de ser finito (nunca terminaría)."],
   check:(o,c)=>{return norm(o[0])==="16"?true:"Esperaba: 16\nObtuve:\n"+norm(o[0])+"\n(2 → 4 → 8 → 16, exactamente 3 duplicaciones)"}}},
 
-/* ══════════════════ Día 0b · Entrada → Proceso → Salida ══════════════════ */
-{id:"n0pc2",n:"Día 0b",t:"Entrada → Proceso → Salida: el marco universal",
+/* ══════════════════ Día 2 · Entrada → Proceso → Salida ══════════════════ */
+{id:"n0pc2",n:"Día 2",t:"Entrada → Proceso → Salida: el marco universal",
  ing:"Absolutamente todo sistema informático encaja en tres letras: E→P→S. Una calculadora, un cajero automático, Google, y tu futuro chatbot: reciben algo (Entrada), lo transforman (Proceso) y devuelven algo (Salida). Tu JARVIS lee tu pregunta (E), un modelo la procesa (P) y responde (S). Aprende a ver este esqueleto en cualquier problema y ya sabrás por dónde empezar SIEMPRE.",
  intro:"Ayer viste qué es un algoritmo. Hoy aprendes el molde en el que cabe casi cualquier problema del mundo: Entrada → Proceso → Salida. Es tan simple que parece trivial, y tan potente que lo usarás toda tu carrera. Cuando un problema te abrume, la primera pregunta de un ingeniero siempre es la misma: ¿qué ENTRA, qué hay que HACER con eso, y qué debe SALIR?",
  intuit:{code:'entrada = 20\nproceso = entrada * 2 + 1\nprint(proceso)',py:false,
@@ -1090,8 +1095,8 @@ const LEVEL0=[
   hints:["subtotal = precio * cantidad  →  descuento = subtotal * 0.25  →  total = subtotal - descuento","Entradas: precio (20) y cantidad (3). Proceso: subtotal = 60, descuento = 15.0, total = 45.0. Salida: 45.0."],
   check:(o,c)=>{if(/45\.0/.test(c)&&!/\*/.test(c))return"No escribas 45.0 a mano: haz que el proceso lo calcule.";return norm(o[0])==="45.0"?true:"Esperaba: 45.0\nObtuve:\n"+norm(o[0])+"\n(subtotal 60 − descuento 15.0 = 45.0)"}}},
 
-/* ══════════════════ Día 0c · Descomposición ══════════════════ */
-{id:"n0pc3",n:"Día 0c",t:"Descomposición: partir un problema grande en pequeños",
+/* ══════════════════ Día 3 · Descomposición ══════════════════ */
+{id:"n0pc3",n:"Día 3",t:"Descomposición: partir un problema grande en pequeños",
  ing:"Ningún ingeniero resuelve un problema gigante de un golpe: lo parte en pedazos que sí puede resolver. Tu futuro JARVIS no es ‘un programa que responde’: es leer el mensaje + buscar contexto + generar respuesta + mostrarla, cada pieza construida por separado. Descomponer es la habilidad número uno para no sentirte abrumado nunca frente a un problema grande.",
  intro:"Un problema grande asusta. La descomposición es el antídoto: partirlo en subproblemas tan pequeños que cada uno se resuelva casi solo, y luego juntar las piezas. Es el segundo pilar del pensamiento computacional (Jeannette Wing, Carnegie Mellon), y la razón por la que un equipo puede construir algo enorme: nadie lo hace entero, cada quien resuelve una pieza.",
  intuit:{code:'gasolina = 40\npeaje = 15\ncomida = 25\ntotal = gasolina + peaje + comida\nprint(total)',py:false,
@@ -1139,8 +1144,8 @@ const LEVEL0=[
   hints:["impuesto = 2000/10 = 200.0; seguro = 2000/20 = 100.0; descuentos = 300.0.","neto = 2000 − 300.0 = 1700.0. La descomposición tiene niveles: ‘descuentos’ se partió en impuesto + seguro."],
   check:(o,c)=>{return norm(o[0])==="1700.0"?true:"Esperaba: 1700.0\nObtuve:\n"+norm(o[0])+"\n(descuentos 300.0; 2000 − 300.0 = 1700.0)"}}},
 
-/* ══════════════════ Día 0d · Abstracción ══════════════════ */
-{id:"n0pc4",n:"Día 0d",t:"Abstracción: quedarte con lo esencial, ocultar el resto",
+/* ══════════════════ Día 4 · Abstracción ══════════════════ */
+{id:"n0pc4",n:"Día 4",t:"Abstracción: quedarte con lo esencial, ocultar el resto",
  ing:"Manejas un auto sin saber cómo explota la gasolina en el motor: el volante y los pedales ABSTRAEN toda esa complejidad. En programación es igual: usas print() sin saber cómo dibuja píxeles la pantalla. Tu futuro RAG usará un modelo de embeddings como una caja negra: le das texto, te da vectores, y no necesitas saber los millones de operaciones internas. Abstraer es cómo los humanos manejamos la complejidad sin volvernos locos.",
  intro:"Un mapa del metro no muestra las calles reales, ni las distancias exactas, ni los edificios: solo las estaciones y las líneas. Es ‘mentira’... y por eso es útil. Eso es abstracción: ocultar los detalles que no importan para quedarte con lo esencial. Es el tercer pilar del pensamiento computacional, y la herramienta con la que los programadores construyen cosas enormes sin ahogarse en los detalles de cada pieza.",
  intuit:{code:'subtotal = 200\ntotal = subtotal * 1.25\nprint(total)',py:false,
@@ -1176,15 +1181,20 @@ const LEVEL0=[
    d:'Un descuento del 25% deja pagar el 75% del precio: el factor <code>0.75</code> abstrae ‘quítale un cuarto’. Guarda ese factor en una variable con nombre claro (<code>factor_descuento</code>) y úsala para calcular el precio de oferta de un producto de <code>50</code> soles.',
    starter:'precio_base = 50\nfactor_descuento = 0.75    # abstrae "paga solo el 75%"\n# usa el factor para el precio de oferta\n\nprint(precio_oferta)',runs:[[]],
    check:(o,c)=>{if(/37\.5/.test(c)&&!/factor_descuento/.test(c))return"No escribas 37.5 a mano: usa la variable factor_descuento.";return norm(o[0])==="37.5"?true:"Esperaba: 37.5\nObtuve:\n"+norm(o[0])},
-   hints:["precio_oferta = precio_base * factor_descuento","50 × 0.75 = 37.5. El nombre factor_descuento te dice qué es, sin recordar que ‘0.75 significa 25% menos’."]}],
+   hints:["precio_oferta = precio_base * factor_descuento","50 × 0.75 = 37.5. El nombre factor_descuento te dice qué es, sin recordar que ‘0.75 significa 25% menos’."]},
+  {id:"n0pc4e4",py:true,t:"Ejercicio 4 · Diagnostica y corrige: imprimió el descuento, no el pago",
+   d:'Un compañero quiso aplicar 30% de descuento a un precio de 200 y escribió lo de abajo: imprime <code>60.0</code>… que es el DESCUENTO, no lo que se paga. Corrige el cálculo para imprimir lo que SE PAGA (<code>140.0</code>) — la abstracción correcta es «me quedo con el 70%».',
+   starter:'precio = 200\nprint(precio * 30 / 100)   # <- esto es el DESCUENTO, no el pago',runs:[[]],
+   check:(o,c)=>{if(/\b140(\.0)?\b/.test(c))return"No escribas 140 a mano: corrige el cálculo.";if(!/\*/.test(c))return"Se calcula multiplicando.";return norm(o[0])==="140.0"?true:"Esperaba: 140.0\nObtuve:\n"+norm(o[0])},
+   hints:["Si descuentan el 30%, pagas el 70%: precio * 70 / 100.","precio - (precio * 30 / 100) también funciona — dos abstracciones del mismo cálculo."]}],
  retoFinal:{id:"n0pc4x",py:true,t:"Desafío final · inédito — la misma abstracción aplicada dos veces",
   d:'Predice ANTES de ejecutar. Un capital crece <code>50%</code> cada año: eso se abstrae en el factor <code>1.5</code>. Si aplicas ese MISMO factor abstracto dos años seguidos, ¿en cuánto termina un capital de <code>1000</code>? Ninguna teoría te mostró aplicar el mismo factor en cadena — descúbrelo.',
   starter:'capital = 1000\nfactor = 1.5              # abstrae "+50% en un anio"\nanio1 = capital * factor  # despues del primer anio\nanio2 = anio1 * factor    # despues del segundo\nprint(anio2)',runs:[[]],
   hints:["Año 1: 1000 × 1.5 = 1500.0. Año 2: 1500.0 × 1.5 = 2250.0.","El mismo factor abstracto (1.5) aplicado en cadena produce crecimiento compuesto: 2250.0."],
   check:(o,c)=>{return norm(o[0])==="2250.0"?true:"Esperaba: 2250.0\nObtuve:\n"+norm(o[0])+"\n(1000 → 1500.0 → 2250.0)"}}},
 
-/* ══════════════════ Día 0e · Patrones y generalización ══════════════════ */
-{id:"n0pc5",n:"Día 0e",t:"Reconocimiento de patrones y generalización",
+/* ══════════════════ Día 5 · Patrones y generalización ══════════════════ */
+{id:"n0pc5",n:"Día 5",t:"Reconocimiento de patrones y generalización",
  ing:"Cuando notas que estás haciendo casi lo mismo una y otra vez cambiando un solo dato, has encontrado un PATRÓN — y ahí nace el mejor código. Un modelo de IA es, en el fondo, una máquina gigante de reconocer patrones en datos. Y generalizar (‘esto vale para CUALQUIER número, no solo para este’) es lo que convierte una solución de un caso en una solución de todos los casos: la semilla de los bucles y las funciones que dominarás pronto.",
  intro:"Los humanos somos máquinas de reconocer patrones: por eso ves caras en las nubes. En programación esa habilidad es oro: cuando detectas que varios subproblemas se resuelven IGUAL cambiando solo un dato, puedes generalizarlos en una sola regla. Es el cuarto pilar del pensamiento computacional, y la puerta de entrada a las dos herramientas más potentes que verás en N0: los bucles (repetir un patrón) y las funciones (nombrar un patrón).",
  intuit:{code:'a = 3 * 3\nb = 5 * 5\nc = 8 * 8\nprint(a + b + c)',py:false,
@@ -1220,15 +1230,20 @@ const LEVEL0=[
    d:'Generaliza este patrón: ‘el n-ésimo número par es n × 2’ (el 1º par es 2, el 2º es 4, el 3º es 6...). Con <code>n = 5</code>, calcula e imprime el 5º número par usando la regla general.',
    starter:'n = 5\n# regla general: el n-esimo par es n * 2\n\nprint(par_n)',runs:[[]],
    check:(o,c)=>{if(/\b10\b/.test(c))return"No escribas 10 a mano: usa la regla general n * 2.";if(!/\*/.test(c)||!/\bn\b/.test(c))return"Aplica la regla general con la variable n: n * 2.";return norm(o[0])==="10"?true:"Esperaba: 10\nObtuve:\n"+norm(o[0])},
-   hints:["par_n = n * 2","El 5º número par es 5 × 2 = 10. La misma regla daría el 100º par (200) sin cambiar nada más que n."]}],
+   hints:["par_n = n * 2","El 5º número par es 5 × 2 = 10. La misma regla daría el 100º par (200) sin cambiar nada más que n."]},
+  {id:"n0pc5e4",py:true,t:"Ejercicio 4 · Diagnostica la generalización falsa",
+   d:'Observando <code>4 → 8</code> y <code>7 → 14</code>, un compañero generalizó: «la regla es SUMAR 4» (con el 4 parece funcionar: 4+4=8… pero 7+4=11, no 14). La regla correcta es OTRA. Aplícala a <code>n = 15</code> e imprime el resultado.',
+   starter:'n = 15\n# aplica la regla CORRECTA que explica los dos ejemplos\n',runs:[[]],
+   check:(o,c)=>{if(/\b30\b/.test(c))return"No escribas 30 a mano: aplica la regla.";if(!/\*\s*2|2\s*\*/.test(c))return"Vuelve a mirar: 4→8 y 7→14 comparten UNA regla (¿qué les haces a ambos?).";return norm(o[0])==="30"?true:"Esperaba: 30\nObtuve:\n"+norm(o[0])},
+   hints:["Una buena regla explica TODOS los ejemplos, no solo uno: 4×2=8 y 7×2=14.","print(n * 2) — verificar la regla contra el segundo ejemplo es lo que mata la generalización falsa."]}],
  retoFinal:{id:"n0pc5x",py:true,t:"Desafío final · inédito — descubre el patrón y predice el siguiente",
   d:'Predice ANTES de ejecutar. Mira la secuencia: <code>1, 4, 9, 16, ...</code>. Cada término sigue un patrón que NO se te ha dado con fórmula: obsérvalo (1 = 1×1, 4 = 2×2, 9 = 3×3, 16 = 4×4...). ¿Cuál es el 5º término? Generaliza el patrón (n × n) y calcúlalo para <code>n = 5</code>.',
   starter:'# patron:  1, 4, 9, 16, ...  =  1*1, 2*2, 3*3, 4*4, ...\n# generaliza: el n-esimo termino es n * n\nn = 5\nsiguiente = n * n\nprint(siguiente)',runs:[[]],
   hints:["El patrón es ‘n al cuadrado’: 1, 4, 9, 16, 25, ...","El 5º término es 5 × 5 = 25. Reconociste el patrón y lo generalizaste a n × n."],
   check:(o,c)=>{return norm(o[0])==="25"?true:"Esperaba: 25\nObtuve:\n"+norm(o[0])+"\n(el patrón es n×n; para n=5 da 25)"}}},
 
-/* ══════════════════ Día 0f · Pseudocódigo ══════════════════ */
-{id:"n0pc6",n:"Día 0f",t:"Pseudocódigo: escribir la solución antes de codearla",
+/* ══════════════════ Día 6 · Pseudocódigo ══════════════════ */
+{id:"n0pc6",n:"Día 6",t:"Pseudocódigo: escribir la solución antes de codearla",
  ing:"Los ingenieros no atacan un problema tecleando Python: primero lo escriben en pseudocódigo —una mezcla de español estructurado— en una pizarra o un cuaderno. Es el borrador de la solución, libre de la tiranía de la sintaxis. Cuando el plan en pseudocódigo está claro, traducirlo a Python (o a cualquier lenguaje) es casi mecánico. Diseñas la lógica una vez; la reescribes en el idioma que sea.",
  intro:"Ya sabes descomponer, abstraer y ver patrones. Ahora necesitas una forma de ESCRIBIR tu plan antes de codear, sin pelear con la sintaxis exacta de Python. Eso es el pseudocódigo: un lenguaje intermedio, entre el español y el código, donde expresas los pasos con palabras claras (LEER, CALCULAR, SI, MIENTRAS, MOSTRAR). Es la herramienta con la que diseñarás cada programa antes de escribir una sola línea real.",
  intuit:{code:'precio = 40\ncantidad = 3\ntotal = precio * cantidad\nprint(total)',py:false,
@@ -1265,20 +1280,25 @@ const LEVEL0=[
    d:'Traduce: <code>EMPEZAR total en 0</code>; <code>SUMAR 100 al total</code>; <code>SUMAR 250 al total</code>; <code>MOSTRAR total</code>. Aquí ‘SUMAR X al total’ se traduce como <code>total = total + X</code>.',
    starter:'total = 0\n# SUMAR 100 al total\n\n# SUMAR 250 al total\n\nprint(total)',runs:[[]],
    check:(o,c)=>{if(/\b350\b/.test(c))return"No escribas 350 a mano: acumula sumando paso a paso.";if(!/total\s*=\s*total\s*\+/.test(c))return"Traduce ‘SUMAR X al total’ como  total = total + X.";return norm(o[0])==="350"?true:"Esperaba: 350\nObtuve:\n"+norm(o[0])},
-   hints:["total = total + 100\ntotal = total + 250","0 → 100 → 350."]}],
- reto:{id:"n0pc6r",py:true,t:"Laboratorio · Diseña en pseudocódigo y traduce (soles a dólares)",
-  d:'Primero DISEÑA mentalmente el pseudocódigo: <code>LEER soles = 75</code>; <code>LEER tipo_cambio = 3.75</code>; <code>CALCULAR dolares = soles ÷ tipo_cambio</code>; <code>MOSTRAR dolares</code>. Ahora tradúcelo a Python e imprime cuántos dólares son 75 soles.',
-  starter:'soles = 75\ntipo_cambio = 3.75\n# CALCULAR dolares = soles / tipo_cambio\n\nprint(dolares)',runs:[[]],
-  check:(o,c)=>{if(/20\.0/.test(c)&&!/\//.test(c))return"No escribas 20.0 a mano: divide soles entre el tipo de cambio.";if(!/\//.test(c))return"Convertir divide: usa /.";return norm(o[0])==="20.0"?true:"Esperaba: 20.0\nObtuve:\n"+norm(o[0])},
-  hints:["dolares = soles / tipo_cambio","75 ÷ 3.75 = 20.0 dólares."]},
+   hints:["total = total + 100\ntotal = total + 250","0 → 100 → 350."]},
+  {id:"n0pc6e4",py:true,t:"Ejercicio 4 · Ahora TÚ escribes el pseudocódigo",
+   d:'Problema en bruto, sin plan: un ciclista recorre <code>90</code> km en <code>4</code> horas y quieres su velocidad media. (1) Escribe TU pseudocódigo como comentarios (<code># LEER…</code>, <code># CALCULAR…</code>, <code># MOSTRAR…</code>); (2) tradúcelo debajo e imprime la velocidad. Hasta ahora tradujiste planes ajenos — éste es tuyo.',
+   starter:'# TU pseudocodigo (comentarios # LEER / # CALCULAR / # MOSTRAR):\n\n# tu traduccion a Python:\n',runs:[[]],
+   check:(o,c)=>{if(!/#\s*(LEER|CALCULAR|MOSTRAR)/i.test(c))return"Falta tu plan: escribe el pseudocódigo en comentarios (# LEER..., # CALCULAR..., # MOSTRAR...).";if(!/\//.test(c))return"La velocidad media divide distancia entre tiempo.";if(/22\.5/.test(c))return"No escribas 22.5 a mano: que tu plan lo calcule.";return norm(o[0])==="22.5"?true:"Esperaba: 22.5\nObtuve:\n"+norm(o[0])},
+   hints:["# LEER km = 90 / # LEER horas = 4 / # CALCULAR velocidad = km entre horas / # MOSTRAR velocidad","90 / 4 = 22.5 — pero lo importante de hoy es el PLAN, no la división."]}],
+ reto:{id:"n0pc6r",py:true,t:"Laboratorio · TÚ escribes el plan: de soles a dólares",
+  d:'Convierte <code>75</code> soles a dólares con tipo de cambio <code>3.75</code>. PRIMERO escribe TU pseudocódigo como comentarios (<code># LEER…</code>, <code># CALCULAR…</code>, <code># MOSTRAR…</code>) — sin plan no hay código — y LUEGO tradúcelo debajo e imprime el resultado.',
+  starter:'# TU pseudocodigo aqui (comentarios: # LEER..., # CALCULAR..., # MOSTRAR...)\n\n# ahora traducelo a Python:\n',runs:[[]],
+  check:(o,c)=>{if(!/#\s*(LEER|CALCULAR|MOSTRAR)/i.test(c))return"Primero el plan: escribe tu pseudocódigo en comentarios (# LEER..., # CALCULAR..., # MOSTRAR...).";if(!/\//.test(c))return"Convertir divide: usa /.";if(/\b20\.0\b/.test(c))return"No escribas 20.0 a mano: deja que tu plan lo calcule.";return norm(o[0])==="20.0"?true:"Esperaba: 20.0\nObtuve:\n"+norm(o[0])},
+  hints:["# LEER soles = 75  /  # LEER cambio = 3.75  /  # CALCULAR dolares = soles entre cambio  /  # MOSTRAR dolares","soles = 75, cambio = 3.75, dolares = soles / cambio, print(dolares) → 20.0"]},
  retoFinal:{id:"n0pc6x",py:true,t:"Desafío final · inédito — pseudocódigo con una DECISIÓN (SI/SINO)",
   d:'El pseudocódigo también expresa decisiones: <code>SI edad ≥ 18 ENTONCES mensaje = "mayor" SINO mensaje = "menor"</code>. Aquí tienes esa decisión ya traducida a Python (verás <code>if/else</code> a fondo más adelante). Predice qué imprime con <code>edad = 20</code>, y luego ejecútalo para confirmar. Es tu primer vistazo a cómo el pseudocódigo <code>SI/SINO</code> se vuelve <code>if/else</code>.',
   starter:'edad = 20\nif edad >= 18:      # SI edad >= 18\n    mensaje = "mayor"\nelse:               # SINO\n    mensaje = "menor"\nprint(mensaje)',runs:[[]],
   hints:["Como 20 es mayor o igual que 18, se ejecuta la rama del SI.","La condición 20 >= 18 es verdadera, así que mensaje = ‘mayor’. El pseudocódigo SI/SINO se traduce directo a if/else."],
   check:(o,c)=>{return norm(o[0])==="mayor"?true:"Esperaba: mayor\nObtuve:\n"+norm(o[0])+"\n(20 >= 18 es verdadero → rama del SI)"}}},
 
-/* ══════════════════ Día 0g · Diagramas de flujo ══════════════════ */
-{id:"n0pc7",n:"Día 0g",t:"Diagramas de flujo: dibujar la lógica (secuencia, decisión, bucle)",
+/* ══════════════════ Día 7 · Diagramas de flujo ══════════════════ */
+{id:"n0pc7",n:"Día 7",t:"Diagramas de flujo: dibujar la lógica (secuencia, decisión, bucle)",
  ing:"Antes de que existiera Python, los ingenieros dibujaban la lógica de sus programas con cajas y flechas: los diagramas de flujo. Siguen vivos hoy porque una imagen del flujo se entiende de un vistazo, mucho antes de leer el código. Tu futuro JARVIS con LangGraph es, literalmente, un diagrama de flujo de decisiones ejecutable. Aprender a ver programas como cajas y flechas es aprender a ver su esqueleto lógico.",
  intro:"Un diagrama de flujo es el plano visual de un algoritmo: cajas para los pasos, un rombo para las decisiones, flechas para el camino que sigue la ejecución. Es otra forma —visual— de diseñar antes de codear, hermana del pseudocódigo. Hoy aprendes sus tres estructuras fundamentales, las mismas que sostienen TODO programa que existe: secuencia (un paso tras otro), decisión (elegir un camino) y bucle (repetir).",
  intuit:{code:'x = 5\nx = x + 10\nx = x - 3\nprint(x)',py:false,
@@ -1326,10 +1346,10 @@ const LEVEL0=[
   hints:["El bucle mira n = 1, 2, 3, 4, 5. El rombo deja pasar solo los pares (2 y 4).","Solo se suman los pares: 2 + 4 = 6. El impar no entra en la rama del SÍ. Un rombo anidado dentro de un bucle es el esqueleto de casi cualquier programa real."],
   check:(o,c)=>{return norm(o[0])==="6"?true:"Esperaba: 6\nObtuve:\n"+norm(o[0])+"\n(pares entre 1 y 5: 2 + 4 = 6)"}}},
 
-/* ══════════════════ Día 0h · Diseño antes de programar (capstone) ══════════════════ */
-{id:"n0pc8",n:"Día 0h",t:"Diseño antes de programar: junta todo el pensamiento computacional",
+/* ══════════════════ Día 8 · Diseño antes de programar (capstone) ══════════════════ */
+{id:"n0pc8",n:"Día 8",t:"Diseño antes de programar: junta todo el pensamiento computacional",
  ing:"‘Medir dos veces, cortar una vez’, dicen los carpinteros. En software es igual: cada minuto pensando el diseño te ahorra horas depurando. Los ingenieros de las mejores empresas pasan más tiempo diseñando —en pizarra, en pseudocódigo, en diagramas— que tecleando. Este es el hábito que separa a quien construye cosas que funcionan de quien pelea sin fin con código que nunca termina de andar. Cierras el Bloque 0 uniendo todo lo aprendido en un solo método.",
- intro:"Último día del Bloque 0. Ya tienes las cinco herramientas del pensamiento computacional: algoritmos, E→P→S, descomposición, abstracción, patrones, y las dos formas de escribir un plan (pseudocódigo y diagramas). Hoy las unes en un solo MÉTODO de trabajo: cómo atacar cualquier problema nuevo diseñando ANTES de codear. Mañana empiezas a programar de verdad (‘Día 1 · Tu primer programa’) — pero con la cabeza de un ingeniero, no la de alguien que teclea a ciegas.",
+ intro:"Último día del Bloque 0. Ya tienes las cinco herramientas del pensamiento computacional: algoritmos, E→P→S, descomposición, abstracción, patrones, y las dos formas de escribir un plan (pseudocódigo y diagramas). Hoy las unes en un solo MÉTODO de trabajo: cómo atacar cualquier problema nuevo diseñando ANTES de codear. Mañana empiezas a programar de verdad (‘Día 9 · Tu primer programa’) — pero con la cabeza de un ingeniero, no la de alguien que teclea a ciegas.",
  intuit:{code:'precio = 50\ncantidad = 4\nsubtotal = precio * cantidad\nigv = subtotal * 0.25\ntotal = subtotal + igv\nprint(total)',py:false,
   q:"Este programa nació de un diseño completo: E→P→S (entra precio y cantidad, sale el total), descompuesto en subtotal + impuesto + total, y aplicando la abstracción del factor. Sigue el plan ya codeado. Con precio 50 y cantidad 4, ¿qué total imprime?",
   req:["250.0"],out:"250.0",
@@ -1357,7 +1377,17 @@ const LEVEL0=[
    d:'Diseña con E→P→S: ENTRA la distancia (<code>240</code> km) y la velocidad (<code>80</code> km/h); el PROCESO es <code>tiempo = distancia ÷ velocidad</code>; SALE el tiempo en horas. Impleméntalo e imprime cuántas horas dura el viaje.',
    starter:'distancia = 240\nvelocidad = 80\n# PROCESO: tiempo = distancia / velocidad\n\nprint(tiempo)',runs:[[]],
    check:(o,c)=>{if(/3\.0/.test(c)&&!/\//.test(c))return"No escribas 3.0 a mano: divide distancia entre velocidad.";if(!/\//.test(c))return"El proceso divide: usa /.";return norm(o[0])==="3.0"?true:"Esperaba: 3.0\nObtuve:\n"+norm(o[0])},
-   hints:["tiempo = distancia / velocidad","240 ÷ 80 = 3.0 horas."]}],
+   hints:["tiempo = distancia / velocidad","240 ÷ 80 = 3.0 horas."]},
+  {id:"n0pc8e3",py:true,t:"🏆 Mini-proyecto · Tu primera creación I: tu edad en días",
+   d:'Tu primer programa 100% TUYO. Diseña con E→P→S y constrúyelo: parte de una edad en años, calcula cuántos días ha vivido esa persona (aproximado: multiplica por 365) e imprime una frase que incluya el número y la palabra <code>dias</code>. Empieza con <code>edad = 25</code> y luego <strong>cámbiala a TU edad real</strong> — el corrector acepta cualquier edad, porque este programa es tuyo.',
+   starter:'edad = 25   # <- pon TU edad real aqui\n# PROCESO: calcula los dias vividos (multiplica por 365)\n\n# SALIDA: imprime una frase que incluya el numero y la palabra dias\n',runs:[[]],
+   check:(o,c)=>{if(!/\*\s*365/.test(c))return"El proceso multiplica la edad por 365 — usa *.";const s=norm(o[0]);if(!/\d{3,}/.test(s))return"Tu salida debe incluir el número de días vividos (será un número de 3+ cifras).";if(!/d[ií]as?/i.test(s))return"Incluye la palabra 'dias' en tu frase.";return true},
+   hints:["dias = edad * 365, y para la frase: print(\"He vivido unos\", dias, \"dias\") — print() une con espacios lo que le pases separado por comas.","Con 25 años: 25 × 365 = 9125 días. Prueba con TU edad: el corrector valida la FORMA (número + la palabra dias), no un valor fijo — la primera vez que un programa te responde algo sobre TI."]},
+  {id:"n0pc8e4",py:true,t:"🏆 Mini-proyecto · Tu primera creación II: tu tarjeta de presentación",
+   d:'Diseña y construye tu tarjeta personal de consola: <strong>al menos 4 líneas</strong> con un borde decorativo, tu nombre, algo que te guste y tu meta como programador. El contenido lo eliges TÚ — el corrector solo valida la forma (mínimo 4 líneas con contenido). Cuando la termines, tómale una captura: es tu primera creación como programador.',
+   starter:'print("==============================")\nprint("  ALEX - futuro ingeniero")\n# agrega 2 o mas lineas: algo que te guste, tu meta...\nprint("==============================")\n',runs:[[]],
+   check:(o,c)=>{const lines=norm(o[0]).split("\n").filter(l=>l.trim().length>0);if(lines.length<4)return"Tu tarjeta necesita al menos 4 líneas con contenido (llevas "+lines.length+").";if(!/print/.test(c))return"Construye la tarjeta con print().";return true},
+   hints:["Cada print() es una línea. Bordes con = o *, y adentro: tu nombre, un gusto, tu meta.","Ejemplo de línea interior: print(\"  Mi meta: construir mi propio JARVIS\")"]}],
  reto:{id:"n0pc8r",py:true,t:"Laboratorio · Diseña e implementa un descuento por volumen (sin pistas)",
   d:'Ponlo todo en práctica. Una compra: <code>8</code> unidades a <code>25</code> soles cada una, con <code>25%</code> de descuento sobre el subtotal. Diseña mentalmente (E→P→S + descomposición en subtotal, descuento, total), y luego impleméntalo. Imprime el total final a pagar.',
   starter:'precio = 25\ncantidad = 8\n# disena y calcula: subtotal, descuento (25%), total\n\nprint(total)',runs:[[]],
@@ -1365,7 +1395,7 @@ const LEVEL0=[
   hints:["subtotal = precio * cantidad  →  descuento = subtotal * 0.25  →  total = subtotal - descuento","subtotal = 200; descuento = 50.0; total = 150.0."]},
  retoFinal:{id:"n0pc8x",py:false,t:"Reflexión de cierre · Tu método para atacar cualquier problema",
   d:'Sin código que ejecutar. En al menos 3 líneas, describe con tus propias palabras el MÉTODO que seguirás ante cualquier problema nuevo de programación, usando lo aprendido en el Bloque 0 (E→P→S, descomposición, abstracción, patrones, pseudocódigo/diagrama, y codear al final). ¿Por qué diseñar antes de programar te ahorrará horas en los proyectos que vienen? Guarda tu respuesta: será tu brújula cuando un problema te abrume en los próximos niveles.'}},
-{id:"d1",n:"Día 1",t:"Tu primer programa · Parte 1: fundamentos",
+{id:"d1",n:"Día 9",t:"Tu primer programa · Parte 1: fundamentos",
  intro:"Hoy cruzas una frontera: dejas de ser alguien que USA programas y te conviertes en alguien que los ESCRIBE. Una sola idea sostiene todo el día: tu código es texto que otro programa (el intérprete) lee y obedece, línea por línea.",
  intuit:{code:'print("2 + 3")\nprint(2 + 3)',
   q:"Sin ejecutar nada: ¿qué imprime EXACTAMENTE cada línea? Escribe las dos salidas.",
@@ -1416,7 +1446,7 @@ const LEVEL0=[
      return norm(o[0])==="Total: 45 soles"?true:"Debe imprimir exactamente: Total: 45 soles"},
    hints:["¿Realmente necesitas seis piezas separadas por +, o puedes escribir el texto casi entero de una vez?","print(\"Total: 45 soles\") ya es válido — simplificar no significa perder ningún carácter del resultado."]},
  ]},
-{id:"d1b",n:"Día 2",t:"Tu primer programa · Parte 2: laboratorio y desafío",
+{id:"d1b",n:"Día 10",t:"Tu primer programa · Parte 2: laboratorio y desafío",
  intro:"Ayer construiste el modelo del intérprete y practicaste literales, expresiones y errores. Hoy lo pones a prueba en un proyecto real — el recibo — y cierras con un desafío que nadie te enseñó a resolver directamente.",
  errores:["Olvidar cerrar comillas o paréntesis → SyntaxError","Escribir Print con mayúscula: Python distingue mayúsculas","Poner texto sin comillas y esperar que se imprima"],
  reto:{id:"d1r",py:true,t:"Desafío final · sin pistas",
@@ -1446,7 +1476,7 @@ const LEVEL0=[
   starter:"",runs:[[]],
   hints:["Si delimitas con comillas dobles y el texto también tiene comillas dobles, Python se confunde antes de tiempo — el error te lo dirá.","Dos caminos válidos: usa comillas simples para delimitar todo el string, o escapa las comillas internas con \\\"."],
   check:(o,c)=>norm(o[0])==='Ella dijo "hola" y se fue'?true:'Esperaba exactamente: Ella dijo "hola" y se fue\nObtuve:\n'+norm(o[0])}},
-{id:"d2",n:"Día 3",t:"Variables: etiquetas, no cajas · Parte 1: fundamentos",
+{id:"d2",n:"Día 11",t:"Variables: etiquetas, no cajas · Parte 1: fundamentos",
  intro:"Un programa sin variables es una calculadora de un solo uso. Hoy aprendes a darle MEMORIA: nombrar valores, guardarlos y transformarlos. Y construyes el modelo mental que separa a los que entienden Python de los que solo lo escriben.",
  intuit:{code:"x = 5\nx = x + 1\nprint(x)",
   q:"¿Qué imprime? Y piensa: ¿cómo puede x ser igual a x + 1?",
@@ -1487,6 +1517,11 @@ const LEVEL0=[
    check:(o,c)=>{if(!/precio_final\s*=\s*precio\b/.test(c))return"precio_final debe crearse A PARTIR de la variable: precio_final = precio";
      return norm(o[0])==="100\n100"?true:"Esperaba:\n100\n100"},
    hints:["Una variable puede asignarse desde otra variable.","print(precio) y print(precio_final) en líneas separadas."]},
+  {id:"d2e3b",py:true,t:"Ejercicio 3b · La etiqueta que NO se mueve",
+   d:'El caso que separa «etiqueta» de «caja», ahora EJECUTADO: parte de <code>precio = 100</code>, crea <code>precio_final = precio</code>, y LUEGO reasigna <code>precio = 200</code>. Imprime <code>precio</code> y después <code>precio_final</code>, en dos líneas. Predice antes: ¿la reasignación arrastra a precio_final, o se queda en 100?',
+   starter:'precio = 100\nprecio_final = precio\nprecio = 200\n# imprime precio y luego precio_final\n',runs:[[]],
+   check:(o,c)=>{if(!/precio_final\s*=\s*precio\b/.test(c))return"Conserva la línea precio_final = precio (es el corazón del experimento).";const exp="200\n100";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["precio_final apuntó al objeto 100 en el momento de la asignación; mover DESPUÉS la etiqueta precio no lo toca.","print(precio) → 200; print(precio_final) → 100. Las etiquetas se mueven una por una."]},
   {id:"d2e4",py:true,t:"Ejercicio 4 · Caza el nombre sombreado",
    d:'Este código imprime <code>5</code> en vez de fallar — pero sombreó un nombre que Python ya usaba, y eso es un problema que aparecerá más adelante. Renombra la variable a algo que no choque con ninguna función incorporada, conservando el mismo resultado.',
    starter:'list = 5\nprint(list)',runs:[[]],
@@ -1500,7 +1535,7 @@ const LEVEL0=[
      return norm(o[0])==="20"?true:"Debe imprimir: 20"},
    hints:["Sumar 0 a algo nunca lo cambia — esa línea es ruido, no lógica.","Basta con temperatura = 20 y el print."]},
  ]},
-{id:"d2b",n:"Día 4",t:"Variables: etiquetas, no cajas · Parte 2: laboratorio y desafío",
+{id:"d2b",n:"Día 12",t:"Variables: etiquetas, no cajas · Parte 2: laboratorio y desafío",
  intro:"Ayer construiste el modelo de etiquetas y lo pusiste a prueba con nombres sombreados y reasignaciones inútiles. Hoy lo aplicas a un intercambio real de valores, y cierras con un desafío que parece un intercambio... pero no lo es.",
  reto:{id:"d2r",py:true,t:"Desafío final · sin pistas",
   d:'Intercambia los valores de las dos variables usando una <strong>variable auxiliar</strong> (prohibido reasignar los textos directamente) e imprime ambas: primero la izquierda, luego la derecha. Salida esperada: <code>dolar</code> y luego <code>sol</code>.',
@@ -1531,7 +1566,7 @@ const LEVEL0=[
   hints:["Traza línea por línea con el modelo de etiquetas: a = b mueve la etiqueta a ANTES de que b cambie. Para cuando ejecutas b = a, a ya no vale 10.","El intercambio real necesita una tercera etiqueta temporal que guarde uno de los dos valores antes de sobrescribir nada."],
   check:(o,c)=>{if(!/=\s*a\b/.test(c)&&!/=\s*b\b/.test(c))return"Tu solución debe usar una variable auxiliar que guarde a o b antes de reasignar.";
     return norm(o[0])==="20\n10"?true:"El intercambio real de a=10, b=20 debe imprimir:\n20\n10\nObtuve:\n"+norm(o[0])}}},
-{id:"d3",n:"Día 5",t:"Tipos de datos · Parte 1: fundamentos",
+{id:"d3",n:"Día 13",t:"Tipos de datos · Parte 1: fundamentos",
  intro:"En Python todo valor tiene un TIPO, y el tipo decide qué puedes hacer con él. El 90% de los errores de principiante son errores de tipo. Hoy aprendes a verlos venir antes de que exploten.",
  intuit:{code:'print("3" + "4")\nprint(3 + 4)',
   q:"¿Qué imprime cada línea? Cuidado: no es la misma operación.",
@@ -1581,7 +1616,7 @@ const LEVEL0=[
    check:(o,c)=>norm(o[0])==="18"?true:"Debe seguir imprimiendo: 18",
    hints:["Puedes consolidar todo en print(int(edad_texto) + 1) — o dejarlo como está, si crees que ayuda a leerlo.","No hay una única respuesta correcta aquí: lo que importa es que decidas con criterio, no al azar."]},
  ]},
-{id:"d3b",n:"Día 6",t:"Tipos de datos · Parte 2: laboratorio y desafío",
+{id:"d3b",n:"Día 14",t:"Tipos de datos · Parte 2: laboratorio y desafío",
  intro:"Ayer dominaste los cuatro tipos y sus conversiones. Hoy los integras con lo de T1 y T2 en la calculadora de vuelto, y cierras con un tercer comportamiento del operador * que ninguna teoría te mostró directamente.",
  errores:['Sumar str + int → TypeError','Creer que int("3.5") funciona','Confundir "True" (string) con True (bool)'],
  reto:{id:"d3r",py:true,t:"Desafío final · sin pistas",
@@ -1609,13 +1644,23 @@ const LEVEL0=[
      if(/f["']/.test(c))return"Esta vez sin f-string — practica la concatenación directa con +.";
      return norm(o[0])==="Tengo 16 años"?true:"Esperaba: Tengo 16 años\nObtuve:\n"+norm(o[0])},
    hints:["\"Tengo \" + edad explota: no puedes pegar str con int directamente.","\"Tengo \" + str(edad) + \" años\" — tres piezas de texto unidas con +."]},
+  {id:"d3e7b",py:true,t:"Ejercicio 7b · La tercera vía: f-string",
+   d:'Ya pegaste texto con <code>+</code> y <code>str()</code>. La vía moderna es la <strong>f-string</strong>: pon una <code>f</code> antes de las comillas y escribe la variable entre llaves — <code>f"Tengo {edad} años"</code> inserta el valor SIN convertir nada a mano. Con <code>edad = 16</code>, imprime EXACTO <code>Tengo 16 años</code> usando una f-string.',
+   starter:'edad = 16\n# usa una f-string (nada de + ni str())\n',runs:[[]],
+   check:(o,c)=>{if(!/f["\x27]/.test(c))return"La gracia es la f-string: f\"...{edad}...\".";if(/str\s*\(/.test(c))return"Sin str(): la f-string convierte sola.";return norm(o[0])==="Tengo 16 años"?true:"Esperaba: Tengo 16 años\nObtuve:\n"+norm(o[0])},
+   hints:["print(f\"Tengo {edad} años\")","Las llaves {} dentro de una f-string se reemplazan por el VALOR de la variable."]},
+  {id:"d3e7c",py:true,t:"Ejercicio 7c · bool() y la regla del contenido",
+   d:'<code>bool()</code> también convierte, y su regla es de CONTENIDO, no de significado: lo vacío y el cero dan <code>False</code>; TODO lo demás da <code>True</code>. Imprime en tres líneas: <code>bool(0)</code>, <code>bool("")</code> y — predícelo antes — <code>bool("False")</code>. ¿La palabra "False" entre comillas es falsa… o es un texto NO vacío?',
+   starter:'print(bool(0))\nprint(bool(""))\n# agrega la tercera linea: bool("False")\n',runs:[[]],
+   check:(o,c)=>{if(!/bool\(\s*["\x27]False["\x27]\s*\)/.test(c))return"Falta la tercera línea: bool(\"False\").";const exp="False\nFalse\nTrue";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["\"False\" es un string con 5 letras: NO está vacío, así que bool() lo declara True.","La regla completa: bool(0), bool(0.0), bool(\"\") → False; cualquier otra cosa → True."]},
  ],
  retoFinal:{id:"d3x",py:true,t:"Desafío final · inédito — un tercer comportamiento de *",
   d:'Predice, ANTES de ejecutar, qué imprime <code>"10" * 3</code> — sabiendo que <code>"10" + "10"</code> pega texto y <code>10 * 3</code> multiplica. Aquí un operando es string y el otro es int: ningún ejemplo de esta lección mostró esta combinación. Luego escribe el código que lo demuestre.',
   starter:"",runs:[[]],
   hints:["El tipo decide qué hace el operador — pero * entre string y número no es ni concatenación por pares ni multiplicación numérica.","Python define '\"10\" * 3' como repetición: el string se repite 3 veces seguidas, sin separador."],
   check:(o,c)=>{if(!/["']10["']\s*\*\s*3|3\s*\*\s*["']10["']/.test(c))return"Escribe la expresión \"10\" * 3 en tu código, no el resultado a mano.";return norm(o[0])==="101010"?true:"Esperaba: 101010\nObtuve:\n"+norm(o[0])}}},
-{id:"d4",n:"Día 7",t:"Operadores · Parte 1: fundamentos",
+{id:"d4",n:"Día 15",t:"Operadores · Parte 1: fundamentos",
  intro:"Los operadores son los verbos de Python. Hoy conoces a la familia completa — y en especial a dos subestimados que usarás toda tu carrera: // y %. Parecen matemática de colegio; son herramientas de ingeniería.",
  intuit:{code:"print(10 % 3)\nprint(10 // 3)",
   q:"¿Qué imprime cada línea? Piensa en dividir 10 entre 3 a mano, como en primaria.",
@@ -1647,6 +1692,11 @@ const LEVEL0=[
      if(!c.includes("=="))return"Debes COMPARAR el resto con 0 usando ==";
      return norm(o[0])==="False"?true:"Debe imprimir: False"},
    hints:["Un número es par si al dividirlo entre 2 el resto es 0.","print(15 % 2 == 0) — la comparación entera va dentro del print."]},
+  {id:"d4e2b",py:true,t:"Ejercicio 2b · Dos preguntas booleanas, sin if",
+   d:'Con <code>edad = 18</code>, imprime en dos líneas: (1) el resultado de evaluar si es mayor de edad (<code>&gt;= 18</code>); (2) si es adolescente (entre 13 y 17 — combina DOS comparaciones con <code>and</code>). Sin ningún <code>if</code>: una comparación YA es un valor imprimible.',
+   starter:'edad = 18\n# linea 1: mayor de edad?\n# linea 2: adolescente? (usa and)\n',runs:[[]],
+   check:(o,c)=>{if(/\bif\b/.test(c))return"Sin if: imprime las comparaciones directamente.";if(!/\band\b/.test(c))return"La segunda pregunta combina dos comparaciones con and.";const exp="True\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["print(edad >= 18) imprime True — la comparación es un valor.","print(edad >= 13 and edad <= 17) → con 18: False (no está entre 13 y 17)."]},
   {id:"d4e3",py:true,t:"Ejercicio 3 · Los paréntesis mandan",
    d:'Este código intenta calcular el promedio de 8 y 10, pero imprime <code>13.0</code>. Corrígelo con paréntesis para que imprima <code>9.0</code>.',
    starter:"print(8 + 10 / 2)",runs:[[]],
@@ -1667,7 +1717,7 @@ const LEVEL0=[
      return norm(o[0])==="9.0"?true:"Debe seguir imprimiendo: 9.0"},
    hints:["¿Los paréntesis exteriores hacen algo que no harían de todos modos?","print((8 + 10) / 2) ya es suficiente: un solo nivel de agrupación."]},
  ]},
-{id:"d4b",n:"Día 8",t:"Operadores · Parte 2: laboratorio y desafío",
+{id:"d4b",n:"Día 16",t:"Operadores · Parte 2: laboratorio y desafío",
  intro:"Ayer dominaste la familia aritmética y su precedencia. Hoy la integras en el divisor de cuenta de restaurante, y cierras combinando comparaciones con and/or de una forma que ninguna teoría anterior mostró.",
  errores:["Esperar que 10/2 dé 5 (da 5.0: / siempre float)","Confundir / con //","Olvidar paréntesis: 8 + 10 / 2 no es un promedio"],
  reto:{id:"d4r",py:true,t:"Desafío final · sin pistas",
@@ -1699,7 +1749,7 @@ const LEVEL0=[
   starter:"x = 10",runs:[[]],
   hints:["and se evalúa antes que or, igual que * se evalúa antes que + — incluso sin paréntesis visibles.","(x > 5 and x < 20) es True, así que el resultado ya está decidido antes de mirar la parte del or."],
   check:(o,c)=>{if(!/and/.test(c)||!/or/.test(c))return"Escribe la EXPRESIÓN con and y or (no el resultado True a mano) para demostrarlo.";return norm(o[0])==="True"?true:"Esperaba: True\nObtuve:\n"+norm(o[0])}}},
-{id:"d5",n:"Día 9",t:"Strings a fondo · Parte 1: fundamentos",
+{id:"d5",n:"Día 17",t:"Strings a fondo · Parte 1: fundamentos",
  intro:"El 85% (regla 8.5/10) de los datos del mundo real son texto sucio: correos con espacios, nombres en mayúsculas, archivos mal formateados. Hoy aprendes cirugía de strings — la habilidad que usarás en TODOS tus proyectos, desde scrapers hasta IA.",
  intuit:{code:'palabra = "python"\nprint(palabra[1])\nprint(palabra[-2])',
   q:"¿Qué letra imprime cada línea? Recuerda desde dónde cuenta Python.",
@@ -1721,7 +1771,7 @@ const LEVEL0=[
  ],
  ex:[
   {id:"d5e1",py:true,t:"Ejercicio 1 · Cortes precisos",
-   d:'Dada la variable de abajo, imprime en dos líneas: los primeros 3 caracteres y los últimos 3 (usando slicing con índices negativos para la segunda).',
+   d:'Dada la variable de abajo, imprime en dos líneas: los primeros 3 caracteres y los últimos 3 (usando slicing con índices negativos para la segunda). Truco: si OMITES un límite del slicing, Python asume el extremo — <code>palabra[:3]</code> son los primeros 3 y <code>palabra[-3:]</code> los últimos 3.',
    starter:'palabra = "programando"',runs:[[]],
    check:(o,c)=>{if(!c.includes("["))return"Debes usar slicing con corchetes [ ].";
      return norm(o[0])==="pro\nndo"?true:"Esperaba:\npro\nndo\nObtuve:\n"+norm(o[0])},
@@ -1740,6 +1790,11 @@ const LEVEL0=[
      if(/\+/.test(c))return"Sin concatenación con + : para eso existe la f-string.";
      return norm(o[0])==="Me llamo Alex y tengo 25 años"?true:"Esperaba: Me llamo Alex y tengo 25 años"},
    hints:["f\"texto {variable} texto\" — las llaves evalúan lo que pongas dentro.","Dos huecos: {nombre} y {edad}, con los espacios bien puestos alrededor."]},
+  {id:"d5e3b",py:true,t:"Ejercicio 3b · Dos decimales con :.2f",
+   d:'La joya prometida, ahora practicada: con <code>precio = 19.5</code> y <code>cantidad = 3</code>, imprime EXACTO <code>Total: 58.50 soles</code> usando UNA sola f-string — la multiplicación va DENTRO de las llaves y el formato <code>:.2f</code> fuerza los dos decimales (58.5 → 58.50).',
+   starter:'precio = 19.5\ncantidad = 3\n# una sola f-string con :.2f\n',runs:[[]],
+   check:(o,c)=>{if(/58\.50/.test(c))return"No escribas 58.50 a mano: calcúlalo dentro de la f-string.";if(!/:\.2f/.test(c))return"El formato de dos decimales es :.2f dentro de las llaves.";return norm(o[0])==="Total: 58.50 soles"?true:"Esperaba: Total: 58.50 soles\nObtuve:\n"+norm(o[0])},
+   hints:["print(f\"Total: {precio * cantidad:.2f} soles\")","Sin :.2f saldría 58.5; el formato rellena el segundo decimal: 58.50. Lo usarás en tu Calculadora."]},
   {id:"d5e4",py:true,t:"Ejercicio 4 · Caza el IndexError",
    d:'Este programa explota — una clase de error distinta a las que ya viste (ni mutación directa ni olvidar guardar un resultado). Repáralo para que imprima la última letra de la palabra sin adivinar cuántas letras tiene.',
    starter:'palabra = "python"\nprint(palabra[10])',runs:[[]],
@@ -1753,7 +1808,7 @@ const LEVEL0=[
      return norm(o[0])==="hola"?true:"Debe imprimir: hola"},
    hints:["Los métodos se encadenan: texto.strip().lower() aplica uno tras otro sin variables intermedias.","print(texto.strip().lower()) en una sola línea."]},
  ]},
-{id:"d5b",n:"Día 10",t:"Strings a fondo · Parte 2: laboratorio y desafío",
+{id:"d5b",n:"Día 18",t:"Strings a fondo · Parte 2: laboratorio y desafío",
  intro:"Ayer dominaste índices, slicing y métodos encadenados. Hoy los integras en el normalizador de contactos, y cierras encadenando .replace() más veces de las que cualquier ejemplo anterior mostró.",
  errores:["Creer que [0:3] incluye el índice 3","Esperar que .strip() borre espacios internos","Pedir un índice que no existe → IndexError"],
  reto:{id:"d5r",py:true,t:"Desafío final · sin pistas",
@@ -1786,7 +1841,7 @@ const LEVEL0=[
   starter:'apodo = "alexito"',runs:[[]],
   hints:["Un .replace() reemplaza UNA letra por *. Nada te impide encadenar varios: texto.replace('a','*').replace('e','*')...","Cada vocal que aparece en 'alexito' necesita su propio .replace() — cuenta cuáles son antes de escribir la cadena completa. (Aunque 'alexito' no tiene 'u', un censurador completo cubriría las cinco vocales.)"],
   check:(o,c)=>{if(!/\.replace\s*\(/.test(c))return"Encadena .replace() para censurar cada vocal, no escribas el resultado a mano.";return norm(o[0])==="*l*x*t*"?true:"Esperaba: *l*x*t*\nObtuve:\n"+norm(o[0])}}},
-{id:"d6",n:"Día 11",t:"Entrada y salida · Parte 1: fundamentos",
+{id:"d6",n:"Día 19",t:"Entrada y salida · Parte 1: fundamentos",
  intro:"Hasta hoy tus programas hablaban solos. Hoy aprenden a ESCUCHAR. Con input() tus programas se vuelven conversaciones — y conocerás la trampa número 1 de todos los principiantes del planeta.",
  intuit:{code:'edad = input("Edad: ")\nprint(edad + edad)',
   q:"El usuario escribe 21. ¿Qué imprime la segunda línea?",
@@ -1841,7 +1896,7 @@ const LEVEL0=[
      return norm(o[0]).split("\n").pop()==="7.0"?true:"La última línea debe imprimir: 7.0\nObtuve:\n"+norm(o[0])},
    hints:["'resultado' solo copia 'numero' sin cambiar nada — esa línea no aporta.","print(float(input(\"Número: \"))) ya hace todo el trabajo en una línea, si prefieres esa ruta."]},
  ]},
-{id:"d6b",n:"Día 12",t:"Entrada y salida · Parte 2: laboratorio y desafío",
+{id:"d6b",n:"Día 20",t:"Entrada y salida · Parte 2: laboratorio y desafío",
  intro:"Ayer aprendiste que input() siempre devuelve texto y a detectar datos inconvertibles. Hoy lo integras en la boleta de calificaciones, y cierras comprobando que float() ya tolera espacios de más sin que tú tengas que limpiarlos.",
  errores:["Operar el input sin convertir → el bug del 48","Convertir a int cuando puede traer decimales","Olvidar el mensaje del prompt: input() mudo confunde al usuario"],
  reto:{id:"d6r",py:true,t:"Desafío final · sin pistas",
@@ -1874,7 +1929,7 @@ const LEVEL0=[
   hints:["float() ya ignora los espacios de sobra alrededor del número — no necesitas limpiarlo tú mismo con métodos de string.","Total = precio * cantidad, mostrado con f-string y formato :.2f."],
   check:(o,c)=>{if(!/input\s*\(/.test(c))return"Lee el precio y la cantidad con input(...), no a mano.";if(!/:\.2f/.test(c))return"El formato de 2 decimales exige una f-string con :.2f";
     return norm(o[0]).split("\n").pop()==="Total: 31.50"?true:"La última línea debe imprimir: Total: 31.50\nObtuve:\n"+norm(o[0])}}},
-{id:"d7",n:"Día 13",t:"Decisiones y repetición · Parte 1: fundamentos",
+{id:"d7",n:"Día 21",t:"Decisiones y repetición · Parte 1: fundamentos",
  intro:"Éste es el día más importante del nivel. if y while convierten tus guiones lineales en programas que DECIDEN y PERSISTEN. Después de hoy, tu código deja de ser una lista de pasos y se vuelve lógica viva.",
  intuit:{code:"n = 4\nwhile n > 2:\n    print(n)\n    n = n - 1",
   q:"¿Qué números imprime? ¿Y por qué se detiene donde se detiene?",
@@ -1930,7 +1985,7 @@ const LEVEL0=[
      return norm(o[0])==="True"?true:"Debe imprimir: True"},
    hints:["edad >= 18 ya es True o False — no necesita un if para 'traducirlo'.","es_mayor = edad >= 18 — una sola línea, mismo resultado."]},
  ]},
-{id:"d7b",n:"Día 14",t:"Decisiones y repetición · Parte 2: laboratorio y desafío",
+{id:"d7b",n:"Día 22",t:"Decisiones y repetición · Parte 2: laboratorio y desafío",
  intro:"Ayer construiste if/while y descubriste que una condición ya es un valor. Hoy los integras en un FizzBuzz con entrada validada — el laboratorio de mayor integración de todo N0 hasta ahora — y cierras diseñando desde cero cómo verificar si un número es primo.",
  errores:["Olvidar los dos puntos al final del if/while","Indentación desigual dentro del mismo bloque","Bucle donde nada cambia la condición → infinito"],
  reto:{id:"d7r",py:true,t:"Desafío final · sin pistas",
@@ -1958,6 +2013,16 @@ const LEVEL0=[
      if(!/%/.test(c))return"Necesitas % para detectar si cada número es par.";
      return norm(o[0])==="5"?true:"Esperaba: 5\nObtuve:\n"+norm(o[0])},
    hints:["Un contador acumulador (pares = 0) que sube 1 cada vez que n % 2 == 0.","Recorre n desde 1 hasta 10 con while, verificando la paridad en cada vuelta."]},
+  {id:"d7e7b",py:true,t:"Ejercicio 7b · Factorial: el acumulador que multiplica",
+   d:'Hasta ahora tu acumulador solo SUMÓ. Calcula <code>5!</code> (5×4×3×2×1) con un <code>while</code> y un acumulador que empieza en <code>1</code> y MULTIPLICA en cada vuelta. Imprime el resultado.',
+   starter:'n = 5\nfactorial = 1\n# while: multiplica factorial por n y baja n hasta 1\n\nprint(factorial)',runs:[[]],
+   check:(o,c)=>{if(/\b120\b/.test(c))return"No escribas 120 a mano: que el bucle lo calcule.";if(!/while/.test(c))return"Usa un while (el for llega mañana).";return norm(o[0])==="120"?true:"Esperaba: 120\nObtuve:\n"+norm(o[0])},
+   hints:["Dentro del while: factorial = factorial * n, y luego n = n - 1.","El acumulador multiplicativo empieza en 1 (no en 0 — ¿por qué?): 1·5·4·3·2·1 = 120."]},
+  {id:"d7e7c",py:true,t:"Ejercicio 7c · Suma hasta el cero (centinela)",
+   d:'El patrón <em>centinela</em>: lee números con <code>input()</code> y súmalos HASTA que llegue un <code>0</code> (el 0 avisa el final y NO se suma). Imprime el total. La prueba escribe 5, 3, 2 y 0: el total es 10.',
+   starter:'total = 0\n# lee el primer numero; mientras no sea 0, sumalo y lee el siguiente\n\nprint(total)',runs:[["5","3","2","0"]],
+   check:(o,c)=>{if(!/while/.test(c))return"El centinela se espera con un while.";if(!/int\s*\(\s*input/.test(c))return"input() devuelve texto: convierte con int().";const last=norm(o[0]).split("\n").pop();return last==="10"?true:"Con 5, 3, 2, 0 el total es 10 (el 0 no se suma). Tu última línea fue: "+last},
+   hints:["Lee ANTES del while y también AL FINAL de cada vuelta: n = int(input()).","while n != 0:  →  total = total + n  →  n = int(input()). El 0 corta el bucle sin sumarse."]},
  ],
  retoFinal:{id:"d7x",py:true,t:"Desafío final · inédito — ¿es primo?",
   d:'Lee un número con <code>input()</code> y determina, con <code>while</code>, si es primo (divisible solo por 1 y por sí mismo). Imprime tu respuesta con la palabra "primo" incluida cuando lo sea, y "no primo" cuando no. Pruébalo con <code>7</code> (primo) y <code>8</code> (no primo). Ningún ejercicio anterior mostró este patrón — tienes que diseñarlo desde cero.',
@@ -1970,7 +2035,7 @@ const LEVEL0=[
     const t1=norm(o[1]);
     if(!t1.includes("no primo"))return"Con 8 (que no es primo) tu programa debe indicarlo como no primo.";
     return true}}},
-{id:"d7c",n:"Día 14b",t:"El bucle for y range: repetir sobre una secuencia",
+{id:"d7c",n:"Día 23",t:"El bucle for y range: repetir sobre una secuencia",
  intro:"Ayer el while repetía MIENTRAS una condición fuera cierta. Pero la forma de repetir más común en Python es otra: 'haz esto PARA CADA elemento de esta colección'. Eso es el bucle for. Y su compañero range() fabrica secuencias de números al vuelo, para cuando quieres repetir un número exacto de veces. Este es el bucle que vas a ver en TODOS los programas de aquí en adelante — desde el primer día de N1. Domínalo hoy, desde cero.",
  intuit:{code:'for i in range(3):\n    print(i)',py:false,
   q:"Sin ejecutar: range(3) genera los números 0, 1, 2 (empieza en 0 y NO llega a 3). El for ejecuta el bloque una vez por cada número, poniéndolo en 'i'. ¿Qué imprime — 0 1 2, o 1 2 3?",
@@ -2019,7 +2084,7 @@ const LEVEL0=[
   starter:'suma = 0\nfor n in range(1, 10):     # ¿hasta dónde llega?\n    if n % 2 == 0:\n        continue            # salta los pares\n    suma = suma + n\nprint(suma)',runs:[[]],
   hints:["range(1, 10) llega hasta el 9 (el 10 queda EXCLUIDO). Los impares en 1..9 son 1, 3, 5, 7, 9.","continue salta el resto de la vuelta cuando n es par, así que solo se suman los impares: 1+3+5+7+9 = 25."],
   check:(o,c)=>{const exp="25";return norm(o[0])===exp?true:"Esperaba: 25\nObtuve:\n"+norm(o[0])+"\n(range(1,10) NO incluye 10; impares 1+3+5+7+9=25)"}}},
-{id:"d7d",n:"Día 14c",t:"Listas · Parte 1: guardar muchos valores en un solo nombre",
+{id:"d7d",n:"Día 24",t:"Listas · Parte 1: guardar muchos valores en un solo nombre",
  intro:"Hasta ahora cada variable guardaba UN valor: un número, un texto. Pero la vida real viene en montones — los nombres de una clase, los precios de un carrito, las temperaturas de la semana. Una LISTA guarda muchos valores en orden, bajo un solo nombre, y —con el for que aprendiste ayer— puedes recorrerlos todos. Es la primera estructura de datos de tu carrera, y la que más usarás.",
  intuit:{code:'frutas = ["manzana", "pera", "uva"]\nprint(frutas[0])\nprint(frutas[-1])',py:false,
   q:"Sin ejecutar: una lista guarda sus elementos en posiciones numeradas que EMPIEZAN EN 0 (igual que los caracteres de un string). frutas[0] es el primero. frutas[-1] cuenta desde el final. ¿Qué imprime cada línea — manzana y uva, o pera y algo más?",
@@ -2066,12 +2131,12 @@ const LEVEL0=[
   starter:'colores = ["rojo", "verde", "azul"]\nprint("El último índice válido es:", len(colores) - 1)\ntry:\n    print(colores[3])\nexcept IndexError:\n    print("IndexError: el índice 3 no existe en una lista de 3 elementos")',runs:[[]],
   hints:["Una lista de 3 elementos tiene índices 0, 1 y 2. El índice 3 sería el CUARTO elemento, que no existe.","len(colores)-1 = 2 es el último índice válido. Pedir [3] lanza IndexError — el error de 'off-by-one' más clásico con listas."],
   check:(o,c)=>{const exp="El último índice válido es: 2\nIndexError: el índice 3 no existe en una lista de 3 elementos";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
-{id:"d7e",n:"Día 14d",t:"Listas · Parte 2: modificar, ordenar y rebanar",
+{id:"d7e",n:"Día 25",t:"Listas · Parte 2: modificar, ordenar y rebanar",
  intro:"Ayer creaste y recorriste listas. Pero una lista no es de piedra: puedes AGREGARLE elementos, quitarlos, ordenarla y sacar 'rebanadas' de ella. Estas operaciones son el pan de cada día — construir una lista de resultados sobre la marcha, ordenar un ranking, quedarte con los primeros N. Y al final, la trampa más famosa de las listas para principiantes: dos nombres que resultan ser la MISMA lista.",
- intuit:{code:'numeros = [3, 1, 2]\nnumeros.append(4)\nprint(numeros)',py:false,
-  q:"Sin ejecutar: .append(4) AGREGA el 4 al FINAL de la lista, modificándola en el sitio (no crea una lista nueva). ¿Qué imprime — [3, 1, 2, 4], o [4, 3, 1, 2]?",
-  req:["[3, 1, 2, 4]","3, 1, 2, 4"],out:"[3, 1, 2, 4]",
-  e:"[3, 1, 2, 4] — append siempre agrega al FINAL. Y modifica la MISMA lista (no devuelve una nueva): por eso escribes numeros.append(4) a secas, no numeros = numeros.append(4) (eso guardaría None, un error común). Construir una lista vacía y ir haciéndole append dentro de un for es el patrón más usado para 'juntar resultados'."},
+ intuit:{code:'numeros = [3, 1, 2]\nnumeros = numeros.append(4)\nprint(numeros)',py:false,
+  q:"Sin ejecutar: alguien quiso agregar el 4 y guardó el resultado de append. ¿Imprime [3, 1, 2, 4]... o imprime otra cosa?",
+  req:["None"],out:"None",
+  e:"Imprime None — la trampa estrella de las listas. .append(4) SÍ agrega el 4, pero modifica la lista EN EL SITIO y devuelve None; al escribir numeros = numeros.append(4), la etiqueta numeros se mueve a ese None y tu lista se pierde. La forma correcta: numeros.append(4) a secas, sin reasignar."},
  mcq:[
   {q:"¿Cuál es la diferencia entre sorted(lista) y lista.sort()?",o:["sorted(lista) devuelve una lista NUEVA ordenada y deja la original intacta; lista.sort() ordena la lista EN EL SITIO y devuelve None","Son idénticos","sorted solo funciona con números","lista.sort() crea una copia"],a:0,e:"sorted(lista) NO toca la original: devuelve una copia ordenada. lista.sort() modifica la lista original y devuelve None (por eso 'x = lista.sort()' es un bug clásico: x queda en None). Elige sorted() si necesitas conservar el orden original; .sort() si quieres cambiar la lista."},
   {q:"nums = [0, 1, 2, 3, 4] — ¿qué es nums[1:4]?",o:["[1, 2, 3]: una REBANADA desde el índice 1 (incluido) hasta el 4 (EXCLUIDO), igual que en los strings y en range","[1, 2, 3, 4]: incluye ambos extremos","[0, 1, 2, 3]","Un error"],a:0,e:"El slicing [inicio:fin] toma desde 'inicio' (incluido) hasta 'fin' (EXCLUIDO) — la misma regla que ya viste en strings y en range. nums[1:4] = [1, 2, 3]. Atajos: [:3] son los primeros 3, [3:] desde el 3 hasta el final."}],
@@ -2097,6 +2162,11 @@ const LEVEL0=[
    starter:'cola = ["Ana", "Beto", "Cira", "Dan"]\n# pop() el último e imprímelo; luego remove "Beto" e imprime la cola\n',runs:[[]],
    check:(o,c)=>{if(!/\.pop\s*\(/.test(c)||!/\.remove\s*\(/.test(c))return"Usa .pop() para el último y .remove(\"Beto\") para quitar por valor.";const exp="Dan\n['Ana', 'Cira']";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["ultimo = cola.pop()\nprint(ultimo)\ncola.remove(\"Beto\")\nprint(cola)"]},
+  {id:"d7ee2b",py:true,t:"Ejercicio 2b · Corrige el sensor: reemplazo por índice",
+   d:'La operación de modificación más directa, que faltaba en tu caja: <code>lista[i] = nuevo</code> REEMPLAZA el elemento de la posición i, en el sitio (la lista es mutable; el string no te dejaba). El sensor falló en la posición 1: reemplaza el <code>99</code> por <code>22</code> asignando por índice — sin append, insert ni remove — e imprime la lista.',
+   starter:'temperaturas = [21, 99, 23]\n# reemplaza el 99 asignando por indice\n\nprint(temperaturas)',runs:[[]],
+   check:(o,c)=>{if(/append|insert|remove/.test(c))return"Sin append/insert/remove: la gracia es ASIGNAR por índice.";if(!/\[\s*1\s*\]\s*=/.test(c))return"La posición dañada es la 1: temperaturas[1] = ...";return norm(o[0])==="[21, 22, 23]"?true:"Esperaba: [21, 22, 23]\nObtuve:\n"+norm(o[0])},
+   hints:["temperaturas[1] = 22","A diferencia del string (inmutable), la lista SÍ permite lista[i] = nuevo."]},
   {id:"d7ee3",py:true,t:"Ejercicio 3 · Ranking con sorted",
    d:'Dada <code>puntajes = [30, 90, 45, 70, 20]</code>, imprime la lista ordenada de MAYOR a menor (usa <code>sorted</code> con <code>reverse=True</code>) SIN modificar la original, y luego imprime la original para confirmar que quedó intacta.',
    starter:'puntajes = [30, 90, 45, 70, 20]\n# imprime el ranking descendente y luego la lista original\n',runs:[[]],
@@ -2109,11 +2179,11 @@ const LEVEL0=[
    hints:["print(ranking[:3])\nprint(ranking[-2:])"]},
  ],
  retoFinal:{id:"d7ex",py:true,t:"Desafío final · inédito — dos nombres, la MISMA lista",
-  d:'Predice, ANTES de ejecutar: <code>b = a</code> NO copia la lista — le da OTRO nombre a la MISMA lista en memoria (recuerda «variables: etiquetas, no cajas», del Día 3). Si le hacemos append a <code>b</code>, ¿cambia también <code>a</code>? ¿Y qué pasa con <code>c = a[:]</code> (una copia de verdad)?',
+  d:'Predice, ANTES de ejecutar: <code>b = a</code> NO copia la lista — le da OTRO nombre a la MISMA lista en memoria (recuerda «variables: etiquetas, no cajas», del Día 11). Si le hacemos append a <code>b</code>, ¿cambia también <code>a</code>? ¿Y qué pasa con <code>c = a[:]</code> (una copia de verdad)?',
   starter:'a = [1, 2, 3]\nb = a           # NO es una copia: b y a son la MISMA lista\nb.append(4)\nprint("a:", a)  # ¿cambió a?\n\nc = a[:]        # c SÍ es una copia independiente\nc.append(99)\nprint("a:", a)  # ¿cambió a esta vez?',runs:[[]],
   hints:["b = a hace que b y a apunten al MISMO objeto lista (dos etiquetas, una caja). Modificar por b se ve por a.","c = a[:] crea una lista NUEVA con los mismos elementos: modificar c ya no afecta a a. Distinguir 'mismo objeto' de 'copia' es una de las trampas más famosas de Python."],
   check:(o,c)=>{const exp="a: [1, 2, 3, 4]\na: [1, 2, 3, 4]";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
-{id:"d7f",n:"Día 14e",t:"Listas y strings: separar, unir y la verdad de lo vacío",
+{id:"d7f",n:"Día 26",t:"Listas y strings: separar, unir y la verdad de lo vacío",
  intro:"Los datos del mundo real casi siempre llegan como TEXTO: una línea de un archivo, una respuesta de una API, lo que el usuario escribe. Convertir ese texto en una lista de piezas manejables (y de vuelta) es una de las habilidades que más vas a usar. Hoy cierras las listas con <code>split</code> y <code>join</code>, y con una idea sutil pero poderosa: en Python, una lista vacía o un texto vacío cuentan como «falso».",
  intuit:{code:'texto = "ana,beto,cira"\npartes = texto.split(",")\nprint(partes)',py:false,
   q:"Sin ejecutar: .split(\",\") corta el texto por cada coma y devuelve una LISTA de las piezas. ¿Qué imprime — ['ana', 'beto', 'cira'], o el texto 'ana,beto,cira' sin cambios?",
@@ -2150,24 +2220,24 @@ const LEVEL0=[
    check:(o,c)=>{if(!/\.join\s*\(/.test(c))return"Usa \"/\".join(ruta) — join se llama sobre el separador.";const exp="usuarios/alex/documentos";return norm(o[0])===exp?true:"Esperaba: "+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["print(\"/\".join(ruta))"]},
   {id:"d7fe3",py:true,t:"Ejercicio 3 · La verdad de lo vacío",
-   d:'Escribe <code>estado(lista)</code>: devuelve <code>"con datos"</code> si la lista tiene algo, o <code>"vacía"</code> si no — usando el idioma <code>if lista:</code> (sin comparar con len). Pruébala con una lista con elementos y con una vacía.',
-   starter:'def estado(lista):\n    # usa if lista: (no len)\n    pass\n\nprint(estado([1, 2, 3]))\nprint(estado([]))',runs:[[]],
-   check:(o,c)=>{if(/len\s*\(/.test(c))return"Este ejercicio es para el idioma 'if lista:' — no uses len().";const exp="con datos\nvacía";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
-   hints:["def estado(lista):\n    if lista:\n        return \"con datos\"\n    else:\n        return \"vacía\""]},
+   d:'Dadas <code>datos = [3, 1]</code> y <code>vacia = []</code>, imprime para CADA una la palabra <code>con datos</code> si tiene algo o <code>vacía</code> si no — usando el idioma <code>if lista:</code> / <code>else:</code> (prohibido comparar con len). Dos líneas de salida.',
+   starter:'datos = [3, 1]\nvacia = []\n# evalua cada lista con if ...: / else: e imprime "con datos" o "vacía"\n',runs:[[]],
+   check:(o,c)=>{if(/len\s*\(/.test(c))return"Este ejercicio es para el idioma 'if lista:' — no uses len().";if(!/\bif\b/.test(c))return"Usa if lista: para preguntar si tiene algo.";const exp="con datos\nvacía";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["if datos:\n    print(\"con datos\")\nelse:\n    print(\"vacía\")","Repite el if/else con vacia — una lista vacía cuenta como False, así que entra por else."]},
  ],
  retoFinal:{id:"d7fx",py:true,t:"Desafío final · inédito — split y join son inversos",
   d:'Predice, ANTES de ejecutar: si tomo un texto, lo parto con split por comas, y vuelvo a unir la lista resultante con join por comas, ¿recupero EXACTAMENTE el texto original? ¿Y si uno con un separador distinto (un guion)?',
   starter:'original = "rojo,verde,azul"\npiezas = original.split(",")\nreconstruido = ",".join(piezas)\nprint(reconstruido == original)      # ¿recupera el original?\nprint("-".join(piezas))              # unido con otro separador',runs:[[]],
   hints:["split y join con el MISMO separador son operaciones inversas: partir por comas y volver a unir por comas devuelve el texto original.","Con un separador distinto (guion), unes las mismas piezas pero con otro pegamento: 'rojo-verde-azul'. Las piezas son las mismas; cambia solo lo que va entre ellas."],
   check:(o,c)=>{const exp="True\nrojo-verde-azul";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])}}},
-/* ══════════════════ Día 14f · Diccionarios · Parte 1 ══════════════════ */
-{id:"n0dic1",n:"Día 14f",t:"Diccionarios · Parte 1: pares clave→valor",
+/* ══════════════════ Día 27 · Diccionarios · Parte 1 ══════════════════ */
+{id:"n0dic1",n:"Día 27",t:"Diccionarios · Parte 1: pares clave→valor",
  ing:'Cuando una app le pide tu perfil a un servidor, lo que llega por la red es un diccionario: {"nombre": "Alex", "plan": "pro"}. El JSON de CUALQUIER API —Netflix, OpenAI, el clima— es un diccionario de pares clave→valor. Una fila de una base de datos es un diccionario (columna→valor). Tu futuro JARVIS guardará cada documento junto a su vector como pares clave→valor. La lista te dio orden por POSICIÓN; el diccionario te da algo más humano: buscar por NOMBRE.',
  intro:'Hasta ahora, para guardar varios datos usabas listas y accedías por POSICIÓN: notas[0], notas[1]... Pero muchas cosas del mundo no tienen un ‘puesto número 3’: tienen un NOMBRE. El teléfono no es ‘el de la posición 2’, es ‘el de Ana’. El precio no es ‘el del índice 5’, es ‘el del pan’. Para eso existe el diccionario: guarda pares clave→valor y te deja acceder por la clave, como una agenda telefónica donde buscas por nombre y obtienes el número. Hoy aprendes a crearlos, leerlos, ampliarlos, y a esquivar su trampa más famosa: el KeyError.',
- intuit:{code:'agenda = {"Ana": "999-111", "Luis": "999-222"}\nprint(agenda["Luis"])',py:false,
-  q:'Un diccionario guarda pares clave→valor entre llaves {}. Esta agenda asocia cada nombre (la clave) con su número (el valor). A diferencia de una lista, NO accedes por posición sino por la clave: agenda["Luis"] pide ‘el número de Luis’. Sin ejecutar, ¿qué número imprime?',
-  req:["999-222"],out:"999-222",
-  e:'999-222. En un diccionario, agenda["Luis"] no significa ‘la posición Luis’ (los diccionarios no tienen posiciones): significa ‘el valor asociado a la clave Luis’. Python busca la clave "Luis" y devuelve su valor, "999-222". Esa es la idea central: en la lista buscas por DÓNDE está (índice); en el diccionario, por CÓMO se llama (clave).'},
+ intuit:{code:'agenda = {"Ana": "999-111", "Luis": "999-222"}\nprint(agenda[0])',py:false,
+  q:"Tu instinto de las listas dice: [0] es el primer elemento. Sin ejecutar: ¿imprime el teléfono de Ana... o explota? Si explota, ¿con qué TIPO de error?",
+  req:["KeyError"],out:"Traceback (most recent call last):\n  File \"programa.py\", line 2, in <module>\nKeyError: 0",
+  e:"Explota con KeyError: 0. Un diccionario NO tiene posiciones: tiene CLAVES. agenda[0] no significa 'el primero' — significa 'el valor de la clave 0', y esa clave no existe. Para leer el teléfono de Ana escribes agenda[\"Ana\"]. Éste es el cambio de chip del día: en la lista buscas por posición; en el diccionario, por nombre."},
  mcq:[
   {q:'¿En qué se diferencia un diccionario de una lista?',o:['En nada, son dos nombres para lo mismo','La lista accede por POSICIÓN (lista[0]); el diccionario accede por CLAVE (dic["nombre"])','El diccionario solo puede guardar números','La lista nunca puede tener texto y el diccionario sí'],a:1,e:'La lista ordena sus elementos por posición y accedes con un índice numérico (lista[0], lista[1]). El diccionario asocia cada valor a una clave con significado (dic["Ana"]) y accedes por esa clave, no por un número de puesto. Usas lista cuando el ORDEN/posición importa; diccionario cuando cada dato tiene un NOMBRE natural.'},
   {q:'Tienes agenda = {"Ana": "111"} y ejecutas print(agenda["Zoe"]). ¿Qué pasa?',o:['Imprime None','Imprime una cadena vacía','El programa se detiene con un error KeyError, porque "Zoe" no es una clave','Crea la clave "Zoe" automáticamente con un valor vacío'],a:2,e:'Acceder con corchetes a una clave que NO existe lanza KeyError y detiene el programa: Python no inventa un valor ni devuelve None. Por eso, cuando no estás seguro de que la clave exista, se usa el método .get(clave, defecto), que devuelve el defecto en vez de romperse.'},
@@ -2217,7 +2287,12 @@ const LEVEL0=[
    d:'La respuesta de una API (Netflix, el clima, OpenAI) llega como un diccionario de pares clave→valor, igual que este. Extrae del diccionario <code>clima</code> el valor de <code>"ciudad"</code> y el de <code>"temperatura"</code>, e imprímelos en ese orden (uno por línea), accediendo por su clave.',
    starter:'clima = {"ciudad": "Lima", "temperatura": 24, "humedad": 80}\n# imprime la ciudad y luego la temperatura, accediendo por clave\n',runs:[[]],
    check:(o,c)=>{if(!/clima\s*\[/.test(c))return"Accede por clave: clima[\"ciudad\"] y clima[\"temperatura\"].";return norm(o[0])==="Lima\n24"?true:"Esperaba:\nLima\n24\nObtuve:\n"+norm(o[0])},
-   hints:['print(clima["ciudad"]) y luego print(clima["temperatura"]).','Cada clave devuelve su valor: "ciudad"→Lima, "temperatura"→24. Así se lee un JSON de API.']}],
+   hints:['print(clima["ciudad"]) y luego print(clima["temperatura"]).','Cada clave devuelve su valor: "ciudad"→Lima, "temperatura"→24. Así se lee un JSON de API.']},
+  {id:"n0dic1e7",py:true,t:"Ejercicio 7 · Eliminar un contacto (la D de CRUD)",
+   d:'Faltaba la D: <code>del dic[clave]</code> ELIMINA el par completo (y lanza KeyError si la clave no existe — igual que la lectura con corchetes; la alternativa segura es <code>dic.pop(clave, defecto)</code>). Elimina a Sofía de la agenda, imprime cuántos contactos quedan (<code>len</code>) y luego el resultado de <code>"Sofía" in agenda</code>.',
+   starter:'agenda = {"Ana": "999-111", "Luis": "999-222", "Sofía": "988-777"}\n# elimina a Sofía, imprime len(agenda) y despues "Sofía" in agenda\n',runs:[[]],
+   check:(o,c)=>{if(!/del\s+agenda\[|\.pop\(/.test(c))return"Elimina con del agenda[...] (o .pop).";const exp="2\nFalse";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
+   hints:["del agenda[\"Sofía\"] borra el par clave+valor completo.","Tras borrar: len(agenda) → 2, y \"Sofía\" in agenda → False (in mira las claves)."]}],
  reto:{id:"n0dic1r",py:true,t:"Laboratorio · Un inventario con dict (agregar, actualizar, .get)",
   d:'Junta todo en un inventario producto→cantidad. Parte de <code>{"lapiz": 100, "cuaderno": 40}</code>. <strong>(1)</strong> Llegaron 25 lápices más: actualiza <code>"lapiz"</code> sumando 25 a su cantidad actual. <strong>(2)</strong> Agrega <code>"borrador"</code> con <code>60</code>. <strong>(3)</strong> Consulta con <code>.get</code> la cantidad de <code>"tijera"</code> (que no existe) usando <code>0</code> como defecto. Imprime, una por línea: la cantidad de lápices, la de borradores y la de tijeras.',
   starter:'inv = {"lapiz": 100, "cuaderno": 40}\n# 1) suma 25 a la cantidad actual de "lapiz"\n\n# 2) agrega "borrador" con 60\n\n# 3) consulta "tijera" con .get y defecto 0\n\nprint(inv["lapiz"])\nprint(inv["borrador"])\n# imprime tambien la cantidad de "tijera"\n',runs:[[]],
@@ -2228,8 +2303,8 @@ const LEVEL0=[
   starter:'d = {}\nd["color"] = "rojo"\nd["color"] = "azul"      # misma clave: reemplaza a "rojo"\nprint(d["color"])         # ¿rojo o azul?\nprint("azul" in d)        # ¿in mira claves o valores?\n',runs:[[]],
   hints:['La segunda asignación a "color" pisa la primera: no existen dos claves "color".','d["color"] es "azul" (la última gana). Y "azul" es un VALOR, no una clave, así que "azul" in d es False.'],
   check:(o,c)=>{return norm(o[0])==="azul\nFalse"?true:"Esperaba:\nazul\nFalse\nObtuve:\n"+norm(o[0])+"\n(la última asignación gana → azul; e in mira las CLAVES, no los valores → False)"}}},
-/* ══════════════════ Día 14g · Diccionarios · Parte 2: recorrer y contar ══════════════════ */
-{id:"n0dic21",n:"Día 14g",t:"Diccionarios · Parte 2: recorrer y contar",
+/* ══════════════════ Día 28 · Diccionarios · Parte 2: recorrer y contar ══════════════════ */
+{id:"n0dic21",n:"Día 28",t:"Diccionarios · Parte 2: recorrer y contar",
  ing:"Cada diciembre, Spotify Wrapped te dice tu artista más escuchado del año; Netflix ordena su fila de ‘Tendencias’; y cuando OpenAI entrena un modelo, lo primero que hace es contar cuántas veces aparece cada palabra en miles de millones de textos. Detrás de TODO eso hay un solo truco humilde que aprenderás hoy: recorrer un diccionario y usarlo como un CONTADOR de frecuencias. Tu futuro JARVIS contará así qué términos aparecen más en tus PDFs para saber de qué tratan. Es, sin exagerar, uno de los patrones más usados en toda la programación.",
  intro:"Ayer creaste diccionarios y accediste a un valor por su clave. Hoy aprendes a RECORRERLOS con for —clave por clave, o con .keys(), .values() e .items()— y a usarlos para la tarea estrella de todo analista de datos: contar cuántas veces aparece cada cosa. Cerrarás con el reto clásico que se pide en cursos como Harvard CS50 y MIT 6.0001: contar la frecuencia de las palabras de una frase. Cuando domines este patrón, verás contadores por todas partes.",
  intuit:{code:'stock = {"manzanas": 3, "peras": 5, "uvas": 2}\ntotal = 0\nfor cantidad in stock.values():\n    total = total + cantidad\nprint(total)',py:false,
@@ -2296,14 +2371,14 @@ const LEVEL0=[
   starter:'frase = "sol mar sol viento mar sol"\npalabras = frase.split()\nconteo = {}\nfor palabra in palabras:\n    conteo[palabra] = conteo.get(palabra, 0) + 1\n# ahora halla la palabra con el conteo mas alto\nmejor_palabra = ""\nmejor_conteo = 0\n# recorre conteo.items() y actualiza mejor_palabra cuando encuentres un conteo mayor\n\nprint(mejor_palabra)',runs:[[]],
   hints:["for palabra, veces in conteo.items():\n    if veces > mejor_conteo:\n        mejor_conteo = veces\n        mejor_palabra = palabra","Cuentas: sol×3, mar×2, viento×1. Al recorrer el conteo, sol (3) es el mayor, así que mejor_palabra queda en ‘sol’."],
   check:(o,c)=>{if(/print\s*\(\s*['"]sol['"]\s*\)/.test(c))return"No imprimas ‘sol’ directamente: encuéntrala recorriendo el conteo.";if(!/for/.test(c))return"Necesitas recorrer el conteo con for para hallar el máximo.";return norm(o[0])==="sol"?true:"Esperaba: sol\nObtuve:\n"+norm(o[0])+"\n(sol aparece 3 veces, más que mar 2 y viento 1)"}}},
-/* ══════════════════ Día 14h · Tuplas: colecciones inmutables ══════════════════ */
-{id:"n0tup1",n:"Día 14h",t:"Tuplas: colecciones inmutables",
+/* ══════════════════ Día 29 · Tuplas: colecciones inmutables ══════════════════ */
+{id:"n0tup1",n:"Día 29",t:"Tuplas: colecciones inmutables",
  ing:"Cada vez que Google Maps te ubica, tu posición es una tupla: <code>(latitud, longitud)</code> — dos números que van SIEMPRE juntos y que no tiene sentido tocar por separado. Cuando una API te devuelve un registro (el color RGB de un píxel, <code>(255, 0, 0)</code>; una fila de una base de datos; la respuesta de tu JARVIS como <code>(texto, score)</code>), muchas veces llega como una tupla: un paquete de valores fijo, protegido contra cambios accidentales. Hoy aprendes la estructura con la que Python agrupa datos que deben permanecer intactos.",
  intro:"Ya conoces las listas: colecciones que crecen, se ordenan y se modifican. Hoy conoces a su hermana disciplinada, la tupla. Una tupla agrupa varios valores en un solo paquete —como una coordenada (x, y)— con una diferencia crucial: una vez creada, NO se puede modificar. Esa ‘rigidez’ no es un defecto, es una garantía: cuando algo no debe cambiar (un punto en el mapa, un registro, una fecha), la tupla lo protege. Y trae dos superpoderes que usarás toda tu vida como programador: el desempaquetado y el retorno de varios valores desde una función.",
- intuit:{code:'punto = (3, 4)\nx = punto[0]\ny = punto[1]\nprint(x + y)',py:false,
-  q:"Una tupla agrupa valores en un paquete, y a cada uno accedes por su POSICIÓN, empezando en 0: <code>punto[0]</code> es el primero, <code>punto[1]</code> el segundo. Aquí <code>punto</code> guarda la coordenada (3, 4). Sin ejecutar: se toma la x (3) y la y (4) y se imprime su suma. ¿Qué número aparece?",
-  req:["7"],out:"7",
-  e:"7. La tupla <code>(3, 4)</code> empaqueta dos valores; se leen por su posición, empezando en 0: <code>punto[0]</code> es 3 (la x) y <code>punto[1]</code> es 4 (la y). La suma 3 + 4 = 7. Fíjate en el detalle clave: SOLO leímos la tupla, nunca la cambiamos — y eso es justo para lo que sirve. Una tupla es un paquete de valores que consultas, no que modificas."},
+ intuit:{code:'punto = (3, 4)\npunto[0] = 9\nprint(punto)',py:false,
+  q:"punto guarda la coordenada (3, 4) en una TUPLA. La segunda línea intenta cambiarle la x. Sin ejecutar: ¿imprime (9, 4), o explota? Si explota, ¿con qué TIPO de error?",
+  req:["TypeError"],out:"Traceback (most recent call last):\n  File \"programa.py\", line 2, in <module>\nTypeError: 'tuple' object does not support item assignment",
+  e:"Explota con TypeError: 'tuple' object does not support item assignment. Ésa es LA diferencia entre tupla y lista: la tupla es INMUTABLE — una vez creada, no puedes cambiar, agregar ni quitar elementos. Si necesitas modificar, usas una lista; si el dato debe quedar fijo (una coordenada, una fecha), la tupla te PROTEGE de cambios accidentales."},
  mcq:[
   {q:"Tienes <code>punto = (3, 4)</code> y ejecutas <code>punto[0] = 9</code>. ¿Qué ocurre?",o:["punto se convierte en (9, 4)","Python lanza un TypeError: las tuplas no se pueden modificar","punto se convierte en (9, 3, 4)","No pasa nada, la línea se ignora en silencio"],a:1,e:"Una tupla es INMUTABLE: una vez creada, sus elementos no se pueden reasignar. Intentar <code>punto[0] = 9</code> lanza <code>TypeError: 'tuple' object does not support item assignment</code>. Si necesitas un valor distinto, creas una tupla NUEVA — no modificas la original. Esa imposibilidad de cambiar es exactamente la garantía por la que se usan tuplas para datos que deben permanecer intactos."},
   {q:"¿En cuál de estos casos es MEJOR una tupla que una lista?",o:["Un carrito de compras al que agregas y quitas productos","Las coordenadas (latitud, longitud) de un lugar fijo en el mapa","La lista de tareas del día, que va cambiando","Los mensajes de un chat, que crecen con cada respuesta"],a:1,e:"La tupla brilla cuando los datos NO deben cambiar: una coordenada geográfica, un color RGB, una fecha de nacimiento. Las otras tres opciones (carrito, tareas, mensajes) crecen o se modifican constantemente — para eso está la lista, que es mutable. Regla práctica: ¿es un conjunto fijo de valores que va junto? tupla. ¿una colección que cambia con el tiempo? lista."},
@@ -2348,7 +2423,7 @@ const LEVEL0=[
    check:(o,c)=>{if(/print\s*\(\s*2\s*,\s*1\s*\)/.test(c))return"No imprimas 2 1 a mano: haz el intercambio de verdad.";if(/=\s*2\s*,\s*1/.test(c))return"No pongas los valores ya intercambiados a mano: usa a, b = b, a.";if(!/\w+\s*,\s*\w+\s*=\s*\w+\s*,\s*\w+/.test(c))return"Usa el intercambio con tuplas: a, b = b, a.";return norm(o[0])==="2 1"?true:"Esperaba: 2 1\nObtuve:\n"+norm(o[0])},
    hints:["a, b = b, a","A la derecha se arma la tupla (b, a) = (2, 1) y se reparte de nuevo en a y b."]},
   {id:"n0tup1e5",py:true,t:"Ejercicio 5 · Una función que devuelve DOS valores",
-   d:'Una función puede devolver varios valores separándolos con comas (en realidad devuelve una tupla). Completa <code>dividir</code> para que devuelva el cociente entero (<code>a // b</code>) y el resto (<code>a % b</code>). Luego recibe ambos desempaquetando y muéstralos. Con <code>dividir(17, 5)</code> debe salir 3 y 2, en dos líneas.',
+   d:'<em>Adelanto del Día 36 (funciones)</em> — te damos la función ya armada en el punto de partida; tu trabajo de HOY es la tupla que devuelve. Una función puede devolver varios valores separándolos con comas (en realidad devuelve una tupla). Completa <code>dividir</code> para que devuelva el cociente entero (<code>a // b</code>) y el resto (<code>a % b</code>). Luego recibe ambos desempaquetando y muéstralos. Con <code>dividir(17, 5)</code> debe salir 3 y 2, en dos líneas.',
    starter:'def dividir(a, b):\n    # devuelve dos valores: el cociente entero y el resto\n    return \n\ncociente, resto = dividir(17, 5)\nprint(cociente)\nprint(resto)',runs:[[]],
    check:(o,c)=>{if(!/def\s+dividir/.test(c))return"Mantén la funcion dividir.";if(!/return[^\n]*,/.test(c))return"La funcion debe devolver DOS valores separados por coma: return a // b, a % b.";if(!/\w+\s*,\s*\w+\s*=\s*dividir/.test(c))return"Recibe los dos valores desempaquetando: cociente, resto = dividir(17, 5).";if(/print\s*\(\s*3\s*\)/.test(c)||/print\s*\(\s*2\s*\)/.test(c))return"No imprimas 3 y 2 a mano: que salgan de la funcion.";return norm(o[0])==="3\n2"?true:"Esperaba:\n3\n2\nObtuve:\n"+norm(o[0])},
    hints:["return a // b, a % b","17 // 5 = 3 (cociente) y 17 % 5 = 2 (resto). La funcion devuelve la tupla (3, 2), que desempaquetas en cociente, resto."]},
@@ -2358,7 +2433,7 @@ const LEVEL0=[
    check:(o,c)=>{if(/["']\s*\(/.test(c))return"No escribas la tupla como texto: construyela de verdad.";if(/\(\s*4\s*,\s*5\s*\)/.test(c))return"No escribas (4, 5) a mano: construyela a partir de punto.";if(!/punto\s*\[/.test(c))return"Construye la nueva tupla a partir de punto[0] y punto[1].";return norm(o[0])==="(4, 5)"?true:"Esperaba: (4, 5)\nObtuve:\n"+norm(o[0])},
    hints:["nuevo = (punto[0] + 1, punto[1] + 1)","No modificas punto (eso daria TypeError): creas otra tupla. (3+1, 4+1) = (4, 5)."]}],
  reto:{id:"n0tup1r",py:true,t:"Laboratorio · Una función que devuelve el mínimo y el máximo",
-  d:'Pon en práctica el retorno múltiple. Escribe la función <code>min_max(a, b, c)</code> que devuelva DOS valores: el menor y el mayor de los tres (puedes usar <code>min(a, b, c)</code> y <code>max(a, b, c)</code>). Luego, con las notas <code>14, 9, 18</code>, recibe ambos desempaquetando en <code>bajo</code> y <code>alto</code> e imprímelos en dos líneas (primero el menor, luego el mayor).',
+  d:'<em>Adelanto del Día 36</em>: la función viene armada — céntrate en la TUPLA que devuelve y en el desempaquetado. Pon en práctica el retorno múltiple. Escribe la función <code>min_max(a, b, c)</code> que devuelva DOS valores: el menor y el mayor de los tres (puedes usar <code>min(a, b, c)</code> y <code>max(a, b, c)</code>). Luego, con las notas <code>14, 9, 18</code>, recibe ambos desempaquetando en <code>bajo</code> y <code>alto</code> e imprímelos en dos líneas (primero el menor, luego el mayor).',
   starter:'def min_max(a, b, c):\n    # devuelve el menor y el mayor de los tres\n    return \n\nbajo, alto = min_max(14, 9, 18)\nprint(bajo)\nprint(alto)',runs:[[]],
   check:(o,c)=>{if(!/def\s+min_max/.test(c))return"Mantén la funcion min_max.";if(!/return[^\n]*,/.test(c))return"Debe devolver DOS valores separados por coma: return min(...), max(...).";if(/print\s*\(\s*9\s*\)/.test(c)||/print\s*\(\s*18\s*\)/.test(c))return"No imprimas 9 y 18 a mano: que salgan de la funcion.";return norm(o[0])==="9\n18"?true:"Esperaba:\n9\n18\nObtuve:\n"+norm(o[0])},
   hints:["return min(a, b, c), max(a, b, c)","min(14, 9, 18) = 9 y max(14, 9, 18) = 18. La funcion devuelve la tupla (9, 18), que desempaquetas en bajo, alto."]},
@@ -2367,8 +2442,8 @@ const LEVEL0=[
   starter:'registro = ("Alex", 2026)\ntry:\n    registro[1] = 2027        # intento de modificar la tupla\n    print("cambiado")\nexcept TypeError:\n    print("no se puede modificar")',runs:[[]],
   hints:["Una tupla no permite reasignar sus elementos: registro[1] = 2027 lanza TypeError.","Como el intento falla, se ejecuta la rama except y se imprime ‘no se puede modificar’. Esa es la garantia de las tuplas: protegen los datos que no deben cambiar."],
   check:(o,c)=>{return norm(o[0])==="no se puede modificar"?true:"Esperaba: no se puede modificar\nObtuve:\n"+norm(o[0])+"\n(la tupla es inmutable: registro[1] = 2027 lanza TypeError, atrapado por except)"}}},
-/* ══════════════════ Día 14i · Sets: colecciones sin duplicados ══════════════════ */
-{id:"n0set1",n:"Día 14i",t:"Sets: colecciones sin duplicados",
+/* ══════════════════ Día 30 · Sets: colecciones sin duplicados ══════════════════ */
+{id:"n0set1",n:"Día 30",t:"Sets: colecciones sin duplicados",
  ing:"Cuando Netflix te muestra los GÉNEROS de una película, o YouTube las ETIQUETAS de un video, nunca ves ‘Comedia, Comedia, Drama’ repetido: cada etiqueta aparece una sola vez. Cuando un boletín de correo envía una promoción, la base de datos garantiza que cada correo esté UNA vez —nadie recibe el mismo mensaje dos veces— con una regla que se llama UNIQUE. Y tu futuro JARVIS, al juntar fragmentos de varios documentos, descarta los repetidos antes de responder. Detrás de todos esos casos hay una misma estructura de Python: el <em>set</em> (conjunto), una colección que por diseño NO admite duplicados y que responde ‘¿está esto aquí?’ casi al instante.",
  intro:"Ya conoces las listas (ordenadas, con posiciones, admiten repetidos). Hoy sumas una herramienta hermana con dos superpoderes muy concretos: garantizar que no haya elementos repetidos, y responder ‘¿pertenece x a esta colección?’ a una velocidad enorme sin importar cuántos elementos haya. Es el <strong>set</strong>. No sirve para todo —pierde el orden y no tiene índices—, pero cuando lo que necesitas es UNICIDAD o PERTENENCIA, no hay nada mejor. Y trae de regalo tres operaciones preciosas heredadas de las matemáticas: unión, intersección y diferencia.",
  intuit:{code:'correos = ["ana@mail.com", "luis@mail.com", "ana@mail.com", "sofia@mail.com", "luis@mail.com"]\nunicos = set(correos)\nprint(len(unicos))',py:false,
@@ -2435,8 +2510,8 @@ const LEVEL0=[
   starter:'lectores_libro1 = {"ana", "luis", "sofia", "mario"}\nlectores_libro2 = {"luis", "mario", "elena", "raul"}\n# EXCLUSIVOS = (todos los lectores)  MENOS  (los que estan en ambos)\n# pista: (libro1 | libro2) - (libro1 & libro2), y ordena con sorted()\n# imprime cuantos son y luego la lista ordenada\n',runs:[[]],
   hints:["exclusivos = sorted((lectores_libro1 | lectores_libro2) - (lectores_libro1 & lectores_libro2))","Union = {ana, luis, sofia, mario, elena, raul} (6). En ambos = {luis, mario} (2). Al quitar los de ‘ambos’ de la union quedan ana, sofia, elena, raul: son 4, ordenados ['ana', 'elena', 'raul', 'sofia']. (Este ‘uno u otro pero no ambos’ tiene hasta un atajo propio en Python: el operador ^.)"],
   check:(o,c)=>{if(!/\|/.test(c)||!/&/.test(c)||!/-/.test(c))return"Combina las TRES operaciones del dia: union  |  , interseccion  &  y diferencia  -.";if(!/sorted\s*\(/.test(c))return"Ordena el resultado con sorted(...) para una salida estable.";return norm(o[0])==="4\n['ana', 'elena', 'raul', 'sofia']"?true:"Esperaba:\n4\n['ana', 'elena', 'raul', 'sofia']\nObtuve:\n"+norm(o[0])+"\n(exclusivos = union menos interseccion = ana, elena, raul, sofia)"}}},
-/* ══════════════════ Día 14j · Bucles anidados: un bucle dentro de otro ══════════════════ */
-{id:"n0nes1",n:"Día 14j",t:"Bucles anidados: un bucle dentro de otro",
+/* ══════════════════ Día 31 · Bucles anidados: un bucle dentro de otro ══════════════════ */
+{id:"n0nes1",n:"Día 31",t:"Bucles anidados: un bucle dentro de otro",
  ing:"La pantalla de inicio de Netflix es una CUADRÍCULA: filas de categorías (‘Tendencias’, ‘Comedias’, ‘Porque viste...’) y, dentro de cada fila, decenas de carátulas en columnas. Para dibujarla, el código recorre cada fila y, por CADA fila, recorre sus columnas: un bucle dentro de otro. Lo mismo ocurre cuando una hoja de cálculo suma una tabla, cuando tu JARVIS recorre una matriz de embeddings, o cuando un videojuego pinta cada píxel de la pantalla (filas × columnas). El bucle anidado es cómo el código recorre cualquier cosa que tenga dos dimensiones.",
  intro:"Ya sabes que un bucle repite un bloque de código. Hoy das el salto que multiplica su poder: meter un bucle DENTRO de otro. La idea es sencilla y a la vez asombrosa — por cada vuelta del bucle de afuera, el de adentro hace TODAS sus vueltas de principio a fin. Si el de afuera da 3 vueltas y el de adentro 4, el bloque más interior se ejecuta 3 × 4 = 12 veces. Con esa única idea vas a construir tablas de multiplicar, dibujar patrones de asteriscos, y recorrer matrices y diccionarios: todo lo que tiene ‘filas y columnas’ vive dentro de un bucle anidado.",
  intuit:{code:'vueltas = 0\nfor i in range(3):        # bucle de AFUERA: 3 vueltas\n    for j in range(4):    # bucle de ADENTRO: 4 vueltas por cada una\n        vueltas = vueltas + 1\nprint(vueltas)',py:false,
@@ -2507,8 +2582,8 @@ const LEVEL0=[
   starter:'# El de AFUERA da 4 vueltas: i = 1, 2, 3, 4.\n# El de ADENTRO da range(i) vueltas, o sea i veces: 1, luego 2, luego 3, luego 4.\ntotal = 0\nfor i in range(1, 5):\n    for j in range(i):      # el limite del de adentro DEPENDE de i\n        total = total + 1\nprint(total)',runs:[[]],
   hints:["El interno corre i veces por cada i: 1 + 2 + 3 + 4.","1 + 2 + 3 + 4 = 10. Cuando el límite del interno depende del externo, las vueltas NO se multiplican en un rectángulo: aquí forman un triángulo y se SUMAN."],
   check:(o,c)=>{return norm(o[0])==="10"?true:"Esperaba: 10\nObtuve:\n"+norm(o[0])+"\n(1 + 2 + 3 + 4 = 10 vueltas: es un triángulo, no un rectángulo)"}}},
-/* ══════════════════ Día 14k · Intuición de eficiencia ══════════════════ */
-{id:"n0cx1",n:"Día 14k",t:"Intuición de eficiencia: ¿por qué un programa tarda más?",
+/* ══════════════════ Día 32 · Intuición de eficiencia ══════════════════ */
+{id:"n0cx1",n:"Día 32",t:"Intuición de eficiencia: ¿por qué un programa tarda más?",
  ing:"Cuando buscas una película en Netflix o un producto entre los millones de Amazon, la respuesta aparece al instante — no porque sus computadoras sean mágicas, sino porque están diseñadas para evitar “revisar todo”. Si Amazon recorriera sus productos uno por uno en cada búsqueda, tardarías minutos. Un modelo de OpenAI, una base de datos, tu futuro JARVIS: todos buscan hacer el MENOR trabajo posible. Hoy no aprendes fórmulas todavía; aprendes a NOTAR cuándo un programa hace demasiado trabajo — el primer instinto de todo buen ingeniero.",
  intro:"Ayer conociste los set y su búsqueda casi instantánea. Hoy entiendes POR QUÉ es instantánea — y por qué otras cosas no lo son. Vas a “medir” el trabajo de un programa con un truco simple: un contador que suma 1 en cada paso. Con él verás con tus propios ojos por qué buscar en una lista de un millón cuesta más que en una de diez, por qué un set se salta ese costo, y por qué un bucle dentro de otro escala tan mal. El objetivo no es calcular nada complicado (eso es “Big-O”, y llega más adelante): es empezar a PENSAR en eficiencia, a tener olfato para lo que escala y lo que se ahoga.",
  intuit:{code:'numeros = [5, 8, 2, 9, 4, 7, 1]\npasos = 0\nfor n in numeros:\n    pasos = pasos + 1\n    if n == 1:\n        break\nprint(pasos)',py:false,
@@ -2570,11 +2645,11 @@ const LEVEL0=[
   starter:'# Un bucle anidado hace n*n operaciones.\npequeno = 10\ngrande = 20                       # el DOBLE de datos\nop_pequeno = pequeno * pequeno    # trabajo con 10 datos\nop_grande = grande * grande       # trabajo con 20 datos\n# cuantas VECES mas grande es? (division entera //)\n\nprint(veces)',runs:[[]],
   hints:["veces = op_grande // op_pequeno","10×10 = 100 y 20×20 = 400. Al DUPLICAR los datos, el trabajo se hizo 4 veces mayor, no 2: por eso los bucles anidados escalan tan mal."],
   check:(o,c)=>{if(/print\(\s*4\s*\)/.test(c))return"No escribas el 4 a mano: calcúlalo comparando el trabajo de los dos tamaños.";if(!/\*/.test(c))return"El trabajo de un bucle anidado es n * n: úsalo para cada tamaño.";if(!/\/\//.test(c))return"Divide el trabajo grande entre el pequeño con // para ver cuántas VECES creció.";return norm(o[0])==="4"?true:"Esperaba: 4\nObtuve:\n"+norm(o[0])+"\n(10x10=100, 20x20=400; al DUPLICAR los datos el trabajo se hizo 4 veces mayor, no 2)"}}},
-{id:"d8",n:"Día 15",t:"Errores y tracebacks · Parte 1: fundamentos",
+{id:"d8",n:"Día 33",t:"Errores y tracebacks · Parte 1: fundamentos",
  intro:"Los programadores mediocres temen a los errores; los ingenieros los leen como mapas. Hoy transformas tu relación con los tracebacks: de enemigo que asusta a informante que te dice exactamente dónde mirar. Ya depuraste un 404 real conmigo — esto te va a sonar familiar.",
  intuit:{code:'print(int("12.5"))',
   q:"¿Corre o explota? Si explota, ¿con qué TIPO de error exactamente?",
-  req:["ValueError"],out:'Traceback (most recent call last):\n  File "programa.py", línea 1, in <module>\nValueError: invalid literal for int() with base 10: \'12.5\'',
+  req:["ValueError"],out:'Traceback (most recent call last):\n  File "programa.py", line 1, in <module>\nValueError: invalid literal for int() with base 10: \'12.5\'',
   e:'Explota con ValueError: int() sobre un string exige dígitos enteros puros — el punto lo descoloca. El TIPO correcto era todo lo que preguntaba: eso es leer tracebacks.'},
  mcq:[
   {q:"¿Dónde miras PRIMERO en un traceback?",o:["La primera línea, arriba","La última línea: tipo de error y mensaje","El número más grande","Da igual, es aleatorio"],a:1,e:"Última línea = QUÉ pasó. Las de arriba = DÓNDE (archivo y línea). Se lee de abajo hacia arriba."},
@@ -2585,7 +2660,7 @@ const LEVEL0=[
  theory:[
   ["El traceback es tu amigo",T('Cuando un programa explota, Python deja un informe: el <strong>traceback</strong>. Se lee <strong>de abajo hacia arriba</strong>: la última línea dice el TIPO de error y el mensaje; encima, el archivo y la línea exacta. Tus cuatro sospechosos habituales: <code>NameError</code> (variable mal escrita o no creada), <code>TypeError</code> (mezclar tipos incompatibles), <code>ValueError</code> (conversión imposible, como <code>int("hola")</code>) y <code>ZeroDivisionError</code>.')],
   ["Dos familias de errores",T('<code>SyntaxError</code> se detecta ANTES de ejecutar: Python ni siquiera arranca (paréntesis sin cerrar, dos puntos faltantes). Los errores de ejecución solo aparecen cuando esa línea corre — el programa puede funcionar 100 veces y explotar en la 101, cuando alguien escribe "hola" donde iba un número. Programar profesionalmente es anticiparlos: hoy con if, en el Nivel 1 con try/except.')],
-  ["Convención profesional: prints de diagnóstico, marcados",T('Cuando uses <code>print()</code> temporalmente para investigar un bug — la misma herramienta del Día 1, ahora con más madurez — prefija el texto con <code>"DEBUG: "</code>. Así lo distingues a simple vista de la salida real, y lo encuentras fácil para borrarlo antes de entregar el código (convención de UC Berkeley, CS61A).'),
+  ["Convención profesional: prints de diagnóstico, marcados",T('Cuando uses <code>print()</code> temporalmente para investigar un bug — la misma herramienta del Día 9, ahora con más madurez — prefija el texto con <code>"DEBUG: "</code>. Así lo distingues a simple vista de la salida real, y lo encuentras fácil para borrarlo antes de entregar el código (convención de UC Berkeley, CS61A).'),
    'x = 5\nprint("DEBUG: valor de x =", x)   # rastro, no salida real\nprint(x + 3)                       # esto sí es el resultado'],
  ],
  ex:[
@@ -2622,7 +2697,7 @@ const LEVEL0=[
      return true},
    hints:["O bien borras la línea de diagnóstico por completo, o la prefijas con \"DEBUG: \".","print(\"DEBUG: valor de x:\", x) dejaría claro que esa línea no es el resultado real."]},
  ]},
-{id:"d8b",n:"Día 16",t:"Errores y tracebacks · Parte 2: cierre integral de N0",
+{id:"d8b",n:"Día 34",t:"Errores y tracebacks · Parte 2: cierre integral de N0",
  intro:"Ayer sistematizaste la lectura de tracebacks y la convención DEBUG:. Hoy cierras todo el Nivel 0: el laboratorio integra las ocho lecciones completas (T1–T8) en un solo artefacto, y el desafío final combina dos clases de error distintas — el broche del nivel.",
  errores:["Leer el traceback de arriba hacia abajo","Ignorar el número de línea que te regala","Borrar código hasta que 'funcione' en vez de entender la causa"],
  reto:{id:"d8r",py:true,t:"Desafío final · sin pistas",
@@ -2658,8 +2733,8 @@ const LEVEL0=[
   starter:'mensaje = "hola"\nif len(mensaje) > 3\n    print(mensaje.upper())\ntotal = 10\nprint(total + valor_extra)',runs:[[]],
   hints:["El primer error impide que el programa arranque siquiera — revisa la anatomía de un error de T1: dónde, qué tipo, qué mensaje.","Cuando repares el primero, aparecerá un segundo error distinto: una referencia a algo que nunca se definió. Puedes quitar esa referencia, o definir la variable con un valor que no cambie el resultado esperado."],
   check:(o,c)=>norm(o[0])==="HOLA\n10"?true:"Esperaba:\nHOLA\n10\nObtuve:\n"+norm(o[0])}},
-/* ══════════════════ Día 16b · Testing mental: ¿cómo rompo mi programa? ══════════════════ */
-{id:"n0tst1",n:"Día 16b",t:"Testing mental: ¿cómo rompo mi programa?",
+/* ══════════════════ Día 35 · Testing mental: ¿cómo rompo mi programa? ══════════════════ */
+{id:"n0tst1",n:"Día 35",t:"Testing mental: ¿cómo rompo mi programa?",
  ing:"Las empresas que casi nunca se caen —Netflix, Amazon, OpenAI— tienen equipos enteros dedicados a UNA cosa: romper su propio software a propósito antes de que lo rompa un usuario. Se llaman QA (control de calidad), y su superpoder no es escribir código, es IMAGINAR la entrada que nadie previó: un campo vacío, una letra donde iba un número, un cero que hace estallar una división. Cuando tu JARVIS reciba una pregunta rarísima, o una API te devuelva un JSON al que le falta un dato, quien pensó en esos casos ANTES es quien no se cae. Hoy aprendes esa disciplina — la más barata de aplicar y la más cara de ignorar en toda la ingeniería.",
  intro:"Hasta ahora escribías programas imaginando que todo sale bien: el usuario teclea el número que esperabas, la división tiene sentido, el nombre no viene vacío. Pero el mundo real es hostil: la gente escribe “abc” donde pediste una edad, deja campos en blanco, pone un cero donde no debe. Antes de aprender herramientas que automatizan las pruebas (como pytest, que verás más adelante), necesitas la habilidad HUMANA que va primero: mirar tu propio programa y preguntarte “¿cómo lo rompo?”. Hoy conviertes esa pregunta en un método — un catálogo de entradas peligrosas y una forma de blindarte contra cada una.",
  intuit:{code:'edad_texto = "25"\nif edad_texto.isdigit():\n    edad = int(edad_texto)\n    print(edad + 1)\nelse:\n    print("Entrada invalida")',py:false,
@@ -2724,7 +2799,7 @@ const LEVEL0=[
   starter:'precio_texto = "200"\ndescuento_texto = "150"\n# Guarda 1: ambos deben ser digitos, si no -> "Datos invalidos"\n# Guarda 2: si el descuento pasa de 100 -> "Descuento imposible"\n# Si todo bien: precio final = precio * (100 - descuento) / 100\n',runs:[[]],
   hints:["Primero valida con .isdigit(), luego convierte, luego comprueba  if descuento > 100:","Estructura:\nif precio_texto.isdigit() and descuento_texto.isdigit():\n    precio = int(precio_texto)\n    descuento = int(descuento_texto)\n    if descuento > 100:\n        print(\"Descuento imposible\")\n    else:\n        print(precio * (100 - descuento) / 100)\nelse:\n    print(\"Datos invalidos\")\nAmbos son digitos, pero 150 > 100, asi que sale 'Descuento imposible'."],
   check:(o,c)=>{if(!/isdigit/.test(c))return"Valida ambos textos con .isdigit() (texto donde iba un numero).";if(!/>\s*100|100\s*</.test(c))return"Protege el rango: un descuento no puede pasar de 100 (descuento > 100).";return norm(o[0])==="Descuento imposible"?true:"Esperaba: Descuento imposible\nObtuve:\n"+norm(o[0])}}},
-{id:"d9",n:"Día 17",t:"Funciones básicas: tu primera receta reutilizable · Parte 1: fundamentos",
+{id:"d9",n:"Día 36",t:"Funciones básicas: tu primera receta reutilizable · Parte 1: fundamentos",
  intro:"Hasta hoy, cada programa era una receta larga, escrita de una sola vez. Hoy aprendes a escribir la receta UNA vez y usarla las veces que quieras, con ingredientes distintos cada vez — el primer paso para que un programa siga siendo comprensible cuando crece. Antes de N1, aquí empieza todo.",
  intuit:{code:'def saludar(nombre):\n    return f"Hola, {nombre}"\n\nprint(saludar("Ana"))\nprint(saludar("Luis"))',
   q:"Sin ejecutar: ¿qué imprime cada línea? ¿La función 'saludar' hace algo distinto cada vez que se llama, o siempre lo mismo?",
@@ -2767,8 +2842,13 @@ const LEVEL0=[
    starter:'def clasificar_edad(edad):\n    # tu código aquí\n    pass\n\nprint(clasificar_edad(15))\nprint(clasificar_edad(25))',runs:[[]],
    check:(o,c)=>{if(!/\bif\b/.test(c))return"Usa if/else dentro de la función para decidir qué devolver.";const exp="menor de edad\nmayor de edad";return norm(o[0])===exp?true:"Esperaba:\n"+exp+"\nObtuve:\n"+norm(o[0])},
    hints:["if edad < 18: return \"menor de edad\"\\nelse: return \"mayor de edad\""]},
+  {id:"d9e5b",py:true,t:"Ejercicio 5b · Lo que nace dentro, muere dentro (ámbito local)",
+   d:'Las variables creadas DENTRO de una función viven solo ahí: afuera no existen (pedir <code>resultado</code> fuera daría <code>NameError</code>). La ÚNICA puerta de salida es <code>return</code>. Llama a <code>calcular()</code>, guarda lo que DEVUELVE en una variable tuya e imprímela — sin tocar la función.',
+   starter:'def calcular():\n    resultado = 10\n    return resultado\n\n# resultado NO existe aqui afuera: guarda lo que DEVUELVE la funcion e imprimelo\n',runs:[[]],
+   check:(o,c)=>{if(!/=\s*calcular\s*\(\s*\)/.test(c))return"Guarda el valor devuelto: mi_variable = calcular().";return norm(o[0])==="10"?true:"Esperaba: 10\nObtuve:\n"+norm(o[0])},
+   hints:["valor = calcular() — el return ENTREGA el 10 a quien llamó.","print(resultado) afuera fallaría con NameError: la variable murió al terminar la función. Por eso existe return."]},
  ]},
-{id:"d9b",n:"Día 18",t:"Funciones básicas · Parte 2: laboratorio y desafío",
+{id:"d9b",n:"Día 37",t:"Funciones básicas · Parte 2: laboratorio y desafío",
  intro:"Ayer escribiste tus primeras funciones. Hoy combinas varios conceptos del nivel dentro de una sola función, ves cómo una función puede usar a otra, y descubres el bug más común de principiante: olvidar el return.",
  reto:{id:"d9r",py:true,t:"Laboratorio · Un reporte que combina todo el nivel",
   d:'Escribe <code>formatear_reporte(nombre, edad, activo)</code>: devuelve <code>f"{nombre en mayúsculas} tiene {edad} anios y esta {estado}"</code>, donde estado es <code>"activo"</code> si <code>activo</code> es True, o <code>"inactivo"</code> si no. Combina mayúsculas (T5), f-strings (T6) y una decisión (T7) — todo en una función.',
@@ -2796,8 +2876,8 @@ const LEVEL0=[
   starter:'# Sin código que ejecutar. Escribe tu razonamiento como comentario:\n# ...\nprint("reflexion registrada")',runs:[[]],
   hints:["Piensa en funciones que de verdad NO necesitan devolver nada (como print() mismo, o una función que solo guarda algo en un archivo) — ¿Python podría distinguir esos casos de un olvido real?"],
   check:(o,c)=>norm(o[0])==="reflexion registrada"?true:"Esperaba: reflexion registrada\nObtuve:\n"+norm(o[0])}},
-/* ══════════════════ Día 18b · Leer documentación: help(), Python Docs, PEP8 ══════════════════ */
-{id:"n0doc1",n:"Día 18b",t:"Leer documentación: help(), Python Docs y PEP8",
+/* ══════════════════ Día 38 · Leer documentación: help(), Python Docs, PEP8 ══════════════════ */
+{id:"n0doc1",n:"Día 38",t:"Leer documentación: help(), Python Docs y PEP8",
  ing:"Ningún ingeniero de Netflix, OpenAI o Amazon memoriza los miles de funciones de Python — y tú tampoco deberías. Lo que separa a un profesional es que sabe BUSCAR: teclea help(len) o dir(str) en el REPL, consulta la documentación oficial en docs.python.org, y escribe su propio código tan limpio (siguiendo PEP8) y tan documentado (con docstrings) que cualquiera pueda leerlo. Tu futuro JARVIS tendrá cientos de funciones; el día que no recuerdes cómo se llamaba una, no vas a adivinar: vas a preguntar.",
  intro:"Llevas casi tres semanas aprendiendo Python y quizá sientas que ‘te falta memorizar mucho’. Buena noticia: los mejores programadores del mundo NO memorizan. Lo que dominan es una habilidad más poderosa — saber encontrar la respuesta en segundos. Hoy aprendes las tres herramientas de esa habilidad: help() y dir() para interrogar a Python desde el REPL, la documentación oficial para lo que no cabe en tu cabeza, y PEP8 + docstrings para escribir código que otros (y tú mismo) puedan leer y consultar sin sufrir. Deja de memorizar; aprende a buscar.",
  intuit:{code:'def doblar(n):\n    """Devuelve el doble de n."""\n    return n * 2\n\nprint(doblar.__doc__)',py:false,
@@ -2866,7 +2946,7 @@ const LEVEL0=[
   starter:"# 1) define celsius_a_fahrenheit(c) con su docstring y la formula c * 9 / 5 + 32\n# 2) imprime la conversion de 100 grados\n# 3) imprime la ayuda de tu funcion con  celsius_a_fahrenheit.__doc__\n\n",runs:[[]],
   hints:["def celsius_a_fahrenheit(c):\n    \"\"\"Convierte grados Celsius a Fahrenheit.\"\"\"\n    return c * 9 / 5 + 32\nprint(celsius_a_fahrenheit(100))\nprint(celsius_a_fahrenheit.__doc__)","100 °C → 100 × 9 / 5 + 32 = 212.0. La segunda línea es tu docstring, que .__doc__ (y help) devuelven."],
   check:(o,c)=>{if(!/def\s+celsius_a_fahrenheit/.test(c))return "Define la función con: def celsius_a_fahrenheit(c):";if(!/("""|''')/.test(c))return "Añade un docstring entre triple comillas como primera línea de la función.";if(!/__doc__/.test(c))return "Imprime también la ayuda con celsius_a_fahrenheit.__doc__.";return norm(o[0])==="212.0\nConvierte grados Celsius a Fahrenheit."?true:"Esperaba:\n212.0\nConvierte grados Celsius a Fahrenheit.\nObtuve:\n"+norm(o[0])}}},
-{id:"d10",n:"Día 19",t:"Lectura y trazado de código ajeno · Parte 1: fundamentos",
+{id:"d10",n:"Día 39",t:"Lectura y trazado de código ajeno · Parte 1: fundamentos",
  intro:"Hasta ahora leíste tu propio código, escrito con tus propios nombres, a tu propio ritmo. Hoy lees código de 'otro autor' — nombres distintos, estilo distinto — y aprendes la habilidad que vas a usar toda tu carrera: entender lo que alguien más escribió, sin ejecutar nada primero.",
  intuit:{code:'x = 4\ny = x * 3\nz = y - 5\nw = z + x\nprint(w)',
   q:"Sin ejecutar: traza cada variable en orden (x, y, z, w) y calcula el valor final de w.",
@@ -2909,7 +2989,7 @@ const LEVEL0=[
    check:(o,c)=>{if(/len\s*\(\s*lista\s*\)\s*-\s*1/.test(c))return"El bug sigue ahí: dividir entre len(lista)-1 no es el promedio real.";return norm(o[0])==="20.0"?true:"Esperaba: 20.0\nObtuve:\n"+norm(o[0])},
    hints:["El promedio real es total dividido entre la CANTIDAD de elementos, no la cantidad menos uno.","return total / len(lista)"]},
  ]},
-{id:"d10b",n:"Día 20",t:"Lectura y trazado de código ajeno · Parte 2: laboratorio y desafío",
+{id:"d10b",n:"Día 40",t:"Lectura y trazado de código ajeno · Parte 2: laboratorio y desafío",
  intro:"Ayer trazaste variable por variable. Hoy lees un código más largo de una sola vez, y cierras con la trampa de lectura más común: una variable que se reasigna dentro de un bucle, con un nombre que invita a leerla mal.",
  reto:{id:"d10r",py:true,t:"Laboratorio · Filtrar leyendo el código completo primero",
   d:'Traza <code>coll</code> (la colección de otro autor), <code>itm</code> (su variable de bucle) y <code>res</code> (el resultado), SIN ejecutar primero. Agrega UNA línea que imprima <code>res</code>.',
@@ -2936,8 +3016,8 @@ const LEVEL0=[
   starter:'# Sin código que ejecutar. Escribe tu reflexión como comentario:\n# ...\nprint("reflexion de lectura de codigo registrada")',runs:[[]],
   hints:["Piensa en el propio código de la Calculadora que construirás a continuación — vas a tener que releer y depurar TU PROPIO código, con la misma paciencia que hoy le diste al de 'otro autor'."],
   check:(o,c)=>norm(o[0])==="reflexion de lectura de codigo registrada"?true:"Esperaba: reflexion de lectura de codigo registrada\nObtuve:\n"+norm(o[0])}},
-/* ══════════════════ Día 20b · Taller de mini-proyectos I ══════════════════ */
-{id:"n0mp11",n:"Día 20b",t:"Taller de mini-proyectos I · construye 4 programas de verdad",
+/* ══════════════════ Día 41 · Taller de mini-proyectos I ══════════════════ */
+{id:"n0mp11",n:"Día 41",t:"Taller de mini-proyectos I · construye 4 programas de verdad",
  ing:"Cada repositorio que ves en GitHub, cada app de una startup, y tu futuro JARVIS, empezaron igual: alguien juntó variables, bucles, condiciones y funciones en un PROGRAMA que hace algo útil de principio a fin. Hasta ahora practicaste cada pieza por separado; hoy las ensamblas. Vas a construir cuatro mini-proyectos completos —un conversor con menú, un analizador de texto, un validador de contraseñas y un juego de adivinar— del tipo exacto que un reclutador te pediría en tu primera entrevista de Python. No son ejercicios de una línea: son programas que arrancan, piden datos, deciden, repiten y responden.",
  intro:"Bienvenido a tu primer taller de proyectos. Aquí no aprendes un concepto nuevo: JUNTAS todo lo que ya sabes (variables, tipos, I/O, if/while/for, listas, diccionarios, funciones) para construir programas reales de principio a fin. La diferencia entre saber la sintaxis y saber programar está justo aquí: en tomar un problema descrito con palabras y convertirlo en un programa que funciona con cualquier entrada. Cada mini-proyecto tiene un contrato claro (qué debe imprimir, ante qué entradas) y un corrector que ejecuta tu programa con secuencias de datos reales, como haría un usuario tecleando. Diseña con E→P→S, descompón en piezas, y prueba cada pieza antes de seguir.",
  intuit:{code:'palabras = ["sol", "mar", "sol", "sol"]\nconteo = {}\nfor p in palabras:\n    if p in conteo:\n        conteo[p] = conteo[p] + 1\n    else:\n        conteo[p] = 1\nprint(conteo["sol"])',py:false,
@@ -3068,8 +3148,8 @@ const LEVEL0=[
     if(!t1.includes("Perdiste. El número era 7."))return"Al agotar los 3 intentos sin acertar → Perdiste. El número era 7.";
     if(!t2.includes("¡Ganaste en 2 intentos!"))return"En la 2.ª corrida (5 y 7) se acierta al 2.º intento → ¡Ganaste en 2 intentos!";
     return true}}},
-/* ══════════════════ Día 20c · Taller de mini-proyectos II ══════════════════ */
-{id:"n0mp21",n:"Día 20c",t:"Taller de mini-proyectos II · datos reales con diccionarios y listas",
+/* ══════════════════ Día 42 · Taller de mini-proyectos II ══════════════════ */
+{id:"n0mp21",n:"Día 42",t:"Taller de mini-proyectos II · datos reales con diccionarios y listas",
  ing:"Abre el carrito de Amazon, tus contactos del teléfono, la lista de reproducción de Spotify o el tablero de tareas de Notion: por dentro NADA de eso es magia. Es exactamente lo que construirás hoy — una lista de diccionarios. En GitHub, el 90% de las apps de una startup en su primer día son cuatro pantallas: un listado, un formulario para agregar, una búsqueda y un total. Y tu futuro JARVIS guardará cada fragmento de su RAG como un diccionario {texto, fuente, vector} dentro de una lista. Hoy dejas de resolver ejercicios sueltos y construyes cuatro mini-apps que se parecen, por dentro, a software real.",
  intro:"En el Taller I combinaste bucles y listas. Hoy subes un escalón: usas las estructuras nuevas —diccionarios y listas de diccionarios— para construir cuatro mini-proyectos completos, con menú en bucle y varias entradas, tal como se comportan los programas de verdad. Una agenda de contactos, un carrito de compras, un panel de estadísticas de notas y un gestor de tareas. No hay concepto nuevo: hay INTEGRACIÓN. El objetivo es que descubras que ‘una app’ no es más que datos bien organizados + un bucle que los agrega, busca, filtra y resume.",
  intuit:{code:'carrito = [\n    {"producto": "pan", "precio": 3, "cantidad": 2},\n    {"producto": "leche", "precio": 4, "cantidad": 1},\n]\ntotal = 0\nfor item in carrito:\n    total = total + item["precio"] * item["cantidad"]\nprint(total)',py:false,
@@ -3206,8 +3286,8 @@ const LEVEL0=[
     if(!t.includes("Subtotal: 12.0"))return"El subtotal ganador es 12.0. Esperaba: Subtotal: 12.0";
     return true},
   hints:["Primero llena el carrito con un while ... input ... hasta \"fin\", igual que en el Mini-proyecto 2.","Inicializa el ‘mejor’ con el primer item: mejor = carrito[0] y mejor_subtotal = carrito[0][\"precio\"] * carrito[0][\"cantidad\"].","Dentro del for, calcula subtotal = item[\"precio\"] * item[\"cantidad\"]; si subtotal > mejor_subtotal, actualiza mejor y mejor_subtotal. Es el mismo patrón que max(), pero sobre un campo calculado."]}},
-/* ══════════════════ Día 20d · Proyecto evolutivo: un programa que CRECE ══════════════════ */
-{id:"n0evo1",n:"Día 20d",t:"Proyecto evolutivo: un programa que CRECE",
+/* ══════════════════ Día 43 · Proyecto evolutivo: un programa que CRECE ══════════════════ */
+{id:"n0evo1",n:"Día 43",t:"Proyecto evolutivo: un programa que CRECE",
  ing:"Ninguna app que usas nació terminada. El Instagram de hoy fue, en 2010, un prototipo tosco que solo subía fotos con filtro; GitHub guarda de cada proyecto serio una fila de etiquetas —v1.0.0, v1.1.0, v2.0.0— que son fotos de un mismo programa madurando versión a versión. Tu futuro JARVIS también: primero será un script que responde una pregunta a lo bruto, y crecerá hasta un asistente con memoria y menús. La habilidad que separa a un ingeniero de un principiante no es escribir la versión final de un tirón: es saber arrancar con una v1 mínima que FUNCIONE y hacerla crecer sin romperla. Hoy vives ese proceso: tomas UN programa y lo ves evolucionar en cinco versiones, cada una partiendo de la anterior.",
  intro:"Este día es distinto a todos los anteriores. No aprendes un concepto nuevo: aprendes cómo se CONSTRUYE software de verdad — no de un solo golpe perfecto, sino por versiones, cada una un peldaño sobre la anterior. Vas a tomar un mismo proyecto (un gestor de cuenta bancaria) y lo vas a hacer madurar cinco veces: de un guion lineal de dos líneas hasta un programa con menú, validación e historial. Cada versión SIGUE FUNCIONANDO y añade valor. Al terminar, no habrás escrito cinco programas: habrás visto UN programa crecer — y esa es la película que se repetirá en cada proyecto de tu carrera.",
  intuit:{code:'saldo = 100\nsaldo = saldo + 50\nsaldo = saldo - 30\nprint(saldo)',py:false,
@@ -3270,8 +3350,8 @@ const LEVEL0=[
   starter:'def depositar(saldo, monto):\n    return saldo + monto\n\ndef retirar(saldo, monto):\n    if monto > saldo:\n        return saldo          # validacion: retiro rechazado\n    return saldo - monto\n\n# Mismo NUCLEO (depositar/retirar)... pero otra INTERFAZ:\n# ya no hay menu ni input, sino una lista de ordenes que se procesa sola.\nsaldo = 100\nordenes = [("dep", 50), ("ret", 30), ("dep", 100), ("ret", 500)]\nfor tipo, monto in ordenes:\n    if tipo == "dep":\n        saldo = depositar(saldo, monto)\n    else:\n        saldo = retirar(saldo, monto)\nprint("Saldo:", saldo)',runs:[[]],
   hints:["Sigue las órdenes en orden: 100 +50 = 150, −30 = 120, +100 = 220, y el retiro de 500 se rechaza (500 > 220).","Saldo final: 220. Las funciones depositar/retirar son EXACTAMENTE las de antes; solo cambió cómo se las alimenta (una lista en vez de un menú). Ese es el premio de tener un núcleo bien hecho: se reusa bajo cualquier interfaz."],
   check:(o,c)=>{if(/\b220\b/.test(c))return"No escribas 220 a mano: deja que el bucle procese las órdenes.";if(!/for\b/.test(c))return"Recorre la lista de órdenes con un for.";return norm(o[0]).includes("Saldo: 220")?true:"Esperaba un saldo final de 220 (100 +50 −30 +100, con el retiro de 500 rechazado).\nObtuve:\n"+norm(o[0])}}},
-/* ══════════════════ Día 20e · Documentar tu proyecto: el README ══════════════════ */
-{id:"n0rme1",n:"Día 20e",t:"Documentar tu proyecto: el README",
+/* ══════════════════ Día 44 · Documentar tu proyecto: el README ══════════════════ */
+{id:"n0rme1",n:"Día 44",t:"Documentar tu proyecto: el README",
  ing:"Abres un proyecto en GitHub y lo PRIMERO que aparece —antes que una sola línea de código— es un texto que te dice qué es, para qué sirve y cómo usarlo: el README. Es la portada de todo proyecto profesional del mundo. Sin él, hasta el código más brillante es una caja negra que nadie sabe encender. Tu futuro JARVIS, tu SaaS, el repo que subas para tu primer trabajo: todos se juzgan, primero, por su README. Es la forma en que tu yo-del-futuro y tus compañeros entienden tu código sin tener que leerlo entero.",
  intro:"Ya sabes escribir programas; hoy aprendes a DOCUMENTARLOS para que otros —y tú mismo dentro de seis meses— los entiendan. Conocerás las tres capas de documentación de todo proyecto serio: los comentarios (para quien lee una línea del código), los docstrings (para quien usa una función) y el README (para quien usa el proyecto entero). Y aprenderás las tres secciones que NINGÚN README puede omitir: qué HACE, cómo se EJECUTA y un EJEMPLO de uso. Documentar no es burocracia: es la diferencia entre un proyecto que otros pueden usar y uno que muere contigo.",
  intuit:{code:'def saludar(nombre):\n    """Devuelve un saludo para el nombre dado."""\n    return "Hola, " + nombre\n\nprint(saludar.__doc__)',py:false,
@@ -3330,7 +3410,7 @@ const LEVEL0=[
   starter:'def descuento(precio):\n    """Aplica 25% de descuento a un precio.\nEjemplo: descuento(200) -> 150.0"""\n    return precio * 0.75\n\n# tu-yo-del-futuro lee el "README" de la funcion, sin abrir su codigo:\nprint(descuento.__doc__)',runs:[[]],
   hints:['El docstring ocupa dos líneas; print(.__doc__) las muestra TAL CUAL, con su salto de línea.','Imprime exactamente:\nAplica 25% de descuento a un precio.\nEjemplo: descuento(200) -> 150.0\nEse texto es la documentación viva de la función: tu README en miniatura.'],
   check:(o,c)=>{const s=norm(o[0]);return s==="Aplica 25% de descuento a un precio.\nEjemplo: descuento(200) -> 150.0"?true:"Esperaba:\nAplica 25% de descuento a un precio.\nEjemplo: descuento(200) -> 150.0\nObtuve:\n"+s}}},
-{id:"d9proyecto",n:"Días 21–22",t:"PROYECTO · Calculadora profesional",project:true,
+{id:"d9proyecto",n:"Días 45–46",t:"PROYECTO · Calculadora profesional",project:true,
  intro:"Fases 7, 8 y 9 en una sola misión: CONSTRUYES (proyecto), lo escribes como profesional (nombres, estructura, robustez) y lo OPTIMIZAS tras el veredicto del corrector. Aquí se junta todo el nivel. Después del corrector viene mi code review en el chat — y ahí seré más duro que la máquina.",
  theory:[
   ["Especificación (contrato estricto)",T('Construye una calculadora de consola con menú en bucle. El corrector ejecutará tu programa con secuencias de entradas reales y verificará cada salida. Contrato:<ul class="tight small"><li>Menú con opciones <strong>1</strong> suma · <strong>2</strong> resta · <strong>3</strong> multiplicación · <strong>4</strong> división · <strong>5</strong> potencia · <strong>6</strong> resto · <strong>7</strong> salir.</li><li>Tras elegir operación, pide dos números (léelos con <code>float()</code>).</li><li>Muestra el resultado EXACTAMENTE como <code>Resultado: X</code> con 2 decimales (f-string con <code>:.2f</code>). Ej.: <code>Resultado: 12.00</code></li><li>División entre cero → imprime una línea que contenga <code>no se puede dividir entre cero</code> (sin explotar) y vuelve al menú.</li><li>Opción no válida → imprime una línea que contenga <code>Opción inválida</code> y vuelve al menú.</li><li>Opción 7 → imprime una línea que contenga <code>Hasta luego</code> y termina.</li><li>Nombres de variables profesionales: nada de <code>a</code>, <code>b</code>, <code>x</code>.</li></ul>Cuando lo apruebes aquí, llévalo al chat con tu tutor para el <strong>code review y la defensa oral</strong> — el corrector mide el contrato; el tutor mide tu comprensión.')],
@@ -3358,8 +3438,8 @@ const LEVEL0=[
      "Lee los dos números DESPUÉS de validar la opción (si la opción es inválida o es salir, no pidas números).",
      "División: if numero_2 == 0: aviso. else: f\"Resultado: {numero_1 / numero_2:.2f}\""]},
  ]},
-/* ══════════════════ Día 22b · Proyecto libre: elige y construye ══════════════════ */
-{id:"n0lib1",n:"Día 22b",t:"Proyecto libre: elige y construye",
+/* ══════════════════ Día 47 · Proyecto libre: elige y construye ══════════════════ */
+{id:"n0lib1",n:"Día 47",t:"Proyecto libre: elige y construye",
  ing:"Todo gran software empezó siendo pequeño. El primer commit de un proyecto en GitHub suele ser un archivo de 20 líneas que apenas funciona. El MVP (producto mínimo viable) de una startup es una versión recortada que hace UNA cosa bien y nada más. Tu futuro JARVIS no nacerá completo: nacerá como un script diminuto que lee una pregunta y responde algo. Hoy haces lo mismo que hacen los ingenieros de verdad: eliges un problema pequeño, lo diseñas, y lo construyes de principio a fin — con la disciplina de calidad que separa un juguete de un proyecto que da orgullo enseñar.",
  intro:"Hasta ahora seguiste enunciados que otros escribieron. Hoy el enunciado lo eliges TÚ. Esa libertad asusta un poco — y por eso este día no te suelta la mano: te da cinco ideas para arrancar, una rúbrica para autoevaluarte, y un checklist de calidad que repasarás antes de dar por terminado tu proyecto. La meta no es hacer algo enorme: es tomar algo pequeño, terminarlo de verdad, y que quede LIMPIO. Autonomía, pero con estructura. Así se construye cualquier cosa seria en software.",
  intuit:{code:'def propina(cuenta, porcentaje):\n    return cuenta * porcentaje / 100\n\ntotal = 200 + propina(200, 10)\nprint(total)',py:false,
@@ -3441,7 +3521,7 @@ const LEVEL0=[
   hints:["Define ambas funciones con return: def restar(a, b): return a - b","Dentro del bucle, tras descartar la opción 3: a = int(input(...)); b = int(input(...)); if opcion == \"1\": print(\"Resultado:\", sumar(a, b)). Con 8 y 2, la suma es 10."]},
  retoFinal:{id:"n0lib1x",py:false,t:"Desafío final · inédito — el plan de TU proyecto (diseña antes de construir)",
   d:'Sin código que ejecutar: hoy diseñas. Elige tu proyecto (una de las cinco ideas o el tuyo propio) y escribe su plan en al menos 5 líneas, usando todo lo del Bloque 0 y del checklist de hoy:<br><br><strong>1.</strong> Nombre de tu proyecto y, en una frase, QUÉ hace (tu README de una línea).<br><strong>2.</strong> Su E→P→S: ¿qué datos ENTRAN (del usuario)?, ¿qué PROCESO harás con ellos?, ¿qué debe SALIR?<br><strong>3.</strong> La descomposición: ¿en qué 2 o 4 piezas (funciones) lo partirás?<br><strong>4.</strong> Tu MVP: ¿cuál es la versión más pequeña que ya funcionaría de principio a fin?<br><strong>5.</strong> Calidad: ¿qué entrada del usuario vas a VALIDAR, y qué nombres claros (snake_case) usarás para tus variables y funciones?<br><br>Guarda este plan: es el diseño que traducirás a Python. Un proyecto bien planeado en cinco líneas ya está medio construido — el resto es escribir lo que aquí decidiste.'}},
-{id:"d_repaso",n:"Día 23",t:"Repaso general integrador",
+{id:"d_repaso",n:"Día 48",t:"Repaso general integrador",
  intro:"Antes del examen, un repaso real: tres ejercicios que combinan deliberadamente conceptos de varias lecciones distintas — igual que exigirán los proyectos reales de aquí en adelante. Usa también la pestaña Repaso (flashcards) y revisa tus Puntos débiles en Inicio antes de continuar.",
  theory:[],
  ex:[
@@ -3471,10 +3551,25 @@ const LEVEL0=[
    check:(o,c)=>{if(/\.Upper\s*\(/.test(c))return"Los métodos de Python son sensibles a mayúsculas — revisa el nombre exacto del método.";
      return norm(o[0])==="HOLA MUNDO"?true:"Debe imprimir: HOLA MUNDO"},
    hints:["El error dice que 'str' no tiene un atributo 'Upper' — pero sí tiene uno parecido.","Los métodos se escriben en minúsculas: .upper(), no .Upper()."]},
+  {id:"drp4",py:true,t:"Repaso 4 · Funciones que devuelven",
+   d:'Escribe <code>aplicar_descuento(precio, pct)</code> que DEVUELVA el precio rebajado. Úsala para sumar dos compras — 100 con 10% y 50 con 20% — e imprime EXACTO <code>Total: 130.0</code> (calculado, no escrito).',
+   starter:'# def aplicar_descuento(precio, pct): ...\n',runs:[[]],
+   check:(o,c)=>{if(!/def\s+aplicar_descuento/.test(c))return"Define aplicar_descuento(precio, pct).";if(!/return/.test(c))return"La función debe DEVOLVER (return), no imprimir.";return norm(o[0])==="Total: 130.0"?true:"Esperaba: Total: 130.0\nObtuve:\n"+norm(o[0])},
+   hints:["return precio * (100 - pct) / 100","100 con 10% → 90.0; 50 con 20% → 40.0; suma 130.0."]},
+  {id:"drp5",py:true,t:"Repaso 5 · Filtrar y ordenar una lista",
+   d:'Con <code>notas = [12, 8, 15, 6, 18, 10]</code>: junta las APROBADAS (≥ 11) con el patrón for+append, y muestra el ranking de mayor a menor. Salida exacta: <code>[18, 15, 12]</code>.',
+   starter:'notas = [12, 8, 15, 6, 18, 10]\naprobadas = []\n# for + append para filtrar; sorted(..., reverse=True) para el ranking\n',runs:[[]],
+   check:(o,c)=>{if(!/append/.test(c))return"Filtra con el patrón for + append.";if(!/sorted|\.sort/.test(c))return"Ordena con sorted(..., reverse=True).";return norm(o[0])==="[18, 15, 12]"?true:"Esperaba: [18, 15, 12]\nObtuve:\n"+norm(o[0])},
+   hints:["for n in notas: / if n >= 11: aprobadas.append(n)","print(sorted(aprobadas, reverse=True))"]},
+  {id:"drp6",py:true,t:"Repaso 6 · El contador de frecuencias",
+   d:'El patrón más útil de los diccionarios, una vez más antes del examen: cuenta cuántas veces aparece cada palabra en <code>"sol mar sol"</code> usando <code>split()</code> + <code>.get(palabra, 0) + 1</code>, e imprime el diccionario. Salida exacta: <code>{\'sol\': 2, \'mar\': 1}</code>.',
+   starter:'frase = "sol mar sol"\nconteo = {}\n# for sobre frase.split(): conteo[palabra] = conteo.get(palabra, 0) + 1\n\nprint(conteo)',runs:[[]],
+   check:(o,c)=>{if(!/\.get\s*\(/.test(c))return"Usa el patrón contador: conteo.get(palabra, 0) + 1.";if(!/split/.test(c))return"Separa la frase en palabras con split().";return norm(o[0])==="{'sol': 2, 'mar': 1}"?true:"Esperaba: {'sol': 2, 'mar': 1}\nObtuve:\n"+norm(o[0])},
+   hints:["for palabra in frase.split():","conteo[palabra] = conteo.get(palabra, 0) + 1 — si no existe arranca en 0."]},
  ]},
-{id:"d10examen",n:"Día 24",t:"Evaluación final del nivel",eval:true,
+{id:"d10examen",n:"Día 49",t:"Evaluación final del nivel",eval:true,
  intro:"Fase 13: demostrar. Primero contra el corrector (teórico + práctico, sin pistas) y después la defensa oral conmigo en el chat — sin copiar, solo razonar. Si algo sale mal, no es fracaso: es el mapa de tu repaso.",
- theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen de nivel cronometrado en la pestaña <strong>Examen</strong> (se muestrean 20 preguntas de un banco de 26, mínimo 17/20); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
+ theory:[["Cómo se aprueba el Nivel 0",T('Tres puertas, en orden: <strong>1)</strong> el examen de nivel cronometrado en la pestaña <strong>Examen</strong> (se muestrean 20 preguntas de un banco de 32, mínimo 17/20); <strong>2)</strong> el examen práctico de ahí mismo (3 programas contra el corrector); <strong>3)</strong> la defensa oral con tu tutor en el chat: le llevas tu calculadora y te preguntará por qué cada línea está donde está. Aprobadas las tres, el tutor desbloquea el Nivel 1 en esta app.')]],
  ex:[]},
 ];
 /* ============================================================
@@ -32089,7 +32184,7 @@ const EXTRA={
    "ref": "Por qué los floats son inexactos (0.1+0.2) — se profundiza con binario en N3",
    "mm": "Un tipo es un CONTRATO: define qué operaciones son válidas y qué significan.",
    "ind": "Validación de entrada = la mitad de la seguridad de un backend.",
-   "jar": "El pipeline str→tokens→floats→str de JARVIS es tu Día 3 a escala industrial.",
+   "jar": "El pipeline str→tokens→floats→str de JARVIS es exactamente la lección de hoy a escala industrial.",
    "rec": "docs Tutorial 3.1.1-3.1.2 · CS50P Lecture 1",
    "ent": "«¿Por qué 0.1+0.2 != 0.3 y cómo comparas floats correctamente?» — Amazon.",
    "reto": "En la Terminal: 3 conversiones que funcionan y 2 que explotan — y predice cada resultado ANTES de ejecutar."
@@ -34000,7 +34095,7 @@ const EXTRA={
    "Cuando un doble bucle no da el resultado esperado, ¿qué revisas primero: el rango del externo, el del interno, o qué línea quedó dentro de cada bloque?",
    "¿Con qué analogía cotidiana (un reloj con sus manecillas, un edificio con pisos y habitaciones, un calendario con meses y días) explicarías que el interno 'gira más rápido' que el externo?"
   ],
-  "viz": "<div style=\"font-family:'Segoe UI',system-ui,sans-serif;background:#131b2b;color:var(--muted);padding:18px 20px;border-radius:12px;border:1px solid #23304a;line-height:1.5;max-width:620px;\">\n  <div style=\"font-size:15px;color:var(--gold);font-weight:700;margin-bottom:4px;\">Un bucle anidado recorre una cuadrícula i × j</div>\n  <div style=\"font-size:12.5px;color:var(--muted);margin-bottom:16px;\">Por CADA valor de <b style=\"color:var(--gold)\">i</b> (fila), la variable <b style=\"color:var(--cyan)\">j</b> (columna) da TODAS sus vueltas. El número dentro de cada celda es el orden en que se visita.</div>\n\n  <div style=\"display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;\">\n    <div style=\"font-family:'Consolas','Courier New',monospace;font-size:13px;background:#0e1626;padding:14px 16px;border-radius:8px;border:1px solid #23304a;white-space:pre;color:var(--muted);\"><span style=\"color:var(--gold)\">for i in range(3):</span>     <span style=\"color:#5b6b85\"># 3 filas</span>\n    <span style=\"color:var(--cyan)\">for j in range(4):</span> <span style=\"color:#5b6b85\"># 4 columnas</span>\n        <span style=\"color:var(--good)\">visita(i, j)</span></div>\n\n    <div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div></div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=0</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=1</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=2</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=3</div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=0</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">1</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">2</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">3</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">4</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,3)</span></div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=1</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">5</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">6</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">7</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">8</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,3)</span></div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=2</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">9</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">10</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">11</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">12</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,3)</span></div>\n      </div>\n    </div>\n  </div>\n\n  <div style=\"margin-top:16px;font-size:12px;color:var(--muted);border-top:1px solid #23304a;padding-top:12px;\">\n    Fíjate: al llegar a <b style=\"color:var(--cyan)\">j=3</b>, <b style=\"color:var(--cyan)\">j</b> vuelve a <b style=\"color:var(--cyan)\">0</b> y <b style=\"color:var(--gold)\">i</b> avanza una fila (paso 4 &rarr; 5). Total = <b style=\"color:var(--good)\">3 &times; 4 = 12</b> visitas, no 3+4=7. Los bucles anidados <b style=\"color:var(--gold)\">multiplican</b>: 1000 &times; 1000 filas serían un millón de pasos (lo medirás en el Día 14k).\n  </div>\n</div>"
+  "viz": "<div style=\"font-family:'Segoe UI',system-ui,sans-serif;background:#131b2b;color:var(--muted);padding:18px 20px;border-radius:12px;border:1px solid #23304a;line-height:1.5;max-width:620px;\">\n  <div style=\"font-size:15px;color:var(--gold);font-weight:700;margin-bottom:4px;\">Un bucle anidado recorre una cuadrícula i × j</div>\n  <div style=\"font-size:12.5px;color:var(--muted);margin-bottom:16px;\">Por CADA valor de <b style=\"color:var(--gold)\">i</b> (fila), la variable <b style=\"color:var(--cyan)\">j</b> (columna) da TODAS sus vueltas. El número dentro de cada celda es el orden en que se visita.</div>\n\n  <div style=\"display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;\">\n    <div style=\"font-family:'Consolas','Courier New',monospace;font-size:13px;background:#0e1626;padding:14px 16px;border-radius:8px;border:1px solid #23304a;white-space:pre;color:var(--muted);\"><span style=\"color:var(--gold)\">for i in range(3):</span>     <span style=\"color:#5b6b85\"># 3 filas</span>\n    <span style=\"color:var(--cyan)\">for j in range(4):</span> <span style=\"color:#5b6b85\"># 4 columnas</span>\n        <span style=\"color:var(--good)\">visita(i, j)</span></div>\n\n    <div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div></div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=0</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=1</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=2</div>\n        <div style=\"text-align:center;color:var(--cyan);font-size:11px;font-weight:700;\">j=3</div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=0</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">1</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">2</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">3</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">4</span><span style=\"color:#5b6b85;font-size:9.5px;\">(0,3)</span></div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;margin-bottom:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=1</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">5</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">6</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">7</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">8</span><span style=\"color:#5b6b85;font-size:9.5px;\">(1,3)</span></div>\n      </div>\n      <div style=\"display:grid;grid-template-columns:44px repeat(4,50px);gap:6px;\">\n        <div style=\"display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:12px;\">i=2</div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">9</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,0)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">10</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,1)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">11</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,2)</span></div>\n        <div style=\"height:50px;background:#0e1626;border:1px solid #23304a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;\"><span style=\"color:var(--good);font-size:17px;font-weight:700;\">12</span><span style=\"color:#5b6b85;font-size:9.5px;\">(2,3)</span></div>\n      </div>\n    </div>\n  </div>\n\n  <div style=\"margin-top:16px;font-size:12px;color:var(--muted);border-top:1px solid #23304a;padding-top:12px;\">\n    Fíjate: al llegar a <b style=\"color:var(--cyan)\">j=3</b>, <b style=\"color:var(--cyan)\">j</b> vuelve a <b style=\"color:var(--cyan)\">0</b> y <b style=\"color:var(--gold)\">i</b> avanza una fila (paso 4 &rarr; 5). Total = <b style=\"color:var(--good)\">3 &times; 4 = 12</b> visitas, no 3+4=7. Los bucles anidados <b style=\"color:var(--gold)\">multiplican</b>: 1000 &times; 1000 filas serían un millón de pasos (lo medirás en el Día 32).\n  </div>\n</div>"
  },
  "n0cx1": {
   "comp": [
@@ -35046,12 +35141,12 @@ function renderExamen(){
   const ready=projectDone();
   if(!ready){
     box.innerHTML='<div class="card"><p class="eyebrow">Evaluación final · nivel 0</p><h2>Examen bloqueado</h2>'+
-     '<p class="small muted" style="margin:6px 0 0">El examen se abre cuando tu <strong>proyecto Calculadora</strong> pase la batería de pruebas (Clases → Días 8–9). Sin proyecto no hay examen: en esta academia primero se construye, después se certifica.</p>'+
+     '<p class="small muted" style="margin:6px 0 0">El examen se abre cuando tu <strong>proyecto Calculadora</strong> pase la batería de pruebas (Clases → Días 45–46). Sin proyecto no hay examen: en esta academia primero se construye, después se certifica.</p>'+
      '<button class="btn" style="margin-top:12px" onclick="go(\'clases\')">Ir a las clases</button></div>';
     return;
   }
   let h='<div class="card"><p class="eyebrow">Evaluación final · nivel 0</p><h2>Parte 1 — Examen teórico</h2>'+
-   '<p class="small muted" style="margin:4px 0 0">15 preguntas · mínimo 85% (regla 8.5/10) · sin usar la Terminal (se honesto: el único estafado serías tú).</p>'+
+   '<p class="small muted" style="margin:4px 0 0">20 preguntas · mínimo 17/20 · sin usar la Terminal (se honesto: el único estafado serías tú).</p>'+
    '<p style="margin:10px 0 0" id="quizBest"></p></div>';
   h+='<div class="card">'+QUIZ.map((q,i)=>'<div class="q" id="q'+i+'"><p class="enun"><span class="num" style="color:var(--blue)">'+String(i+1).padStart(2,"0")+"</span> · "+q.q+"</p>"+
     q.o.map((o,j)=>'<label><input type="radio" name="q'+i+'" value="'+j+'"><span>'+o+"</span></label>").join("")+
@@ -35449,7 +35544,7 @@ function insignias(){
   if(anyEx)b.push(["⚡ Primera sangre","primer ejercicio aprobado"]);
   if(Object.values(S.ph||{}).some(p=>p.int))b.push(["🔮 Vidente","primera predicción correcta"]);
   if(LEVEL0.some(d=>!d.eval&&dayDone(d)))b.push(["🏗️ Un día al 80%","primer tema con fases 1–6"]);
-  if(dayDone(LEVEL0.find(d=>d.id==="d8")||{ex:[]}))b.push(["🐛 Cazador de bugs","Día 8 dominado"]);
+  if(dayDone(LEVEL0.find(d=>d.id==="d8")||{ex:[]}))b.push(["🐛 Cazador de bugs","Día 33 dominado"]);
   if(projectDone())b.push(["🧮 Constructor","proyecto Calculadora aprobado"]);
   if(S.quiz.best!==null&&S.quiz.best>=93)b.push(["🧠 Mente de acero","examen teórico ≥ 93%"]);
   if(rachaCalc()>=7)b.push(["🔥 Semana de fuego","racha de 7 días"]);

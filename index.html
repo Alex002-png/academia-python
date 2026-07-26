@@ -972,6 +972,44 @@ def __academia_run(code, stdin_list, max_steps=300000):
     finally:
         sys.settrace(None)
         sys.stdout = _old_stdout
+
+# ---- REPL real: mismo interprete, memoria persistente entre lineas ----
+import ast as _ast
+__REPL_NS = {"__name__": "__main__"}
+def __academia_repl(code, stdin_list, reset=False):
+    global __REPL_NS
+    if reset:
+        __REPL_NS = {"__name__": "__main__"}
+        return (True, "", "")
+    _out = io.StringIO()
+    _idx = [0]
+    def _input(prompt=""):
+        _out.write(str(prompt))
+        if _idx[0] >= len(stdin_list):
+            raise EOFError("__NEED_INPUT__")
+        v = stdin_list[_idx[0]]
+        _idx[0] += 1
+        _out.write(str(v) + "\\n")
+        return v
+    __REPL_NS["input"] = _input
+    _old = sys.stdout
+    sys.stdout = _out
+    try:
+        try:
+            _tree = _ast.parse(code, mode="eval")
+            _val = eval(compile(_tree, "<consola>", "eval"), __REPL_NS)
+            if _val is not None:
+                print(repr(_val))
+        except SyntaxError:
+            exec(compile(code, "<consola>", "exec"), __REPL_NS)
+        return (True, _out.getvalue(), "")
+    except BaseException as e:
+        _tbo = e.__traceback__
+        while _tbo is not None and _tbo.tb_frame.f_code.co_filename not in ("<consola>", "programa.py"):
+            _tbo = _tbo.tb_next
+        return (False, _out.getvalue(), "".join(_traceback.format_exception(type(e), e, _tbo)))
+    finally:
+        sys.stdout = _old
 `);
       return py;
     });
@@ -1009,6 +1047,33 @@ const PY_PKG_DETECT=[
   {re:/\bsklearn\b/,pkg:"scikit-learn",flag:"__academiaSklearnLoaded",warm:"import sklearn\nimport sklearn.tree\nimport sklearn.ensemble\nimport sklearn.linear_model\nimport sklearn.neighbors\nimport sklearn.svm\nimport sklearn.cluster\nimport sklearn.model_selection\nimport sklearn.pipeline\nimport sklearn.preprocessing\nimport sklearn.metrics\nimport sklearn.impute\nimport sklearn.compose"},
   {re:/\bmatplotlib\b/,pkg:"matplotlib",flag:"__academiaMatplotlibLoaded",warm:'import matplotlib\nmatplotlib.use("AGG")\nimport matplotlib.pyplot'},
 ];
+/* Ejecuta el codigo del alumno en Python REAL desde la Terminal.
+   input() es sincrono en Python, pero la Terminal pide datos de forma asincrona: si al
+   programa le falta un dato, se le pregunta al alumno y se reintenta con la respuesta
+   anadida (el sandbox no tiene efectos externos, asi que reintentar es seguro). */
+async function ejecutarEnTerminal(code, modo){
+  const py=await getPyodide();
+  for(const p of PY_PKG_DETECT){
+    if(p.re.test(code)&&!py[p.flag]){await py.loadPackage(p.pkg);await py.runPythonAsync(p.warm);py[p.flag]=true}
+  }
+  const datos=[]; let mostrado=0;
+  for(let intento=0;intento<40;intento++){
+    const fn=py.globals.get(modo==="repl"?"__academia_repl":"__academia_run");
+    const pyIn=py.toPy(datos);
+    let ok,out,tb,res;
+    try{ res=(modo==="repl")?fn(code,pyIn,false):fn(code,pyIn); const t=res.toJs(); ok=t[0];out=t[1];tb=t[2]; }
+    finally{ if(res&&res.destroy)res.destroy(); pyIn.destroy(); fn.destroy(); }
+    if(!ok && (/__NEED_INPUT__/.test(String(tb))||/EOFError/.test(String(tb)))){
+      const pendiente=out.slice(mostrado);   // lo nuevo desde la ultima vez (incluye el prompt)
+      mostrado=out.length;
+      const v=await TERM.read(pendiente);
+      datos.push(v);
+      continue;
+    }
+    return {ok,out,tb,yaMostrado:mostrado};
+  }
+  return {ok:false,out:"",tb:"Demasiadas peticiones de datos (40): revisa si pides input() dentro de un bucle infinito.",yaMostrado:0};
+}
 async function runScriptedPy(code,stdin){
   const py=await getPyodide();
   for(const p of PY_PKG_DETECT){
@@ -35374,10 +35439,12 @@ document.getElementById("replIn").addEventListener("keydown",async ev=>{
   if(TERM.pending){const p=TERM.pending;TERM.pending=null;p(v);return}
   if(!v.trim())return;
   TERM.write(">>> "+v+"\n","ec");
-  const ctx={ops:0,repl:true,out:t=>TERM.write(t),echo:t=>TERM.write(t+"\n"),
-    input:p=>TERM.read(p)};
-  try{const prog=parseProgram(v);await execBlock(prog,replEnv,ctx)}
-  catch(err){TERM.write(traceback(err)+"\n","err")}
+  try{
+    const r=await ejecutarEnTerminal(v,"repl");
+    const resto=r.out.slice(r.yaMostrado||0);
+    if(resto)TERM.write(resto);
+    if(!r.ok)TERM.write(r.tb+"\n","err");
+  }catch(err){TERM.write("No se pudo ejecutar: "+String(err&&err.message||err)+"\n","err")}
 });
 /* ---- depurador visual paso a paso ---- */
 let stepResolve=null;
@@ -35422,10 +35489,13 @@ async function runPlayground(){
   const code=document.getElementById("pgEditor").value;
   if(!code.trim())return;
   TERM.write("$ python programa.py\n","sys");
-  const ctx={ops:0,repl:false,out:t=>TERM.write(t),echo:()=>{},input:p=>TERM.read(p)};
-  try{const prog=parseProgram(code);await execBlock(prog,new Map(),ctx);
-    TERM.write("— programa terminado —\n","sys")}
-  catch(err){TERM.write(traceback(err)+"\n","err")}
+  try{
+    const r=await ejecutarEnTerminal(code,"run");
+    const resto=r.out.slice(r.yaMostrado||0);
+    if(resto)TERM.write(resto);
+    if(!r.ok)TERM.write(r.tb+"\n","err");
+    else TERM.write("— programa terminado —\n","sys");
+  }catch(err){TERM.write("No se pudo ejecutar: "+String(err&&err.message||err)+"\n","err")}
 }
 document.getElementById("pgEditor").addEventListener("keydown",ev=>{
   if(ev.ctrlKey&&ev.key==="Enter")runPlayground()});

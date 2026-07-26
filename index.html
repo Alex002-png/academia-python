@@ -270,6 +270,13 @@
 
 <!-- ======== INICIO ======== -->
 <section class="view on" id="v-inicio">
+  <div class="card" id="heroSeguir" style="border-color:var(--gold-dim);background:linear-gradient(180deg,#1b2436,var(--surface))">
+    <p class="eyebrow" style="color:var(--gold)">Continuar donde lo dejaste</p>
+    <p id="heroTask" style="margin:6px 0 2px;font-size:1.05rem;font-weight:700">—</p>
+    <p class="small muted" id="heroSub" style="margin:0"></p>
+    <button class="btn" style="margin-top:12px;font-size:1rem;padding:11px 20px" onclick="rutaGo()">▶ Seguir aprendiendo</button>
+    <button class="btn ghost" style="margin-top:12px;margin-left:8px" onclick="abrirBuscador()">🔎 Buscar tema <span class="small muted">(Ctrl+K)</span></button>
+  </div>
   <div class="card">
     <p class="eyebrow">Estado del programa · modo intensivo 25 h/semana</p>
     <h2>Nivel 0 — Fundamentos</h2>
@@ -358,6 +365,7 @@
     <div id="cloudForm"></div>
     <p class="small muted" style="margin:12px 0 6px;border-top:1px dashed var(--line);padding-top:10px">Respaldo manual (funciona siempre, incluso sin nube):</p>
     <div class="row">
+      <button class="btn ghost" onclick="descargarProgreso()">⬇ Descargar respaldo (.json)</button>
       <button class="btn ghost" onclick="exportar()">Copiar mi progreso</button>
       <button class="btn ghost" onclick="document.getElementById('impBox').style.display='block'">Importar…</button>
     </div>
@@ -388,6 +396,16 @@
     </div>
   </div>
 </section>
+
+<!-- ======== BUSCADOR (Ctrl+K) ======== -->
+<div id="buscadorOverlay" style="display:none;position:fixed;inset:0;background:rgba(5,8,14,.82);z-index:9999;padding:8vh 14px 14px" onclick="if(event.target===this)cerrarBuscador()">
+  <div style="max-width:640px;margin:0 auto;background:var(--surface);border:1px solid var(--line2);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+    <input type="text" id="buscadorIn" placeholder="Busca un tema: diccionarios, bucle, error, funciones…" autocomplete="off"
+      style="width:100%;border:none;border-bottom:1px solid var(--line);border-radius:0;font-size:1.02rem;padding:15px 18px;background:var(--deep)">
+    <div id="buscadorRes" style="max-height:56vh;overflow-y:auto"></div>
+    <p class="small muted" style="margin:0;padding:9px 18px;border-top:1px solid var(--line)">↑↓ para moverte · Enter para abrir · Esc para cerrar</p>
+  </div>
+</div>
 
 <!-- ======== CLASES ======== -->
 <section class="view" id="v-clases"><div id="clasesBox"></div></section>
@@ -34928,6 +34946,12 @@ function renderClases(){
       '<p class="small muted" style="margin:6px 0 0">Si alguna respuesta es “no”: repite esa parte. Las Fases 7 (Examen) y 8 se sellan al final del nivel — examen + defensa oral con tu tutor, que es quien declara <strong>DOMINADO</strong>.</p>'+
       (nx<lvl.length?'<button class="btn" style="margin-top:12px" onclick="openDay('+nx+')">Continuar → '+lvl[nx].n+": "+lvl[nx].t+"</button>":"")+"</div>";
   }
+  const _nota=(S.notas&&S.notas[d.id])||"";
+  h+='<div class="card"><p class="eyebrow" style="color:var(--cyan)">📓 Tu cuaderno · notas de este día</p>'+
+     '<p class="small muted" style="margin:2px 0 8px">Lo que escribas aquí se guarda con tu progreso (y viaja a tu otro dispositivo). Escribe con TUS palabras qué entendiste, qué te costó y qué no quieres olvidar.</p>'+
+     '<textarea class="plain" id="notaDia" rows="4" placeholder="Ej.: la diferencia entre = y == · me costó el slicing: [a:b] no incluye b · truco: contar los cortes, no las letras">'+esc(_nota)+'</textarea>'+
+     '<div class="row" style="margin-top:8px"><button class="btn ghost" onclick="guardarNota(\''+d.id+'\')">Guardar nota</button>'+
+     '<span class="small" id="notaMsg" style="align-self:center"></span></div></div>';
   box.innerHTML=h;
   if(okMcq){d.ex.forEach(e=>{if(document.getElementById("ed-"+e.id))wireEx(e)});
     if(d.reto&&document.getElementById("ed-"+d.reto.id))wireEx(d.reto);
@@ -35164,6 +35188,75 @@ function corrMCQ(){
     else{el.classList.add("ko");fb.textContent="Incorrecto. "+m.e}
   });
   if(ok===d.mcq.length){S.ph[d.id]=Object.assign({},phOf(d),{mcq:1});save();xpToast(5);renderClases()}
+}
+/* ---- buscador de temas (Ctrl+K) ---- */
+let buscSel=0, buscHits=[];
+function abrirBuscador(){
+  document.getElementById("buscadorOverlay").style.display="block";
+  const inp=document.getElementById("buscadorIn");
+  inp.value="";buscarTemas("");inp.focus();
+}
+function cerrarBuscador(){document.getElementById("buscadorOverlay").style.display="none"}
+function textoDia(d){
+  let t=(d.n||"")+" "+(d.t||"")+" "+(d.intro||"");
+  (d.ex||[]).forEach(e=>t+=" "+(e.t||""));
+  if(d.reto)t+=" "+(d.reto.t||"");
+  if(d.retoFinal)t+=" "+(d.retoFinal.t||"");
+  if(d.theory)t+=" "+JSON.stringify(d.theory);
+  return t.replace(/<[^>]+>/g," ").toLowerCase();
+}
+function buscarTemas(q){
+  q=(q||"").trim().toLowerCase();
+  const box=document.getElementById("buscadorRes");
+  const lvl=LEVELS[curLevel]||LEVEL0;
+  buscHits=[];
+  lvl.forEach((d,i)=>{
+    if(!q){ if(buscHits.length<8)buscHits.push({i,d,por:""}); return; }
+    const titulo=((d.n||"")+" "+(d.t||"")).toLowerCase();
+    const cuerpo=textoDia(d);
+    if(titulo.includes(q))buscHits.push({i,d,peso:0,por:"título"});
+    else if(cuerpo.includes(q))buscHits.push({i,d,peso:1,por:"dentro del tema"});
+  });
+  buscHits.sort((a,b)=>(a.peso||0)-(b.peso||0));
+  buscHits=buscHits.slice(0,12);
+  buscSel=0;
+  if(!buscHits.length){box.innerHTML='<p class="small muted" style="padding:16px 18px;margin:0">Sin resultados para “'+esc(q)+'”. Prueba con otra palabra (p. ej. lista, diccionario, error, función).</p>';return}
+  box.innerHTML=buscHits.map((r,k)=>{
+    const bloq=!dayUnlocked(r.i);
+    return '<div class="buscItem'+(k===buscSel?" sel":"")+'" data-k="'+k+'" onclick="irADia('+r.i+')" style="padding:11px 18px;border-bottom:1px solid var(--line);cursor:pointer'+(k===buscSel?";background:var(--surface2)":"")+'">'+
+      '<div style="font-weight:600;font-size:.94rem">'+esc(r.d.n)+' · '+esc(String(r.d.t).replace(/<[^>]+>/g,"").slice(0,66))+'</div>'+
+      '<div class="small muted">'+(bloq?"🔒 aún bloqueado":"")+(r.por?(bloq?" · ":"")+"coincide en "+r.por:"")+'</div></div>';
+  }).join("");
+}
+function irADia(i){
+  cerrarBuscador();
+  if(!dayUnlocked(i)){alert("Ese día todavía está bloqueado: complétalos en orden.");return}
+  go("clases");openDay(i);
+}
+document.addEventListener("keydown",ev=>{
+  if((ev.ctrlKey||ev.metaKey)&&(ev.key==="k"||ev.key==="K")){ev.preventDefault();abrirBuscador();return}
+  const ov=document.getElementById("buscadorOverlay");
+  if(!ov||ov.style.display!=="block")return;
+  if(ev.key==="Escape"){cerrarBuscador();return}
+  if(ev.key==="ArrowDown"||ev.key==="ArrowUp"){
+    ev.preventDefault();
+    buscSel=Math.max(0,Math.min(buscHits.length-1,buscSel+(ev.key==="ArrowDown"?1:-1)));
+    document.querySelectorAll(".buscItem").forEach((el,k)=>{el.style.background=(k===buscSel)?"var(--surface2)":"";});
+    const sel=document.querySelector('.buscItem[data-k="'+buscSel+'"]');if(sel)sel.scrollIntoView({block:"nearest"});
+    return;
+  }
+  if(ev.key==="Enter"&&buscHits[buscSel]){ev.preventDefault();irADia(buscHits[buscSel].i)}
+});
+document.addEventListener("input",ev=>{if(ev.target&&ev.target.id==="buscadorIn")buscarTemas(ev.target.value)});
+
+function guardarNota(id){
+  const ta=document.getElementById("notaDia");if(!ta)return;
+  S.notas=S.notas||{};
+  const v=ta.value.trim();
+  if(v)S.notas[id]=v; else delete S.notas[id];
+  save();
+  const m=document.getElementById("notaMsg");
+  if(m){m.style.color="var(--good)";m.textContent="Nota guardada ✓";setTimeout(()=>{if(m)m.textContent=""},2200)}
 }
 function openDay(i){curDay=i;renderClases();window.scrollTo({top:0})}
 function closeDay(){curDay=null;renderClases();window.scrollTo({top:0})}
@@ -35424,7 +35517,29 @@ function renderFC(){
   if(!due.length){fcCur=null;
     front.textContent=pool.length?"Mazo al día. Vuelve mañana.":"El mazo crece contigo: cada día dominado desbloquea sus tarjetas (incluye vocabulario técnico en inglés). Tus errores también se convierten en tarjetas.";
     back.style.display="none";btns.innerHTML="";renderHome();return}
-  fcCur=due[Math.floor(Math.random()*due.length)];
+  // repaso inteligente: primero lo que más has fallado y lo nacido de TUS errores
+  const ahora=Date.now();
+  const prio=c=>{
+    const st=S.cards[c.k]||{};
+    let p=(st.fallos||0)*10;                 // lo que más fallaste, primero
+    if(String(c.k).charAt(0)==="y")p+=6;     // tarjetas generadas por tus propios errores
+    p+=(2-(st.box||0))*2;                    // cuanto menos dominada, antes
+    if(st.due)p+=Math.min(4,(ahora-st.due)/86400000);  // más vencida, antes
+    return p;
+  };
+  due.sort((a,b)=>prio(b)-prio(a));
+  // sorteo PONDERADO entre las más urgentes: la que más fallaste sale mucho más,
+  // pero sin caer siempre en la misma (algo de variedad).
+  const cabeza=due.slice(0,Math.min(4,due.length));
+  const pesos=cabeza.map(c=>Math.max(1,prio(c)));
+  const suma=pesos.reduce((a,b)=>a+b,0);
+  let r=Math.random()*suma;
+  fcCur=cabeza[0];
+  for(let i=0;i<cabeza.length;i++){r-=pesos[i];if(r<=0){fcCur=cabeza[i];break}}
+  const _st=S.cards[fcCur.k]||{};
+  const _hd=document.getElementById("fcHeader");
+  if(_hd&&(_st.fallos||String(fcCur.k).charAt(0)==="y"))
+    _hd.textContent+=(_st.fallos?" · la has fallado "+_st.fallos+" vez(es)":" · nacida de un error tuyo");
   front.textContent=fcCur.f;
   back.textContent=fcCur.b;back.style.display="none";
   btns.innerHTML='<button class="btn ghost" onclick="revealFC()">Revelar respuesta</button>';
@@ -35438,6 +35553,8 @@ function revealFC(){
 }
 function calif(bien){
   const st=S.cards[fcCur.k]||{box:0};
+  st.vistas=(st.vistas||0)+1;
+  if(!bien)st.fallos=(st.fallos||0)+1;
   st.box=bien?Math.min(st.box+1,2):0;
   st.due=Date.now()+BOXDAYS[st.box]*86400000+(bien?0:600000);
   S.cards[fcCur.k]=st;save();renderFC();
@@ -35492,6 +35609,33 @@ async function confirmarReinicio(){
   msg.style.color="var(--good)";
   msg.textContent="Avance borrado. Recargando…";
   setTimeout(()=>location.reload(),700);
+}
+function descargarProgreso(){
+  const msg=document.getElementById("syncMsg");
+  try{
+    const hoy=new Date().toISOString().slice(0,10);
+    const info={_academia:"Academia Python · respaldo de progreso",_fecha:hoy,
+                _usuario:(CLOUD&&CLOUD.user)||"(sin cuenta)",
+                _ejercicios:Object.keys(S.ex||{}).length, progreso:S};
+    const blob=new Blob([JSON.stringify(info,null,1)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="academia-python_"+((CLOUD&&CLOUD.user)||"progreso")+"_"+hoy+".json";
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+    if(msg){msg.style.color="var(--good)";msg.textContent="Respaldo descargado ("+info._ejercicios+" ejercicios). Guárdalo: puedes recuperarlo con “Importar…”.";}
+    S.lastBackup=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+    const rec=document.getElementById("backupRec");if(rec)rec.remove();
+  }catch(e){ if(msg){msg.style.color="var(--bad)";msg.textContent="No se pudo descargar: "+String(e.message||e).slice(0,80);} }
+}
+function recordarRespaldo(){
+  const box=document.getElementById("syncMsg");if(!box)return;
+  const hechos=Object.keys(S.ex||{}).length;
+  if(hechos<10)return;                                  // aún no hay nada que perder
+  const dias=S.lastBackup?(Date.now()-S.lastBackup)/86400000:999;
+  if(dias<7)return;                                     // respaldo reciente
+  if(document.getElementById("backupRec"))return;
+  box.insertAdjacentHTML("afterend",'<p class="small" id="backupRec" style="margin:8px 0 0;color:var(--warn)">⚠ Llevas '+hechos+' ejercicios y '+(S.lastBackup?"más de una semana sin respaldo":"ningún respaldo descargado")+'. Pulsa <strong>⬇ Descargar respaldo</strong>: un archivo no se pierde aunque cambies de navegador.</p>');
 }
 function exportar(){
   const data=JSON.stringify(S),msg=document.getElementById("syncMsg");
@@ -35616,8 +35760,15 @@ function renderHome(){
   document.getElementById("kDue").textContent=dueCards().length;
   const ns=nextStepInfo();
   document.getElementById("nextTask").textContent=ns.label;
+  const ht=document.getElementById("heroTask");
+  if(ht){
+    ht.textContent=ns.label;
+    const hs=document.getElementById("heroSub");
+    if(hs)hs.textContent=done+" de "+tot+" ejercicios completados · "+pct+"% del nivel";
+  }
   document.getElementById("btnContinuar").onclick=rutaGo;
   if(document.getElementById("v-ruta").classList.contains("on"))renderRuta();
+  try{recordarRespaldo()}catch(e){}
   document.getElementById("aprobadoBox").innerHTML=levelApproved()
     ?'<div class="okbox" style="margin-top:12px"><strong>NIVEL 0 APROBADO por el corrector.</strong> Última puerta: defensa oral y code review con tu tutor en el chat. Después, él desbloquea el Nivel 1 aquí mismo.</div>':"";
 }
@@ -35673,12 +35824,34 @@ async function cloudPushNow(){
   const r=await cloudFetch("POST",[{sync_code:CLOUD.code,data:S,updated_at:new Date().toISOString()}]);
   if(!r.ok){const t=await r.text().catch(()=>"");throw new Error("HTTP "+r.status+" "+t.slice(0,200))}
 }
+function avisoCuenta(ci){
+  const box=document.getElementById("cloudForm");if(!box)return;
+  const old=document.getElementById("cuentaAviso");if(old)old.remove();
+  if(!ci)return;
+  let html;
+  if(ci.cuentaNueva&&ci.antes===0){
+    html='<div id="cuentaAviso" class="hintbox" style="margin-top:10px"><strong>Cuenta nueva.</strong> No había ningún avance guardado con este usuario y contraseña, así que empiezas de cero. '+
+         'Si esperabas encontrar tu progreso, lo más probable es que la <strong>contraseña sea distinta</strong> a la que usaste antes: cierra sesión y prueba de nuevo (usuario y contraseña deben ser EXACTOS).</div>';
+  }else if(ci.cuentaNueva){
+    html='<div id="cuentaAviso" class="okbox" style="margin-top:10px"><strong>Cuenta nueva creada.</strong> Se subió el avance de este equipo ('+ci.antes+' ejercicios). Entra con el mismo usuario y contraseña en tu otro dispositivo.</div>';
+  }else{
+    html='<div id="cuentaAviso" class="okbox" style="margin-top:10px"><strong>Bienvenido de vuelta.</strong> Recuperamos <strong>'+ci.hallados+' ejercicios</strong> de tu cuenta'+
+         (ci.total>ci.hallados?' y se sumaron los '+(ci.total-ci.hallados)+' que tenías aquí sin sincronizar':'')+'. Total ahora: <strong>'+ci.total+'</strong>.</div>';
+  }
+  box.insertAdjacentHTML("beforeend",html);
+}
 function cloudDiag(e){
   const m=String(e&&e.message||e);
   if(/HTTP 401|Invalid API key|jwt/i.test(m))return"Clave rechazada (401): la clave está mal copiada o no es la sb_publishable_ de ESTE proyecto. Cópiala de nuevo con el botón 📋.";
   if(/HTTP 404/.test(m))return"No existe la tabla (404): en Supabase → SQL Editor vuelve a ejecutar el SQL de creación de academia_progress.";
   if(/HTTP 40[03]/.test(m))return"Permiso denegado ("+m.match(/HTTP \d+/)[0]+"): falta la política RLS — reejecuta el SQL completo (incluye el create policy).";
-  if(/Failed to fetch|NetworkError|TypeError/i.test(m))return"El navegador no llegó a Supabase: o estás en claude.ai (bloquea conexiones externas — usa tu URL de GitHub Pages), o la Project URL está mal escrita, o no hay internet.";
+  if(/Failed to fetch|NetworkError/i.test(m)){
+    if(typeof navigator!=="undefined"&&navigator.onLine===false)
+      return"Sin internet: tu dispositivo está desconectado. Tu avance SIGUE guardado aquí; se subirá solo cuando vuelvas a tener conexión.";
+    return"No se pudo llegar al servidor: revisa tu conexión (o estás abriendo la app desde un sitio que bloquea conexiones externas, como una vista previa; usa la dirección normal de la academia).";
+  }
+  if(/Cannot read properties|is not a function|undefined/i.test(m))
+    return"Los datos llegaron bien, pero la app falló al mostrarlos. Tu avance NO se ha perdido. Recarga con Ctrl+Shift+R; si sigue, avísale a tu tutor con este texto: "+m.slice(0,120);
   return"Detalle técnico: "+m.slice(0,220);
 }
 async function cloudPull(){
@@ -35688,10 +35861,24 @@ async function cloudPull(){
     const r=await cloudFetch("GET");
     if(!r.ok){const t=await r.text().catch(()=>"");throw new Error("HTTP "+r.status+" "+t.slice(0,200))}
     const rows=await r.json();
-    if(rows.length){S=mergeS(S,rows[0].data);localStorage.setItem(KEY,JSON.stringify(S))}
+    const antes=Object.keys(S.ex||{}).length;
+    let hallados=0,cuentaNueva=true;
+    if(rows.length&&rows[0].data&&Object.keys(rows[0].data).length){
+      cuentaNueva=false;
+      hallados=Object.keys(rows[0].data.ex||{}).length;
+      S=mergeS(S,rows[0].data);localStorage.setItem(KEY,JSON.stringify(S));
+    }
+    window.__cloudInfo={cuentaNueva,hallados,antes,total:Object.keys(S.ex||{}).length};
     await cloudPushNow();
     const old=document.getElementById("cloudErr");if(old)old.remove();
-    cloudUI("nube conectada · progreso sincronizado","good");
+    const ci=window.__cloudInfo||{};
+    if(ci.cuentaNueva&&ci.antes===0)
+      cloudUI("cuenta NUEVA · empiezas de cero","blue");
+    else if(ci.cuentaNueva)
+      cloudUI("cuenta NUEVA · se guardó tu avance de este equipo ("+ci.antes+" ejercicios)","good");
+    else
+      cloudUI("bienvenido de vuelta · "+ci.hallados+" ejercicios recuperados de tu cuenta","good");
+    avisoCuenta(ci);
     renderHome();renderWeak();renderFC();
     if(document.getElementById("v-clases").classList.contains("on"))renderClases();
   }catch(e){

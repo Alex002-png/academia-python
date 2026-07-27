@@ -45,7 +45,7 @@
     backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex}
   nav.tabs button{flex:1;background:none;border:none;color:var(--dim);cursor:pointer;
     font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;
-    padding:12px 1px 13px;border-top:2px solid transparent}
+    padding:15px 1px 16px;border-top:2px solid transparent}
   nav.tabs button.on{color:var(--gold);border-top-color:var(--gold)}
   nav.tabs button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
   @media(min-width:820px){
@@ -204,6 +204,19 @@
     cursor:pointer;box-shadow:0 6px 22px #000a;display:flex;align-items:center;gap:6px}
   .fab:hover{filter:brightness(1.08)}
   @media(min-width:820px){.fab{bottom:22px;right:22px}}
+
+  /* ---- legibilidad en movil ----
+     .chip salia a 10.2px (y aparece 94 veces como "Bloqueado"),
+     .lbl a 9.9px y .lvlmeta a 10.9px. Por debajo de ~11.5px cuesta
+     leerlas en un telefono. Se suben solo estas tres: son etiquetas
+     con espacio libre alrededor, asi que no desbordan nada.
+     Van con "body " delante: sus definiciones originales estan mas
+     abajo en la hoja y con igual especificidad ganarian por orden. */
+  @media(max-width:819px){
+    body .chip{font-size:11.6px}
+    body .lbl,body .hdright .lbl{font-size:11.4px}
+    body .lvlmeta{font-size:11.6px}
+  }
 
   /* ---- teclado movil: al escribir, la pantalla es para el problema ----
      con el teclado abierto quedan ~350px utiles y las capas pegadas
